@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { daveOnly, sensible } from '../sim/bots.ts';
-import { placeholderContent as content } from '../src/content/index.ts';
+import { week1Content as content } from '../src/content/index.ts';
 import { loadPack } from '../src/content/schema.ts';
-import placeholder from '../src/content/packs/placeholder.json' with { type: 'json' };
+import placeholder from '../src/content/packs/week1.json' with { type: 'json' };
 import { voteShare } from '../src/engine/election.ts';
 import { autoplay, legalActions, newTerm, reduce } from '../src/engine/engine.ts';
 import type { Action, State } from '../src/engine/types.ts';
 
-const start = (seed = 'p1') => newTerm('placeholder', seed, content);
+const start = (seed = 'p1') => newTerm('week1', seed, content);
 const play = (s: State, ...actions: Action[]) => actions.reduce((st, a) => reduce(st, a, content), s);
 /** A state with a chosen desk, so tests do not depend on the shared draw order. */
 const withDesk = (s: State, ...ids: string[]): State => ({ ...s, desk: ids.map((cardId) => ({ cardId, status: 'open' as const })) });

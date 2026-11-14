@@ -22,9 +22,14 @@ export const TUNING = {
   pressLowPoll: -5,
   bankruptAt: -50,
   recall: { approval: 40, money: 20, election: -8, max: 2 },
-  // Every group loses this much approval each month ("the honeymoon fades"). Not in the brief: 0 = off.
-  // Proposed in reports/balance-m0.md as the fix for approval inflation; awaiting a decision.
-  fade: Number(globalThis.process?.env?.FADE ?? 0),
+  // Every group loses this much approval each month: the honeymoon fades. FADE env var overrides for experiments.
+  fade: Number(globalThis.process?.env?.FADE ?? 4),
+  // Rubber band: the fade grows by this much per approval point above 50 and shrinks below 50 (never under 0).
+  fadeSlope: Number(globalThis.process?.env?.FADEK ?? 0.2),
+  fadeMax: 7,
+  urgentIgnoreScale: 2, // ignoring an URGENT (conditional) card hurts this many times more
+  // Handover after Deputy Dave governs missed days: never worse than this.
+  handover: { approvalFloor: 42, moneyFloor: 40 },
   rareChance: 1 / 50,
   vote: { people: 0.5, press: 0.2, business: 0.1, law: 0.1, objective: 2, brokenPromise: -4, min: 5, max: 95 },
 };

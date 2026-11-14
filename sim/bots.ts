@@ -1,6 +1,7 @@
 // Bot policies for the balance simulator. A policy sees the state and the legal actions and returns one.
 import { blocked, campaignCard, findCard, upfront } from '../src/engine/engine.ts';
 import type { Policy } from '../src/engine/engine.ts';
+import { davePolicy } from '../src/engine/dave.ts';
 import { TUNING } from '../src/engine/tuning.ts';
 import { GROUPS } from '../src/engine/types.ts';
 import type { Action, Card, Content, Effects, Option, State } from '../src/engine/types.ts';
@@ -111,13 +112,8 @@ export const peoplePleaser = scored({
   tax: () => 'low',
 });
 
-export const daveOnly: Policy = (s, legal) => {
-  if (s.phase === 'desk') return legal.find((a) => a.type === 'delegate') ?? { type: 'endDesk' };
-  if (s.phase === 'event') return { type: 'skipEvent' };
-  if (s.phase === 'promises') return legal[legal.length - 1]!;
-  if (s.phase === 'campaign') return legal[legal.length - 1]!;
-  return { type: 'next' };
-};
+// dave-only: Deputy Dave runs the whole term (the same policy that covers missed days).
+export const daveOnly: Policy = davePolicy;
 
 // ---- sensible: values approval by what it is worth at the election, money by how scarce it is ----
 
@@ -169,7 +165,7 @@ const sensibleScore: Scorer = (s, _card, o, content) => {
 export const sensible = scored({
   score: sensibleScore,
   ignore: (s, c) => approvalValue(s, c.ignored) - (c.ignored?.setFlag ? 2 : 0),
-  noise: 1.5, // players differ; without noise every sensible run would be identical
+  noise: 2.5, // players differ and misjudge; without noise every sensible run would be identical
   minGain: 0.5,
   buyAction: true,
   tax: (s) => (s.money < 10 ? 'high' : s.money > 110 && s.approval.people < 70 ? 'low' : s.money >= 30 ? 'medium' : s.tax),

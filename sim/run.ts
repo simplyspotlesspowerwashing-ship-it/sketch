@@ -1,7 +1,7 @@
 // Balance simulator: plays whole terms headlessly with each bot and writes a report.
 //   npm run sim -- [terms=5000] [out=reports/balance.md]
 import { writeFileSync } from 'node:fs';
-import { placeholderContent } from '../src/content/index.ts';
+import { week1Content } from '../src/content/index.ts';
 import { autoplay, findCard, newTerm } from '../src/engine/engine.ts';
 import { TUNING } from '../src/engine/tuning.ts';
 import type { Content } from '../src/engine/types.ts';
@@ -9,7 +9,7 @@ import { POLICIES } from './bots.ts';
 
 const N = Number(process.argv[2] ?? 5000);
 const OUT = process.argv[3] ?? 'reports/balance.md';
-const content: Content = placeholderContent;
+const content: Content = week1Content;
 const pct = (n: number, d: number) => (d ? ((100 * n) / d).toFixed(1) + '%' : '-');
 const q = (sorted: number[], p: number) => sorted[Math.min(sorted.length - 1, Math.floor(p * sorted.length))]!;
 

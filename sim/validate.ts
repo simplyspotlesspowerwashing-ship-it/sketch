@@ -1,4 +1,4 @@
-import { placeholderContent } from '../src/content/index.ts';
+import { week1Content } from '../src/content/index.ts';
 
-const p = placeholderContent.pack;
+const p = week1Content.pack;
 console.log(`OK ${p.id}: ${p.cards.length} desk cards, ${p.events.length} events, ${p.dave.outcomes.length} Dave outcomes`);

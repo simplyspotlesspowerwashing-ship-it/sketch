@@ -110,6 +110,7 @@ export type Phase = 'promises' | 'desk' | 'event' | 'report' | 'dayEnd' | 'campa
 export interface DeskSlot {
   cardId: string;
   status: 'open' | 'done' | 'dave' | 'ignored';
+  urgent?: boolean; // conditional card: ignoring it hurts double
   option?: number;
 }
 
@@ -183,6 +184,7 @@ export interface State {
   reports: MonthReport[];
   polls: number[];
   campaignEffect: number;
+  daveDays: number[]; // days Deputy Dave governed while the player was away
   result: Result | null;
 }
 

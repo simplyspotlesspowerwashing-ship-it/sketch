@@ -12,6 +12,11 @@ const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v
 export const dayOfMonth = (month: number) => Math.ceil(month / 2);
 export const monthOfDay = (month: number): 1 | 2 => (month % 2 === 1 ? 1 : 2);
 
+/** Monthly approval fade for a group at this approval: popular mayors fade faster, unpopular ones stop falling. */
+export function fadeFor(approval: number): number {
+  return Math.round(clamp(TUNING.fade + (approval - 50) * TUNING.fadeSlope, 0, TUNING.fadeMax));
+}
+
 // ---------- lookups ----------
 
 export function findCard(content: Content, id: string): Card {
@@ -74,6 +79,7 @@ function checkRecall(s: State, content: Content, rng: Rng): boolean {
   const endings = content.pack.recallEndings;
   const pick = Math.floor(rng(`${s.weekId}|recall|${s.recalls}`)() * endings.length);
   s.lastRecall = endings[pick] ?? 'You have been recalled.';
+  s.monthTags.push('recall');
   s.flags[s.money < TUNING.bankruptAt ? 'wentBankrupt' : 'wasRecalled'] = true;
   for (const g of GROUPS) s.approval[g] = TUNING.recall.approval;
   s.money = TUNING.recall.money;
@@ -142,12 +148,13 @@ function drawDesk(s: State, content: Content, rng: Rng): DeskSlot[] {
     (c) => !c.day && !c.rare && (c.requires || c.secret) && holds(s, c.requires) && (c.repeatable || !s.usedCards.includes(c.id)) && !ids.includes(c.id),
   );
   if (inject) ids[Math.min(2, ids.length)] = inject.id;
+  const urgentId = inject?.id;
   // Rare card: shared 1-in-50 draw per month, takes the middle slot.
   const rares = cards.filter((c) => c.rare && holds(s, c.requires) && !s.usedCards.includes(c.id));
   const r = rng(`${s.weekId}|rare|${s.month}`);
   if (rares.length > 0 && r() < TUNING.rareChance) ids[Math.min(1, ids.length)] = rares[Math.floor(r() * rares.length)]!.id;
   for (const id of ids) if (!s.usedCards.includes(id)) s.usedCards.push(id);
-  return ids.slice(0, 3).map((cardId) => ({ cardId, status: 'open' as const }));
+  return ids.slice(0, 3).map((cardId) => ({ cardId, status: 'open' as const, ...(cardId === urgentId && ids.includes(cardId) ? { urgent: true } : {}) }));
 }
 
 function startMonth(s: State, content: Content, rng: Rng) {
@@ -193,7 +200,7 @@ function closeMonth(s: State, content: Content, rng: Rng) {
     if (e) for (const g of GROUPS) if (e[g]) drift[g] = (drift[g] ?? 0) + e[g];
   };
   add({ people: T.tax[s.tax].people });
-  if (T.fade) add({ people: -T.fade, business: -T.fade, law: -T.fade, press: -T.fade });
+  for (const g of GROUPS) add({ [g]: -fadeFor(s.approval[g]) });
   for (const p of s.projects) add(content.projects[p.id]!.perMonth);
   applyEffects(s, drift);
   report.drift = drift;
@@ -264,7 +271,7 @@ export function newTerm(weekId: string, playerSeed: string, content: Content, rn
     tax: 'medium', actionsLeft: 0, boughtActionToday: false, delegatedThisMonth: false, protestNext: false,
     desk: [], eventId: null, projects: [], leases: [], promises: [], duePromises: [], brokenPromises: 0,
     recalls: 0, lastRecall: null, flags: {}, objectivesDone: [], combosDone: [], usedCards: [], poolCursor: 0,
-    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, result: null,
+    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, daveDays: [], result: null,
   };
   startMonth(s, content, rng);
   return s;
@@ -387,9 +394,10 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
         slot.status = 'ignored';
         const card = findCard(content, slot.cardId);
         if (card.ignored) {
-          applyEffects(s, card.ignored);
+          applyEffects(s, card.ignored, slot.urgent ? TUNING.urgentIgnoreScale : 1);
           if (card.ignored.setFlag) s.flags[card.ignored.setFlag] = true;
         }
+        if (slot.urgent) s.monthTags.push('urgentIgnored');
         s.history.push({ month: s.month, cardId: card.id, choice: 'ignored' });
       }
       if (checkRecall(s, content, rng)) return s;
