@@ -21,12 +21,10 @@ function scored(opts: {
   score: Scorer;
   ignore: IgnoreScorer;
   noise?: number;
-  minGain?: number; // only act when best option beats ignoring by this much
   tax?: (s: State) => State['tax'];
   payPromise?: (s: State, money: number) => boolean;
-  buyAction?: boolean;
   decree?: (s: State, d: Decree) => number;
-  /** chance of [flop, fine, great] at mini-games */
+  /** chance of [flop, sloppy, clean] at mini-games */
   skill?: [number, number, number];
 }): Policy {
   return (s, legal, content, rand) => {
@@ -61,37 +59,21 @@ function scored(opts: {
       });
       return best;
     }
-    // desk
-    const open = s.desk.filter((d) => d.status === 'open').map((d) => {
-      const card = findCard(content, d.cardId);
-      let bestV = -Infinity;
-      let bestI = -1;
-      card.options.forEach((o, i) => {
-        if (blocked(s, o, content)) return;
-        const v = opts.score(s, card, o, content) + n();
-        if (v > bestV) [bestV, bestI] = [v, i];
-      });
-      const ig = opts.ignore(s, card);
-      return { card, bestI, gain: bestV - ig, ig };
+    // desk: every card must be dealt with, in order; the only choice is which option
+    const slot = s.desk.find((d) => d.status === 'open');
+    if (!slot) return { type: 'endDesk' };
+    const card = findCard(content, slot.cardId);
+    let bestV = -Infinity;
+    let bestI = -1;
+    card.options.forEach((o, i) => {
+      if (blocked(s, o, content)) return;
+      const v = opts.score(s, card, o, content) + n();
+      if (v > bestV) [bestV, bestI] = [v, i];
     });
-    const actable = open.filter((c) => c.bestI >= 0 && c.gain > (opts.minGain ?? -Infinity)).sort((a, b) => b.gain - a.gain);
-    if (s.actionsLeft > 0 && actable.length > 0) {
-      const pick = actable[0]!;
-      const act: Action = { type: 'choose', cardId: pick.card.id, option: pick.bestI };
-      if (pick.card.options[pick.bestI]!.challenge) {
-        const [flop, fine] = opts.skill ?? [0.3, 0.45, 0.25];
-        const r = rand();
-        act.skill = r < flop ? 0 : r < flop + fine ? 1 : 2;
-      }
-      return act;
-    }
-    if (opts.buyAction && s.actionsLeft === 0 && actable.length > 0 && actable[0]!.gain > 6 && legal.some((a) => a.type === 'buyAction')) return { type: 'buyAction' };
-    if (legal.some((a) => a.type === 'delegate') && open.length > 0) {
-      // Dave gets the card that would hurt most to ignore.
-      const worst = [...open].sort((a, b) => a.ig - b.ig)[0]!;
-      return { type: 'delegate', cardId: worst.card.id };
-    }
-    return { type: 'endDesk' };
+    if (bestI < 0) return { type: 'endDesk' };
+    const [flop, sloppy] = opts.skill ?? [0.3, 0.4, 0.3];
+    const r = rand();
+    return { type: 'choose', cardId: card.id, option: bestI, skill: r < flop ? 0 : r < flop + sloppy ? 1 : 2 };
   };
 }
 
@@ -101,21 +83,17 @@ const projectApproval = (o: Option, content: Content, s: State) => {
   return sum(p.onBuild) + sum(p.perMonth) * monthsLeft(s);
 };
 
-export const random: Policy = (s, legal, content, rand) => {
-  const pick = (list: Action[]) => {
-    const a = list[Math.floor(rand() * list.length)]!;
-    if (a.type === 'choose' && findCard(content, a.cardId).options[a.option]!.challenge) return { ...a, skill: Math.floor(rand() * 3) as 0 | 1 | 2 };
-    return a;
-  };
-  const chooses = legal.filter((a) => a.type === 'choose');
-  if (s.phase === 'promises') return pick(legal);
-  if (s.phase === 'event') return rand() < 0.2 ? { type: 'skipEvent' } : pick(chooses.length ? chooses : legal);
-  if (s.phase !== 'desk') return pick(legal.filter((a) => a.type !== 'setTax'));
-  if (rand() < 0.03) return pick(legal.filter((a) => a.type === 'setTax'));
-  if (chooses.length > 0 && rand() < 0.85) return pick(chooses);
-  const delegates = legal.filter((a) => a.type === 'delegate');
-  if (delegates.length > 0 && rand() < 0.4) return pick(delegates);
-  return { type: 'endDesk' };
+export const random: Policy = (s, legal, _content, rand) => {
+  const pick = (list: Action[]) => list[Math.floor(rand() * list.length)]!;
+  if (s.phase === 'desk') {
+    const slot = s.desk.find((d) => d.status === 'open');
+    const mine = legal.filter((a) => a.type === 'choose' && a.cardId === slot?.cardId);
+    if (mine.length === 0) return { type: 'endDesk' };
+    const a = pick(mine);
+    return a.type === 'choose' ? { ...a, skill: Math.floor(rand() * 3) as 0 | 1 | 2 } : a;
+  }
+  if (s.phase === 'event') return rand() < 0.2 ? { type: 'skipEvent' } : pick([...legal.filter((a) => a.type === 'choose'), { type: 'skipEvent' } as Action]);
+  return pick(legal.filter((a) => a.type !== 'setTax'));
 };
 
 const decreeApproval = (s: State, d: Decree) => sum(d.effects) + sum(d.perMonth) * monthsLeft(s);
@@ -131,7 +109,6 @@ export const miser = scored({
   decree: (s, d) => (d.money ?? 0) + (d.monthly ?? 0) * monthsLeft(s),
   score: (s, _c, o, content) => upfront(o, content) + ((o.monthly ?? 0) + (o.project ? content.projects[o.project]!.monthly : 0)) * monthsLeft(s) - (o.promise?.money ?? 0),
   ignore: () => 0,
-  minGain: 0,
   tax: () => 'high',
   payPromise: () => false,
 });
@@ -185,7 +162,6 @@ const sensibleScore: Scorer = (s, _card, o, content) => {
     if (p.favorEvery) v += Math.floor(left / p.favorEvery) * 1.5;
     v += 1; // objectives and combos
   }
-  if (o.challenge) v += 0.35 * (approvalValue(s, o.challenge.great.effects) + moneyValue(s, o.challenge.great.money ?? 0)) + 0.2 * (approvalValue(s, o.challenge.flop.effects) + moneyValue(s, o.challenge.flop.money ?? 0));
   if (o.gamble) {
     const val = (x: { money?: number; effects?: Effects }) => approvalValue(s, x.effects) + moneyValue(s, x.money ?? 0);
     v += (o.gamble.chance / 100) * val(o.gamble.win) + (1 - o.gamble.chance / 100) * val(o.gamble.lose);
@@ -200,12 +176,10 @@ const sensibleScore: Scorer = (s, _card, o, content) => {
 
 export const sensible = scored({
   decree: (s, d) => approvalValue(s, d.effects) + approvalValue(s, d.perMonth, monthsLeft(s)) + moneyValue(s, (d.money ?? 0) + (d.monthly ?? 0) * monthsLeft(s)),
-  skill: [0.2, 0.45, 0.35],
+  skill: [0.15, 0.35, 0.5],
   score: sensibleScore,
   ignore: (s, c) => approvalValue(s, c.ignored) - (c.ignored?.setFlag ? 2 : 0),
   noise: 2.5, // players differ and misjudge; without noise every sensible run would be identical
-  minGain: 0.5,
-  buyAction: true,
   tax: (s) => (s.money < 10 ? 'high' : s.money > 110 && s.approval.people < 70 ? 'low' : s.money >= 30 ? 'medium' : s.tax),
   payPromise: (s, money) => s.money - money > -20,
 });

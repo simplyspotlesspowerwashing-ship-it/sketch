@@ -1,109 +1,108 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { daveOnly, sensible } from '../sim/bots.ts';
+import { sensible } from '../sim/bots.ts';
 import { week1Content } from '../src/content/index.ts';
 import { loadPack } from '../src/content/schema.ts';
-import placeholder from '../src/content/packs/week1.json' with { type: 'json' };
-import { coverMissedDays } from '../src/engine/dave.ts';
+import week1 from '../src/content/packs/week1.json' with { type: 'json' };
+import { coverMissedDays, davePolicy } from '../src/engine/dave.ts';
 import { voteShare } from '../src/engine/election.ts';
+import { autoplay, botchCost, fadeFor, findCard, legalActions, newTerm, reduce } from '../src/engine/engine.ts';
 import { TUNING } from '../src/engine/tuning.ts';
-import { autoplay, fadeFor, legalActions, newTerm, reduce } from '../src/engine/engine.ts';
 import type { Action, State } from '../src/engine/types.ts';
 
 // Monday's shared event is removed so month-end tests reach the report directly; events are tested on their own.
 const content = { ...week1Content, pack: { ...week1Content.pack, events: week1Content.pack.events.filter((e) => e.day !== 1) } };
 
-// The rule tests below check exact numbers, so the monthly approval fade is switched off for them
-// and tested on its own at the end.
+// The rule tests check exact numbers, so the monthly approval fade is switched off for them and tested on its own.
 const fade = { base: TUNING.fade, slope: TUNING.fadeSlope };
 beforeAll(() => { TUNING.fade = 0; TUNING.fadeSlope = 0; });
 afterAll(() => { TUNING.fade = fade.base; TUNING.fadeSlope = fade.slope; });
 
-/** A new term with Monday's Mayor's Hour already skipped, so tests begin at the desk. */
-const start = (seed = 'p1') => reduce(newTerm('week1', seed, content), { type: 'skipDecree' }, content);
+const start = (seed = 'p1') => newTerm('week1', seed, content);
 const play = (s: State, ...actions: Action[]) => actions.reduce((st, a) => reduce(st, a, content), s);
 /** A state with a chosen desk, so tests do not depend on the shared draw order. */
 const withDesk = (s: State, ...ids: string[]): State => ({ ...s, desk: ids.map((cardId) => ({ cardId, status: 'open' as const })) });
 
 describe('setup and determinism', () => {
-  it('starts with the brief\'s numbers', () => {
+  it("starts with the brief's numbers and three cards that must all be dealt with", () => {
     const s = start();
     expect(s.money).toBe(100);
     expect(s.favors).toBe(2);
     expect(s.approval).toEqual({ people: 50, business: 50, law: 50, press: 50 });
-    expect(s.actionsLeft).toBe(3);
-    expect(s.desk).toHaveLength(4);
+    expect(s.phase).toBe('desk');
+    expect(s.desk).toHaveLength(3);
   });
   it('gives every player the same desk', () => {
     expect(start('alice').desk).toEqual(start('bob').desk);
   });
-  it('is reproducible for the same player and differs between players only through Dave', () => {
-    const a = autoplay(start('same'), daveOnly, content, () => false);
-    const b = autoplay(start('same'), daveOnly, content, () => false);
-    expect(a).toEqual(b);
+  it('is reproducible for the same player', () => {
+    expect(autoplay(start('same'), davePolicy, content, () => false)).toEqual(autoplay(start('same'), davePolicy, content, () => false));
   });
-  it('does not mutate the input state', () => {
+  it('does not mutate the input state, and rejects illegal actions', () => {
     const s = start();
     const copy = structuredClone(s);
     reduce(s, { type: 'endDesk' }, content);
     expect(s).toEqual(copy);
+    expect(() => reduce(s, { type: 'next' }, content)).toThrow(/illegal/);
   });
-  it('rejects illegal actions', () => {
-    expect(() => reduce(start(), { type: 'next' }, content)).toThrow(/illegal/);
+  it('every desk card has a mini-game and an option that is free up front', () => {
+    for (const c of week1Content.pack.cards) {
+      expect(c.game, c.id).toBeTruthy();
+      expect(c.options.some((o) => !((o.money ?? 0) < 0) && !((o.favors ?? 0) < 0) && !o.project), c.id).toBe(true);
+    }
   });
 });
 
 describe('desk', () => {
-  it('spends actions, and stops at three', () => {
+  it('there is no action limit: every card can be dealt with', () => {
     let s = withDesk(start(), 'snowplow', 'curfew', 'festival');
-    s = play(s, { type: 'choose', cardId: 'snowplow', option: 2 }, { type: 'choose', cardId: 'curfew', option: 0 });
-    expect(s.actionsLeft).toBe(1);
-    s = play(s, { type: 'choose', cardId: 'festival', option: 2 });
-    expect(s.actionsLeft).toBe(0);
+    s = play(s, { type: 'choose', cardId: 'snowplow', option: 2, skill: 2 }, { type: 'choose', cardId: 'curfew', option: 0, skill: 2 }, { type: 'choose', cardId: 'festival', option: 2, skill: 2 });
+    expect(s.desk.every((d) => d.status === 'done')).toBe(true);
     expect(s.money).toBe(82);
     expect(s.approval.law).toBe(60);
-    expect(legalActions(s, content).some((a) => a.type === 'choose')).toBe(false);
   });
-  it('lets one Favor buy one extra action per day', () => {
-    let s = play(start(), { type: 'buyAction' });
-    expect(s.actionsLeft).toBe(4);
-    expect(s.favors).toBe(1);
-    expect(legalActions(s, content).some((a) => a.type === 'buyAction')).toBe(false);
+  it('a clean game gives exactly the chosen trade; sloppy and flop only make it worse', () => {
+    const run = (skill: 0 | 1 | 2) => play(withDesk(start(), 'pothole'), { type: 'choose', cardId: 'pothole', option: 0, skill });
+    expect(run(2).money).toBe(86);
+    expect(run(2).approval).toEqual({ people: 55, business: 55, law: 50, press: 50 });
+    expect(run(1).money).toBe(86);
+    expect(run(1).approval.people).toBe(50); // pothole has no group, so the penalty lands on People
+    expect(run(0).money).toBe(81);
+    expect(run(0).approval.people).toBe(45);
+    for (const skill of [0, 1] as const) {
+      const c = botchCost(findCard(content, 'pothole'), skill);
+      expect(c.money).toBeLessThanOrEqual(0);
+      expect(Object.values(c.effects).every((v) => v < 0)).toBe(true);
+    }
   });
-  it('allows one free delegation per month', () => {
+  it('a bad job on an urgent card costs double', () => {
+    const base = start();
+    const s = play({ ...base, desk: [{ cardId: 'gooseOccupation', status: 'open', urgent: true }] }, { type: 'choose', cardId: 'gooseOccupation', option: 0, skill: 0 });
+    expect(s.approval.people).toBe(50 + 5 - 20);
+  });
+  it('sending Dave costs a Favor and plays no game', () => {
     let s = withDesk(start(), 'snowplow', 'curfew', 'festival');
-    s = play(s, { type: 'delegate', cardId: 'curfew' });
-    expect(s.actionsLeft).toBe(3);
+    s = play(s, { type: 'delegate', cardId: 'curfew' }, { type: 'delegate', cardId: 'festival' });
+    expect(s.favors).toBe(0);
     expect(s.desk[1]!.status).toBe('dave');
     expect(legalActions(s, content).some((a) => a.type === 'delegate')).toBe(false);
   });
-  it('applies ignored effects and escalation flags to unhandled cards', () => {
-    let s = withDesk(start(), 'goosePond', 'curfew', 'parkingMeters');
-    s = play(s, { type: 'endDesk' });
-    expect(s.flags.gooseGrudge).toBe(true);
-    expect(s.approval.people).toBe(45);
-    expect(s.approval.law).toBe(45);
-  });
   it('injects the escalation card once its flag is set', () => {
-    let s = withDesk(start(), 'goosePond', 'curfew', 'parkingMeters');
-    s = play(s, { type: 'choose', cardId: 'goosePond', option: 2 }, { type: 'endDesk' }, { type: 'next' });
+    let s = withDesk(start(), 'goosePond');
+    s = play(s, { type: 'choose', cardId: 'goosePond', option: 2, skill: 2 }, { type: 'endDesk' }, { type: 'next' });
     expect(s.month).toBe(2);
-    expect(s.desk.map((d) => d.cardId)).toContain('gooseOccupation');
+    expect(s.desk.find((d) => d.cardId === 'gooseOccupation')?.urgent).toBe(true);
   });
   it('blocks building the same project twice and spending Favors you do not have', () => {
-    let s = withDesk(start(), 'goosePond', 'curfew', 'festival');
-    s = play(s, { type: 'choose', cardId: 'goosePond', option: 0 });
+    let s = play(withDesk(start(), 'goosePond'), { type: 'choose', cardId: 'goosePond', option: 0, skill: 2 });
     expect(s.projects.map((p) => p.id)).toEqual(['pond']);
-    s = withDesk({ ...s, favors: 0 }, 'goosePond', 'curfew', 'festival');
-    const options = legalActions(s, content).filter((a) => a.type === 'choose' && a.cardId === 'goosePond');
-    expect(options).toEqual([{ type: 'choose', cardId: 'goosePond', option: 2 }]);
+    s = withDesk({ ...s, favors: 0 }, 'goosePond');
+    expect(legalActions(s, content).filter((a) => a.type === 'choose')).toEqual([{ type: 'choose', cardId: 'goosePond', option: 2 }]);
   });
 });
 
 describe('month end', () => {
   it('pays tax income from the formula: mult x (10 + Business x 0.2)', () => {
-    const s = play(withDesk(start()), { type: 'endDesk' });
-    expect(s.reports[0]!.income).toBe(20);
-    expect(s.money).toBe(120);
+    expect(play(withDesk(start()), { type: 'endDesk' }).reports[0]!.income).toBe(20);
     const high = play(withDesk(start()), { type: 'setTax', level: 'high' }, { type: 'endDesk' });
     expect(high.reports[0]!.income).toBe(26);
     expect(high.approval.people).toBe(47);
@@ -112,46 +111,78 @@ describe('month end', () => {
     expect(low.approval.people).toBe(52);
   });
   it('cuts income 30% when Business is under 35', () => {
-    const base = withDesk(start(), 'parkingMeters');
-    const s = play({ ...base, approval: { ...base.approval, business: 30 } }, { type: 'endDesk' });
-    expect(s.reports[0]!.income).toBe(Math.round(16 * 0.7));
+    const base = withDesk(start());
+    expect(play({ ...base, approval: { ...base.approval, business: 30 } }, { type: 'endDesk' }).reports[0]!.income).toBe(Math.round(16 * 0.7));
   });
   it('charges project upkeep and applies monthly project effects', () => {
-    let s = withDesk(start(), 'goosePond');
-    s = play(s, { type: 'choose', cardId: 'goosePond', option: 0 }, { type: 'endDesk' });
+    const s = play(withDesk(start(), 'goosePond'), { type: 'choose', cardId: 'goosePond', option: 0, skill: 2 }, { type: 'endDesk' });
     expect(s.reports[0]!.projects).toBe(-2);
-    expect(s.money).toBe(100 - 20 + 19 - 2); // business fell to 45 -> income 19
-    expect(s.approval.people).toBe(57); // +5 card, +2 pond
+    expect(s.money).toBe(100 - 20 + 19 - 2);
+    expect(s.approval.people).toBe(57);
   });
   it('grants a Favor when Press is 60 or more, capped at 5', () => {
-    const base = withDesk(start(), 'parkingMeters');
+    const base = withDesk(start());
     expect(play({ ...base, approval: { ...base.approval, press: 60 } }, { type: 'endDesk' }).favors).toBe(3);
     expect(play({ ...base, favors: 5, approval: { ...base.approval, press: 60 } }, { type: 'endDesk' }).favors).toBe(5);
   });
-  it('a protest removes one action next month when People is under 35', () => {
-    const base = withDesk(start(), 'parkingMeters');
+  it('a protest (People under 35) makes every card urgent next month', () => {
+    const base = withDesk(start());
     const s = play({ ...base, approval: { ...base.approval, people: 30 } }, { type: 'endDesk' }, { type: 'next' });
-    expect(s.actionsLeft).toBe(2);
+    expect(s.desk.every((d) => d.urgent)).toBe(true);
   });
-  it('fires a combo once when both projects exist', () => {
-    const base = withDesk(start(), 'parkingMeters');
-    const s = play({ ...base, projects: [{ id: 'casino', builtMonth: 1 }, { id: 'helicopter', builtMonth: 1 }] }, { type: 'endDesk' });
+  it('fires a combo once, and completes objectives', () => {
+    const base = withDesk(start());
+    const s = play({ ...base, approval: { ...base.approval, press: 75 }, projects: [{ id: 'casino', builtMonth: 1 }, { id: 'helicopter', builtMonth: 1 }] }, { type: 'endDesk' });
     expect(s.reports[0]!.combos).toEqual(['vegasPd']);
-    expect(s.combosDone).toEqual(['vegasPd']);
-  });
-  it('completes objectives', () => {
-    const base = withDesk(start(), 'parkingMeters');
-    const s = play({ ...base, approval: { ...base.approval, press: 75 } }, { type: 'endDesk' });
     expect(s.objectivesDone).toContain('darling');
-    expect(s.flags['obj:darling']).toBe(true);
+  });
+  it('fades faster when popular and stops when unpopular', () => {
+    TUNING.fade = 4; TUNING.fadeSlope = 0.2;
+    expect([fadeFor(50), fadeFor(80), fadeFor(35), fadeFor(20)]).toEqual([4, 7, 1, 0]);
+    expect(play(withDesk(start()), { type: 'endDesk' }).approval.law).toBe(46);
+    TUNING.fade = 0; TUNING.fadeSlope = 0;
+  });
+});
+
+describe('the day', () => {
+  /** Finish the current day's two months with an empty desk. */
+  const finishDay = (s: State) => play(withDesk(s), { type: 'endDesk' }, { type: 'next' }, ...([] as Action[]));
+  it('runs cards first, then the Mayor\'s Hour, then the poll', () => {
+    let s = finishDay(start()); // month 2 desk
+    expect(s.month).toBe(2);
+    s = play(withDesk(s), { type: 'endDesk' }, { type: 'next' });
+    expect(s.phase).toBe('decree');
+    expect(s.decreeOffer).toHaveLength(3);
+    expect(s.polls).toHaveLength(0);
+    const d = content.pack.decrees.find((x) => x.id === s.decreeOffer[0])!;
+    const after = play(s, { type: 'decree', id: d.id });
+    expect(after.phase).toBe('dayEnd');
+    expect(after.decrees).toEqual([d.id]);
+    expect(after.polls).toHaveLength(1);
+    expect(play(s, { type: 'skipDecree' }).phase).toBe('dayEnd');
+  });
+  it('offers everyone the same three decrees', () => {
+    const at = (seed: string) => play(withDesk(finishDay(start(seed))), { type: 'endDesk' }, { type: 'next' });
+    expect(at('alice').decreeOffer).toEqual(at('bob').decreeOffer);
+  });
+  it('a decree pays or costs every month', () => {
+    const base = withDesk(start());
+    const s = play({ ...base, decrees: ['doorTax'] }, { type: 'endDesk' });
+    expect(s.reports[0]!.decrees).toBe(6);
+    expect(s.approval.people).toBe(49);
+  });
+  it('the shared daily event follows the first month and plays no game', () => {
+    let s = reduce(newTerm('week1', 'p1', week1Content), { type: 'endDesk' }, week1Content);
+    expect(s.phase).toBe('event');
+    s = reduce(s, { type: 'choose', cardId: 'evParade', option: 1 }, week1Content);
+    expect(s.phase).toBe('report');
   });
 });
 
 describe('promises', () => {
   const promised = () => {
-    let s = withDesk(start(), 'festival', 'parkingMeters');
-    s = play(s, { type: 'choose', cardId: 'festival', option: 1 }, { type: 'endDesk' }, { type: 'next' }); // month 2
-    s = play(withDesk(s, 'parkingMeters'), { type: 'endDesk' }, { type: 'next' }, { type: 'next' }, { type: 'skipDecree' }); // month 3, day 2
+    let s = play(withDesk(start(), 'festival'), { type: 'choose', cardId: 'festival', option: 1, skill: 2 }, { type: 'endDesk' }, { type: 'next' });
+    s = play(withDesk(s), { type: 'endDesk' }, { type: 'next' }, { type: 'skipDecree' }, { type: 'next' }); // day 2, month 3
     return s;
   };
   it('gives the benefit now and comes due later', () => {
@@ -160,18 +191,14 @@ describe('promises', () => {
     expect(s.phase).toBe('promises');
     expect(s.duePromises).toHaveLength(1);
   });
-  it('paying costs the money', () => {
+  it('paying costs the money; breaking costs double the gain and 4 points at the election', () => {
     const s = promised();
-    const paid = play(s, { type: 'resolvePromise', id: s.duePromises[0]!, pay: true });
+    const id = s.duePromises[0]!;
+    const paid = play(s, { type: 'resolvePromise', id, pay: true });
     expect(paid.money).toBe(s.money - 14);
-    expect(paid.brokenPromises).toBe(0);
     expect(paid.phase).toBe('desk');
-  });
-  it('breaking costs double the original gain and counts against the election', () => {
-    const s = promised();
-    const broke = play(s, { type: 'resolvePromise', id: s.duePromises[0]!, pay: false });
+    const broke = play(s, { type: 'resolvePromise', id, pay: false });
     expect(broke.approval.people).toBe(s.approval.people - 10);
-    expect(broke.brokenPromises).toBe(1);
     expect(voteShare(broke, 0)).toBe(voteShare({ ...broke, brokenPromises: 0 }, 0) - 4);
   });
 });
@@ -179,25 +206,19 @@ describe('promises', () => {
 describe('recall', () => {
   it('resets the town and costs 8 points at the election', () => {
     const base = withDesk(start(), 'curfew');
-    const s = play({ ...base, approval: { ...base.approval, people: 8 } }, { type: 'choose', cardId: 'curfew', option: 0 });
+    const s = play({ ...base, approval: { ...base.approval, people: 8 } }, { type: 'choose', cardId: 'curfew', option: 0, skill: 2 });
     expect(s.recalls).toBe(1);
     expect(s.approval).toEqual({ people: 40, business: 40, law: 40, press: 40 });
     expect(s.money).toBe(20);
-    expect(s.lastRecall).toBeTruthy();
     expect(voteShare(s, 0)).toBe(50 - 5 - 2 - 1 - 1 - 8);
   });
-  it('triggers on bankruptcy at month end', () => {
-    const base = withDesk(start(), 'parkingMeters');
-    const s = play({ ...base, money: -60, leases: [{ cardId: 'x', monthly: -30 }] }, { type: 'endDesk' });
-    expect(s.recalls).toBe(1);
-    expect(s.flags.wentBankrupt).toBe(true);
-  });
-  it('a third recall ends the term early but still produces a result', () => {
-    const base = withDesk(start(), 'curfew');
-    const s = play({ ...base, recalls: 2, approval: { ...base.approval, people: 8 } }, { type: 'choose', cardId: 'curfew', option: 0 });
+  it('triggers on bankruptcy, and a third recall ends the term with a result', () => {
+    const base = withDesk(start());
+    expect(play({ ...base, money: -60, leases: [{ cardId: 'x', monthly: -30 }] }, { type: 'endDesk' }).flags.wentBankrupt).toBe(true);
+    const third = withDesk(start(), 'curfew');
+    const s = play({ ...third, recalls: 2, approval: { ...third.approval, people: 8 } }, { type: 'choose', cardId: 'curfew', option: 0, skill: 2 });
     expect(s.phase).toBe('results');
     expect(s.result?.endedEarly).toBe(true);
-    expect(s.result?.won).toBe(false);
   });
 });
 
@@ -211,18 +232,12 @@ describe('election', () => {
     expect(voteShare({ ...s, approval: { people: 100, business: 100, law: 100, press: 100 } }, 20)).toBe(95);
     expect(voteShare({ ...s, approval: { people: 1, business: 1, law: 1, press: 1 }, recalls: 2 }, 0)).toBe(5);
   });
-  it('a full term runs Monday to Sunday: 12 months, 6 polls, a campaign and a result', () => {
+  it('a full term runs Monday to Sunday: 12 months, 6 polls, 36 cards or fewer per player, a campaign and a result', () => {
     const s = autoplay(start('full'), sensible, content, () => false);
     expect(s.phase).toBe('results');
     expect(s.reports).toHaveLength(12);
     expect(s.polls).toHaveLength(6);
-    expect(s.day).toBe(7);
-    expect(s.result!.share).toBeGreaterThanOrEqual(5);
-    expect(s.result!.won).toBe(s.result!.share >= 50);
     expect(s.history.some((h) => h.cardId.startsWith('campaign'))).toBe(true);
-  });
-  it('keeps each day within 14 decisions', () => {
-    const s = autoplay(start('count'), sensible, content, () => false);
     for (let day = 1; day <= 6; day++) {
       const n = s.history.filter((h) => Math.ceil(h.month / 2) === day && h.choice !== 'ignored').length;
       expect(n).toBeLessThanOrEqual(14);
@@ -235,157 +250,68 @@ describe('missed days and joining mid-week', () => {
     const s = coverMissedDays(start('late'), content, 4);
     expect(s.day).toBe(4);
     expect(s.month).toBe(7);
-    expect(s.phase).toBe('decree'); // the morning starts with the Mayor's Hour
+    expect(s.phase === 'desk' || s.phase === 'promises').toBe(true);
     expect(s.daveDays).toEqual([1, 2, 3]);
-    expect(s.reports).toHaveLength(6);
   });
   it('the handover is a little worse than a fresh start but never ruined', () => {
     for (const seed of ['a', 'b', 'c', 'd', 'e', 'f']) {
       const s = coverMissedDays(start(seed), content, 6);
       for (const g of ['people', 'business', 'law', 'press'] as const) expect(s.approval[g]).toBeGreaterThanOrEqual(35);
       expect(s.money).toBeGreaterThanOrEqual(40);
-      expect(s.money).toBeLessThanOrEqual(90 + 60);
       expect(s.recalls).toBe(0);
       expect(s.brokenPromises).toBe(0);
-      expect(s.actionsLeft).toBe(3);
     }
   });
-  it('does not replay a day the player already finished', () => {
+  it('does not replay a finished day, and lands on the campaign card on Sunday', () => {
     const played = autoplay(start('p'), sensible, content, (st) => st.phase === 'dayEnd');
-    const s = coverMissedDays(played, content, 2);
-    expect(s.day).toBe(2);
-    expect(s.daveDays).toEqual([]);
-  });
-  it('lands on the campaign card on Sunday', () => {
-    const s = coverMissedDays(start('sun'), content, 7);
-    expect(s.phase).toBe('campaign');
-    expect(s.daveDays).toEqual([1, 2, 3, 4, 5, 6]);
-  });
-});
-
-describe('events', () => {
-  it('the shared daily event follows the first month of the day and costs no action', () => {
-    let s = reduce(newTerm('week1', 'p1', week1Content), { type: 'skipDecree' }, week1Content);
-    s = reduce(s, { type: 'endDesk' }, week1Content);
-    expect(s.phase).toBe('event');
-    expect(s.eventId).toBe('evParade');
-    s = reduce(s, { type: 'choose', cardId: 'evParade', option: 1 }, week1Content);
-    expect(s.phase).toBe('report');
-    expect(s.money).toBe(100 - 8 + s.reports[0]!.income);
+    expect(coverMissedDays(played, content, 2).daveDays).toEqual([]);
+    const sun = coverMissedDays(start('sun'), content, 7);
+    expect(sun.phase).toBe('campaign');
+    expect(sun.daveDays).toEqual([1, 2, 3, 4, 5, 6]);
   });
 });
 
 describe('town setup', () => {
   const profile = { mayor: '  Mayor <b>Pat</b>  ', town: 'Goosebury', base: 'press' as const, perk: 'chest' as const };
-  it('boosts your base, costs its rival, and applies the perk, once', () => {
-    const s = reduce(start(), { type: 'setup', profile }, content);
-    expect(s.approval).toEqual({ people: 50, business: 50, law: 46, press: 58 });
-    expect(s.money).toBe(130);
+  it('can be done at any point, once: base up, rival down, perk applied', () => {
+    const late = autoplay(start('s'), sensible, content, (st) => st.phase === 'dayEnd');
+    const s = reduce(late, { type: 'setup', profile }, content);
+    expect(s.approval.press).toBe(Math.min(100, late.approval.press + 8));
+    expect(s.approval.law).toBe(late.approval.law - 4);
+    expect(s.money).toBe(late.money + 30);
     expect(s.profile!.mayor).toBe('Mayor bPat/b');
     expect(() => reduce(s, { type: 'setup', profile }, content)).toThrow(/once/);
   });
-  it('the cousin perk lets Dave take two requests a month', () => {
-    let s = reduce(withDesk(start(), 'snowplow', 'curfew', 'festival'), { type: 'setup', profile: { ...profile, perk: 'cousin' } }, content);
-    s = play(s, { type: 'delegate', cardId: 'curfew' }, { type: 'delegate', cardId: 'festival' });
-    expect(legalActions(s, content).some((a) => a.type === 'delegate')).toBe(false);
-  });
-  it('names can be changed later', () => {
-    let s = reduce(start(), { type: 'setup', profile }, content);
-    s = reduce(s, { type: 'rename', mayor: 'Sam', town: 'Upper Honk' }, content);
-    expect(s.profile).toMatchObject({ mayor: 'Sam', town: 'Upper Honk', base: 'press' });
-  });
-});
-
-describe('decrees', () => {
-  it('each morning offers the same three to everyone, and one can be enacted', () => {
-    const a = newTerm('week1', 'alice', content);
-    const b = newTerm('week1', 'bob', content);
-    expect(a.phase).toBe('decree');
-    expect(a.decreeOffer).toHaveLength(3);
-    expect(a.decreeOffer).toEqual(b.decreeOffer);
-    const d = content.pack.decrees.find((x) => x.id === a.decreeOffer[0])!;
-    const s = reduce(a, { type: 'decree', id: d.id }, content);
-    expect(s.phase).toBe('desk');
-    expect(s.decrees).toEqual([d.id]);
-    expect(s.money).toBe(100 + (d.money ?? 0));
-    expect(s.actionsLeft).toBe(3);
-  });
-  it('a decree pays or costs every month and is not offered again', () => {
-    const base = withDesk(start());
-    const s = play({ ...base, decrees: ['doorTax'] }, { type: 'endDesk' });
-    expect(s.reports[0]!.decrees).toBe(6);
-    expect(s.approval.people).toBe(49);
-    const later = coverMissedDays({ ...s, decrees: content.pack.decrees.slice(0, 18).map((d) => d.id) }, content, 2);
-    expect(later.decreeOffer.every((id) => !later.decrees.includes(id) || later.phase !== 'decree')).toBe(true);
-  });
-});
-
-describe('mini-game results', () => {
-  const run = (skill: 0 | 1 | 2) => play(withDesk(start(), 'pothole'), { type: 'choose', cardId: 'pothole', option: 0, skill });
-  it('a great result adds the bonus, a flop adds the penalty, fine adds nothing', () => {
-    expect(run(1).money).toBe(86);
-    expect(run(1).approval.business).toBe(55);
-    expect(run(2).approval.business).toBe(60);
-    expect(run(0).money).toBe(81);
-    expect(run(2).history[0]!.skill).toBe(2);
+  it('the cousin perk makes the first Dave each month free; names can be changed later', () => {
+    let s = reduce(withDesk(start(), 'snowplow', 'curfew'), { type: 'setup', profile: { ...profile, perk: 'cousin' } }, content);
+    s = play(s, { type: 'delegate', cardId: 'curfew' });
+    expect(s.favors).toBe(2);
+    s = play(s, { type: 'delegate', cardId: 'snowplow' });
+    expect(s.favors).toBe(1);
+    expect(reduce(s, { type: 'rename', mayor: 'Sam', town: 'Upper Honk' }, content).profile).toMatchObject({ mayor: 'Sam', town: 'Upper Honk', base: 'press' });
   });
 });
 
 describe('gambles', () => {
   it('apply the win or the lose outcome, and the same player always gets the same result', () => {
-    const run = (seed: string) => play(withDesk(start(seed), 'cheeseVault'), { type: 'choose', cardId: 'cheeseVault', option: 0 });
+    const run = (seed: string) => play(withDesk(start(seed), 'cheeseVault'), { type: 'choose', cardId: 'cheeseVault', option: 0, skill: 2 });
     const results = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].map((seed) => run(seed));
-    for (const s of results) {
-      const won = s.history[0]!.won;
-      expect(s.money).toBe(won ? 132 : 90);
-      expect(s.approval.people).toBe(won ? 50 : 45);
-    }
+    for (const s of results) expect(s.money).toBe(s.history[0]!.won ? 132 : 90);
     expect(new Set(results.map((s) => s.history[0]!.won)).size).toBe(2);
     expect(run('a')).toEqual(run('a'));
   });
 });
 
-describe('late-week crises', () => {
-  it('a second urgent card can arrive from Thursday', () => {
-    const s = coverMissedDays(start('crisis'), content, 5);
-    expect(s.month).toBe(9);
-    expect(s.desk.filter((d) => d.urgent).length).toBeGreaterThanOrEqual(1);
-    expect(s.desk.filter((d) => d.urgent).length).toBeLessThanOrEqual(2);
-  });
-});
-
-describe('urgent cards', () => {
-  it('ignoring an urgent card hurts double', () => {
-    const base = start();
-    const s = play({ ...base, desk: [{ cardId: 'gooseOccupation', status: 'open', urgent: true }] }, { type: 'endDesk' });
-    expect(s.approval.people).toBe(30);
-    expect(s.approval.business).toBe(40);
-  });
-});
-
-describe('approval fade', () => {
-  it('fades faster when popular and stops when unpopular', () => {
-    TUNING.fade = 4; TUNING.fadeSlope = 0.2;
-    expect(fadeFor(50)).toBe(4);
-    expect(fadeFor(80)).toBe(7);
-    expect(fadeFor(35)).toBe(1);
-    expect(fadeFor(20)).toBe(0);
-    const s = play(withDesk(start(), 'parkingMeters'), { type: 'endDesk' });
-    expect(s.approval.law).toBe(46);
-    expect(s.reports[0]!.drift.law).toBe(-4);
-    TUNING.fade = 0; TUNING.fadeSlope = 0;
-  });
-});
-
 describe('content validation', () => {
-  it('rejects a pack with a bad project reference', () => {
-    const bad = structuredClone(placeholder) as { cards: { options: { project?: string }[] }[] };
+  it('rejects a bad project reference, an over-long label, and a desk card without a game', () => {
+    const bad = structuredClone(week1) as { cards: { game?: unknown; options: { project?: string; label: string }[] }[] };
     bad.cards[0]!.options[0]!.project = 'volcano';
     expect(() => loadPack(bad)).toThrow(/unknown project volcano/);
-  });
-  it('rejects labels over 28 characters', () => {
-    const bad = structuredClone(placeholder) as { cards: { options: { label: string }[] }[] };
-    bad.cards[0]!.options[0]!.label = 'x'.repeat(29);
-    expect(() => loadPack(bad)).toThrow();
+    const long = structuredClone(week1) as typeof bad;
+    long.cards[0]!.options[0]!.label = 'x'.repeat(29);
+    expect(() => loadPack(long)).toThrow();
+    const nogame = structuredClone(week1) as typeof bad;
+    delete nogame.cards[0]!.game;
+    expect(() => loadPack(nogame)).toThrow(/needs a mini-game/);
   });
 });

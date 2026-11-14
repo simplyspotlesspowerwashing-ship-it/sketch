@@ -173,6 +173,40 @@ export function Portrait({ who, mood = 'neutral', size = 64, ring }: { who: stri
   );
 }
 
+
+// ---------- sprites (44 x 44), shared by the mini-games, the intro clips and the town ----------
+const SO = { stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' as const, 'stroke-linecap': 'round' as const };
+const SPRITES: Record<string, () => ComponentChildren> = {
+  goose: () => <><ellipse cx="20" cy="30" rx="13" ry="8" fill="#fff" {...SO} /><path d="M28 28 q6 -14 2 -20" stroke={INK} stroke-width="8" fill="none" stroke-linecap="round" /><path d="M28 28 q6 -14 2 -20" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round" /><path d="M32 6 l9 2 l-9 4z" fill="#E8943A" {...SO} /><circle cx="30" cy="8" r="1.2" fill={INK} /></>,
+  raccoon: () => <><path d="M8 14 l-2 -9 l8 4z M36 14 l2 -9 l-8 4z" fill="#8C8577" {...SO} /><ellipse cx="22" cy="24" rx="16" ry="13" fill="#B8B1A4" {...SO} /><path d="M8 22 q7 -7 13 0 q-4 7 -10 5z M36 22 q-7 -7 -13 0 q4 7 10 5z" fill="#3A322C" /><circle cx="15" cy="23" r="2" fill="#fff" /><circle cx="29" cy="23" r="2" fill="#fff" /><ellipse cx="22" cy="30" rx="3" ry="2" fill={INK} /></>,
+  frog: () => <><ellipse cx="22" cy="28" rx="15" ry="10" fill="#5FA77A" {...SO} /><circle cx="14" cy="16" r="5.5" fill="#fff" {...SO} /><circle cx="30" cy="16" r="5.5" fill="#fff" {...SO} /><circle cx="14" cy="16" r="2" fill={INK} /><circle cx="30" cy="16" r="2" fill={INK} /><path d="M14 30 q8 5 16 0" fill="none" {...SO} /></>,
+  cheese: () => <><path d="M4 32 l30 -20 l6 20z" fill="#F7D774" {...SO} /><circle cx="18" cy="27" r="3" fill="#E8C55A" {...SO} /><circle cx="25" cy="19" r="1.3" fill={INK} /><circle cx="31" cy="19" r="1.3" fill={INK} /><path d="M25 25 q3 2 6 0" fill="none" {...SO} /></>,
+  coin: () => <><circle cx="22" cy="22" r="16" fill="#E8C55A" {...SO} /><circle cx="22" cy="22" r="11" fill="none" stroke={INK} stroke-width="1.5" /><path d="M22 14 v16 M18 18 q4 -3 8 0 q0 4 -4 4 q-4 0 -4 4 q4 3 8 0" fill="none" {...SO} /></>,
+  paper: () => <><path d="M9 5 h20 l7 7 v27 h-27z" fill="#fff" {...SO} /><path d="M29 5 v7 h7" fill="none" {...SO} /><path d="M14 18 h16 M14 24 h16 M14 30 h10" {...SO} /></>,
+  star: () => <path d="M22 4 l5.3 11.2 l12.2 1.5 l-9 8.4 l2.3 12.1 l-10.8 -6 l-10.8 6 l2.3 -12.1 l-9 -8.4 l12.2 -1.5z" fill="#F7D774" {...SO} />,
+  heli: () => <><path d="M4 12 h36" {...SO} stroke-width="3" /><path d="M22 12 v5" {...SO} /><ellipse cx="20" cy="26" rx="14" ry="9" fill="#3B6FB6" {...SO} /><path d="M32 23 l10 -4 v8z" fill="#3B6FB6" {...SO} /><path d="M11 23 h9 v6 h-9z" fill="#CFE3EE" {...SO} /><path d="M10 39 h22 M15 35 v4 M26 35 v4" {...SO} /></>,
+  car: () => <><path d="M4 30 v-8 l7 -9 h18 l8 9 h3 v8z" fill="#D9653B" {...SO} /><path d="M12 22 l4 -6 h6 v6z M25 22 v-6 h4 l4 6z" fill="#CFE3EE" {...SO} /><circle cx="12" cy="31" r="5" fill={INK} /><circle cx="32" cy="31" r="5" fill={INK} /></>,
+  cloud: () => <><path d="M10 34 q-8 0 -7 -8 q1 -7 9 -6 q3 -10 13 -8 q9 2 8 11 q8 1 7 7 q-1 4 -6 4z" fill="#8C97A3" {...SO} /><path d="M20 34 l-3 7 M28 34 l-3 7" stroke="#F7D774" stroke-width="2.5" stroke-linecap="round" /></>,
+  snow: () => <><circle cx="22" cy="30" r="11" fill="#fff" {...SO} /><circle cx="22" cy="13" r="8" fill="#fff" {...SO} /><circle cx="19" cy="11" r="1.3" fill={INK} /><circle cx="25" cy="11" r="1.3" fill={INK} /><path d="M22 14 l6 2 l-6 1z" fill="#E8943A" {...SO} stroke-width="1" /><circle cx="22" cy="27" r="1.3" fill={INK} /><circle cx="22" cy="33" r="1.3" fill={INK} /></>,
+  brick: () => <><rect x="4" y="12" width="36" height="20" rx="2" fill="#C8704A" {...SO} /><path d="M4 22 h36 M16 12 v10 M28 12 v10 M10 22 v10 M22 22 v10 M34 22 v10" stroke={INK} stroke-width="1.4" /></>,
+  note: () => <><path d="M16 32 v-22 l18 -4 v22" fill="none" {...SO} stroke-width="3" /><ellipse cx="11" cy="33" rx="6" ry="4.5" fill={INK} /><ellipse cx="29" cy="29" rx="6" ry="4.5" fill={INK} /></>,
+  kid: () => <><path d="M10 42 q0 -14 12 -14 q12 0 12 14z" fill="#D9653B" {...SO} /><circle cx="22" cy="18" r="10" fill="#F5CFAE" {...SO} /><path d="M12 15 q10 -12 20 0 l-1 -4 q-9 -9 -18 0z" fill="#3B6FB6" {...SO} /><path d="M30 13 q7 -1 10 3 q-5 1 -10 -1z" fill="#3B6FB6" {...SO} /><circle cx="18" cy="19" r="1.3" fill={INK} /><circle cx="26" cy="19" r="1.3" fill={INK} /><path d="M18 23 q4 3 8 0" fill="none" {...SO} /></>,
+  hole: () => <><ellipse cx="22" cy="26" rx="19" ry="10" fill={INK} /><ellipse cx="22" cy="24" rx="14" ry="6" fill="#3A322C" /><circle cx="17" cy="23" r="1.6" fill="#F2EBDD" /><circle cx="27" cy="23" r="1.6" fill="#F2EBDD" /></>,
+  drop: () => <><path d="M22 4 q14 18 14 26 a14 12 0 0 1 -28 0 q0 -8 14 -26z" fill="#7FB7D9" {...SO} /><path d="M15 29 q0 6 6 7" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" /></>,
+  bolt: () => <path d="M26 3 l-16 22 h9 l-4 16 l18 -24 h-10z" fill="#F7D774" {...SO} />,
+  acorn: () => <><path d="M10 20 q12 26 24 0z" fill="#B5651D" {...SO} /><path d="M7 20 q15 -14 30 0z" fill="#7A5234" {...SO} /><path d="M22 10 v-6" {...SO} /></>,
+  ghost: () => <><path d="M8 40 v-22 a14 14 0 0 1 28 0 v22 l-5 -5 l-4.5 5 l-4.5 -5 l-4.5 5 l-4.5 -5z" fill="#fff" {...SO} /><circle cx="17" cy="18" r="2.5" fill={INK} /><circle cx="27" cy="18" r="2.5" fill={INK} /><ellipse cx="22" cy="26" rx="3" ry="4" fill={INK} /></>,
+  monster: () => <><path d="M14 42 q-6 -30 8 -36 q14 0 12 12 q-8 -3 -8 6 v18z" fill="#5FA77A" {...SO} /><circle cx="27" cy="13" r="2" fill={INK} /><path d="M17 16 l-5 -3 M17 22 l-6 -1 M18 28 l-6 1" {...SO} /></>,
+  carrot: () => <><path d="M14 14 q18 4 22 26 q-22 -4 -26 -22z" fill="#E8943A" {...SO} /><path d="M12 14 l-6 -8 M14 12 l0 -9 M10 16 l-8 -2" stroke="#3F8F5A" stroke-width="3" stroke-linecap="round" /></>,
+  icecream: () => <><path d="M12 22 l10 20 l10 -20z" fill="#E8C55A" {...SO} /><circle cx="22" cy="15" r="11" fill="#F6C6D0" {...SO} /><circle cx="18" cy="12" r="1.3" fill={INK} /><circle cx="26" cy="12" r="1.3" fill={INK} /></>,
+  rocket: () => <><path d="M22 3 q10 10 8 26 h-16 q-2 -16 8 -26z" fill="#F2EBDD" {...SO} /><path d="M14 24 l-7 9 l8 -2z M30 24 l7 9 l-8 -2z" fill="#C23B3B" {...SO} /><circle cx="22" cy="15" r="4" fill="#7FB7D9" {...SO} /><path d="M18 31 q4 12 8 0z" fill="#E8943A" {...SO} /></>,
+};
+export const SPRITE_NAMES = Object.keys(SPRITES);
+export const spriteBody = (theme: string): ComponentChildren => (SPRITES[theme] ?? SPRITES.star!)();
+export function Sprite({ theme, size = 44 }: { theme: string; size?: number }) {
+  return <svg class="sprite" width={size} height={size} viewBox="0 0 44 44" aria-hidden="true">{spriteBody(theme)}</svg>;
+}
+
 // ---------- icons ----------
 export const Icon = {
   ticket: (p: { size?: number }) => (
@@ -224,7 +258,7 @@ function Car({ color, police }: { color: string; police?: boolean }) {
   );
 }
 
-export function Town({ s, pulse }: { s: State; pulse?: Pulse | null }) {
+export function Town({ s, pulse, scene }: { s: State; pulse?: Pulse | null; scene?: string | null }) {
   const has = (id: string) => s.projects.some((p) => p.id === id);
   const fresh = (id: string) => (s.projects.find((p) => p.id === id)?.builtMonth === s.month ? 'built fresh' : 'built');
   const f = s.flags;
@@ -316,6 +350,7 @@ export function Town({ s, pulse }: { s: State; pulse?: Pulse | null }) {
       })}
       {/* trouble overlays */}
       {s.approval.law < 35 && <g class="built"><path d="M108 108 q6 -8 12 0 t12 0 t12 0" stroke="#C23B3B" stroke-width="3" fill="none" stroke-linecap="round" /><text x="184" y="118" font-size="9" font-weight="700" fill="#C23B3B" font-family="Fredoka, sans-serif" transform="rotate(-6 184 118)">BARB WUZ HERE</text><g transform="translate(372 150)"><ellipse cx="0" cy="0" rx="9" ry="6" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><circle cx="-8" cy="-5" r="5" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><path d="M-11 -6 h6" stroke={INK} stroke-width="3" /><path d="M8 -2 q8 -4 8 -12" stroke={INK} stroke-width="4" fill="none" stroke-linecap="round" /></g></g>}
+      {scene && [0, 1, 2, 3, 4, 5].map((i) => <g key={`${scene}${i}`} class={`parade ${i % 2 ? 'rev' : ''}`} style={{ 'animation-delay': `${-i * 0.9}s` }}><g class="hop" style={{ 'animation-delay': `${i * 0.11}s`, 'animation-duration': '.35s' }}><g transform={`translate(0 ${112 + (i % 3) * 9}) scale(.62)`}>{spriteBody(scene)}</g></g></g>)}
       {pulse && GROUPS.filter((g) => pulse.effects[g]).map((g) => [0, 1, 2].map((i) => { const up = pulse.effects[g]! > 0; const [x, y] = ANCHOR[g]; return <g key={`${pulse.key}${g}${i}`} class="emote" style={{ 'animation-delay': `${i * 0.18}s` }} transform={`translate(${x + (i - 1) * 12} ${y})`}>{up ? <path d="M0 4 q-7 -5 -7 -9 q0 -4 3.5 -4 q2.5 0 3.5 2.5 q1 -2.5 3.5 -2.5 q3.5 0 3.5 4 q0 4 -7 9z" fill={GROUP_COLOR[g]} stroke={INK} stroke-width="1.4" /> : <g><circle r="6" fill="#F6DAD3" stroke={INK} stroke-width="1.4" /><path d="M-3 -3 l6 6 M3 -3 l-6 6" stroke="#C23B3B" stroke-width="2" stroke-linecap="round" /></g>}</g>; }))}
       {s.approval.people < 35 && <g class="built">{[150, 168, 186].map((x, i) => <g key={x} class="goose" style={{ 'animation-delay': `${i * 0.2}s` }} transform={`translate(${x} 128)`}><rect x="-7" y="-22" width="14" height="10" fill="#fff" stroke={INK} stroke-width="1.5" /><path d="M0 -12 v12" stroke={INK} stroke-width="2" /><circle cx="0" cy="2" r="3.5" fill="#D9653B" stroke={INK} stroke-width="1.5" /><path d="M-4 -17 h8" stroke="#C23B3B" stroke-width="2" /></g>)}</g>}
     </svg>

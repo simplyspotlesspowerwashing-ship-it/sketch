@@ -17,24 +17,7 @@
      },
      "reaction": "Honk. That means thank you. Probably.",
      "project": "pond",
-     "headlineTag": "goose",
-     "challenge": {
-      "game": "whack",
-      "theme": "goose",
-      "title": "Herd the geese into the pond",
-      "great": {
-       "text": "Every goose in. Gerald saluted. With a wing.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "Three geese are in your office now. They like it.",
-       "effects": {
-        "law": -5
-       }
-      }
-     }
+     "headlineTag": "goose"
     },
     {
      "label": "Pond in the park instead",
@@ -70,7 +53,14 @@
      "who": "pam",
      "line": "The children love the geese. The geese do not love the children."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "goose",
+    "title": "Herd the geese to the pond",
+    "flop": "Three geese are in your office now. They like it.",
+    "bad": "raccoon"
+   }
   },
   {
    "id": "helicopter",
@@ -87,22 +77,7 @@
      },
      "reaction": "I call the front seat. Forever.",
      "project": "helicopter",
-     "headlineTag": "helicopter",
-     "challenge": {
-      "game": "timing",
-      "theme": "star",
-      "title": "Land the helicopter",
-      "great": {
-       "text": "A perfect landing. Barb wept behind her sunglasses.",
-       "effects": {
-        "law": 5
-       }
-      },
-      "flop": {
-       "text": "You landed on Doug's car. Doug watched.",
-       "money": -5
-      }
-     }
+     "headlineTag": "helicopter"
     },
     {
      "label": "Lease one",
@@ -139,7 +114,14 @@
      "who": "marge",
      "line": "'Chief Buzzes Town.' I'd print that."
     }
-   ]
+   ],
+   "game": {
+    "type": "dodge",
+    "theme": "heli",
+    "title": "Fly the helicopter home",
+    "flop": "You landed on Doug's car. Doug watched.",
+    "bad": "cloud"
+   }
   },
   {
    "id": "snowplow",
@@ -172,22 +154,7 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "Two plows. I need to sit down.",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Dig out the second plow",
-      "great": {
-       "text": "Dug out so fast the rental was half price.",
-       "money": 6
-      },
-      "flop": {
-       "text": "Still digging. It's June now.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "Two plows. I need to sit down."
     }
    ],
    "draft": true,
@@ -204,7 +171,14 @@
      "who": "chad",
      "line": "Snow is bad for business. Unless you sell snow."
     }
-   ]
+   ],
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Plow the road, miss the snowmen",
+    "flop": "You plowed the bakery. It was not in the road.",
+    "bad": "snow"
+   }
   },
   {
    "id": "libraryCasino",
@@ -221,22 +195,7 @@
      },
      "reaction": "You won't regret this. Others will.",
      "project": "casino",
-     "headlineTag": "casino",
-     "challenge": {
-      "game": "timing",
-      "theme": "coin",
-      "title": "Pull the first lever",
-      "great": {
-       "text": "Jackpot! The library can afford a second book.",
-       "money": 10
-      },
-      "flop": {
-       "text": "You lost the town's lunch money. On camera.",
-       "effects": {
-        "press": -5
-       }
-      }
-     }
+     "headlineTag": "casino"
     },
     {
      "label": "Refuse",
@@ -272,7 +231,13 @@
      "who": "barb",
      "line": "I'd have to arrest the librarian. Again."
     }
-   ]
+   ],
+   "game": {
+    "type": "stack",
+    "theme": "coin",
+    "title": "Stack the casino chips",
+    "flop": "The chips fell. Into the quiet reading area."
+   }
   },
   {
    "id": "bearStory",
@@ -289,24 +254,7 @@
      },
      "reaction": "Wonderful. Did you win? Never mind, you won.",
      "setFlag": "bearClaim",
-     "headlineTag": "bear",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Wrestle the bear, for the photo",
-      "great": {
-       "text": "The photo is incredible. The bear signed it.",
-       "effects": {
-        "press": 5
-       }
-      },
-      "flop": {
-       "text": "The bear won. It's on the front page, grinning.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "headlineTag": "bear"
     },
     {
      "label": "Tell the truth",
@@ -331,7 +279,13 @@
      "who": "timmy",
      "line": "Did the bear have a name?"
     }
-   ]
+   ],
+   "game": {
+    "type": "tug",
+    "theme": "star",
+    "title": "Wrestle the bear, for the photo",
+    "flop": "The bear won. It's on the front page, grinning."
+   }
   },
   {
    "id": "giantSpoon",
@@ -347,24 +301,7 @@
      },
      "reaction": "It faces north. That part matters.",
      "project": "spoon",
-     "headlineTag": "spoon",
-     "challenge": {
-      "game": "timing",
-      "theme": "star",
-      "title": "Cut the ribbon",
-      "great": {
-       "text": "A clean snip. The spoon gleamed. Someone fainted.",
-       "effects": {
-        "press": 5
-       }
-      },
-      "flop": {
-       "text": "You cut your own sash. Then the spoon fell over.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "headlineTag": "spoon"
     },
     {
      "label": "A normal-sized spoon",
@@ -398,7 +335,13 @@
      "who": "doug",
      "line": "A spoon. With our money. I feel faint."
     }
-   ]
+   ],
+   "game": {
+    "type": "stack",
+    "theme": "brick",
+    "title": "Raise the spoon, piece by piece",
+    "flop": "It's a giant fork now. Nobody ordered a fork."
+   }
   },
   {
    "id": "newSchool",
@@ -415,24 +358,7 @@
      },
      "reaction": "The PTA approves. We have never said that before.",
      "project": "school",
-     "headlineTag": "school",
-     "challenge": {
-      "game": "sequence",
-      "theme": "paper",
-      "title": "Recite the school motto",
-      "great": {
-       "text": "Word perfect. In Latin. Nobody knew it had Latin.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "You said 'boats' four times. That's the old motto.",
-       "effects": {
-        "press": -5
-       }
-      }
-     }
+     "headlineTag": "school"
     },
     {
      "label": "Promise it by spring",
@@ -470,7 +396,13 @@
      "who": "timmy",
      "line": "I like the boat book."
     }
-   ]
+   ],
+   "game": {
+    "type": "stack",
+    "theme": "brick",
+    "title": "Build the school",
+    "flop": "The school leans. The children lean with it."
+   }
   },
   {
    "id": "tvStation",
@@ -487,24 +419,7 @@
      },
      "reaction": "You're on at six. Wear a tie.",
      "project": "tv",
-     "headlineTag": "tv",
-     "challenge": {
-      "game": "sequence",
-      "theme": "star",
-      "title": "Read the autocue",
-      "great": {
-       "text": "Flawless. Marge called you 'almost a professional'.",
-       "effects": {
-        "press": 5
-       }
-      },
-      "flop": {
-       "text": "You read the stage directions aloud. 'Mayor smiles.'",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "headlineTag": "tv"
     },
     {
      "label": "Lend her the roof",
@@ -537,7 +452,13 @@
      "who": "barb",
      "line": "She'll film my parking."
     }
-   ]
+   ],
+   "game": {
+    "type": "simon",
+    "theme": "note",
+    "title": "Follow the director's cues",
+    "flop": "You read the stage directions aloud. 'Mayor smiles.'"
+   }
   },
   {
    "id": "parkingMeters",
@@ -552,22 +473,7 @@
       "people": -10,
       "business": -5
      },
-     "reaction": "Coins. Lovely, countable coins.",
-     "challenge": {
-      "game": "whack",
-      "theme": "coin",
-      "title": "Collect the first coins",
-      "great": {
-       "text": "You got every coin. Doug is counting them twice.",
-       "money": 6
-      },
-      "flop": {
-       "text": "You fed your own coins in. All of them.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "Coins. Lovely, countable coins."
     },
     {
      "label": "Meters for visitors only",
@@ -602,7 +508,14 @@
      "who": "barb",
      "line": "Free parking means chaos. I've seen it."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "coin",
+    "title": "Collect the coins",
+    "flop": "You fed your own coins in. All of them.",
+    "bad": "raccoon"
+   }
   },
   {
    "id": "curfew",
@@ -627,24 +540,7 @@
       "people": 5,
       "law": 5
      },
-     "reaction": "Now they stand indoors. I'll allow it.",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Arm-wrestle a teen for respect",
-      "great": {
-       "text": "You won. They made you an honorary teen.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "You lost to a thirteen-year-old. Barb filmed it.",
-       "effects": {
-        "law": -5
-       }
-      }
-     }
+     "reaction": "Now they stand indoors. I'll allow it."
     },
     {
      "label": "Let them stand",
@@ -669,7 +565,14 @@
      "who": "timmy",
      "line": "I want to stand near the fountain too."
     }
-   ]
+   ],
+   "game": {
+    "type": "whack",
+    "theme": "kid",
+    "title": "Round up the loiterers",
+    "flop": "You sent a statue home. The teens are still there.",
+    "bad": "goose"
+   }
   },
   {
    "id": "taxBreak",
@@ -696,22 +599,7 @@
       "business": 5,
       "press": -5
      },
-     "reaction": "I love a deal. I'll name a bench after you.",
-     "challenge": {
-      "game": "timing",
-      "theme": "coin",
-      "title": "Shake on it at the right moment",
-      "great": {
-       "text": "Firm grip. Good timing. Chad rounded up.",
-       "money": 6
-      },
-      "flop": {
-       "text": "You shook too early. Then too late. Then the lamp.",
-       "effects": {
-        "business": -5
-       }
-      }
-     }
+     "reaction": "I love a deal. I'll name a bench after you."
     },
     {
      "label": "Refuse",
@@ -736,7 +624,13 @@
      "who": "marge",
      "line": "'Mayor Bends For Billionaire.' Or not. Your call."
     }
-   ]
+   ],
+   "game": {
+    "type": "tug",
+    "theme": "coin",
+    "title": "Haggle with Chad",
+    "flop": "You haggled yourself upward. Chad sent flowers."
+   }
   },
   {
    "id": "festival",
@@ -753,24 +647,7 @@
       "law": -5
      },
      "reaction": "FROG DAY! FROG DAY!",
-     "setFlag": "frogs",
-     "challenge": {
-      "game": "whack",
-      "theme": "frog",
-      "title": "Catch the parade frogs",
-      "great": {
-       "text": "Every frog back on its float. A Frog Day miracle.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "Frogs in the police station. Barb isn't laughing.",
-       "effects": {
-        "law": -5
-       }
-      }
-     }
+     "setFlag": "frogs"
     },
     {
      "label": "Promise Frog Day soon",
@@ -807,7 +684,14 @@
      "who": "barb",
      "line": "Frogs block traffic. Slowly, but they do."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "frog",
+    "title": "Catch the parade frogs",
+    "flop": "Frogs in the police station. Barb isn't laughing.",
+    "bad": "raccoon"
+   }
   },
   {
    "id": "pothole",
@@ -822,22 +706,7 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "Goodbye, Kevin. He's survived by a smaller pothole. We've named it Kevin Junior.",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Shovel gravel into Kevin",
-      "great": {
-       "text": "Kevin is full. Main Street is whole. Shops cheered.",
-       "effects": {
-        "business": 5
-       }
-      },
-      "flop": {
-       "text": "Kevin ate the shovel. And the gravel. And the truck.",
-       "money": -5
-      }
-     }
+     "reaction": "Goodbye, Kevin. He's survived by a smaller pothole. We've named it Kevin Junior."
     },
     {
      "label": "Sell tickets to see Kevin",
@@ -877,7 +746,14 @@
      "who": "marge",
      "line": "Kevin has more readers than you."
     }
-   ]
+   ],
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Drive round Kevin",
+    "flop": "Kevin ate the car. And the tow truck. And the plan.",
+    "bad": "hole"
+   }
   },
   {
    "id": "statue",
@@ -928,7 +804,13 @@
      "who": "linda",
      "line": "Statues are how they watch us."
     }
-   ]
+   ],
+   "game": {
+    "type": "stack",
+    "theme": "brick",
+    "title": "Raise the statue",
+    "flop": "The head is on backwards. It winks at the wall."
+   }
   },
   {
    "id": "raccoonBins",
@@ -944,24 +826,7 @@
       "law": 5,
       "people": 5
      },
-     "reaction": "Let's see them open THAT. Oh. They opened it.",
-     "challenge": {
-      "game": "whack",
-      "theme": "raccoon",
-      "title": "Shoo the raccoons",
-      "great": {
-       "text": "They left in an orderly line. One tipped a tiny hat.",
-       "effects": {
-        "law": 5
-       }
-      },
-      "flop": {
-       "text": "They shooed you. You live behind the diner now.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "Let's see them open THAT. Oh. They opened it."
     },
     {
      "label": "Night patrols",
@@ -996,7 +861,14 @@
      "who": "doug",
      "line": "Bins cost money. Everything costs money."
     }
-   ]
+   ],
+   "game": {
+    "type": "whack",
+    "theme": "raccoon",
+    "title": "Shoo the raccoons",
+    "flop": "They shooed you. You live behind the diner now.",
+    "bad": "goose"
+   }
   },
   {
    "id": "buglePress",
@@ -1011,22 +883,7 @@
      "effects": {
       "press": 10
      },
-     "reaction": "Tomorrow's edition will be very kind to you.",
-     "challenge": {
-      "game": "timing",
-      "theme": "paper",
-      "title": "Start the new press",
-      "great": {
-       "text": "It roared to life. First headline: your good side.",
-       "effects": {
-        "press": 5
-       }
-      },
-      "flop": {
-       "text": "You jammed it with your tie. The tie is the news.",
-       "money": -4
-      }
-     }
+     "reaction": "Tomorrow's edition will be very kind to you."
     },
     {
      "label": "Use the school copier",
@@ -1059,7 +916,13 @@
      "who": "chad",
      "line": "I could buy the Bugle. Just saying."
     }
-   ]
+   ],
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Sort the front pages",
+    "flop": "Tomorrow's paper is all page four. Forty times."
+   }
   },
   {
    "id": "schoolLunch",
@@ -1074,24 +937,7 @@
      "effects": {
       "people": 10
      },
-     "reaction": "A vegetable! Some of them cried.",
-     "challenge": {
-      "game": "sequence",
-      "theme": "star",
-      "title": "Serve lunch in the right order",
-      "great": {
-       "text": "Soup, main, pudding. The children applauded a meal.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "Custard on the fish. The children will never forget.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "A vegetable! Some of them cried."
     },
     {
      "label": "Chad sponsors lunch",
@@ -1125,7 +971,14 @@
      "who": "marge",
      "line": "I tried the paste. I'm suing."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "carrot",
+    "title": "Catch lunch before it lands",
+    "flop": "Custard on the fish. The children will never forget.",
+    "bad": "raccoon"
+   }
   },
   {
    "id": "fireworks",
@@ -1142,24 +995,7 @@
       "law": -5
      },
      "reaction": "BEST. MAYOR. EVER.",
-     "setFlag": "fireworks",
-     "challenge": {
-      "game": "timing",
-      "theme": "star",
-      "title": "Light the fuse and run",
-      "great": {
-       "text": "A perfect show. One of them spelled 'TIMMY'.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "One went into the police station. It's fine. It's on fire.",
-       "effects": {
-        "law": -5
-       }
-      }
-     }
+     "setFlag": "fireworks"
     },
     {
      "label": "One sparkler",
@@ -1193,7 +1029,13 @@
      "who": "gerald",
      "line": "HONK. (Geese hate fireworks.)"
     }
-   ]
+   ],
+   "game": {
+    "type": "simon",
+    "theme": "star",
+    "title": "Light the fuses in order",
+    "flop": "One went into the police station. It's fine. It's on fire."
+   }
   },
   {
    "id": "radar",
@@ -1245,7 +1087,14 @@
      "who": "marge",
      "line": "His guesses fill half my paper."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "drop",
+    "title": "Catch the rain, dodge the lightning",
+    "flop": "Steve was struck twice. He says it's 'data'.",
+    "bad": "bolt"
+   }
   },
   {
    "id": "nightLibrary",
@@ -1295,7 +1144,13 @@
      "who": "timmy",
      "line": "Can I come? I'm allowed up till eight."
     }
-   ]
+   ],
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Shelve the whispering books",
+    "flop": "The books are shelved wrong. They're arguing."
+   }
   },
   {
    "id": "mallParking",
@@ -1348,7 +1203,14 @@
      "who": "pam",
      "line": "Touch that park and the PTA mobilises."
     }
-   ]
+   ],
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Park without hitting a goose",
+    "flop": "You parked in a goose's spot. There will be a meeting.",
+    "bad": "goose"
+   }
   },
   {
    "id": "speedTrap",
@@ -1399,7 +1261,14 @@
      "who": "doug",
      "line": "Twelve thousand, though."
     }
-   ]
+   ],
+   "game": {
+    "type": "whack",
+    "theme": "car",
+    "title": "Clock the speeders",
+    "flop": "You ticketed a goose. It's contesting.",
+    "bad": "goose"
+   }
   },
   {
    "id": "mascot",
@@ -1450,7 +1319,13 @@
      "who": "timmy",
      "line": "I LOVE WET SOCK."
     }
-   ]
+   ],
+   "game": {
+    "type": "match",
+    "theme": "star",
+    "title": "Find the mascot's other sock",
+    "flop": "Wet Sock has one sock. Which is, to be fair, the brand."
+   }
   },
   {
    "id": "gooseStrike",
@@ -1465,24 +1340,7 @@
      "effects": {
       "people": 5
      },
-     "reaction": "Honk. (Work resumes.)",
-     "challenge": {
-      "game": "sequence",
-      "theme": "goose",
-      "title": "Do the secret union honk",
-      "great": {
-       "text": "Honk-perfect. You are a goose now, legally.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "You honked something rude. About Gerald's mother.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "Honk. (Work resumes.)"
     },
     {
      "label": "Hire ducks instead",
@@ -1518,7 +1376,13 @@
      "who": "steve",
      "line": "Cloudy, with mosquitoes."
     }
-   ]
+   ],
+   "game": {
+    "type": "simon",
+    "theme": "goose",
+    "title": "Do the secret union honk",
+    "flop": "You honked something rude. About Gerald's mother."
+   }
   },
   {
    "id": "bankError",
@@ -1569,7 +1433,14 @@
      "who": "pam",
      "line": "The school roof costs exactly thirty thousand."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "coin",
+    "title": "Grab the cash, dodge the receipts",
+    "flop": "You dropped it in the fountain. It's the town's now. Wet.",
+    "bad": "paper"
+   }
   },
   {
    "id": "strangerPrice",
@@ -1618,7 +1489,13 @@
      "who": "chad",
      "line": "Hey, I was going to buy the town."
     }
-   ]
+   ],
+   "game": {
+    "type": "tug",
+    "theme": "star",
+    "title": "Stare down the Stranger",
+    "flop": "You blinked. He's measuring the curtains."
+   }
   },
   {
    "id": "talentShow",
@@ -1633,24 +1510,7 @@
       "press": 10,
       "people": -10
      },
-     "reaction": "'Mayor Makes Children Cry.' Front page.",
-     "challenge": {
-      "game": "sequence",
-      "theme": "star",
-      "title": "Remember who sang what",
-      "great": {
-       "text": "You named all forty children. In order. Pam gasped.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "You gave first prize to a coat on a chair.",
-       "effects": {
-        "press": -5
-       }
-      }
-     }
+     "reaction": "'Mayor Makes Children Cry.' Front page."
     },
     {
      "label": "Everyone wins",
@@ -1685,7 +1545,13 @@
      "who": "marge",
      "line": "Please be honest. I need this."
     }
-   ]
+   ],
+   "game": {
+    "type": "match",
+    "theme": "note",
+    "title": "Remember who sang what",
+    "flop": "You gave first prize to a coat on a chair."
+   }
   },
   {
    "id": "farmersMarket",
@@ -1722,22 +1588,7 @@
       "business": -5
      },
      "reaction": "A carrot tax. I can live with that.",
-     "setFlag": "market",
-     "challenge": {
-      "game": "whack",
-      "theme": "coin",
-      "title": "Collect the carrot tax",
-      "great": {
-       "text": "Every stall paid. One paid in carrots. Good ones.",
-       "money": 5
-      },
-      "flop": {
-       "text": "You taxed a scarecrow. It has lodged an appeal.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "setFlag": "market"
     }
    ],
    "draft": true,
@@ -1754,7 +1605,14 @@
      "who": "doug",
      "line": "A fee! Finally, some money coming in."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "carrot",
+    "title": "Catch the flying carrots",
+    "flop": "You taxed a scarecrow. It has lodged an appeal.",
+    "bad": "raccoon"
+   }
   },
   {
    "id": "policeDog",
@@ -1779,24 +1637,7 @@
       "law": 5,
       "people": 5
      },
-     "reaction": "He's talking about his feelings. Well, barking.",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Pet Sergeant Biscuit until brave",
-      "great": {
-       "text": "He barked at a crime! A small one. But still.",
-       "effects": {
-        "law": 5
-       }
-      },
-      "flop": {
-       "text": "He's hiding behind you now. So is the therapist.",
-       "effects": {
-        "law": -5
-       }
-      }
-     }
+     "reaction": "He's talking about his feelings. Well, barking."
     },
     {
      "label": "One scared dog is plenty",
@@ -1820,7 +1661,13 @@
      "who": "doug",
      "line": "Dog therapy. In the budget. Under 'D'."
     }
-   ]
+   ],
+   "game": {
+    "type": "tug",
+    "theme": "star",
+    "title": "Coax Sergeant Biscuit out",
+    "flop": "He's hiding behind you now. So is the therapist."
+   }
   },
   {
    "id": "parkWifi",
@@ -1870,7 +1717,13 @@
      "who": "linda",
      "line": "Wifi is how the pigeons report back."
     }
-   ]
+   ],
+   "game": {
+    "type": "simon",
+    "theme": "star",
+    "title": "Type the wifi password",
+    "flop": "The password is now 'aaaaaaaa'. Timmy cracked it."
+   }
   },
   {
    "id": "haunted",
@@ -1920,7 +1773,14 @@
      "who": "marge",
      "line": "Ghosts sell papers."
     }
-   ]
+   ],
+   "game": {
+    "type": "whack",
+    "theme": "ghost",
+    "title": "Catch the ghost on camera",
+    "flop": "You caught Dave. Three times. He asks you to stop.",
+    "bad": "raccoon"
+   }
   },
   {
    "id": "heatwave",
@@ -1934,22 +1794,7 @@
      "effects": {
       "people": 10
      },
-     "reaction": "It's snowing. But the pool looks great.",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Pump water into the pool",
-      "great": {
-       "text": "Full in an hour. You did not need the second hose.",
-       "money": 5
-      },
-      "flop": {
-       "text": "You pumped it into the car park. Chad has a pool.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "It's snowing. But the pool looks great."
     },
     {
      "label": "Sprinklers on Main Street",
@@ -1983,7 +1828,14 @@
      "who": "pam",
      "line": "The pool is where the PTA plots."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "drop",
+    "title": "Fill the pool, bucket by bucket",
+    "flop": "You filled the car park. Chad has a pool now.",
+    "bad": "frog"
+   }
   },
   {
    "id": "bridge",
@@ -1999,24 +1851,7 @@
       "business": 5,
       "people": 5
      },
-     "reaction": "It doesn't wobble. I miss the wobble, a bit.",
-     "challenge": {
-      "game": "timing",
-      "theme": "star",
-      "title": "Tighten the last bolt",
-      "great": {
-       "text": "Solid as a rock. The inspector walked on it. Once.",
-       "effects": {
-        "business": 5
-       }
-      },
-      "flop": {
-       "text": "That was a load-bearing bolt. Was.",
-       "effects": {
-        "law": -5
-       }
-      }
-     }
+     "reaction": "It doesn't wobble. I miss the wobble, a bit."
     },
     {
      "label": "Promise repairs soon",
@@ -2056,7 +1891,13 @@
      "who": "marge",
      "line": "'Bridge Fine, Says Man Running Away.'"
     }
-   ]
+   ],
+   "game": {
+    "type": "stack",
+    "theme": "brick",
+    "title": "Rebuild the bridge",
+    "flop": "That was a load-bearing bolt. Was."
+   }
   },
   {
    "id": "billboard",
@@ -2106,7 +1947,13 @@
      "who": "linda",
      "line": "It blinks in code."
     }
-   ]
+   ],
+   "game": {
+    "type": "stack",
+    "theme": "brick",
+    "title": "Hang the billboard straight",
+    "flop": "It's upside down. 'DAHC TSURT.' People prefer it."
+   }
   },
   {
    "id": "crossingGuard",
@@ -2157,7 +2004,14 @@
      "who": "gerald",
      "line": "Honk. (He says he's qualified.)"
     }
-   ]
+   ],
+   "game": {
+    "type": "dodge",
+    "theme": "kid",
+    "title": "Walk the children across",
+    "flop": "You crossed alone. The children are still waving.",
+    "bad": "car"
+   }
   },
   {
    "id": "theWhistle",
@@ -2208,7 +2062,13 @@
      "who": "chad",
      "line": "Two papers means two ad bills."
     }
-   ]
+   ],
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Spot the copied headlines",
+    "flop": "You shut down the wrong paper. It was a menu."
+   }
   },
   {
    "id": "moonClaim",
@@ -2260,7 +2120,13 @@
      "who": "steve",
      "line": "If we own it, are tides our fault?"
     }
-   ]
+   ],
+   "game": {
+    "type": "stack",
+    "theme": "brick",
+    "title": "Build a very long flagpole",
+    "flop": "The pole reached a plane. The plane is annoyed."
+   }
   },
   {
    "id": "cheeseVault",
@@ -2295,24 +2161,7 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "Nine thousand people. One cheese. Zero survivors. Of the cheese.",
-     "challenge": {
-      "game": "whack",
-      "theme": "cheese",
-      "title": "Catch the escaping cheese",
-      "great": {
-       "text": "All four tons caught. The crowd ate the evidence.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "It's in the sewers now. It's learning.",
-       "effects": {
-        "law": -5
-       }
-      }
-     }
+     "reaction": "Nine thousand people. One cheese. Zero survivors. Of the cheese."
     },
     {
      "label": "Seal the vault",
@@ -2338,7 +2187,14 @@
      "who": "timmy",
      "line": "Can I meet it?"
     }
-   ]
+   ],
+   "game": {
+    "type": "whack",
+    "theme": "cheese",
+    "title": "Catch the escaping cheese",
+    "flop": "It's in the sewers now. It's learning.",
+    "bad": "raccoon"
+   }
   },
   {
    "id": "mimeStrike",
@@ -2363,24 +2219,7 @@
       "press": 5,
       "law": -5
      },
-     "reaction": "You agreed to something. Nobody knows what. You shook an invisible hand.",
-     "challenge": {
-      "game": "sequence",
-      "theme": "star",
-      "title": "Copy the mime",
-      "great": {
-       "text": "You walked against the wind. The mimes wept. Silently.",
-       "effects": {
-        "press": 5
-       }
-      },
-      "flop": {
-       "text": "You mimed something rude. By accident. Twice.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "You agreed to something. Nobody knows what. You shook an invisible hand."
     },
     {
      "label": "Ignore the mimes",
@@ -2404,7 +2243,13 @@
      "who": "barb",
      "line": "One of them stole an invisible car."
     }
-   ]
+   ],
+   "game": {
+    "type": "simon",
+    "theme": "star",
+    "title": "Copy the mime",
+    "flop": "You mimed something rude. By accident. Twice."
+   }
   },
   {
    "id": "duckDuel",
@@ -2467,7 +2312,13 @@
      "who": "marge",
      "line": "'FOWL PLAY.' I've waited my whole career."
     }
-   ]
+   ],
+   "game": {
+    "type": "tug",
+    "theme": "goose",
+    "title": "Hold the ducks and geese apart",
+    "flop": "They united. Against you."
+   }
   },
   {
    "id": "timeCapsule",
@@ -2516,7 +2367,13 @@
      "who": "linda",
      "line": "The capsule was the distraction. Dig under it."
     }
-   ]
+   ],
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Piece the note back together",
+    "flop": "It now reads 'CHAD OWES THE TOWN'. Chad disagrees."
+   }
   },
   {
    "id": "roundabout",
@@ -2533,24 +2390,7 @@
       "law": -5
      },
      "reaction": "They're out. Two of them went back in. They miss it.",
-     "setFlag": "roundaboutFixed",
-     "challenge": {
-      "game": "timing",
-      "theme": "star",
-      "title": "Wave each car out at the gap",
-      "great": {
-       "text": "Four cars free. The book club has moved to a cafe.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "You waved a bus in. It has forty passengers.",
-       "effects": {
-        "business": -5
-       }
-      }
-     }
+     "setFlag": "roundaboutFixed"
     },
     {
      "label": "Sell tickets to watch",
@@ -2591,7 +2431,14 @@
      "who": "pam",
      "line": "The book club is reading my husband's emails."
     }
-   ]
+   ],
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Drive out of the roundabout",
+    "flop": "You waved a bus in. It has forty passengers.",
+    "bad": "car"
+   }
   },
   {
    "id": "pigeonAide",
@@ -2655,7 +2502,14 @@
      "who": "doug",
      "line": "Its expenses are just 'bread'. I approved them."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "paper",
+    "title": "Catch what the pigeon signs",
+    "flop": "It signed your resignation. Neat handwriting.",
+    "bad": "goose"
+   }
   },
   {
    "id": "lakeMonster",
@@ -2707,7 +2561,14 @@
      "who": "timmy",
      "line": "It has my frisbee. It can keep it."
     }
-   ]
+   ],
+   "game": {
+    "type": "whack",
+    "theme": "monster",
+    "title": "Photograph the monster",
+    "flop": "Every photo is of a goose. The goose is flattered.",
+    "bad": "goose"
+   }
   },
   {
    "id": "chadRocket",
@@ -2776,7 +2637,14 @@
      "who": "barb",
      "line": "I have no rocket laws. I'm writing some now."
     }
-   ]
+   ],
+   "game": {
+    "type": "dodge",
+    "theme": "rocket",
+    "title": "Steer the rocket",
+    "flop": "It clipped the school flag. The flag is in orbit.",
+    "bad": "cloud"
+   }
   },
   {
    "id": "squirrelLoan",
@@ -2791,22 +2659,7 @@
       "people": -5,
       "press": 5
      },
-     "reaction": "We own nine hundred acorns. The squirrels are outside. Watching.",
-     "challenge": {
-      "game": "whack",
-      "theme": "coin",
-      "title": "Grab the acorns",
-      "great": {
-       "text": "Nine hundred acorns, and they threw in a pine cone.",
-       "money": 4
-      },
-      "flop": {
-       "text": "They grabbed your wallet instead. Fair is fair.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "We own nine hundred acorns. The squirrels are outside. Watching."
     },
     {
      "label": "Forgive the loan",
@@ -2840,7 +2693,14 @@
      "who": "chad",
      "line": "Never take nuts as collateral. First rule of business."
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "acorn",
+    "title": "Grab the acorns",
+    "flop": "They grabbed your wallet instead. Fair is fair.",
+    "bad": "raccoon"
+   }
   },
   {
    "id": "opera",
@@ -2855,24 +2715,7 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "You cried at your own funeral. That's tomorrow's photo.",
-     "challenge": {
-      "game": "sequence",
-      "theme": "star",
-      "title": "Clap at the right moments",
-      "great": {
-       "text": "You clapped only at the good bits. Both of them.",
-       "effects": {
-        "press": 5
-       }
-      },
-      "flop": {
-       "text": "You clapped at your own death. Then asked for more.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "You cried at your own funeral. That's tomorrow's photo."
     },
     {
      "label": "Pay for rewrites",
@@ -2907,7 +2750,13 @@
      "who": "pam",
      "line": "The children are the chorus. They sing your crimes."
     }
-   ]
+   ],
+   "game": {
+    "type": "simon",
+    "theme": "note",
+    "title": "Clap at the right moments",
+    "flop": "You clapped at your own death. Then asked for more."
+   }
   },
   {
    "id": "twinTown",
@@ -2924,24 +2773,7 @@
       "business": 5,
       "press": 5
      },
-     "reaction": "They loved it. They've asked to be adopted.",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Shake every visitor's hand",
-      "great": {
-       "text": "Two hundred handshakes. Not one sprain.",
-       "effects": {
-        "press": 5
-       }
-      },
-      "flop": {
-       "text": "You sprained their mayor. It was his good hand.",
-       "effects": {
-        "business": -5
-       }
-      }
-     }
+     "reaction": "They loved it. They've asked to be adopted."
     },
     {
      "label": "Show them the pothole",
@@ -2976,7 +2808,13 @@
      "who": "marge",
      "line": "'WORSE TOWN: A REVIEW.' One star. Came back twice."
     }
-   ]
+   ],
+   "game": {
+    "type": "tug",
+    "theme": "star",
+    "title": "Shake every visitor's hand",
+    "flop": "You sprained their mayor. It was his good hand."
+   }
   },
   {
    "id": "gooseOccupation",
@@ -3022,7 +2860,14 @@
      "who": "chad",
      "line": "My car is in there."
     }
-   ]
+   ],
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Drive through the goose line",
+    "flop": "You honked at them. They honked back. Louder.",
+    "bad": "goose"
+   }
   },
   {
    "id": "secretStranger",
@@ -3059,6 +2904,12 @@
    },
    "ignored": {
     "press": -5
+   },
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Match the old ballots",
+    "flop": "You counted them. Gerald won again."
    }
   },
   {
@@ -3108,6 +2959,12 @@
    },
    "ignored": {
     "business": -10
+   },
+   "game": {
+    "type": "tug",
+    "theme": "coin",
+    "title": "Out-argue Chad's lawyers",
+    "flop": "His lawyers work in shifts. You fell asleep."
    }
   },
   {
@@ -3143,6 +3000,12 @@
    },
    "ignored": {
     "people": -10
+   },
+   "game": {
+    "type": "simon",
+    "theme": "note",
+    "title": "Gurgle the PTA minutes",
+    "flop": "You gurgled a motion. It passed. You're treasurer."
    }
   },
   {
@@ -3180,6 +3043,13 @@
    "ignored": {
     "people": -10,
     "law": -5
+   },
+   "game": {
+    "type": "catch",
+    "theme": "paper",
+    "title": "Catch the falling books",
+    "flop": "You caught the overdue ones. With your face.",
+    "bad": "bolt"
    }
   },
   {
@@ -3195,24 +3065,7 @@
       "law": 5,
       "business": -5
      },
-     "reaction": "Hm. Hmm. This page is a drawing of a goose. I'll allow it.",
-     "challenge": {
-      "game": "sequence",
-      "theme": "paper",
-      "title": "Hand over the right files",
-      "great": {
-       "text": "The right files, in order. He almost smiled.",
-       "effects": {
-        "law": 5
-       }
-      },
-      "flop": {
-       "text": "You handed him Dave's diary. He's read page one.",
-       "effects": {
-        "business": -5
-       }
-      }
-     }
+     "reaction": "Hm. Hmm. This page is a drawing of a goose. I'll allow it."
     },
     {
      "label": "Bribe him with cheese",
@@ -3260,7 +3113,13 @@
      "who": "doug",
      "line": "I'm not here. If he asks, I moved. To the sea."
     }
-   ]
+   ],
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Find the matching receipts",
+    "flop": "You handed him Dave's diary. He's read page one."
+   }
   },
   {
    "id": "flood",
@@ -3275,22 +3134,7 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "The street is dry. The shops smell like pond. They're calling it 'rustic'.",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Pump faster",
-      "great": {
-       "text": "Dry by lunch. The pump company gave a refund.",
-       "money": 8
-      },
-      "flop": {
-       "text": "You pumped it uphill. It came back. With friends.",
-       "effects": {
-        "people": -5
-       }
-      }
-     }
+     "reaction": "The street is dry. The shops smell like pond. They're calling it 'rustic'."
     },
     {
      "label": "Rename it 'Little Venice'",
@@ -3331,7 +3175,14 @@
      "who": "gerald",
      "line": "HONK. (He's never been happier.)"
     }
-   ]
+   ],
+   "game": {
+    "type": "catch",
+    "theme": "drop",
+    "title": "Bail out Main Street",
+    "flop": "You pumped it uphill. It came back. With friends.",
+    "bad": "frog"
+   }
   },
   {
    "id": "diaryLeak",
@@ -3393,7 +3244,14 @@
      "who": "pam",
      "line": "I was forty-first. FORTY-FIRST."
     }
-   ]
+   ],
+   "game": {
+    "type": "whack",
+    "theme": "paper",
+    "title": "Grab the loose pages",
+    "flop": "Page ninety got away. Pam has it.",
+    "bad": "goose"
+   }
   },
   {
    "id": "coneRally",
@@ -3407,24 +3265,7 @@
      "effects": {
       "people": 10
      },
-     "reaction": "Four hundred and one people. We counted Dave three times.",
-     "challenge": {
-      "game": "mash",
-      "theme": "star",
-      "title": "Out-cheer the cone crowd",
-      "great": {
-       "text": "Your crowd was louder. The cone fell over. Coincidence.",
-       "effects": {
-        "people": 5
-       }
-      },
-      "flop": {
-       "text": "You cheered alone. It echoed. The cone stood firm.",
-       "effects": {
-        "press": -5
-       }
-      }
-     }
+     "reaction": "Four hundred and one people. We counted Dave three times."
     },
     {
      "label": "Debate the cone, live",
@@ -3467,6 +3308,12 @@
    "ignored": {
     "people": -10,
     "press": -5
+   },
+   "game": {
+    "type": "tug",
+    "theme": "star",
+    "title": "Out-cheer the cone",
+    "flop": "You cheered alone. It echoed. The cone stood firm."
    }
   },
   {
@@ -3504,6 +3351,13 @@
    "ignored": {
     "law": -5,
     "business": -5
+   },
+   "game": {
+    "type": "whack",
+    "theme": "raccoon",
+    "title": "Catch the sign thieves",
+    "flop": "You arrested the 'No Parking' sign. It confessed.",
+    "bad": "kid"
    }
   },
   {
@@ -3544,6 +3398,12 @@
    },
    "ignored": {
     "law": -10
+   },
+   "game": {
+    "type": "match",
+    "theme": "coin",
+    "title": "Count the cards",
+    "flop": "Linda counted faster. She owns your watch now."
    }
   },
   {
@@ -3580,6 +3440,13 @@
    },
    "ignored": {
     "press": -15
+   },
+   "game": {
+    "type": "whack",
+    "theme": "paper",
+    "title": "Grab the Bugles before they sell",
+    "flop": "You bought every copy. Marge printed more.",
+    "bad": "goose"
    }
   },
   {
@@ -3615,6 +3482,13 @@
    },
    "ignored": {
     "people": -15
+   },
+   "game": {
+    "type": "catch",
+    "theme": "icecream",
+    "title": "Catch the ice creams",
+    "flop": "You dropped forty cones. A man lay down again.",
+    "bad": "raccoon"
    }
   },
   {
@@ -3651,6 +3525,12 @@
    },
    "ignored": {
     "business": -15
+   },
+   "game": {
+    "type": "tug",
+    "theme": "coin",
+    "title": "Hold on to Main Street",
+    "flop": "He owns the pavement now. You're standing on his."
    }
   },
   {
@@ -3688,6 +3568,13 @@
    "ignored": {
     "press": -10,
     "people": -5
+   },
+   "game": {
+    "type": "dodge",
+    "theme": "kid",
+    "title": "Walk home without being arrested",
+    "flop": "You were arrested for walking. And 'looking walky'.",
+    "bad": "car"
    }
   },
   {
@@ -3715,7 +3602,14 @@
     }
    ],
    "draft": true,
-   "rare": true
+   "rare": true,
+   "game": {
+    "type": "catch",
+    "theme": "coin",
+    "title": "Catch the golden egg",
+    "flop": "You dropped it. It bounced. That's suspicious.",
+    "bad": "raccoon"
+   }
   }
  ],
  "events": [
@@ -4402,6 +4296,18 @@
   {
    "tag": "decree",
    "text": "New Decree Baffles Town, Delights Lawyers"
+  },
+  {
+   "tag": "flop",
+   "text": "Mayor Attempts Task Personally; Task Wins"
+  },
+  {
+   "tag": "flop",
+   "text": "'I'll Do It Myself,' Says Mayor, Wrongly"
+  },
+  {
+   "tag": "sloppy",
+   "text": "Job Done 'Technically', Sources Confirm"
   }
  ],
  "decrees": [

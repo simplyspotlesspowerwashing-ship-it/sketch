@@ -8,6 +8,7 @@ const { chromium } = require('playwright');
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, reducedMotion: 'reduce' });
   const pg = await ctx.newPage();
   const errs = []; pg.on('pageerror', e => errs.push(String(e))); pg.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
+  await ctx.addInitScript(() => { window.__mgSkill = [2, 2, 1, 2, 0][Math.floor(Math.random() * 5)]; });   // test hook: mini-games finish on their own
   await ctx.addInitScript((off) => { if (!localStorage.getItem('badtown.save')) localStorage.setItem('badtown.save', JSON.stringify({ schema: 1, state: null, playerSeed: 'smoke', muted: true, introSeen: '', tutorialDone: false, dayOffset: off })); }, Number(process.argv[3] ?? 0));
   await pg.goto(process.env.URL ?? 'http://localhost:4173/');
   await pg.waitForSelector('.sheet');
@@ -15,24 +16,7 @@ const { chromium } = require('playwright');
   let decisions = 0, shots = 0, recalls = 0, setupShot = false, games = 0, decrees = 0, decreeShot = false; const played = new Set();
   for (let guard = 0; guard < 900; guard++) {
     if (await pg.locator('.election').count()) break;
-    if (await pg.locator('.mg').count()) {                                   // mini-game: play every second one, skip the rest
-      if (await pg.locator('.mg .skip').count()) {
-        games++;
-        if (games === 1) await pg.screenshot({ path: out + '/8-minigame-intro.png' });
-        if (games % 2 === 0) { await click('.mg .skip'); await pg.waitForTimeout(950); continue; }
-        await click('.mg .btn.primary');
-        if (games === 1) { await pg.waitForTimeout(700); await pg.screenshot({ path: out + '/9-minigame.png' }); }
-      }
-      for (let i = 0; i < 400 && await pg.locator('.mg').count() && !(await pg.locator('.mg-result').count()); i++) {
-        for (const sel of ['.mg-big', '.mg-target', '.mg-dir:not([disabled])']) {
-          const el = pg.locator(sel).first();
-          if (await el.count()) { await el.dispatchEvent('pointerdown').catch(() => {}); played.add(sel); }
-        }
-        await pg.waitForTimeout(40);
-      }
-      await pg.waitForTimeout(1000);
-      continue;
-    }
+    if (await pg.locator('.mg, .clip').count()) { games++; await pg.waitForTimeout(400); continue; }   // auto-finished by the test hook
     if (await pg.locator('.option.decree').count() && !(await pg.locator('.sheet').count())) { if (!decreeShot) { await pg.screenshot({ path: out + '/a-decree.png' }); decreeShot = true; } await pg.locator('.option.decree:not([disabled])').nth(guard % 3).click().catch(() => {}); decrees++; continue; }
     if (await pg.locator('#mayor-name').count()) { if (!setupShot) { await pg.screenshot({ path: out + '/0-setup.png' }); setupShot = true; } await click('.sheet .btn.primary'); continue; }
     if (await pg.locator('.sheet.recall').count()) { await click('.sheet.recall .btn.primary'); recalls++; continue; }
@@ -62,7 +46,7 @@ const { chromium } = require('playwright');
   await pg.waitForSelector('.verdict', { timeout: 15000 });
   await pg.screenshot({ path: out + '/7-election.png', fullPage: true });
   const overflow = await pg.evaluate(() => document.documentElement.scrollWidth > innerWidth);
-  console.log('minigames', games, [...played].join(' '), 'decrees', decrees);
+  console.log('minigame screens', games, 'decrees', decrees);
   console.log('decisions', decisions, 'recalls', recalls, 'overflow', overflow, 'errors', errs.slice(0, 5));
   console.log(await pg.locator('.share').first().textContent());
   await b.close();

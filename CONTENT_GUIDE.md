@@ -47,7 +47,14 @@ An option may carry `gamble: { chance, win, lose }`. Both outcomes are shown bef
 
 ## Mini-games
 
-An option may carry `challenge: { game, theme, title, great, flop }`. `game` is `timing`, `whack`, `mash` or `sequence`; `theme` picks the sprite (`goose`, `raccoon`, `frog`, `cheese`, `coin`, `paper`, `star`). `great` and `flop` are outcomes like a gamble's. Use a challenge where the player would physically do something: herd, wrestle, recite, pump.
+Every desk card needs `game: { type, theme, bad?, title, flop }`.
+
+- `type`: `catch` (slide a basket), `dodge` (three lanes), `whack` (tap the right ones), `match` (pairs), `stack` (drop pieces), `simon` (repeat signals), `tug` (tap on green).
+- `theme` is the sprite the player handles; `bad` is the one to avoid (catch, dodge, whack). Sprites are in `src/ui/art.tsx`.
+- `title` (max 40) is the job, written as something the mayor physically does: "Herd the geese to the pond".
+- `flop` (max 90) is the comic line when it goes wrong.
+- The game should be the card. If the card is about geese, the player handles geese.
+- Every card also needs one option that costs no money or Favors up front, so the desk can always be cleared.
 
 ## Decrees
 

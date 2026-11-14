@@ -32,14 +32,21 @@ export interface Option {
   reaction: string;
   headlineTag?: string;
   campaign?: number; // Sunday campaign card only: added to vote share
-  /** A mini-game played after choosing. Doing well or flopping adds an outcome on top of the option's own costs. */
-  challenge?: { game: GameId; theme: string; title: string; great: Outcome_; flop: Outcome_ };
   /** A visible gamble: `chance` percent to win. Both outcomes are shown before choosing; they apply on top of the option's own costs. */
   gamble?: { chance: number; win: Outcome_; lose: Outcome_ };
 }
 
-export type GameId = 'timing' | 'whack' | 'mash' | 'sequence';
-/** Mini-game result: 0 flop, 1 fine, 2 great. */
+export type GameId = 'catch' | 'dodge' | 'whack' | 'match' | 'stack' | 'simon' | 'tug';
+/** The mini-game every desk card is played through. There is no upside: a clean job gives exactly the trade
+ *  you chose, a sloppy one costs extra, a flop costs more. */
+export interface CardGame {
+  type: GameId;
+  theme: string; // sprite the player handles
+  bad?: string; // sprite to avoid (catch, dodge, whack)
+  title: string; // max 40 chars
+  flop: string; // what went wrong, max 90 chars
+}
+/** Mini-game result: 0 flop, 1 sloppy, 2 clean. */
 export type Skill = 0 | 1 | 2;
 
 /** Something the mayor enacts on their own initiative: a silly tax, a dumb law, a stunt. Lasts the rest of the term. */
@@ -77,6 +84,7 @@ export interface Card {
   options: Option[];
   ignored?: Effects & { setFlag?: string };
   advisors?: { who: CharacterId; line: string }[];
+  game?: CardGame; // desk cards
   rare?: boolean;
   secret?: boolean;
   repeatable?: boolean; // conditional cards fire once unless set
@@ -195,7 +203,7 @@ export interface Result {
 }
 
 export interface State {
-  v: 3; // bump when the state shape changes; older saves start a fresh term
+  v: 4; // bump when the state shape changes; older saves start a fresh term
   weekId: string;
   playerSeed: string;
   day: number; // 1..6 governing, 7 = Sunday
@@ -205,8 +213,7 @@ export interface State {
   favors: number;
   approval: Record<GroupId, number>;
   tax: TaxLevel;
-  actionsLeft: number;
-  boughtActionToday: boolean;
+  actionsLeft: number; // cards still open on the desk
   delegationsThisMonth: number;
   protestNext: boolean;
   desk: DeskSlot[];
@@ -240,7 +247,6 @@ export type Action =
   | { type: 'decree'; id: string }
   | { type: 'skipDecree' }
   | { type: 'delegate'; cardId: string }
-  | { type: 'buyAction' }
   | { type: 'setTax'; level: TaxLevel }
   | { type: 'resolvePromise'; id: string; pay: boolean }
   | { type: 'setup'; profile: Profile } // once per term, any time before the results

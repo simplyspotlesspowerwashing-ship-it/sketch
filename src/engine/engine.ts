@@ -17,9 +17,20 @@ export function fadeFor(approval: number): number {
   return Math.round(clamp(TUNING.fade + (approval - 50) * TUNING.fadeSlope, 0, TUNING.fadeMax));
 }
 
-/** How many requests Deputy Dave will take per month. */
-export function daveLimit(s: State): number {
-  return s.profile?.perk === 'cousin' ? 2 : 1;
+/** Favors it costs to send Deputy Dave instead of playing a card. With the cousin perk the first one each month is free. */
+export function daveCost(s: State): number {
+  return s.profile?.perk === 'cousin' && s.delegationsThisMonth === 0 ? 0 : TUNING.daveCost;
+}
+
+/** The group a card's mini-game penalty lands on. */
+export function botchGroup(card: Card): GroupId {
+  return card.group ?? GROUPS.find((g) => card.ignored?.[g]) ?? 'people';
+}
+
+/** What a sloppy (1) or flopped (0) mini-game costs on this card. */
+export function botchCost(card: Card, skill: 0 | 1, urgent = false): { money: number; effects: Effects } {
+  const b = skill === 0 ? TUNING.botch.flop : TUNING.botch.sloppy;
+  return { money: b.money, effects: { [botchGroup(card)]: b.approval * (urgent ? TUNING.urgentIgnoreScale : 1) } };
 }
 
 const RIVAL: Record<GroupId, GroupId> = { people: 'business', business: 'people', law: 'press', press: 'law' };
@@ -171,21 +182,17 @@ function drawDesk(s: State, content: Content, rng: Rng): DeskSlot[] {
 }
 
 function startMonth(s: State, content: Content, rng: Rng) {
-  s.actionsLeft = Math.max(0, TUNING.actionsPerMonth - (s.protestNext ? 1 : 0));
+  const protest = s.protestNext; // a protest makes every card this month URGENT
   s.protestNext = false;
   s.delegationsThisMonth = 0;
   s.monthTags = [];
   s.lastRecall = null;
-  if (monthOfDay(s.month) === 1) s.boughtActionToday = false;
   s.desk = drawDesk(s, content, rng);
+  if (protest) for (const d of s.desk) d.urgent = true;
+  s.actionsLeft = s.desk.length;
   s.duePromises = s.promises.filter((p) => p.dueMonth <= s.month).map((p) => p.id);
-  // Each morning starts with the Mayor's Hour: three decrees on offer, the same three for everyone.
   s.decreeOffer = [];
-  if (monthOfDay(s.month) === 1) {
-    const fresh = content.pack.decrees.filter((d) => !s.decrees.includes(d.id)).map((d) => d.id);
-    s.decreeOffer = shuffled(fresh, rng(`${s.weekId}|decrees|${dayOfMonth(s.month)}`)).slice(0, TUNING.decreesOffered);
-  }
-  s.phase = s.decreeOffer.length > 0 ? 'decree' : s.duePromises.length > 0 ? 'promises' : 'desk';
+  s.phase = s.duePromises.length > 0 ? 'promises' : 'desk';
 }
 
 function eventForToday(s: State, content: Content): Card | undefined {
@@ -287,10 +294,10 @@ function finish(s: State, endedEarly: boolean) {
 export function newTerm(weekId: string, playerSeed: string, content: Content, rng: Rng = seededRng): State {
   const a = TUNING.startApproval;
   const s: State = {
-    v: 3, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
+    v: 4, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
     money: TUNING.startMoney, favors: TUNING.startFavors,
     approval: { people: a, business: a, law: a, press: a },
-    tax: 'medium', actionsLeft: 0, boughtActionToday: false, delegationsThisMonth: 0, protestNext: false,
+    tax: 'medium', actionsLeft: 0, delegationsThisMonth: 0, protestNext: false,
     desk: [], eventId: null, projects: [], leases: [], promises: [], duePromises: [], brokenPromises: 0,
     recalls: 0, lastRecall: null, flags: {}, objectivesDone: [], combosDone: [], usedCards: [], poolCursor: 0,
     monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, decrees: [], decreeOffer: [], profile: null, daveDays: [], result: null,
@@ -324,10 +331,9 @@ export function legalActions(s: State, content: Content): Action[] {
       for (const slot of s.desk) {
         if (slot.status !== 'open') continue;
         const card = findCard(content, slot.cardId);
-        if (s.actionsLeft > 0) card.options.forEach((o, option) => { if (!blocked(s, o, content)) out.push({ type: 'choose', cardId: card.id, option }); });
-        if (s.delegationsThisMonth < daveLimit(s)) out.push({ type: 'delegate', cardId: card.id });
+        card.options.forEach((o, option) => { if (!blocked(s, o, content)) out.push({ type: 'choose', cardId: card.id, option }); });
+        if (daveCost(s) <= s.favors) out.push({ type: 'delegate', cardId: card.id });
       }
-      if (!s.boughtActionToday && s.favors >= 1) out.push({ type: 'buyAction' });
       tax();
       out.push({ type: 'endDesk' });
       break;
@@ -384,24 +390,18 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
       if (d.setFlag) s.flags[d.setFlag] = true;
       s.monthTags.push(d.headlineTag ?? 'decree');
       s.decreeOffer = [];
-      s.phase = s.duePromises.length > 0 ? 'promises' : 'desk';
-      checkRecall(s, content, rng);
+      if (!checkRecall(s, content, rng)) { s.polls.push(voteShare(s, 0)); s.phase = 'dayEnd'; }
       return s;
     }
 
     case 'skipDecree':
       s.decreeOffer = [];
-      s.phase = s.duePromises.length > 0 ? 'promises' : 'desk';
+      s.polls.push(voteShare(s, 0));
+      s.phase = 'dayEnd';
       return s;
 
     case 'setTax':
       s.tax = action.level;
-      return s;
-
-    case 'buyAction':
-      s.favors -= 1;
-      s.actionsLeft += 1;
-      s.boughtActionToday = true;
       return s;
 
     case 'resolvePromise': {
@@ -427,7 +427,9 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
       addFavors(s, outcome.favors ?? 0);
       applyEffects(s, outcome.effects);
       slot.status = 'dave';
+      s.favors -= daveCost(s);
       s.delegationsThisMonth += 1;
+      s.actionsLeft -= 1;
       s.monthTags.push('dave');
       s.history.push({ month: s.month, cardId: action.cardId, choice: 'dave', dave: outcome.id });
       checkRecall(s, content, rng);
@@ -448,16 +450,14 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
         if (out.setFlag) s.flags[out.setFlag] = true;
         s.monthTags.push(entry.won ? 'gambleWon' : 'gambleLost');
       }
-      const ch = card.options[action.option]!.challenge;
-      if (ch && action.skill !== undefined) {
-        entry.skill = action.skill;
-        const out = action.skill === 2 ? ch.great : action.skill === 0 ? ch.flop : null;
-        if (out) {
-          s.money += out.money ?? 0;
-          applyEffects(s, out.effects);
-          if (out.setFlag) s.flags[out.setFlag] = true;
-        }
+      if (s.phase === 'desk' && card.game && action.skill !== undefined && action.skill < 2) {
+        // Played badly: the same trade, but worse.
+        const cost = botchCost(card, action.skill as 0 | 1, s.desk.find((d) => d.cardId === card.id)?.urgent);
+        s.money += cost.money;
+        applyEffects(s, cost.effects);
+        s.monthTags.push(action.skill === 0 ? 'flop' : 'sloppy');
       }
+      if (action.skill !== undefined) entry.skill = action.skill;
       s.history.push(entry);
       if (s.phase === 'desk') {
         const slot = s.desk.find((d) => d.cardId === card.id)!;
@@ -509,8 +509,11 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
       if (s.phase === 'report') {
         s.eventId = null;
         if (monthOfDay(s.month) === 2) {
-          s.polls.push(voteShare(s, 0));
-          s.phase = 'dayEnd';
+          // The day's cards are done: now the Mayor's Hour. Three decrees, the same three for everyone.
+          const fresh = content.pack.decrees.filter((d) => !s.decrees.includes(d.id)).map((d) => d.id);
+          s.decreeOffer = shuffled(fresh, rng(`${s.weekId}|decrees|${s.day}`)).slice(0, TUNING.decreesOffered);
+          if (s.decreeOffer.length > 0) s.phase = 'decree';
+          else { s.polls.push(voteShare(s, 0)); s.phase = 'dayEnd'; }
         } else {
           s.month += 1;
           startMonth(s, content, rng);

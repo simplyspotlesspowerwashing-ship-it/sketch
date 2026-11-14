@@ -2,12 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { week1Content as content } from '../content/index.ts';
 import { coverMissedDays } from '../engine/dave.ts';
 import { voteShare } from '../engine/election.ts';
-import { blocked, campaignCard, daveLimit, fadeFor, findCard, legalActions, monthOfDay, newTerm, reduce, upfront } from '../engine/engine.ts';
+import { blocked, botchCost, campaignCard, daveCost, fadeFor, findCard, legalActions, monthOfDay, newTerm, reduce, upfront } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
 import { GROUPS } from '../engine/types.ts';
 import type { Action, Card, Decree, Effects, GroupId, Option, PerkId, Profile, Skill, State, TaxLevel } from '../engine/types.ts';
-import { MiniGame, Sprite } from './minigames.tsx';
-import { Arrows, GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
+import { MiniGame } from './minigames.tsx';
+import { Arrows, GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Sprite, Town } from './art.tsx';
 import type { Mood, Pulse } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, previewStats, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
@@ -19,7 +19,7 @@ const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-r
 
 function boot(save: Save): State {
   const cal = calendar(save.dayOffset);
-  const kept = save.state && save.state.v === 3 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  const kept = save.state && save.state.v === 4 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, content), content, cal.today);
 }
 
@@ -53,6 +53,11 @@ function EffectChips({ effects }: { effects: Effects | undefined }) {
   return <>{GROUPS.filter((g) => effects?.[g]).map((g) => <Arrows key={g} group={g} value={effects![g]!} />)}</>;
 }
 
+function BotchChips({ card, skill, urgent }: { card: Card; skill: 0 | 1; urgent?: boolean }) {
+  const c = botchCost(card, skill, urgent);
+  return <>{c.money ? <MoneyChip value={c.money} /> : null}<EffectChips effects={c.effects} /></>;
+}
+
 function OptionCosts({ o }: { o: Option }) {
   const p = o.project ? content.projects[o.project]! : null;
   const now = upfront(o, content);
@@ -68,15 +73,6 @@ function OptionCosts({ o }: { o: Option }) {
       {p?.favorEvery && <span class="chip favor"><Icon.ticket size={14} />+1 every {p.favorEvery} months</span>}
       {o.promise && <span class="chip promise">Owe {money(o.promise.money)} in {o.promise.dueIn} months</span>}
       {o.campaign ? <span class="chip vote">Votes ▲ +{o.campaign}%</span> : null}
-      {o.challenge && (
-        <span class="gamble play">
-          <span class="odds"><Sprite theme={o.challenge.theme} size={22} /> <b>Play:</b> {o.challenge.title}</span><span />
-          <span class="odds">Do great</span>
-          <span class="costs">{o.challenge.great.money ? <MoneyChip value={o.challenge.great.money} /> : null}<EffectChips effects={o.challenge.great.effects} /></span>
-          <span class="odds bad">Flop</span>
-          <span class="costs">{o.challenge.flop.money ? <MoneyChip value={o.challenge.flop.money} /> : null}<EffectChips effects={o.challenge.flop.effects} /></span>
-        </span>
-      )}
       {o.gamble && (
         <span class="gamble">
           <span class="odds"><b>{o.gamble.chance}%</b> it works</span>
@@ -85,7 +81,7 @@ function OptionCosts({ o }: { o: Option }) {
           <span class="costs">{o.gamble.lose.money ? <MoneyChip value={o.gamble.lose.money} /> : null}<EffectChips effects={o.gamble.lose.effects} /></span>
         </span>
       )}
-      {now === 0 && !Object.keys(merged).length && !o.campaign && !o.gamble && !o.challenge && !o.monthly && <span class="chip">Free</span>}
+      {now === 0 && !Object.keys(merged).length && !o.campaign && !o.gamble && !o.monthly && <span class="chip">Free</span>}
     </span>
   );
 }
@@ -123,7 +119,7 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
   );
 }
 
-interface Outcome { card: Card; option: number | 'dave'; daveText?: string; before: State; after: State; won?: boolean; skill?: Skill }
+interface Outcome { card: Card; option: number | 'dave'; daveText?: string; before: State; after: State; won?: boolean; skill?: Skill; urgent?: boolean }
 
 function ResultPanel({ r, onDone }: { r: Outcome; onDone: () => void }) {
   const o = typeof r.option === 'number' ? r.card.options[r.option]! : null;
@@ -143,7 +139,11 @@ function ResultPanel({ r, onDone }: { r: Outcome; onDone: () => void }) {
         <Portrait who={o ? r.card.who : 'dave'} mood={mood} size={72} />
         <p class="bubble">{o ? o.reaction : r.daveText}</p>
       </div>
-      {o?.challenge && r.skill !== undefined && r.skill !== 1 && <div class={`dice ${r.skill === 2 ? 'won' : 'lost'}`}><b>{r.skill === 2 ? 'Nailed it.' : 'That went badly.'}</b> {(r.skill === 2 ? o.challenge.great : o.challenge.flop).text}</div>}
+      {o && r.card.game && r.skill !== undefined && (
+        <div class={`dice ${r.skill === 2 ? 'won' : 'lost'}`}>
+          {r.skill === 2 ? <><b>A clean job.</b> You got exactly the deal you chose.</> : <><b>{r.skill === 1 ? 'Sloppy.' : 'Disaster.'}</b> {r.skill === 0 ? r.card.game.flop : 'It got done. Not well.'} <span class="costs"><BotchChips card={r.card} skill={r.skill as 0 | 1} urgent={r.urgent} /></span></>}
+        </div>
+      )}
       {o?.gamble && r.won !== undefined && <div class={`dice ${r.won ? 'won' : 'lost'}`}><b>{r.won ? 'It worked!' : 'It did not work.'}</b> {(r.won ? o.gamble.win : o.gamble.lose).text}</div>}
       <div class="reactions">
         {dm !== 0 && <MoneyChip value={dm} />}
@@ -171,8 +171,7 @@ function CardSheet({ card, s, mode, urgent, onChoose, onDave, onSkip, onClose }:
   onChoose: (i: number) => void; onDave?: () => void; onSkip?: () => void; onClose?: () => void;
 }) {
   const [advice, setAdvice] = useState(false);
-  const noActions = mode === 'desk' && s.actionsLeft <= 0;
-  const daveLeft = daveLimit(s) - s.delegationsThisMonth;
+  const noActions = false;
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       const n = Number(e.key);
@@ -185,7 +184,7 @@ function CardSheet({ card, s, mode, urgent, onChoose, onDave, onSkip, onClose }:
   });
   return (
     <>
-      {urgent && <div class="ribbon">URGENT · ignoring this hurts double</div>}
+      {urgent && <div class="ribbon">URGENT · a bad job here costs double</div>}
       <div class="speaker">
         <Portrait who={card.who} size={76} ring={card.group ? GROUP_COLOR[card.group] : undefined} />
         <div><div class="who">{NAMES[card.who] ?? card.who}{card.rare && <span class="tag rare">RARE</span>}</div><p class="bubble">{card.text}</p></div>
@@ -196,7 +195,12 @@ function CardSheet({ card, s, mode, urgent, onChoose, onDave, onSkip, onClose }:
           {advice && card.advisors.map((a) => <div key={a.who} class="adv"><Portrait who={a.who} size={30} /><span><b>{(NAMES[a.who] ?? a.who).split(',')[0]}:</b> {a.line}</span></div>)}
         </div>
       )}
-      {noActions && <p class="hint warn">No actions left this month. You can still give this to Dave{daveLeft <= 0 ? ' (already used)' : ''}{!s.boughtActionToday && s.favors > 0 ? ', or spend a Favor for one more action' : ''}.</p>}
+      {mode === 'desk' && card.game && (
+        <div class="stakes">
+          <span class="stakes-top"><Sprite theme={card.game.theme} size={26} /><b>Then you'll have to: {card.game.title}</b></span>
+          <span class="costs"><span class="odds">Sloppy</span><BotchChips card={card} skill={1} urgent={urgent} /><span class="odds bad">Flop</span><BotchChips card={card} skill={0} urgent={urgent} /></span>
+        </div>
+      )}
       <div class="options">
         {card.options.map((o, i) => {
           const why = blocked(s, o, content);
@@ -209,9 +213,8 @@ function CardSheet({ card, s, mode, urgent, onChoose, onDave, onSkip, onClose }:
         })}
       </div>
       <div class="sheet-foot">
-        {onDave && <button class="btn dave" onClick={onDave}><Portrait who="dave" size={28} /> Give it to Dave <small>free · {daveLeft} left this month</small></button>}
+        {onDave && <button class="btn dave" onClick={onDave}><Portrait who="dave" size={28} /> Send Dave instead <small>{daveCost(s) ? `costs ${daveCost(s)} Favor · no game · anything could happen` : 'free this once · no game · anything could happen'}</small></button>}
         {onSkip && <button class="btn ghost" onClick={onSkip}>Do nothing <span class="costs"><EffectChips effects={card.ignored} /></span></button>}
-        {mode === 'desk' && card.ignored && <p class="hint">If ignored: <span class="costs"><EffectChips effects={urgent ? Object.fromEntries(GROUPS.filter((g) => card.ignored![g]).map((g) => [g, card.ignored![g]! * 2])) : card.ignored} /></span></p>}
       </div>
     </>
   );
@@ -324,7 +327,7 @@ function alerts(s: State): { text: string; bad: boolean }[] {
   const out: { text: string; bad: boolean }[] = [];
   const a = s.approval;
   if (s.money < 0) out.push({ text: `In debt. Recall at −$${-TUNING.bankruptAt}k`, bad: true });
-  if (a.people < TUNING.low) out.push({ text: 'Protest: 1 fewer action next month', bad: true });
+  if (a.people < TUNING.low) out.push({ text: 'Protest: every card is URGENT next month', bad: true });
   if (a.business < TUNING.low) out.push({ text: 'Business is sulking: income −30%', bad: true });
   if (a.law < TUNING.low) out.push({ text: 'Crime wave: expect crime cards', bad: true });
   if (a.press < TUNING.low) out.push({ text: 'Bad press: −5 at the polls', bad: true });
@@ -335,16 +338,12 @@ function alerts(s: State): { text: string; bad: boolean }[] {
 }
 
 function Guide({ s, open, first }: { s: State; open: number; first: boolean }) {
-  const can = Math.min(s.actionsLeft, open);
-  const dave = daveLimit(s) - s.delegationsThisMonth;
-  const step = open === 0 ? 'Desk clear. End the month.'
-    : can > 0 ? `Deal with ${can} of these ${open}. The rest get worse.`
-    : dave > 0 ? 'Out of actions. Give one to Dave, or end the month.' : 'Out of actions. End the month.';
+  const step = open === 0 ? 'Desk clear. End the month.' : `Deal with all ${open}. Pick your trade, then do the job yourself.`;
   const list = alerts(s);
   return (
     <div class="guide">
       <p class="step"><span class="num">{monthOfDay(s.month)}/2</span><b>{step}</b></p>
-      {first && <p class="hint">Tap a request to see what it costs. Costs are exact. Arrows show who'll be pleased or cross.</p>}
+      {first && <p class="hint">Tap a request. Every choice costs something, and every one ends in a short game. Play it well or the deal gets worse.</p>}
       {list.length > 0 && <div class="alerts">{list.map((x) => <span key={x.text} class={`alert ${x.bad ? 'bad' : ''}`}>{x.bad ? '!' : '★'} {x.text}</span>)}</div>}
     </div>
   );
@@ -369,7 +368,7 @@ const pickOne = (list: string[], not = '') => { let v = not; while (v === not) v
 const PERKS: { id: PerkId; name: string; what: string }[] = [
   { id: 'chest', name: 'A war chest', what: `Start with +$${TUNING.setup.chest}k` },
   { id: 'friends', name: 'Friends at The Bugle', what: `Start with +${TUNING.setup.friends} Favors` },
-  { id: 'cousin', name: "Dave's cousin", what: 'Dave takes 2 requests a month, not 1' },
+  { id: 'cousin', name: "Dave's cousin", what: 'Each month, sending Dave once is free' },
 ];
 const RIVALS: Record<GroupId, GroupId> = { people: 'business', business: 'people', law: 'press', press: 'law' };
 
@@ -389,7 +388,7 @@ function Setup({ onDone, late }: { onDone: (p: Profile) => void; late: boolean }
   const [perk, setPerk] = useState<PerkId>('chest');
   return (
     <Sheet label="Set up your town">
-      <h2 class="display">Before you take office</h2>
+      <h2 class="display">One day down. Make it official.</h2>
       {late && <p class="hint">Dave has been keeping your chair warm since Monday. Literally. Don't ask.</p>}
       <NameField id="mayor-name" label="Your name" value={mayor} onInput={setMayor} onDice={() => { setMayor(pickOne(MAYORS, mayor)); sfx('tap'); }} />
       <NameField id="town-name" label="Your town" value={town} onInput={setTown} onDice={() => { setTown(pickOne(TOWNS, town)); sfx('tap'); }} />
@@ -402,14 +401,14 @@ function Setup({ onDone, late }: { onDone: (p: Profile) => void; late: boolean }
             </button>
           ))}
         </div>
-        <p class="hint">Your base starts at {50 + TUNING.setup.base}. Their rivals ({GROUP_NAME[RIVALS[base]]}) start at {50 + TUNING.setup.rival}.</p>
+        <p class="hint">Your base gets +{TUNING.setup.base} right now. Their rivals ({GROUP_NAME[RIVALS[base]]}) get {TUNING.setup.rival}.</p>
       </fieldset>
       <fieldset class="pick"><legend>Pick one head start</legend>
         <div class="options">
           {PERKS.map((p) => <button type="button" key={p.id} class={`option ${perk === p.id ? 'current' : ''}`} aria-pressed={perk === p.id} onClick={() => { setPerk(p.id); sfx('tap'); }}><span class="opt-top"><b>{p.name}</b></span><span class="costs"><span class="chip">{p.what}</span></span></button>)}
         </div>
       </fieldset>
-      <button class="btn primary" onClick={() => onDone({ mayor, town, base, perk })}>Take office</button>
+      <button class="btn primary" onClick={() => onDone({ mayor, town, base, perk })}>Sign the paperwork</button>
       <p class="hint">You can change the names later. The rest is permanent, like most mistakes.</p>
     </Sheet>
   );
@@ -435,7 +434,6 @@ export function App() {
   const [focus, setFocus] = useState<string | null>(null);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
   const [overlay, setOverlay] = useState<'tax' | 'dev' | 'recall' | 'names' | null>(null);
-  const [confirmEnd, setConfirmEnd] = useState(false);
   const [pulse, setPulse] = useState<Pulse | null>(null);
   const [playing, setPlaying] = useState<{ card: Card; option: number } | null>(null);
   const [lawBook, setLawBook] = useState(false);
@@ -443,7 +441,7 @@ export function App() {
   const taps = useRef<number[]>([]);
   const cal = useMemo(() => calendar(save.dayOffset), [save.dayOffset]);
   const introKey = `${s.weekId}:${s.day}`;
-  const needSetup = !s.profile && s.phase !== 'results';
+  const needSetup = !s.profile && s.phase === 'dayEnd'; // you name yourself and the town once your first day is done
   const showIntro = !needSetup && save.introSeen !== introKey && s.phase !== 'results' && s.phase !== 'dayEnd';
 
   const persist = (next: State, patch: Partial<Save> = {}) => {
@@ -464,15 +462,16 @@ export function App() {
   const choose = (card: Card, option: number, skill?: Skill) => {
     const before = s;
     const o = card.options[option]!;
-    if (o.challenge && skill === undefined) { setPlaying({ card, option }); sfx('paper'); return; }
+    if (before.phase === 'desk' && card.game && skill === undefined) { setPlaying({ card, option }); sfx('paper'); return; }
     setPlaying(null);
+    const urgent = before.desk.find((d) => d.cardId === card.id)?.urgent;
     const after = act({ type: 'choose', cardId: card.id, option, ...(skill !== undefined ? { skill } : {}) });
     sfx('stamp');
     setTimeout(() => sfx(card.who === 'gerald' ? 'honk' : upfront(o, content) > 0 ? 'coin' : upfront(o, content) < 0 ? 'spend' : 'tap'), 180);
     const won = after.history[after.history.length - 1]?.won;
     if (o.gamble) setTimeout(() => sfx(won ? 'win' : 'lose'), 420);
     bump(before, after);
-    if (before.phase === 'desk' || o.gamble || o.challenge) setOutcome({ card, option, before, after, won, skill });
+    if (before.phase === 'desk' || o.gamble) setOutcome({ card, option, before, after, won, skill, urgent });
     else setFocus(null);
   };
   const enact = (d: Decree) => {
@@ -530,7 +529,6 @@ export function App() {
 
   const shownMoney = useTween(s.money);
   const legal = legalActions(s, content);
-  const canBuy = legal.some((a) => a.type === 'buyAction');
   const openCards = s.desk.filter((d) => d.status === 'open').length;
   const focusCard = focus ? findCard(content, focus) : null;
   const focusSlot = s.desk.find((d) => d.cardId === focus);
@@ -553,7 +551,7 @@ export function App() {
         </div>
       </header>
 
-      <Town s={s} pulse={pulse} />
+      <Town s={s} pulse={pulse} scene={playing?.card.game?.theme} />
       <Timeline s={s} />
 
       <section class="hud" aria-label="Town status">
@@ -562,7 +560,7 @@ export function App() {
         </button>
         <button class="stat" onClick={() => { setLawBook(true); sfx('tap'); }} aria-label={`${s.decrees.length} decrees in force. Open the law book`}><Icon.scroll /><b>{s.decrees.length}</b><small>Decrees ▾</small></button>
         <div class="stat" aria-label={`${s.favors} Favors`}><Icon.ticket size={18} /><b>{s.favors}</b><small>Favors</small></div>
-        <div class="stat" aria-label={`${s.actionsLeft} actions left`}><span class="pips">{Array.from({ length: Math.max(2, s.actionsLeft) }, (_, i) => <i key={i} class={i < s.actionsLeft ? 'on' : ''} />)}</span><small>Actions</small></div>
+        <div class="stat" aria-label={`${openCards} requests left this month`}><span class="pips">{s.desk.map((d) => <i key={d.cardId} class={d.status === 'open' ? 'on' : ''} />)}</span><small>To do</small></div>
       </section>
       <section class="meters">{GROUPS.map((g) => <Meter key={g} g={g} s={s} />)}</section>
 
@@ -576,6 +574,7 @@ export function App() {
               return (
                 <button key={slot.cardId} class={`paper tilt${i % 3} ${done ? 'done' : ''} ${slot.urgent ? 'urgent' : ''}`} disabled={done} onClick={() => { setFocus(card.id); sfx('paper'); }}>
                   {slot.urgent && <span class="ribbon small">URGENT</span>}
+                  {card.game && !done && <span class="paper-game"><Sprite theme={card.game.theme} size={22} /></span>}
                   <Portrait who={card.who} size={40} ring={card.group ? GROUP_COLOR[card.group] : undefined} />
                   <span class="paper-text"><b>{(NAMES[card.who] ?? card.who).split(',')[0]}{card.rare ? ' · RARE' : ''}</b>{card.text}</span>
                   {done && <span class={`stamp mini ${slot.status === 'dave' ? 'dave' : card.options[slot.option ?? 0]?.kind === 'refuse' ? 'denied' : ''}`}>{slot.status === 'dave' ? "DAVE'D" : card.options[slot.option ?? 0]?.kind === 'refuse' ? 'DENIED' : 'DONE'}</span>}
@@ -584,18 +583,14 @@ export function App() {
             })}
           </div>
           <div class="desk-foot">
-            {canBuy && s.actionsLeft === 0 && openCards > 0 && <button class="btn" onClick={() => { act({ type: 'buyAction' }); sfx('coin'); }}><Icon.ticket size={16} /> Spend a Favor for 1 more action</button>}
-            <button class="btn primary" onClick={() => {
-              if (openCards > 0 && s.actionsLeft > 0 && !confirmEnd) { setConfirmEnd(true); return; }
-              setConfirmEnd(false); act({ type: 'endDesk' }); sfx('paper');
-            }}>{confirmEnd ? `Sure? ${s.actionsLeft} action${s.actionsLeft > 1 ? 's' : ''} unused` : openCards > 0 ? `End the month · ignore ${openCards}` : 'End the month'}</button>
+            <button class="btn primary" disabled={openCards > 0 && legal.some((a) => a.type === 'choose')} onClick={() => { act({ type: 'endDesk' }); sfx('paper'); }}>{openCards > 0 ? `${openCards} still to do` : 'End the month'}</button>
           </div>
         </main>
       )}
 
       {s.phase === 'decree' && !needSetup && !showIntro && (
         <main class="panel">
-          <div class="guide"><p class="step"><span class="num">★</span><b>Mayor's Hour: enact one thing, or nothing.</b></p><p class="hint">Nobody asked for these. That's the fun. A decree lasts all week. Everyone gets the same three today.</p></div>
+          <div class="guide"><p class="step"><span class="num">★</span><b>Cards done. Now the Mayor's Hour: enact one thing, or nothing.</b></p><p class="hint">Nobody asked for these. That's the fun. A decree lasts all week. Everyone gets the same three today.</p></div>
           <div class="options">
             {s.decreeOffer.map((id) => {
               const d = content.pack.decrees.find((x) => x.id === id)!;
@@ -671,10 +666,10 @@ export function App() {
 
       {/* overlays */}
       {focusCard && s.phase === 'desk' && (
-        <Sheet label={`Request from ${NAMES[focusCard.who]}`} onClose={outcome ? undefined : closeCard}>
-          {outcome ? <ResultPanel r={outcome} onDone={closeCard} /> : playing ? <MiniGame key={playing.card.id + playing.option} {...playing.card.options[playing.option]!.challenge!} onDone={(sk) => choose(playing.card, playing.option, sk)} /> : (
+        <Sheet label={`Request from ${NAMES[focusCard.who]}`} onClose={outcome || playing ? undefined : closeCard}>
+          {outcome ? <ResultPanel r={outcome} onDone={closeCard} /> : playing ? <MiniGame key={playing.card.id + playing.option} card={playing.card} onDone={(sk) => choose(playing.card, playing.option, sk)} /> : (
             <CardSheet card={focusCard} s={s} mode="desk" urgent={focusSlot?.urgent} onClose={closeCard}
-              onChoose={(i) => choose(focusCard, i)} onDave={s.delegationsThisMonth < daveLimit(s) ? () => delegate(focusCard) : undefined} />
+              onChoose={(i) => choose(focusCard, i)} onDave={legal.some((a) => a.type === 'delegate') ? () => delegate(focusCard) : undefined} />
           )}
         </Sheet>
       )}
@@ -698,7 +693,7 @@ export function App() {
               <div class="speaker"><Portrait who="dave" size={60} mood="pleased" />
                 <p class="bubble">You were out{s.reports.length === s.daveDays.length * 2 ? ' since Monday' : ''}, so we... I ran things for {s.daveDays.length} day{s.daveDays.length > 1 ? 's' : ''}. {content.pack.dave.absence[(s.day + s.daveDays.length) % content.pack.dave.absence.length]} It went fine. Don't check the bins.</p></div>
             )}
-            {s.day === 1 && <p>{s.profile?.mayor ?? 'You'}, you are the mayor. It is one week until the election. Everyone wants something, and there's only so much of you.</p>}
+            {s.day === 1 && <p>You are the mayor. It is one week until the election. Everyone wants something, and there's only so much of you.</p>}
             {s.day === 7 && <p>It's election day. Whatever you did this week, the town remembers.</p>}
             <p class="hint">Poll this morning: <b>{voteShare(s, 0)}%</b> · you need 50% on Sunday.</p>
             <ul class="objectives">{content.pack.objectives.map((o) => <li key={o.id} class={s.objectivesDone.includes(o.id) ? 'done' : ''}>{s.objectivesDone.includes(o.id) ? '✓' : '○'} {o.text} <span class="chip vote">+2%</span></li>)}</ul>
@@ -706,7 +701,7 @@ export function App() {
           <button class="btn primary" autoFocus onClick={() => { persist(s, { introSeen: introKey }); sfx('paper'); }}>{s.day === 7 ? 'To the campaign' : 'To the desk'}</button>
         </Sheet>
       )}
-      {needSetup && <Setup late={s.daveDays.length > 0} onDone={(profile) => { act({ type: 'setup', profile }); sfx('win'); }} />}
+      {needSetup && !enacted && <Setup late={s.daveDays.length > 0} onDone={(profile) => { act({ type: 'setup', profile }); sfx('win'); }} />}
       {overlay === 'names' && s.profile && <Names profile={s.profile} onClose={() => setOverlay(null)} onSave={(mayor, town) => { act({ type: 'rename', mayor, town }); setOverlay(null); }} />}
       {enacted && (
         <Sheet label="Decree enacted">
@@ -715,7 +710,7 @@ export function App() {
             <h2 class="display">{enacted.name}</h2>
             <div class="speaker"><Portrait who={enacted.who} size={72} mood={(enacted.effects && Object.values(enacted.effects).some((v) => v < 0)) ? 'annoyed' : 'pleased'} /><p class="bubble">{enacted.reaction}</p></div>
             <DecreeCosts d={enacted} />
-            <button class="btn primary" autoFocus onClick={() => setEnacted(null)}>To the desk</button>
+            <button class="btn primary" autoFocus onClick={() => setEnacted(null)}>See today's poll</button>
           </div>
         </Sheet>
       )}

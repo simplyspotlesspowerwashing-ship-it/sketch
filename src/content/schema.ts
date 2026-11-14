@@ -25,7 +25,6 @@ const option = z.strictObject({
   reaction: z.string().min(1).max(90),
   headlineTag: z.string().optional(),
   campaign: z.number().optional(),
-  challenge: z.strictObject({ game: z.enum(['timing', 'whack', 'mash', 'sequence']), theme: z.string(), title: z.string().min(1).max(40), great: outcome, flop: outcome }).optional(),
   gamble: z.strictObject({ chance: z.number().min(5).max(95), win: outcome, lose: outcome }).optional(),
 });
 
@@ -40,6 +39,7 @@ const card = z.strictObject({
   options: z.array(option).min(1).max(4),
   ignored: effects.extend({ setFlag: z.string().optional() }).optional(),
   advisors: z.array(z.strictObject({ who: z.string(), line: z.string().max(90) })).max(2).optional(),
+  game: z.strictObject({ type: z.enum(['catch', 'dodge', 'whack', 'match', 'stack', 'simon', 'tug']), theme: z.string(), bad: z.string().optional(), title: z.string().min(1).max(40), flop: z.string().min(1).max(90) }).optional(),
   rare: z.boolean().optional(),
   secret: z.boolean().optional(),
   repeatable: z.boolean().optional(),
@@ -70,6 +70,8 @@ export const weekPackSchema = z.strictObject({
   headlines: z.array(z.strictObject({ tag: z.string(), text: z.string() })),
 });
 
+const upfrontFree = (o: { money?: number; favors?: number; project?: string }) => !((o.money ?? 0) < 0) && !((o.favors ?? 0) < 0) && !o.project;
+
 /** Schema check plus the rules a schema cannot express. Throws with every problem listed. */
 export function loadPack(raw: unknown): Content {
   const pack = weekPackSchema.parse(raw) as WeekPack;
@@ -80,6 +82,8 @@ export function loadPack(raw: unknown): Content {
     ids.add(c.id);
     const desk = pack.cards.includes(c);
     if (desk && (c.options.length < 2 || c.options.length > 3)) problems.push(`${c.id}: desk cards need 2-3 options`);
+    if (desk && !c.game) problems.push(`${c.id}: every desk card needs a mini-game`);
+    if (desk && !c.options.some((o) => upfrontFree(o))) problems.push(`${c.id}: needs one option that costs no money or Favors, so the desk can always be cleared`);
     for (const o of c.options) {
       if (o.project && !PROJECTS[o.project]) problems.push(`${c.id}: unknown project ${o.project}`);
       if ((o.kind === 'project') !== Boolean(o.project)) problems.push(`${c.id}/${o.label}: kind "project" and a project id go together`);

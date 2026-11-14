@@ -7,7 +7,7 @@ Status: **playable preview** (M1-M3 scope in rough form: full week, art, sound, 
 ```bash
 npm install
 npm run dev         # play locally
-npm test            # 44 engine tests (Vitest)
+npm test            # 35 engine tests (Vitest)
 npm run validate    # schema-check the week pack
 npm run sim         # 5,000 terms per bot -> reports/balance.md
 node sim/stats.ts   # regenerate the labelled preview crowd data
@@ -31,22 +31,20 @@ reports/        committed balance reports
 CONTENT_GUIDE.md  how to write cards
 ```
 
-## Rules decisions so far (all open to change)
+## Rules as they stand (all open to change)
 
-- Money is stored in $k. Approval arrows map to numbers: one arrow = 5, two arrows = 10.
-- `Card.month` is 1 or 2 (which of the day's two months). `Option.monthly` was added for leases, `Option.campaign` for the Sunday card, `Card.repeatable` for group-pressure cards.
-- A conditional card (escalation, low-Law crime, high-approval pressure, secret) takes the third desk slot, at most one per month. The fixed card it displaces is dropped without penalty.
-- Combos pay out automatically at month end and appear in the month report.
-- Promises still open at the election come due then: paid if the town has the money, otherwise broken.
-- An option that would push Money straight below -$50k cannot be picked. Upkeep can still take you there.
-- Deputy Dave's outcome is independent of the card he was given (one shared table).
-- Approval fades every month (`TUNING.fade` 6, plus 0.2 per point above 50, less below 50, never under 0). Shown in the month report as "the mood this month".
-- A conditional card arrives stamped URGENT; ignoring it costs double.
-- You can start on any day. Deputy Dave governs the days you missed (`src/engine/dave.ts`); the town is handed back with every group at 45 or more, money between $40k and $90k, and no recalls or broken promises from his watch.
-- The desk shows 4 requests and you get 3 actions a month (6 decisions a day plus Dave and the daily event).
-- Town setup once per term (`setup` action): mayor name, town name, the group that elected you (+8, its rival -4) and one head start (+$30k, +2 Favors, or Dave takes two requests a month). Names can be changed later (`rename`).
-- Gamble options show their odds and both outcomes before you choose; the roll is seeded per player.
-- From Thursday (month 7) a second URGENT card can land each month. Late-week crisis cards use `requires.fromMonth`.
-- Many options set a flag that the town map draws (see `Town` in `src/ui/art.tsx`): the moon flag, Kevin the pothole, the roundabout, the flood, the monster and so on.
-- Mini-games: an option can carry a `challenge` (timing, whack, mash or sequence). The UI plays it and passes a `skill` (0 flop, 1 fine, 2 great) on the `choose` action; the engine adds the great or flop outcome. Skipping counts as fine. The games live in `src/ui/minigames.tsx`.
-- Mayor's Hour: each morning three decrees are offered (same three for everyone) and one can be enacted for free. Decrees last the term, pay or cost every month, and appear in the law book and on the notice board in the map.
+- Money is in $k. One approval arrow = 5 points, two = 10.
+- A day is: month 1 desk, the shared daily event, month 2 desk, then the Mayor's Hour (one decree or none), then the poll. Sunday is the campaign card and the election.
+- The desk shows 3 requests and all 3 must be dealt with. There is no action limit and no ignoring.
+- Every desk card is played through a mini-game (`Card.game`, seven types in `src/ui/minigames.tsx`). The UI passes a `skill` on the `choose` action: 2 clean, 1 sloppy, 0 flop. There is no bonus: clean gives exactly the chosen trade, sloppy costs 5 approval from the card's group, a flop costs 10 and $5k. Doubled on URGENT cards.
+- Sending Deputy Dave instead costs 1 Favor (no game, random outcome from his table).
+- Conditional cards (escalations, crises, group pressure, secrets) arrive URGENT; up to two a month from Thursday. A protest (People under 35) makes every card URGENT the next month.
+- Approval fades each month (`TUNING.fade` 1, plus 0.1 per point above 50, never below 0).
+- Gamble options show their odds and both outcomes; the roll is seeded per player.
+- Decrees last the term, pay or cost every month, and appear in the law book and on the map's notice board.
+- Town setup (names, base group, one head start) happens once, at the end of the first day played. Names can be changed later.
+- You can start on any day. Deputy Dave governs missed days (`src/engine/dave.ts`); the handover floors approval at 45 and money at $40k, caps money at $90k, and wipes his recalls and broken promises.
+- Promises still open at the election are paid if the money is there, otherwise broken.
+- Many options set a flag that the town map draws (`Town` in `src/ui/art.tsx`).
+
+Browser checks: `node e2e/smoke.cjs <dir> [dayOffset]` plays to election night (mini-games are auto-finished through a test hook); `node e2e/games.cjs <url> <dir> [idle]` plays each mini-game for real with a scripted player.
