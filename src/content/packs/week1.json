@@ -17,7 +17,24 @@
      },
      "reaction": "Honk. That means thank you. Probably.",
      "project": "pond",
-     "headlineTag": "goose"
+     "headlineTag": "goose",
+     "challenge": {
+      "game": "whack",
+      "theme": "goose",
+      "title": "Herd the geese into the pond",
+      "great": {
+       "text": "Every goose in. Gerald saluted. With a wing.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "Three geese are in your office now. They like it.",
+       "effects": {
+        "law": -5
+       }
+      }
+     }
     },
     {
      "label": "Pond in the park instead",
@@ -70,7 +87,22 @@
      },
      "reaction": "I call the front seat. Forever.",
      "project": "helicopter",
-     "headlineTag": "helicopter"
+     "headlineTag": "helicopter",
+     "challenge": {
+      "game": "timing",
+      "theme": "star",
+      "title": "Land the helicopter",
+      "great": {
+       "text": "A perfect landing. Barb wept behind her sunglasses.",
+       "effects": {
+        "law": 5
+       }
+      },
+      "flop": {
+       "text": "You landed on Doug's car. Doug watched.",
+       "money": -5
+      }
+     }
     },
     {
      "label": "Lease one",
@@ -140,7 +172,22 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "Two plows. I need to sit down."
+     "reaction": "Two plows. I need to sit down.",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Dig out the second plow",
+      "great": {
+       "text": "Dug out so fast the rental was half price.",
+       "money": 6
+      },
+      "flop": {
+       "text": "Still digging. It's June now.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     }
    ],
    "draft": true,
@@ -174,7 +221,22 @@
      },
      "reaction": "You won't regret this. Others will.",
      "project": "casino",
-     "headlineTag": "casino"
+     "headlineTag": "casino",
+     "challenge": {
+      "game": "timing",
+      "theme": "coin",
+      "title": "Pull the first lever",
+      "great": {
+       "text": "Jackpot! The library can afford a second book.",
+       "money": 10
+      },
+      "flop": {
+       "text": "You lost the town's lunch money. On camera.",
+       "effects": {
+        "press": -5
+       }
+      }
+     }
     },
     {
      "label": "Refuse",
@@ -227,7 +289,24 @@
      },
      "reaction": "Wonderful. Did you win? Never mind, you won.",
      "setFlag": "bearClaim",
-     "headlineTag": "bear"
+     "headlineTag": "bear",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Wrestle the bear, for the photo",
+      "great": {
+       "text": "The photo is incredible. The bear signed it.",
+       "effects": {
+        "press": 5
+       }
+      },
+      "flop": {
+       "text": "The bear won. It's on the front page, grinning.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Tell the truth",
@@ -268,7 +347,24 @@
      },
      "reaction": "It faces north. That part matters.",
      "project": "spoon",
-     "headlineTag": "spoon"
+     "headlineTag": "spoon",
+     "challenge": {
+      "game": "timing",
+      "theme": "star",
+      "title": "Cut the ribbon",
+      "great": {
+       "text": "A clean snip. The spoon gleamed. Someone fainted.",
+       "effects": {
+        "press": 5
+       }
+      },
+      "flop": {
+       "text": "You cut your own sash. Then the spoon fell over.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "A normal-sized spoon",
@@ -319,7 +415,24 @@
      },
      "reaction": "The PTA approves. We have never said that before.",
      "project": "school",
-     "headlineTag": "school"
+     "headlineTag": "school",
+     "challenge": {
+      "game": "sequence",
+      "theme": "paper",
+      "title": "Recite the school motto",
+      "great": {
+       "text": "Word perfect. In Latin. Nobody knew it had Latin.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "You said 'boats' four times. That's the old motto.",
+       "effects": {
+        "press": -5
+       }
+      }
+     }
     },
     {
      "label": "Promise it by spring",
@@ -374,7 +487,24 @@
      },
      "reaction": "You're on at six. Wear a tie.",
      "project": "tv",
-     "headlineTag": "tv"
+     "headlineTag": "tv",
+     "challenge": {
+      "game": "sequence",
+      "theme": "star",
+      "title": "Read the autocue",
+      "great": {
+       "text": "Flawless. Marge called you 'almost a professional'.",
+       "effects": {
+        "press": 5
+       }
+      },
+      "flop": {
+       "text": "You read the stage directions aloud. 'Mayor smiles.'",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Lend her the roof",
@@ -422,7 +552,22 @@
       "people": -10,
       "business": -5
      },
-     "reaction": "Coins. Lovely, countable coins."
+     "reaction": "Coins. Lovely, countable coins.",
+     "challenge": {
+      "game": "whack",
+      "theme": "coin",
+      "title": "Collect the first coins",
+      "great": {
+       "text": "You got every coin. Doug is counting them twice.",
+       "money": 6
+      },
+      "flop": {
+       "text": "You fed your own coins in. All of them.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Meters for visitors only",
@@ -482,7 +627,24 @@
       "people": 5,
       "law": 5
      },
-     "reaction": "Now they stand indoors. I'll allow it."
+     "reaction": "Now they stand indoors. I'll allow it.",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Arm-wrestle a teen for respect",
+      "great": {
+       "text": "You won. They made you an honorary teen.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "You lost to a thirteen-year-old. Barb filmed it.",
+       "effects": {
+        "law": -5
+       }
+      }
+     }
     },
     {
      "label": "Let them stand",
@@ -534,7 +696,22 @@
       "business": 5,
       "press": -5
      },
-     "reaction": "I love a deal. I'll name a bench after you."
+     "reaction": "I love a deal. I'll name a bench after you.",
+     "challenge": {
+      "game": "timing",
+      "theme": "coin",
+      "title": "Shake on it at the right moment",
+      "great": {
+       "text": "Firm grip. Good timing. Chad rounded up.",
+       "money": 6
+      },
+      "flop": {
+       "text": "You shook too early. Then too late. Then the lamp.",
+       "effects": {
+        "business": -5
+       }
+      }
+     }
     },
     {
      "label": "Refuse",
@@ -576,7 +753,24 @@
       "law": -5
      },
      "reaction": "FROG DAY! FROG DAY!",
-     "setFlag": "frogs"
+     "setFlag": "frogs",
+     "challenge": {
+      "game": "whack",
+      "theme": "frog",
+      "title": "Catch the parade frogs",
+      "great": {
+       "text": "Every frog back on its float. A Frog Day miracle.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "Frogs in the police station. Barb isn't laughing.",
+       "effects": {
+        "law": -5
+       }
+      }
+     }
     },
     {
      "label": "Promise Frog Day soon",
@@ -628,7 +822,22 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "Goodbye, Kevin. He's survived by a smaller pothole. We've named it Kevin Junior."
+     "reaction": "Goodbye, Kevin. He's survived by a smaller pothole. We've named it Kevin Junior.",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Shovel gravel into Kevin",
+      "great": {
+       "text": "Kevin is full. Main Street is whole. Shops cheered.",
+       "effects": {
+        "business": 5
+       }
+      },
+      "flop": {
+       "text": "Kevin ate the shovel. And the gravel. And the truck.",
+       "money": -5
+      }
+     }
     },
     {
      "label": "Sell tickets to see Kevin",
@@ -735,7 +944,24 @@
       "law": 5,
       "people": 5
      },
-     "reaction": "Let's see them open THAT. Oh. They opened it."
+     "reaction": "Let's see them open THAT. Oh. They opened it.",
+     "challenge": {
+      "game": "whack",
+      "theme": "raccoon",
+      "title": "Shoo the raccoons",
+      "great": {
+       "text": "They left in an orderly line. One tipped a tiny hat.",
+       "effects": {
+        "law": 5
+       }
+      },
+      "flop": {
+       "text": "They shooed you. You live behind the diner now.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Night patrols",
@@ -785,7 +1011,22 @@
      "effects": {
       "press": 10
      },
-     "reaction": "Tomorrow's edition will be very kind to you."
+     "reaction": "Tomorrow's edition will be very kind to you.",
+     "challenge": {
+      "game": "timing",
+      "theme": "paper",
+      "title": "Start the new press",
+      "great": {
+       "text": "It roared to life. First headline: your good side.",
+       "effects": {
+        "press": 5
+       }
+      },
+      "flop": {
+       "text": "You jammed it with your tie. The tie is the news.",
+       "money": -4
+      }
+     }
     },
     {
      "label": "Use the school copier",
@@ -833,7 +1074,24 @@
      "effects": {
       "people": 10
      },
-     "reaction": "A vegetable! Some of them cried."
+     "reaction": "A vegetable! Some of them cried.",
+     "challenge": {
+      "game": "sequence",
+      "theme": "star",
+      "title": "Serve lunch in the right order",
+      "great": {
+       "text": "Soup, main, pudding. The children applauded a meal.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "Custard on the fish. The children will never forget.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Chad sponsors lunch",
@@ -884,7 +1142,24 @@
       "law": -5
      },
      "reaction": "BEST. MAYOR. EVER.",
-     "setFlag": "fireworks"
+     "setFlag": "fireworks",
+     "challenge": {
+      "game": "timing",
+      "theme": "star",
+      "title": "Light the fuse and run",
+      "great": {
+       "text": "A perfect show. One of them spelled 'TIMMY'.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "One went into the police station. It's fine. It's on fire.",
+       "effects": {
+        "law": -5
+       }
+      }
+     }
     },
     {
      "label": "One sparkler",
@@ -1190,7 +1465,24 @@
      "effects": {
       "people": 5
      },
-     "reaction": "Honk. (Work resumes.)"
+     "reaction": "Honk. (Work resumes.)",
+     "challenge": {
+      "game": "sequence",
+      "theme": "goose",
+      "title": "Do the secret union honk",
+      "great": {
+       "text": "Honk-perfect. You are a goose now, legally.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "You honked something rude. About Gerald's mother.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Hire ducks instead",
@@ -1341,7 +1633,24 @@
       "press": 10,
       "people": -10
      },
-     "reaction": "'Mayor Makes Children Cry.' Front page."
+     "reaction": "'Mayor Makes Children Cry.' Front page.",
+     "challenge": {
+      "game": "sequence",
+      "theme": "star",
+      "title": "Remember who sang what",
+      "great": {
+       "text": "You named all forty children. In order. Pam gasped.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "You gave first prize to a coat on a chair.",
+       "effects": {
+        "press": -5
+       }
+      }
+     }
     },
     {
      "label": "Everyone wins",
@@ -1413,7 +1722,22 @@
       "business": -5
      },
      "reaction": "A carrot tax. I can live with that.",
-     "setFlag": "market"
+     "setFlag": "market",
+     "challenge": {
+      "game": "whack",
+      "theme": "coin",
+      "title": "Collect the carrot tax",
+      "great": {
+       "text": "Every stall paid. One paid in carrots. Good ones.",
+       "money": 5
+      },
+      "flop": {
+       "text": "You taxed a scarecrow. It has lodged an appeal.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     }
    ],
    "draft": true,
@@ -1455,7 +1779,24 @@
       "law": 5,
       "people": 5
      },
-     "reaction": "He's talking about his feelings. Well, barking."
+     "reaction": "He's talking about his feelings. Well, barking.",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Pet Sergeant Biscuit until brave",
+      "great": {
+       "text": "He barked at a crime! A small one. But still.",
+       "effects": {
+        "law": 5
+       }
+      },
+      "flop": {
+       "text": "He's hiding behind you now. So is the therapist.",
+       "effects": {
+        "law": -5
+       }
+      }
+     }
     },
     {
      "label": "One scared dog is plenty",
@@ -1593,7 +1934,22 @@
      "effects": {
       "people": 10
      },
-     "reaction": "It's snowing. But the pool looks great."
+     "reaction": "It's snowing. But the pool looks great.",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Pump water into the pool",
+      "great": {
+       "text": "Full in an hour. You did not need the second hose.",
+       "money": 5
+      },
+      "flop": {
+       "text": "You pumped it into the car park. Chad has a pool.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Sprinklers on Main Street",
@@ -1643,7 +1999,24 @@
       "business": 5,
       "people": 5
      },
-     "reaction": "It doesn't wobble. I miss the wobble, a bit."
+     "reaction": "It doesn't wobble. I miss the wobble, a bit.",
+     "challenge": {
+      "game": "timing",
+      "theme": "star",
+      "title": "Tighten the last bolt",
+      "great": {
+       "text": "Solid as a rock. The inspector walked on it. Once.",
+       "effects": {
+        "business": 5
+       }
+      },
+      "flop": {
+       "text": "That was a load-bearing bolt. Was.",
+       "effects": {
+        "law": -5
+       }
+      }
+     }
     },
     {
      "label": "Promise repairs soon",
@@ -1922,7 +2295,24 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "Nine thousand people. One cheese. Zero survivors. Of the cheese."
+     "reaction": "Nine thousand people. One cheese. Zero survivors. Of the cheese.",
+     "challenge": {
+      "game": "whack",
+      "theme": "cheese",
+      "title": "Catch the escaping cheese",
+      "great": {
+       "text": "All four tons caught. The crowd ate the evidence.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "It's in the sewers now. It's learning.",
+       "effects": {
+        "law": -5
+       }
+      }
+     }
     },
     {
      "label": "Seal the vault",
@@ -1973,7 +2363,24 @@
       "press": 5,
       "law": -5
      },
-     "reaction": "You agreed to something. Nobody knows what. You shook an invisible hand."
+     "reaction": "You agreed to something. Nobody knows what. You shook an invisible hand.",
+     "challenge": {
+      "game": "sequence",
+      "theme": "star",
+      "title": "Copy the mime",
+      "great": {
+       "text": "You walked against the wind. The mimes wept. Silently.",
+       "effects": {
+        "press": 5
+       }
+      },
+      "flop": {
+       "text": "You mimed something rude. By accident. Twice.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Ignore the mimes",
@@ -2126,7 +2533,24 @@
       "law": -5
      },
      "reaction": "They're out. Two of them went back in. They miss it.",
-     "setFlag": "roundaboutFixed"
+     "setFlag": "roundaboutFixed",
+     "challenge": {
+      "game": "timing",
+      "theme": "star",
+      "title": "Wave each car out at the gap",
+      "great": {
+       "text": "Four cars free. The book club has moved to a cafe.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "You waved a bus in. It has forty passengers.",
+       "effects": {
+        "business": -5
+       }
+      }
+     }
     },
     {
      "label": "Sell tickets to watch",
@@ -2367,7 +2791,22 @@
       "people": -5,
       "press": 5
      },
-     "reaction": "We own nine hundred acorns. The squirrels are outside. Watching."
+     "reaction": "We own nine hundred acorns. The squirrels are outside. Watching.",
+     "challenge": {
+      "game": "whack",
+      "theme": "coin",
+      "title": "Grab the acorns",
+      "great": {
+       "text": "Nine hundred acorns, and they threw in a pine cone.",
+       "money": 4
+      },
+      "flop": {
+       "text": "They grabbed your wallet instead. Fair is fair.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Forgive the loan",
@@ -2416,7 +2855,24 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "You cried at your own funeral. That's tomorrow's photo."
+     "reaction": "You cried at your own funeral. That's tomorrow's photo.",
+     "challenge": {
+      "game": "sequence",
+      "theme": "star",
+      "title": "Clap at the right moments",
+      "great": {
+       "text": "You clapped only at the good bits. Both of them.",
+       "effects": {
+        "press": 5
+       }
+      },
+      "flop": {
+       "text": "You clapped at your own death. Then asked for more.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Pay for rewrites",
@@ -2468,7 +2924,24 @@
       "business": 5,
       "press": 5
      },
-     "reaction": "They loved it. They've asked to be adopted."
+     "reaction": "They loved it. They've asked to be adopted.",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Shake every visitor's hand",
+      "great": {
+       "text": "Two hundred handshakes. Not one sprain.",
+       "effects": {
+        "press": 5
+       }
+      },
+      "flop": {
+       "text": "You sprained their mayor. It was his good hand.",
+       "effects": {
+        "business": -5
+       }
+      }
+     }
     },
     {
      "label": "Show them the pothole",
@@ -2722,7 +3195,24 @@
       "law": 5,
       "business": -5
      },
-     "reaction": "Hm. Hmm. This page is a drawing of a goose. I'll allow it."
+     "reaction": "Hm. Hmm. This page is a drawing of a goose. I'll allow it.",
+     "challenge": {
+      "game": "sequence",
+      "theme": "paper",
+      "title": "Hand over the right files",
+      "great": {
+       "text": "The right files, in order. He almost smiled.",
+       "effects": {
+        "law": 5
+       }
+      },
+      "flop": {
+       "text": "You handed him Dave's diary. He's read page one.",
+       "effects": {
+        "business": -5
+       }
+      }
+     }
     },
     {
      "label": "Bribe him with cheese",
@@ -2785,7 +3275,22 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "The street is dry. The shops smell like pond. They're calling it 'rustic'."
+     "reaction": "The street is dry. The shops smell like pond. They're calling it 'rustic'.",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Pump faster",
+      "great": {
+       "text": "Dry by lunch. The pump company gave a refund.",
+       "money": 8
+      },
+      "flop": {
+       "text": "You pumped it uphill. It came back. With friends.",
+       "effects": {
+        "people": -5
+       }
+      }
+     }
     },
     {
      "label": "Rename it 'Little Venice'",
@@ -2902,7 +3407,24 @@
      "effects": {
       "people": 10
      },
-     "reaction": "Four hundred and one people. We counted Dave three times."
+     "reaction": "Four hundred and one people. We counted Dave three times.",
+     "challenge": {
+      "game": "mash",
+      "theme": "star",
+      "title": "Out-cheer the cone crowd",
+      "great": {
+       "text": "Your crowd was louder. The cone fell over. Coincidence.",
+       "effects": {
+        "people": 5
+       }
+      },
+      "flop": {
+       "text": "You cheered alone. It echoed. The cone stood firm.",
+       "effects": {
+        "press": -5
+       }
+      }
+     }
     },
     {
      "label": "Debate the cone, live",
@@ -3868,6 +4390,319 @@
   {
    "tag": "urgentIgnored",
    "text": "Crisis Left To 'Sort Itself Out'; It Did Not"
+  },
+  {
+   "tag": "decree",
+   "text": "Mayor Makes New Rule; Town Reads It Twice To Be Sure"
+  },
+  {
+   "tag": "decree",
+   "text": "'It's The Law Now,' Says Mayor, Of Something Ridiculous"
+  },
+  {
+   "tag": "decree",
+   "text": "New Decree Baffles Town, Delights Lawyers"
+  }
+ ],
+ "decrees": [
+  {
+   "id": "hatTax",
+   "kind": "tax",
+   "who": "chad",
+   "name": "The Tall Hat Tax",
+   "text": "A tax on any hat taller than six inches. Chad owns a top hat with a second, smaller hat on it.",
+   "reaction": "You're taxing my hat's hat? That hat has a hat fund.",
+   "draft": true,
+   "monthly": 5,
+   "perMonth": {
+    "business": -2
+   }
+  },
+  {
+   "id": "sighTax",
+   "kind": "tax",
+   "who": "doug",
+   "name": "A Tax on Sighing",
+   "text": "Ten cents per audible sigh. The town sighs about four thousand times a day. Mostly at you.",
+   "reaction": "I sighed when I read it. That's ten cents. I'm sighing again.",
+   "draft": true,
+   "monthly": 4,
+   "perMonth": {
+    "people": -2
+   }
+  },
+  {
+   "id": "rainTax",
+   "kind": "tax",
+   "who": "steve",
+   "name": "The Rain Tax",
+   "text": "Citizens pay for rain they use. Steve will go door to door asking who got wet.",
+   "reaction": "Did you get wet today? Be honest. I have a clipboard.",
+   "draft": true,
+   "money": 6,
+   "monthly": 2,
+   "effects": {
+    "press": -5
+   }
+  },
+  {
+   "id": "whistleLicence",
+   "kind": "tax",
+   "who": "barb",
+   "name": "Whistling Licences",
+   "text": "Whistling needs a licence. Jaunty whistling needs the premium licence.",
+   "reaction": "I've already fined a kettle.",
+   "draft": true,
+   "monthly": 3,
+   "effects": {
+    "law": 5
+   },
+   "perMonth": {
+    "people": -1
+   }
+  },
+  {
+   "id": "kevinRights",
+   "kind": "tax",
+   "who": "marge",
+   "name": "Sell Pothole Naming Rights",
+   "text": "Businesses can sponsor a pothole. First up: 'Kevin, brought to you by Chad'.",
+   "reaction": "'This Pothole Sponsored By Regret.' I'd buy that.",
+   "draft": true,
+   "money": 14,
+   "effects": {
+    "press": 5,
+    "people": -5
+   }
+  },
+  {
+   "id": "noTuesday",
+   "kind": "law",
+   "who": "pam",
+   "name": "Cancel Tuesdays",
+   "text": "Tuesdays are abolished. The week goes Monday, Second Monday, Wednesday.",
+   "reaction": "The PTA meets on Tuesdays. Met. I have feelings about this.",
+   "draft": true,
+   "effects": {
+    "people": 10
+   },
+   "perMonth": {
+    "business": -2
+   }
+  },
+  {
+   "id": "compliments",
+   "kind": "law",
+   "who": "marge",
+   "name": "Mandatory Compliments",
+   "text": "Every conversation must begin with a compliment. Sarcasm is a fine of $5.",
+   "reaction": "Lovely decree. Your hair looks like a decision. Is that right?",
+   "draft": true,
+   "monthly": 1,
+   "effects": {
+    "press": 5,
+    "law": -5
+   },
+   "perMonth": {
+    "press": 1
+   }
+  },
+  {
+   "id": "gooseWay",
+   "kind": "law",
+   "who": "gerald",
+   "name": "Geese Have Right of Way",
+   "text": "On roads, pavements, and inside shops. Especially inside shops.",
+   "reaction": "HONK. (He's crossing the road. Slowly. On purpose.)",
+   "draft": true,
+   "effects": {
+    "people": 10,
+    "business": -5
+   },
+   "perMonth": {
+    "business": -1
+   }
+  },
+  {
+   "id": "leftOnly",
+   "kind": "law",
+   "who": "barb",
+   "name": "Left Turns Only",
+   "text": "All right turns are banned. To go right, citizens turn left three times.",
+   "reaction": "Traffic is a spiral now. A beautiful, legal spiral.",
+   "draft": true,
+   "effects": {
+    "law": 10,
+    "business": -5
+   },
+   "perMonth": {
+    "business": -1
+   }
+  },
+  {
+   "id": "dogDeputies",
+   "kind": "law",
+   "who": "barb",
+   "name": "All Dogs Are Deputies",
+   "text": "Every dog in town is sworn in. They get badges. The badges are on their collars.",
+   "reaction": "Forty-one new officers. Thirty-nine good boys. Two under review.",
+   "draft": true,
+   "monthly": -2,
+   "effects": {
+    "law": 5,
+    "people": 5
+   },
+   "perMonth": {
+    "law": 2
+   }
+  },
+  {
+   "id": "soupFriday",
+   "kind": "law",
+   "who": "pam",
+   "name": "Free Soup Fridays",
+   "text": "Free soup for everyone, every Friday. Nobody asked what kind. Nobody ever does.",
+   "reaction": "It's grey soup. They love it. Don't ask what's in it. I didn't.",
+   "draft": true,
+   "monthly": -3,
+   "effects": {
+    "people": 5
+   },
+   "perMonth": {
+    "people": 2
+   }
+  },
+  {
+   "id": "napHour",
+   "kind": "law",
+   "who": "timmy",
+   "name": "Compulsory Nap Hour",
+   "text": "The whole town naps from two to three. Shops close. Crime also naps, probably.",
+   "reaction": "I'm not tired. I'm not ti... zzz.",
+   "draft": true,
+   "effects": {
+    "people": 10,
+    "business": -10
+   },
+   "perMonth": {
+    "law": -1
+   }
+  },
+  {
+   "id": "townSmell",
+   "kind": "stunt",
+   "who": "linda",
+   "name": "An Official Town Smell",
+   "text": "The town adopts an official smell. Linda proposes 'old library, with a hint of soup'.",
+   "reaction": "It's in a bottle now. Don't open it indoors. Or outdoors.",
+   "draft": true,
+   "money": -6,
+   "effects": {
+    "press": 10
+   }
+  },
+  {
+   "id": "chadDay",
+   "kind": "stunt",
+   "who": "chad",
+   "name": "Chad Appreciation Day",
+   "text": "A parade for Chad. He provides the float. The float is him, on a larger him.",
+   "reaction": "I didn't ask for this. I did fund it, plan it and name it.",
+   "draft": true,
+   "money": 10,
+   "effects": {
+    "business": 10,
+    "people": -10
+   }
+  },
+  {
+   "id": "noBadNews",
+   "kind": "law",
+   "who": "marge",
+   "name": "Ban Bad News",
+   "text": "The Bugle may only print good news. Today's headline: 'Nothing On Fire (Much)'.",
+   "reaction": "'Mayor Bans Sadness.' I'm allowed to print that. It's good news.",
+   "draft": true,
+   "effects": {
+    "press": -10,
+    "people": 5
+   },
+   "perMonth": {
+    "people": 1
+   }
+  },
+  {
+   "id": "binCurfew",
+   "kind": "law",
+   "who": "dave",
+   "name": "A Curfew for Bins",
+   "text": "All bins must be indoors by nine. Deputy Dave has asked to speak against it.",
+   "reaction": "This is an attack on... on nightlife. On my nightlife.",
+   "draft": true,
+   "effects": {
+    "law": 10,
+    "people": -5
+   }
+  },
+  {
+   "id": "frogCensus",
+   "kind": "stunt",
+   "who": "timmy",
+   "name": "Count Every Frog",
+   "text": "An official frog census. Timmy will lead it. He has a net and no plan.",
+   "reaction": "Four hundred and six! Or the same frog four hundred times.",
+   "draft": true,
+   "money": -4,
+   "effects": {
+    "people": 5,
+    "press": 5
+   }
+  },
+  {
+   "id": "moonAds",
+   "kind": "stunt",
+   "who": "chad",
+   "name": "Billboards Facing the Moon",
+   "text": "Rent out ad space that only the moon can see. Chad says the moon is 'an untapped market'.",
+   "reaction": "The moon has not bought anything yet. Give it time.",
+   "draft": true,
+   "money": 12,
+   "effects": {
+    "business": 5,
+    "press": -5
+   }
+  },
+  {
+   "id": "singAnthem",
+   "kind": "law",
+   "who": "pam",
+   "name": "A Longer Town Anthem",
+   "text": "The anthem gains nineteen verses. Verse twelve is just the bin schedule.",
+   "reaction": "The children know all nineteen. They sing it at me. In shops.",
+   "draft": true,
+   "effects": {
+    "people": 5,
+    "business": -5
+   },
+   "perMonth": {
+    "press": 1
+   }
+  },
+  {
+   "id": "doorTax",
+   "kind": "tax",
+   "who": "doug",
+   "name": "The Door Tax",
+   "text": "A tax on doors. Citizens with more than one door pay extra. Windows are watching nervously.",
+   "reaction": "People are leaving through windows. Technically, that's free.",
+   "draft": true,
+   "monthly": 6,
+   "effects": {
+    "people": -5
+   },
+   "perMonth": {
+    "people": -1
+   }
   }
  ]
 }

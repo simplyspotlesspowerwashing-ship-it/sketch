@@ -25,6 +25,7 @@ const option = z.strictObject({
   reaction: z.string().min(1).max(90),
   headlineTag: z.string().optional(),
   campaign: z.number().optional(),
+  challenge: z.strictObject({ game: z.enum(['timing', 'whack', 'mash', 'sequence']), theme: z.string(), title: z.string().min(1).max(40), great: outcome, flop: outcome }).optional(),
   gamble: z.strictObject({ chance: z.number().min(5).max(95), win: outcome, lose: outcome }).optional(),
 });
 
@@ -45,11 +46,19 @@ const card = z.strictObject({
   draft: z.boolean().optional(),
 });
 
+const decree = z.strictObject({
+  id: z.string().min(1), kind: z.enum(['tax', 'law', 'stunt']), who: z.string().min(1),
+  name: z.string().min(1).max(28), text: z.string().min(1).max(120),
+  money: z.number().optional(), monthly: z.number().optional(), effects: effects.optional(), perMonth: effects.optional(),
+  setFlag: z.string().optional(), reaction: z.string().min(1).max(90), headlineTag: z.string().optional(), draft: z.boolean().optional(),
+});
+
 export const weekPackSchema = z.strictObject({
   id: z.string(),
   title: z.string(),
   cards: z.array(card).min(3),
   events: z.array(card),
+  decrees: z.array(decree).min(3),
   campaign: z.array(card).min(1),
   objectives: z.array(z.strictObject({ id: z.string(), text: z.string(), when: condition })).max(3),
   cliffhangers: z.array(z.string()),

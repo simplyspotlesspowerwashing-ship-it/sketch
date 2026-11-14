@@ -59,10 +59,11 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 @keyframes blink { 50% { opacity: .25; } }
 @keyframes drift { from { transform: translateX(-80px); } to { transform: translateX(420px); } }
 
-.hud { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 8px; }
+.hud { display: grid; grid-template-columns: 1.7fr 1fr 1fr 1fr; gap: 6px; }
 .stat { background: var(--paper); border: 2.5px solid var(--ink); border-radius: 14px; padding: 6px 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; box-shadow: var(--shadow); text-align: left; min-height: 52px; }
 .stat b { font-size: 20px; font-variant-numeric: tabular-nums; line-height: 1; }
-.stat small { flex-basis: 100%; font-size: 11px; color: var(--soft); white-space: nowrap; }
+.stat small { flex-basis: 100%; font-size: 10.5px; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat { min-width: 0; }
 .stat.money.neg b { color: var(--alert); }
 .pips { display: flex; gap: 4px; }
 .pips i { width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid var(--ink); background: transparent; }
@@ -100,6 +101,34 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .alert.bad { background: #F6DAD3; color: #8E2A2A; border-color: var(--alert); }
 .gamble { display: grid; grid-template-columns: auto 1fr; gap: 4px 8px; align-items: center; width: 100%; border: 2px dashed var(--ink); border-radius: 10px; padding: 6px 8px; background: #FFF8DC; }
 .odds { font-size: 12px; white-space: nowrap; } .odds b { font-size: 15px; color: #2C6B41; } .odds.bad b { color: var(--alert); }
+.gamble.play { background: #E9F1FB; }
+.gamble .odds { display: inline-flex; align-items: center; gap: 4px; }
+.option.decree { gap: 5px; }
+.decree-text { font-size: 14px; }
+.kind { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; border: 2px solid var(--ink); border-radius: 6px; padding: 0 5px; background: var(--gold); }
+.option.law .kind { background: #DCE6F4; } .option.stunt .kind { background: #F6DAD3; }
+.law { display: flex; flex-direction: column; gap: 3px; border-bottom: 1px dashed var(--line); padding-bottom: 8px; font-size: 14px; }
+.mg { display: flex; flex-direction: column; gap: 12px; align-items: stretch; touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.mg-head { display: flex; align-items: center; gap: 8px; padding-right: 40px; }
+.mg-head .display { text-align: left; font-size: 20px; line-height: 1.15; }
+.mg-bar { position: relative; height: 34px; border: 2.5px solid var(--ink); border-radius: 12px; background: #F6DAD3; overflow: hidden; }
+.mg-bar.tall { background: var(--cream); }
+.mg-zone { position: absolute; top: 0; bottom: 0; background: #9CD3A6; border-inline: 2px solid var(--ink); }
+.mg-gold { position: absolute; top: 0; bottom: 0; background: var(--gold); border-inline: 2px solid var(--ink); }
+.mg-marker { position: absolute; top: -2px; bottom: -2px; width: 7px; margin-left: -3.5px; background: var(--ink); border-radius: 3px; }
+.mg-fill { position: absolute; inset: 0 auto 0 0; background: var(--people); border-right: 2.5px solid var(--ink); }
+.mg-line { position: absolute; top: 0; bottom: 0; width: 0; border-left: 3px dashed var(--ink); }
+.mg-big { min-height: 84px; font-size: 26px; touch-action: manipulation; }
+.mg-arena { position: relative; height: 230px; border: 2.5px solid var(--ink); border-radius: 16px; background: #9DBF8A; overflow: hidden; touch-action: manipulation; }
+.mg-target { position: absolute; background: none; border: 0; padding: 4px; animation: popin .16s cubic-bezier(.3, 1.7, .5, 1); touch-action: manipulation; }
+@keyframes popin { from { scale: .2; } }
+.mg-score { margin: 0; text-align: center; font-size: 14px; } .mg-score b { font-size: 22px; }
+.mg-signal { height: 90px; display: grid; place-items: center; font-size: 22px; border: 2.5px solid var(--ink); border-radius: 16px; background: #fff; }
+.mg-signal b { font-size: 60px; line-height: 1; animation: popin .2s cubic-bezier(.3, 1.7, .5, 1); }
+.mg-pad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.mg-dir { font-size: 26px; min-height: 64px; touch-action: manipulation; }
+.mg-result { text-align: center; font-size: 30px; font-weight: 700; padding: 26px 0; animation: thunk .3s both; }
+.mg-result.s2 { color: #2C6B41; } .mg-result.s0 { color: var(--alert); }
 .dice { border: 2.5px solid var(--ink); border-radius: 12px; padding: 8px 10px; font-size: 15px; animation: thunk .35s .25s both; }
 .dice.won { background: #DCEBDD; } .dice.lost { background: #F6DAD3; }
 .field { display: flex; flex-direction: column; gap: 3px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--soft); }

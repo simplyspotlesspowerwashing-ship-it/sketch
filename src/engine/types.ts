@@ -32,8 +32,31 @@ export interface Option {
   reaction: string;
   headlineTag?: string;
   campaign?: number; // Sunday campaign card only: added to vote share
+  /** A mini-game played after choosing. Doing well or flopping adds an outcome on top of the option's own costs. */
+  challenge?: { game: GameId; theme: string; title: string; great: Outcome_; flop: Outcome_ };
   /** A visible gamble: `chance` percent to win. Both outcomes are shown before choosing; they apply on top of the option's own costs. */
   gamble?: { chance: number; win: Outcome_; lose: Outcome_ };
+}
+
+export type GameId = 'timing' | 'whack' | 'mash' | 'sequence';
+/** Mini-game result: 0 flop, 1 fine, 2 great. */
+export type Skill = 0 | 1 | 2;
+
+/** Something the mayor enacts on their own initiative: a silly tax, a dumb law, a stunt. Lasts the rest of the term. */
+export interface Decree {
+  id: string;
+  kind: 'tax' | 'law' | 'stunt';
+  who: CharacterId; // who reacts
+  name: string; // max 28 chars
+  text: string; // max 120 chars
+  money?: number; // now
+  monthly?: number; // every month
+  effects?: Effects; // now
+  perMonth?: Effects; // every month
+  setFlag?: string;
+  reaction: string;
+  headlineTag?: string;
+  draft?: boolean;
 }
 
 export interface Outcome_ {
@@ -100,6 +123,7 @@ export interface WeekPack {
   title: string;
   cards: Card[]; // desk cards: fixed (day+month), pool (neither), conditional (requires)
   events: Card[]; // one per day, `day` set
+  decrees: Decree[]; // three are offered each morning (same three for everyone)
   campaign: Card[]; // first whose `requires` holds is used; last is the default
   objectives: Objective[]; // completing sets flag `obj:<id>` (secret cards require it)
   cliffhangers: string[];
@@ -122,7 +146,7 @@ export interface Profile {
   perk: PerkId;
 }
 
-export type Phase = 'promises' | 'desk' | 'event' | 'report' | 'dayEnd' | 'campaign' | 'results';
+export type Phase = 'decree' | 'promises' | 'desk' | 'event' | 'report' | 'dayEnd' | 'campaign' | 'results';
 
 export interface DeskSlot {
   cardId: string;
@@ -144,6 +168,7 @@ export interface MonthReport {
   month: number;
   income: number; // tax income after the Business penalty
   projects: number; // net project + lease money
+  decrees: number; // net money from decrees
   drift: Effects; // tax and project approval drift
   ignored: string[];
   favorsGained: number;
@@ -159,6 +184,7 @@ export interface HistoryEntry {
   choice: number | 'ignored' | 'dave';
   dave?: string;
   won?: boolean; // gamble result
+  skill?: Skill; // mini-game result
 }
 
 export interface Result {
@@ -169,7 +195,7 @@ export interface Result {
 }
 
 export interface State {
-  v: 2; // bump when the state shape changes; older saves start a fresh term
+  v: 3; // bump when the state shape changes; older saves start a fresh term
   weekId: string;
   playerSeed: string;
   day: number; // 1..6 governing, 7 = Sunday
@@ -202,13 +228,17 @@ export interface State {
   reports: MonthReport[];
   polls: number[];
   campaignEffect: number;
+  decrees: string[]; // enacted this term
+  decreeOffer: string[]; // today's three
   profile: Profile | null; // set by the town setup; null until the player has done it
   daveDays: number[]; // days Deputy Dave governed while the player was away
   result: Result | null;
 }
 
 export type Action =
-  | { type: 'choose'; cardId: string; option: number } // desk, event or campaign card
+  | { type: 'choose'; cardId: string; option: number; skill?: Skill } // desk, event or campaign card
+  | { type: 'decree'; id: string }
+  | { type: 'skipDecree' }
   | { type: 'delegate'; cardId: string }
   | { type: 'buyAction' }
   | { type: 'setTax'; level: TaxLevel }

@@ -5,7 +5,8 @@ import { voteShare } from '../engine/election.ts';
 import { blocked, campaignCard, daveLimit, fadeFor, findCard, legalActions, monthOfDay, newTerm, reduce, upfront } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
 import { GROUPS } from '../engine/types.ts';
-import type { Action, Card, Effects, GroupId, Option, PerkId, Profile, State, TaxLevel } from '../engine/types.ts';
+import type { Action, Card, Decree, Effects, GroupId, Option, PerkId, Profile, Skill, State, TaxLevel } from '../engine/types.ts';
+import { MiniGame, Sprite } from './minigames.tsx';
 import { Arrows, GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
 import type { Mood, Pulse } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, previewStats, setMuted, sfx, writeSave } from './platform.ts';
@@ -18,7 +19,7 @@ const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-r
 
 function boot(save: Save): State {
   const cal = calendar(save.dayOffset);
-  const kept = save.state && save.state.v === 2 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  const kept = save.state && save.state.v === 3 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, content), content, cal.today);
 }
 
@@ -67,6 +68,15 @@ function OptionCosts({ o }: { o: Option }) {
       {p?.favorEvery && <span class="chip favor"><Icon.ticket size={14} />+1 every {p.favorEvery} months</span>}
       {o.promise && <span class="chip promise">Owe {money(o.promise.money)} in {o.promise.dueIn} months</span>}
       {o.campaign ? <span class="chip vote">Votes ▲ +{o.campaign}%</span> : null}
+      {o.challenge && (
+        <span class="gamble play">
+          <span class="odds"><Sprite theme={o.challenge.theme} size={22} /> <b>Play:</b> {o.challenge.title}</span><span />
+          <span class="odds">Do great</span>
+          <span class="costs">{o.challenge.great.money ? <MoneyChip value={o.challenge.great.money} /> : null}<EffectChips effects={o.challenge.great.effects} /></span>
+          <span class="odds bad">Flop</span>
+          <span class="costs">{o.challenge.flop.money ? <MoneyChip value={o.challenge.flop.money} /> : null}<EffectChips effects={o.challenge.flop.effects} /></span>
+        </span>
+      )}
       {o.gamble && (
         <span class="gamble">
           <span class="odds"><b>{o.gamble.chance}%</b> it works</span>
@@ -75,7 +85,7 @@ function OptionCosts({ o }: { o: Option }) {
           <span class="costs">{o.gamble.lose.money ? <MoneyChip value={o.gamble.lose.money} /> : null}<EffectChips effects={o.gamble.lose.effects} /></span>
         </span>
       )}
-      {now === 0 && !Object.keys(merged).length && !o.campaign && !o.gamble && !o.monthly && <span class="chip">Free</span>}
+      {now === 0 && !Object.keys(merged).length && !o.campaign && !o.gamble && !o.challenge && !o.monthly && <span class="chip">Free</span>}
     </span>
   );
 }
@@ -113,7 +123,7 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
   );
 }
 
-interface Outcome { card: Card; option: number | 'dave'; daveText?: string; before: State; after: State; won?: boolean }
+interface Outcome { card: Card; option: number | 'dave'; daveText?: string; before: State; after: State; won?: boolean; skill?: Skill }
 
 function ResultPanel({ r, onDone }: { r: Outcome; onDone: () => void }) {
   const o = typeof r.option === 'number' ? r.card.options[r.option]! : null;
@@ -133,6 +143,7 @@ function ResultPanel({ r, onDone }: { r: Outcome; onDone: () => void }) {
         <Portrait who={o ? r.card.who : 'dave'} mood={mood} size={72} />
         <p class="bubble">{o ? o.reaction : r.daveText}</p>
       </div>
+      {o?.challenge && r.skill !== undefined && r.skill !== 1 && <div class={`dice ${r.skill === 2 ? 'won' : 'lost'}`}><b>{r.skill === 2 ? 'Nailed it.' : 'That went badly.'}</b> {(r.skill === 2 ? o.challenge.great : o.challenge.flop).text}</div>}
       {o?.gamble && r.won !== undefined && <div class={`dice ${r.won ? 'won' : 'lost'}`}><b>{r.won ? 'It worked!' : 'It did not work.'}</b> {(r.won ? o.gamble.win : o.gamble.lose).text}</div>}
       <div class="reactions">
         {dm !== 0 && <MoneyChip value={dm} />}
@@ -284,6 +295,7 @@ function Results({ s, onNewWeek }: { s: State; onNewWeek: () => void }) {
           <p class="hint">You beat <b>{beat}%</b> of mayors {stats.preview && <span class="tag">preview data</span>}</p>
           <ul class="legacy">
             <li>Built: {s.projects.map((p) => content.projects[p.id]!.name).join(', ') || 'nothing at all'}</li>
+            <li>Decrees: {s.decrees.map((id) => content.pack.decrees.find((d) => d.id === id)!.name).join(', ') || 'none'}</li>
             <li>Objectives: {s.objectivesDone.length} of {content.pack.objectives.length}</li>
             <li>Promises broken: {s.brokenPromises} · Recalls: {s.recalls}</li>
             {s.daveDays.length > 0 && <li>Days Dave was in charge: {s.daveDays.map((d) => DAY_NAMES[d - 1]).join(', ')}</li>}
@@ -293,6 +305,17 @@ function Results({ s, onNewWeek }: { s: State; onNewWeek: () => void }) {
         </div>
       )}
     </div>
+  );
+}
+
+function DecreeCosts({ d, ongoing }: { d: Decree; ongoing?: boolean }) {
+  return (
+    <span class="costs">
+      {!ongoing && d.money ? <MoneyChip value={d.money} /> : null}
+      {d.monthly ? <MoneyChip value={d.monthly} suffix="/mo" /> : null}
+      {!ongoing && <EffectChips effects={d.effects} />}
+      {d.perMonth && GROUPS.filter((g) => d.perMonth![g]).map((g) => <span key={g} class="chip monthly" style={{ '--g': GROUP_COLOR[g] }}><i class="dot" />{GROUP_NAME[g]} {d.perMonth![g]! > 0 ? '▲' : '▼'} each month</span>)}
+    </span>
   );
 }
 
@@ -414,6 +437,9 @@ export function App() {
   const [overlay, setOverlay] = useState<'tax' | 'dev' | 'recall' | 'names' | null>(null);
   const [confirmEnd, setConfirmEnd] = useState(false);
   const [pulse, setPulse] = useState<Pulse | null>(null);
+  const [playing, setPlaying] = useState<{ card: Card; option: number } | null>(null);
+  const [lawBook, setLawBook] = useState(false);
+  const [enacted, setEnacted] = useState<Decree | null>(null);
   const taps = useRef<number[]>([]);
   const cal = useMemo(() => calendar(save.dayOffset), [save.dayOffset]);
   const introKey = `${s.weekId}:${s.day}`;
@@ -435,17 +461,26 @@ export function App() {
     return next;
   };
 
-  const choose = (card: Card, option: number) => {
+  const choose = (card: Card, option: number, skill?: Skill) => {
     const before = s;
     const o = card.options[option]!;
-    const after = act({ type: 'choose', cardId: card.id, option });
+    if (o.challenge && skill === undefined) { setPlaying({ card, option }); sfx('paper'); return; }
+    setPlaying(null);
+    const after = act({ type: 'choose', cardId: card.id, option, ...(skill !== undefined ? { skill } : {}) });
     sfx('stamp');
     setTimeout(() => sfx(card.who === 'gerald' ? 'honk' : upfront(o, content) > 0 ? 'coin' : upfront(o, content) < 0 ? 'spend' : 'tap'), 180);
     const won = after.history[after.history.length - 1]?.won;
     if (o.gamble) setTimeout(() => sfx(won ? 'win' : 'lose'), 420);
     bump(before, after);
-    if (before.phase === 'desk' || o.gamble) setOutcome({ card, option, before, after, won });
+    if (before.phase === 'desk' || o.gamble || o.challenge) setOutcome({ card, option, before, after, won, skill });
     else setFocus(null);
+  };
+  const enact = (d: Decree) => {
+    const before = s;
+    const after = act({ type: 'decree', id: d.id });
+    sfx('stamp');
+    bump(before, after);
+    setEnacted(d);
   };
   const delegate = (card: Card) => {
     const before = s;
@@ -455,7 +490,7 @@ export function App() {
     bump(before, after);
     setOutcome({ card, option: 'dave', daveText: content.pack.dave.outcomes.find((d) => d.id === id)?.text, before, after });
   };
-  const closeCard = () => { setFocus(null); setOutcome(null); };
+  const closeCard = () => { setFocus(null); setOutcome(null); setPlaying(null); };
   const bump = (before: State, after: State) => {
     if (after.recalls !== before.recalls) return;
     const effects: Effects = {};
@@ -525,6 +560,7 @@ export function App() {
         <button class={`stat money ${s.money < 0 ? 'neg' : ''}`} onClick={() => { setOverlay('tax'); sfx('tap'); }} aria-label={`Money ${money(s.money)}. Income ${income} thousand a month. Tax ${s.tax}. Change tax`}>
           <Icon.coin size={18} /><b>{money(shownMoney)}</b><small>+${income}k/mo · tax {s.tax} ▾</small>
         </button>
+        <button class="stat" onClick={() => { setLawBook(true); sfx('tap'); }} aria-label={`${s.decrees.length} decrees in force. Open the law book`}><Icon.scroll /><b>{s.decrees.length}</b><small>Decrees ▾</small></button>
         <div class="stat" aria-label={`${s.favors} Favors`}><Icon.ticket size={18} /><b>{s.favors}</b><small>Favors</small></div>
         <div class="stat" aria-label={`${s.actionsLeft} actions left`}><span class="pips">{Array.from({ length: Math.max(2, s.actionsLeft) }, (_, i) => <i key={i} class={i < s.actionsLeft ? 'on' : ''} />)}</span><small>Actions</small></div>
       </section>
@@ -557,6 +593,26 @@ export function App() {
         </main>
       )}
 
+      {s.phase === 'decree' && !needSetup && !showIntro && (
+        <main class="panel">
+          <div class="guide"><p class="step"><span class="num">★</span><b>Mayor's Hour: enact one thing, or nothing.</b></p><p class="hint">Nobody asked for these. That's the fun. A decree lasts all week. Everyone gets the same three today.</p></div>
+          <div class="options">
+            {s.decreeOffer.map((id) => {
+              const d = content.pack.decrees.find((x) => x.id === id)!;
+              const ok = legal.some((a) => a.type === 'decree' && a.id === id);
+              return (
+                <button key={id} class={`option decree ${d.kind}`} disabled={!ok} onClick={() => enact(d)}>
+                  <span class="opt-top"><span class="kind">{d.kind}</span><b>{d.name}</b></span>
+                  <span class="decree-text">{d.text}</span>
+                  <DecreeCosts d={d} />
+                </button>
+              );
+            })}
+          </div>
+          <button class="btn ghost" onClick={() => { act({ type: 'skipDecree' }); sfx('paper'); }}>Enact nothing today</button>
+        </main>
+      )}
+
       {s.phase === 'promises' && (
         <main class="panel">
           <h2 class="display">Promises due</h2>
@@ -582,6 +638,7 @@ export function App() {
             <table class="ledger">
               <tbody>
                 <tr><td>Tax income</td><td class="up">{signed(report.income)}</td></tr>
+                {report.decrees !== 0 && <tr><td>Your decrees</td><td class={report.decrees < 0 ? 'down' : 'up'}>{signed(report.decrees)}</td></tr>}
                 {report.projects !== 0 && <tr><td>Projects and leases</td><td class={report.projects < 0 ? 'down' : 'up'}>{signed(report.projects)}</td></tr>}
                 {report.favorsGained > 0 && <tr><td>Favors from the press</td><td class="up">+{report.favorsGained}</td></tr>}
                 <tr><td>The mood this month</td><td><span class="costs"><EffectChips effects={report.drift} /></span></td></tr>
@@ -615,7 +672,7 @@ export function App() {
       {/* overlays */}
       {focusCard && s.phase === 'desk' && (
         <Sheet label={`Request from ${NAMES[focusCard.who]}`} onClose={outcome ? undefined : closeCard}>
-          {outcome ? <ResultPanel r={outcome} onDone={closeCard} /> : (
+          {outcome ? <ResultPanel r={outcome} onDone={closeCard} /> : playing ? <MiniGame key={playing.card.id + playing.option} {...playing.card.options[playing.option]!.challenge!} onDone={(sk) => choose(playing.card, playing.option, sk)} /> : (
             <CardSheet card={focusCard} s={s} mode="desk" urgent={focusSlot?.urgent} onClose={closeCard}
               onChoose={(i) => choose(focusCard, i)} onDave={s.delegationsThisMonth < daveLimit(s) ? () => delegate(focusCard) : undefined} />
           )}
@@ -651,6 +708,24 @@ export function App() {
       )}
       {needSetup && <Setup late={s.daveDays.length > 0} onDone={(profile) => { act({ type: 'setup', profile }); sfx('win'); }} />}
       {overlay === 'names' && s.profile && <Names profile={s.profile} onClose={() => setOverlay(null)} onSave={(mayor, town) => { act({ type: 'rename', mayor, town }); setOverlay(null); }} />}
+      {enacted && (
+        <Sheet label="Decree enacted">
+          <div class="result">
+            <div class="stamp">IT'S THE LAW</div>
+            <h2 class="display">{enacted.name}</h2>
+            <div class="speaker"><Portrait who={enacted.who} size={72} mood={(enacted.effects && Object.values(enacted.effects).some((v) => v < 0)) ? 'annoyed' : 'pleased'} /><p class="bubble">{enacted.reaction}</p></div>
+            <DecreeCosts d={enacted} />
+            <button class="btn primary" autoFocus onClick={() => setEnacted(null)}>To the desk</button>
+          </div>
+        </Sheet>
+      )}
+      {lawBook && (
+        <Sheet label="Law book" onClose={() => setLawBook(false)}>
+          <h2 class="display">The law book</h2>
+          {s.decrees.length === 0 && <p class="hint">Nothing enacted yet. Each morning you can make one thing the law.</p>}
+          {s.decrees.map((id) => { const d = content.pack.decrees.find((x) => x.id === id)!; return <div key={id} class="law"><b>{d.name}</b><span>{d.text}</span><DecreeCosts d={d} ongoing /></div>; })}
+        </Sheet>
+      )}
       {overlay === 'tax' && (
         <Sheet label="Tax rate" onClose={() => setOverlay(null)}>
           <div class="speaker"><Portrait who="doug" size={60} /><p class="bubble">The tax rate. You can change it any time. Please be gentle. Or don't. I'm fine.</p></div>

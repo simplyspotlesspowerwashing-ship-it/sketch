@@ -181,6 +181,9 @@ export const Icon = {
   coin: (p: { size?: number }) => (
     <svg width={p.size ?? 16} height={p.size ?? 16} viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#E8C55A" stroke={INK} stroke-width="2" /><path d="M12 7v10M9.5 9.5q2.5 -2 5 0q0 2.5 -2.5 2.500q-2.5 0 -2.5 2.500q2.5 2 5 0" fill="none" stroke={INK} stroke-width="1.8" stroke-linecap="round" /></svg>
   ),
+  scroll: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h13v15a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2h10v2" fill="#fff" stroke={INK} stroke-width="2" stroke-linejoin="round" /><path d="M9 8h7M9 12h7" stroke={INK} stroke-width="2" stroke-linecap="round" /></svg>
+  ),
   pen: () => (
     <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-5L16 4l4 4L9 19z" fill="#E8C55A" stroke={INK} stroke-width="2" stroke-linejoin="round" /><path d="M13 7l4 4" stroke={INK} stroke-width="2" /></svg>
   ),
@@ -285,6 +288,7 @@ export function Town({ s, pulse }: { s: State; pulse?: Pulse | null }) {
       {/* welcome sign */}
       <g transform="translate(4 116)"><path d="M8 0 v14 M52 0 v14" stroke={INK} stroke-width="2" /><rect x="0" y="-12" width="60" height="14" rx="2" fill="#F2EBDD" {...O} /><text x="30" y="-6.5" text-anchor="middle" font-size="4.2" fill={INK} font-family="Fredoka, sans-serif">WELCOME TO</text><text x="30" y="-0.8" text-anchor="middle" font-size={town.length > 11 ? 5 : 6.5} font-weight="700" fill={INK} font-family="Fredoka, sans-serif">{town.slice(0, 16)}</text>{f.speedTrap && <g class="built"><path d="M40 -12 q8 -12 16 0z" fill="#27497A" {...O} /><circle cx="45" cy="-13" r="1.2" fill="#fff" /><circle cx="51" cy="-13" r="1.2" fill="#fff" /></g>}</g>
       {f.goodLuck && <g class="built" transform="translate(366 120)"><path d="M14 0 v12" stroke={INK} stroke-width="2" /><rect x="0" y="-10" width="30" height="12" rx="2" fill="#F7D774" {...O} transform="rotate(-6)" /><text x="15" y="-2" text-anchor="middle" font-size="5" font-weight="700" fill={INK} font-family="Fredoka, sans-serif" transform="rotate(-6)">GOOD LUCK</text></g>}
+      {s.decrees.length > 0 && <g class="built" transform="translate(250 104)"><path d="M2 18 v8 M20 18 v8" stroke={INK} stroke-width="2" /><rect x="-2" y="0" width="26" height="19" rx="2" fill="#B58D55" {...O} />{s.decrees.slice(0, 6).map((id, i) => <rect key={id} x={1 + (i % 3) * 7.5} y={2 + Math.floor(i / 3) * 8} width="6" height="7" fill={['#fff', '#F7D774', '#F6DAD3'][i % 3]} stroke={INK} stroke-width=".9" transform={`rotate(${(i % 2 ? 4 : -5)} ${4 + (i % 3) * 7.5} ${5 + Math.floor(i / 3) * 8})`} />)}</g>}
       {/* walkers */}
       {!night && Array.from({ length: walkers }, (_, i) => <g key={i} class={`walker ${i % 2 ? 'rev' : ''}`} style={{ 'animation-duration': `${16 + i * 5}s`, 'animation-delay': `${-i * 4}s` }}><g class="hop" style={{ 'animation-delay': `${i * 0.13}s` }}><path d="M-3 126 q3 -9 6 0z" fill={['#D9653B', '#3B6FB6', '#B0892A', '#7A5C9C', '#3F8F5A'][i % 5]} stroke={INK} stroke-width="1.3" /><circle cx="0" cy="114.5" r="3" fill={['#F0C4A0', '#B9794E', '#E2A878', '#8A5A3C'][i % 4]} stroke={INK} stroke-width="1.3" />{s.approval.people < 35 && <path d="M-2 110 l4 0" stroke="#C23B3B" stroke-width="1.5" />}</g></g>)}
       {/* road */}

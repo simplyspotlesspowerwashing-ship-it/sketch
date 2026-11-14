@@ -8,6 +8,7 @@ export const TUNING = {
   startApproval: 50,
   actionsPerMonth: 3,
   deskSize: 4,
+  decreesOffered: 3,
   lateCrisisFromMonth: 7, // from here a second URGENT card can land on the desk each month
   setup: { base: 8, rival: -4, chest: 30, friends: 2 },
   months: 12,
@@ -26,7 +27,7 @@ export const TUNING = {
   bankruptAt: -50,
   recall: { approval: 40, money: 20, election: -8, max: 2 },
   // Every group loses this much approval each month: the honeymoon fades. FADE env var overrides for experiments.
-  fade: Number(globalThis.process?.env?.FADE ?? 5),
+  fade: Number(globalThis.process?.env?.FADE ?? 6),
   // Rubber band: the fade grows by this much per approval point above 50 and shrinks below 50 (never under 0).
   fadeSlope: Number(globalThis.process?.env?.FADEK ?? 0.2),
   fadeMax: 7,

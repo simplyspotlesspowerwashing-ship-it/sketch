@@ -18,7 +18,8 @@ const fade = { base: TUNING.fade, slope: TUNING.fadeSlope };
 beforeAll(() => { TUNING.fade = 0; TUNING.fadeSlope = 0; });
 afterAll(() => { TUNING.fade = fade.base; TUNING.fadeSlope = fade.slope; });
 
-const start = (seed = 'p1') => newTerm('week1', seed, content);
+/** A new term with Monday's Mayor's Hour already skipped, so tests begin at the desk. */
+const start = (seed = 'p1') => reduce(newTerm('week1', seed, content), { type: 'skipDecree' }, content);
 const play = (s: State, ...actions: Action[]) => actions.reduce((st, a) => reduce(st, a, content), s);
 /** A state with a chosen desk, so tests do not depend on the shared draw order. */
 const withDesk = (s: State, ...ids: string[]): State => ({ ...s, desk: ids.map((cardId) => ({ cardId, status: 'open' as const })) });
@@ -150,7 +151,7 @@ describe('promises', () => {
   const promised = () => {
     let s = withDesk(start(), 'festival', 'parkingMeters');
     s = play(s, { type: 'choose', cardId: 'festival', option: 1 }, { type: 'endDesk' }, { type: 'next' }); // month 2
-    s = play(withDesk(s, 'parkingMeters'), { type: 'endDesk' }, { type: 'next' }, { type: 'next' }); // month 3, day 2
+    s = play(withDesk(s, 'parkingMeters'), { type: 'endDesk' }, { type: 'next' }, { type: 'next' }, { type: 'skipDecree' }); // month 3, day 2
     return s;
   };
   it('gives the benefit now and comes due later', () => {
@@ -234,7 +235,7 @@ describe('missed days and joining mid-week', () => {
     const s = coverMissedDays(start('late'), content, 4);
     expect(s.day).toBe(4);
     expect(s.month).toBe(7);
-    expect(s.phase === 'desk' || s.phase === 'promises').toBe(true);
+    expect(s.phase).toBe('decree'); // the morning starts with the Mayor's Hour
     expect(s.daveDays).toEqual([1, 2, 3]);
     expect(s.reports).toHaveLength(6);
   });
@@ -264,7 +265,7 @@ describe('missed days and joining mid-week', () => {
 
 describe('events', () => {
   it('the shared daily event follows the first month of the day and costs no action', () => {
-    let s = newTerm('week1', 'p1', week1Content);
+    let s = reduce(newTerm('week1', 'p1', week1Content), { type: 'skipDecree' }, week1Content);
     s = reduce(s, { type: 'endDesk' }, week1Content);
     expect(s.phase).toBe('event');
     expect(s.eventId).toBe('evParade');
@@ -292,6 +293,41 @@ describe('town setup', () => {
     let s = reduce(start(), { type: 'setup', profile }, content);
     s = reduce(s, { type: 'rename', mayor: 'Sam', town: 'Upper Honk' }, content);
     expect(s.profile).toMatchObject({ mayor: 'Sam', town: 'Upper Honk', base: 'press' });
+  });
+});
+
+describe('decrees', () => {
+  it('each morning offers the same three to everyone, and one can be enacted', () => {
+    const a = newTerm('week1', 'alice', content);
+    const b = newTerm('week1', 'bob', content);
+    expect(a.phase).toBe('decree');
+    expect(a.decreeOffer).toHaveLength(3);
+    expect(a.decreeOffer).toEqual(b.decreeOffer);
+    const d = content.pack.decrees.find((x) => x.id === a.decreeOffer[0])!;
+    const s = reduce(a, { type: 'decree', id: d.id }, content);
+    expect(s.phase).toBe('desk');
+    expect(s.decrees).toEqual([d.id]);
+    expect(s.money).toBe(100 + (d.money ?? 0));
+    expect(s.actionsLeft).toBe(3);
+  });
+  it('a decree pays or costs every month and is not offered again', () => {
+    const base = withDesk(start());
+    const s = play({ ...base, decrees: ['doorTax'] }, { type: 'endDesk' });
+    expect(s.reports[0]!.decrees).toBe(6);
+    expect(s.approval.people).toBe(49);
+    const later = coverMissedDays({ ...s, decrees: content.pack.decrees.slice(0, 18).map((d) => d.id) }, content, 2);
+    expect(later.decreeOffer.every((id) => !later.decrees.includes(id) || later.phase !== 'decree')).toBe(true);
+  });
+});
+
+describe('mini-game results', () => {
+  const run = (skill: 0 | 1 | 2) => play(withDesk(start(), 'pothole'), { type: 'choose', cardId: 'pothole', option: 0, skill });
+  it('a great result adds the bonus, a flop adds the penalty, fine adds nothing', () => {
+    expect(run(1).money).toBe(86);
+    expect(run(1).approval.business).toBe(55);
+    expect(run(2).approval.business).toBe(60);
+    expect(run(0).money).toBe(81);
+    expect(run(2).history[0]!.skill).toBe(2);
   });
 });
 

@@ -45,6 +45,14 @@ Content is data. A week is one JSON pack in `src/content/packs/`, checked by `np
 
 An option may carry `gamble: { chance, win, lose }`. Both outcomes are shown before the player chooses, with the odds. Each outcome has `text` (max 90 characters), and optional `money`, `effects`, `setFlag`. Use them for the absurd bets, not for ordinary choices.
 
+## Mini-games
+
+An option may carry `challenge: { game, theme, title, great, flop }`. `game` is `timing`, `whack`, `mash` or `sequence`; `theme` picks the sprite (`goose`, `raccoon`, `frog`, `cheese`, `coin`, `paper`, `star`). `great` and `flop` are outcomes like a gamble's. Use a challenge where the player would physically do something: herd, wrestle, recite, pump.
+
+## Decrees
+
+`decrees` in the pack are things the mayor does unprompted: a `tax`, a `law` or a `stunt`. Same rule as cards: it should be absurd and it should cost someone. Name max 28 characters, text max 120.
+
 ## Making the map react
 
 If a choice should leave a mark on the town, set a flag and draw it in `Town` (`src/ui/art.tsx`). A card that changes the map feels heavier than one that only moves a meter.

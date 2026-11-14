@@ -179,7 +179,13 @@ function startMonth(s: State, content: Content, rng: Rng) {
   if (monthOfDay(s.month) === 1) s.boughtActionToday = false;
   s.desk = drawDesk(s, content, rng);
   s.duePromises = s.promises.filter((p) => p.dueMonth <= s.month).map((p) => p.id);
-  s.phase = s.duePromises.length > 0 ? 'promises' : 'desk';
+  // Each morning starts with the Mayor's Hour: three decrees on offer, the same three for everyone.
+  s.decreeOffer = [];
+  if (monthOfDay(s.month) === 1) {
+    const fresh = content.pack.decrees.filter((d) => !s.decrees.includes(d.id)).map((d) => d.id);
+    s.decreeOffer = shuffled(fresh, rng(`${s.weekId}|decrees|${dayOfMonth(s.month)}`)).slice(0, TUNING.decreesOffered);
+  }
+  s.phase = s.decreeOffer.length > 0 ? 'decree' : s.duePromises.length > 0 ? 'promises' : 'desk';
 }
 
 function eventForToday(s: State, content: Content): Card | undefined {
@@ -197,7 +203,7 @@ function headline(s: State, content: Content, rng: Rng): string {
 
 function closeMonth(s: State, content: Content, rng: Rng) {
   const T = TUNING;
-  const report: MonthReport = { month: s.month, income: 0, projects: 0, drift: {}, ignored: [], favorsGained: 0, combos: [], objectives: [], headline: '' };
+  const report: MonthReport = { month: s.month, income: 0, projects: 0, decrees: 0, drift: {}, ignored: [], favorsGained: 0, combos: [], objectives: [], headline: '' };
   report.ignored = s.desk.filter((d) => d.status === 'ignored').map((d) => d.cardId);
 
   // Money
@@ -205,7 +211,9 @@ function closeMonth(s: State, content: Content, rng: Rng) {
   report.income = Math.round(T.tax[s.tax].mult * (T.incomeBase + s.approval.business * T.incomePerBusiness) * penalty);
   for (const p of s.projects) report.projects += content.projects[p.id]!.monthly;
   for (const l of s.leases) report.projects += l.monthly;
-  s.money += report.income + report.projects;
+  const enacted = content.pack.decrees.filter((d) => s.decrees.includes(d.id));
+  for (const d of enacted) report.decrees += d.monthly ?? 0;
+  s.money += report.income + report.projects + report.decrees;
 
   // Drift
   const drift: Effects = {};
@@ -215,6 +223,7 @@ function closeMonth(s: State, content: Content, rng: Rng) {
   add({ people: T.tax[s.tax].people });
   for (const g of GROUPS) add({ [g]: -fadeFor(s.approval[g]) });
   for (const p of s.projects) add(content.projects[p.id]!.perMonth);
+  for (const d of enacted) add(d.perMonth);
   applyEffects(s, drift);
   report.drift = drift;
 
@@ -278,13 +287,13 @@ function finish(s: State, endedEarly: boolean) {
 export function newTerm(weekId: string, playerSeed: string, content: Content, rng: Rng = seededRng): State {
   const a = TUNING.startApproval;
   const s: State = {
-    v: 2, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
+    v: 3, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
     money: TUNING.startMoney, favors: TUNING.startFavors,
     approval: { people: a, business: a, law: a, press: a },
     tax: 'medium', actionsLeft: 0, boughtActionToday: false, delegationsThisMonth: 0, protestNext: false,
     desk: [], eventId: null, projects: [], leases: [], promises: [], duePromises: [], brokenPromises: 0,
     recalls: 0, lastRecall: null, flags: {}, objectivesDone: [], combosDone: [], usedCards: [], poolCursor: 0,
-    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, profile: null, daveDays: [], result: null,
+    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, decrees: [], decreeOffer: [], profile: null, daveDays: [], result: null,
   };
   startMonth(s, content, rng);
   return s;
@@ -297,6 +306,13 @@ export function legalActions(s: State, content: Content): Action[] {
     for (const level of ['low', 'medium', 'high'] as const) if (level !== s.tax) out.push({ type: 'setTax', level });
   };
   switch (s.phase) {
+    case 'decree':
+      for (const id of s.decreeOffer) {
+        const d = content.pack.decrees.find((x) => x.id === id)!;
+        if (s.money + (d.money ?? 0) >= TUNING.bankruptAt) out.push({ type: 'decree', id });
+      }
+      out.push({ type: 'skipDecree' });
+      break;
     case 'promises':
       for (const id of s.duePromises) {
         const p = s.promises.find((x) => x.id === id)!;
@@ -354,11 +370,30 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
     if (p.perk === 'friends') addFavors(s, TUNING.setup.friends);
     return s;
   }
-  const legal = legalActions(state, content).some((a) => JSON.stringify(a) === JSON.stringify(action));
+  const bare = action.type === 'choose' ? { type: action.type, cardId: action.cardId, option: action.option } : action;
+  const legal = legalActions(state, content).some((a) => JSON.stringify(a) === JSON.stringify(bare));
   if (!legal) throw new Error(`illegal action in phase ${state.phase}: ${JSON.stringify(action)}`);
   const s: State = structuredClone(state);
 
   switch (action.type) {
+    case 'decree': {
+      const d = content.pack.decrees.find((x) => x.id === action.id)!;
+      s.decrees.push(d.id);
+      s.money += d.money ?? 0;
+      applyEffects(s, d.effects);
+      if (d.setFlag) s.flags[d.setFlag] = true;
+      s.monthTags.push(d.headlineTag ?? 'decree');
+      s.decreeOffer = [];
+      s.phase = s.duePromises.length > 0 ? 'promises' : 'desk';
+      checkRecall(s, content, rng);
+      return s;
+    }
+
+    case 'skipDecree':
+      s.decreeOffer = [];
+      s.phase = s.duePromises.length > 0 ? 'promises' : 'desk';
+      return s;
+
     case 'setTax':
       s.tax = action.level;
       return s;
@@ -412,6 +447,16 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
         applyEffects(s, out.effects);
         if (out.setFlag) s.flags[out.setFlag] = true;
         s.monthTags.push(entry.won ? 'gambleWon' : 'gambleLost');
+      }
+      const ch = card.options[action.option]!.challenge;
+      if (ch && action.skill !== undefined) {
+        entry.skill = action.skill;
+        const out = action.skill === 2 ? ch.great : action.skill === 0 ? ch.flop : null;
+        if (out) {
+          s.money += out.money ?? 0;
+          applyEffects(s, out.effects);
+          if (out.setFlag) s.flags[out.setFlag] = true;
+        }
       }
       s.history.push(entry);
       if (s.phase === 'desk') {
