@@ -34,7 +34,7 @@ export const davePolicy: Policy = (s, legal, _content, rand) => {
 /**
  * Advance the term to `today` (1 = Monday ... 7 = Sunday), with Dave governing every day the
  * player did not finish. Afterwards the town is handed back a little worse for wear but never
- * ruined: approval and money are lifted to a floor, and recalls or broken promises that
+ * ruined: approval and money are lifted to a floor, spare money is capped, and recalls or broken promises that
  * happened on Dave's watch are not held against the player.
  */
 export function coverMissedDays(state: State, content: Content, today: number, rng: Rng = seededRng): State {
@@ -47,7 +47,8 @@ export function coverMissedDays(state: State, content: Content, today: number, r
       s = structuredClone(s);
       const H = TUNING.handover;
       for (const g of GROUPS) s.approval[g] = Math.max(s.approval[g], H.approvalFloor);
-      s.money = Math.max(s.money, H.moneyFloor);
+      s.money = Math.min(Math.max(s.money, H.moneyFloor), H.moneyCap); // Dave spends whatever is left over on 'lunch'
+      s.protestNext = false;
       s.recalls = before.recalls;
       s.brokenPromises = before.broken;
       s.lastRecall = null;

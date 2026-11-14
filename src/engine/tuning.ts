@@ -29,7 +29,7 @@ export const TUNING = {
   fadeMax: 7,
   urgentIgnoreScale: 2, // ignoring an URGENT (conditional) card hurts this many times more
   // Handover after Deputy Dave governs missed days: never worse than this.
-  handover: { approvalFloor: 42, moneyFloor: 40 },
+  handover: { approvalFloor: 45, moneyFloor: 40, moneyCap: 90 },
   rareChance: 1 / 50,
   vote: { people: 0.5, press: 0.2, business: 0.1, law: 0.1, objective: 2, brokenPromise: -4, min: 5, max: 95 },
 };

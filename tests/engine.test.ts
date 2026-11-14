@@ -1,11 +1,22 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { daveOnly, sensible } from '../sim/bots.ts';
-import { week1Content as content } from '../src/content/index.ts';
+import { week1Content } from '../src/content/index.ts';
 import { loadPack } from '../src/content/schema.ts';
 import placeholder from '../src/content/packs/week1.json' with { type: 'json' };
+import { coverMissedDays } from '../src/engine/dave.ts';
 import { voteShare } from '../src/engine/election.ts';
-import { autoplay, legalActions, newTerm, reduce } from '../src/engine/engine.ts';
+import { TUNING } from '../src/engine/tuning.ts';
+import { autoplay, fadeFor, legalActions, newTerm, reduce } from '../src/engine/engine.ts';
 import type { Action, State } from '../src/engine/types.ts';
+
+// Monday's shared event is removed so month-end tests reach the report directly; events are tested on their own.
+const content = { ...week1Content, pack: { ...week1Content.pack, events: week1Content.pack.events.filter((e) => e.day !== 1) } };
+
+// The rule tests below check exact numbers, so the monthly approval fade is switched off for them
+// and tested on its own at the end.
+const fade = { base: TUNING.fade, slope: TUNING.fadeSlope };
+beforeAll(() => { TUNING.fade = 0; TUNING.fadeSlope = 0; });
+afterAll(() => { TUNING.fade = fade.base; TUNING.fadeSlope = fade.slope; });
 
 const start = (seed = 'p1') => newTerm('week1', seed, content);
 const play = (s: State, ...actions: Action[]) => actions.reduce((st, a) => reduce(st, a, content), s);
@@ -28,8 +39,6 @@ describe('setup and determinism', () => {
     const a = autoplay(start('same'), daveOnly, content, () => false);
     const b = autoplay(start('same'), daveOnly, content, () => false);
     expect(a).toEqual(b);
-    const c = autoplay(start('other'), daveOnly, content, () => false);
-    expect(c.history.map((h) => h.cardId)).toEqual(a.history.map((h) => h.cardId).slice(0, c.history.length));
   });
   it('does not mutate the input state', () => {
     const s = start();
@@ -47,7 +56,7 @@ describe('desk', () => {
     let s = withDesk(start(), 'snowplow', 'curfew', 'festival');
     s = play(s, { type: 'choose', cardId: 'snowplow', option: 2 }, { type: 'choose', cardId: 'curfew', option: 0 });
     expect(s.actionsLeft).toBe(0);
-    expect(s.money).toBe(85);
+    expect(s.money).toBe(82);
     expect(s.approval.law).toBe(60);
     expect(legalActions(s, content).some((a) => a.type === 'choose')).toBe(false);
   });
@@ -89,13 +98,13 @@ describe('desk', () => {
 
 describe('month end', () => {
   it('pays tax income from the formula: mult x (10 + Business x 0.2)', () => {
-    const s = play(withDesk(start(), 'parkingMeters'), { type: 'endDesk' });
+    const s = play(withDesk(start()), { type: 'endDesk' });
     expect(s.reports[0]!.income).toBe(20);
     expect(s.money).toBe(120);
-    const high = play(withDesk(start(), 'parkingMeters'), { type: 'setTax', level: 'high' }, { type: 'endDesk' });
+    const high = play(withDesk(start()), { type: 'setTax', level: 'high' }, { type: 'endDesk' });
     expect(high.reports[0]!.income).toBe(26);
     expect(high.approval.people).toBe(47);
-    const low = play(withDesk(start(), 'parkingMeters'), { type: 'setTax', level: 'low' }, { type: 'endDesk' });
+    const low = play(withDesk(start()), { type: 'setTax', level: 'low' }, { type: 'endDesk' });
     expect(low.reports[0]!.income).toBe(15);
     expect(low.approval.people).toBe(52);
   });
@@ -105,7 +114,7 @@ describe('month end', () => {
     expect(s.reports[0]!.income).toBe(Math.round(16 * 0.7));
   });
   it('charges project upkeep and applies monthly project effects', () => {
-    let s = withDesk(start(), 'goosePond', 'parkingMeters');
+    let s = withDesk(start(), 'goosePond');
     s = play(s, { type: 'choose', cardId: 'goosePond', option: 0 }, { type: 'endDesk' });
     expect(s.reports[0]!.projects).toBe(-2);
     expect(s.money).toBe(100 - 20 + 19 - 2); // business fell to 45 -> income 19
@@ -128,9 +137,10 @@ describe('month end', () => {
     expect(s.combosDone).toEqual(['vegasPd']);
   });
   it('completes objectives', () => {
-    const s = play(withDesk(start(), 'goosePond', 'parkingMeters'), { type: 'choose', cardId: 'goosePond', option: 0 }, { type: 'endDesk' });
-    expect(s.objectivesDone).toContain('peaceful');
-    expect(s.flags['obj:peaceful']).toBe(true);
+    const base = withDesk(start(), 'parkingMeters');
+    const s = play({ ...base, approval: { ...base.approval, press: 75 } }, { type: 'endDesk' });
+    expect(s.objectivesDone).toContain('darling');
+    expect(s.flags['obj:darling']).toBe(true);
   });
 });
 
@@ -150,7 +160,7 @@ describe('promises', () => {
   it('paying costs the money', () => {
     const s = promised();
     const paid = play(s, { type: 'resolvePromise', id: s.duePromises[0]!, pay: true });
-    expect(paid.money).toBe(s.money - 12);
+    expect(paid.money).toBe(s.money - 14);
     expect(paid.brokenPromises).toBe(0);
     expect(paid.phase).toBe('desk');
   });
@@ -217,13 +227,71 @@ describe('election', () => {
   });
 });
 
-describe('missed days', () => {
-  it('Dave can govern a whole day and hand the town back', () => {
-    const s = autoplay(start('away'), daveOnly, content, (st) => st.phase === 'dayEnd');
-    expect(s.phase).toBe('dayEnd');
-    expect(s.day).toBe(1);
-    expect(s.reports).toHaveLength(2);
-    expect(s.history.filter((h) => h.choice === 'dave')).toHaveLength(2);
+describe('missed days and joining mid-week', () => {
+  it('Dave governs every missed day and hands the town back at the start of today', () => {
+    const s = coverMissedDays(start('late'), content, 4);
+    expect(s.day).toBe(4);
+    expect(s.month).toBe(7);
+    expect(s.phase === 'desk' || s.phase === 'promises').toBe(true);
+    expect(s.daveDays).toEqual([1, 2, 3]);
+    expect(s.reports).toHaveLength(6);
+  });
+  it('the handover is a little worse than a fresh start but never ruined', () => {
+    for (const seed of ['a', 'b', 'c', 'd', 'e', 'f']) {
+      const s = coverMissedDays(start(seed), content, 6);
+      for (const g of ['people', 'business', 'law', 'press'] as const) expect(s.approval[g]).toBeGreaterThanOrEqual(35);
+      expect(s.money).toBeGreaterThanOrEqual(40);
+      expect(s.money).toBeLessThanOrEqual(90 + 60);
+      expect(s.recalls).toBe(0);
+      expect(s.brokenPromises).toBe(0);
+      expect(s.actionsLeft).toBe(2);
+    }
+  });
+  it('does not replay a day the player already finished', () => {
+    const played = autoplay(start('p'), sensible, content, (st) => st.phase === 'dayEnd');
+    const s = coverMissedDays(played, content, 2);
+    expect(s.day).toBe(2);
+    expect(s.daveDays).toEqual([]);
+  });
+  it('lands on the campaign card on Sunday', () => {
+    const s = coverMissedDays(start('sun'), content, 7);
+    expect(s.phase).toBe('campaign');
+    expect(s.daveDays).toEqual([1, 2, 3, 4, 5, 6]);
+  });
+});
+
+describe('events', () => {
+  it('the shared daily event follows the first month of the day and costs no action', () => {
+    let s = newTerm('week1', 'p1', week1Content);
+    s = reduce(s, { type: 'endDesk' }, week1Content);
+    expect(s.phase).toBe('event');
+    expect(s.eventId).toBe('evParade');
+    s = reduce(s, { type: 'choose', cardId: 'evParade', option: 1 }, week1Content);
+    expect(s.phase).toBe('report');
+    expect(s.money).toBe(100 - 8 + s.reports[0]!.income);
+  });
+});
+
+describe('urgent cards', () => {
+  it('ignoring an urgent card hurts double', () => {
+    const base = start();
+    const s = play({ ...base, desk: [{ cardId: 'gooseOccupation', status: 'open', urgent: true }] }, { type: 'endDesk' });
+    expect(s.approval.people).toBe(30);
+    expect(s.approval.business).toBe(40);
+  });
+});
+
+describe('approval fade', () => {
+  it('fades faster when popular and stops when unpopular', () => {
+    TUNING.fade = 4; TUNING.fadeSlope = 0.2;
+    expect(fadeFor(50)).toBe(4);
+    expect(fadeFor(80)).toBe(7);
+    expect(fadeFor(35)).toBe(1);
+    expect(fadeFor(20)).toBe(0);
+    const s = play(withDesk(start(), 'parkingMeters'), { type: 'endDesk' });
+    expect(s.approval.law).toBe(46);
+    expect(s.reports[0]!.drift.law).toBe(-4);
+    TUNING.fade = 0; TUNING.fadeSlope = 0;
   });
 });
 

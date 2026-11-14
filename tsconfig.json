@@ -16,7 +16,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "skipLibCheck": true,
-    "types": ["node"]
+    "types": ["node", "vite/client"]
   },
   "include": ["src", "sim", "tests", "vite.config.ts"]
 }

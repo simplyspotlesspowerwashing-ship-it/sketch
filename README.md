@@ -2,17 +2,20 @@
 
 A comedy town-management game played in 3-5 minutes a day. One real week is one term in office.
 
-Status: **M0** (engine, content schema, balance simulator, placeholder cards). No playable screen yet; that is M1.
+Status: **playable preview** (M1-M3 scope in rough form: full week, art, sound, crowd reveal with labelled preview data).
 
 ```bash
 npm install
-npm test            # engine unit tests (Vitest)
+npm run dev         # play locally
+npm test            # 36 engine tests (Vitest)
 npm run validate    # schema-check the week pack
-npm run sim         # 5,000 terms per bot -> reports/balance.md   (npm run sim -- 500 out.md for a quick run)
-npm run dev         # Vite dev server (placeholder page until M1)
+npm run sim         # 5,000 terms per bot -> reports/balance.md
+node sim/stats.ts   # regenerate the labelled preview crowd data
+npm run build && npx vite preview --port 4173 &
+node e2e/smoke.cjs /tmp/shots 2    # browser playthrough to election night
 ```
 
-Node 22.18+ is required: the simulator runs the TypeScript sources directly.
+Node 22.18+ is required: the simulator runs the TypeScript sources directly. Triple-tap the title in the game for the dev panel.
 
 ## Layout
 
@@ -20,13 +23,15 @@ Node 22.18+ is required: the simulator runs the TypeScript sources directly.
 src/engine/     pure rules engine: reduce(state, action, content, rng) -> state. No DOM.
   tuning.ts     every balance number in one place
 src/content/    Zod schema, shared projects and combos, week packs (JSON)
-sim/            bot policies and the balance simulator
+src/ui/         Preact screen, SVG art (art.tsx), storage / calendar / sound / stats (platform.ts)
+sim/            bot policies, balance simulator, preview-stats generator
+e2e/            browser smoke test
 tests/          engine unit tests
 reports/        committed balance reports
 CONTENT_GUIDE.md  how to write cards
 ```
 
-## Rules decisions made in M0 (all open to change)
+## Rules decisions so far (all open to change)
 
 - Money is stored in $k. Approval arrows map to numbers: one arrow = 5, two arrows = 10.
 - `Card.month` is 1 or 2 (which of the day's two months). `Option.monthly` was added for leases, `Option.campaign` for the Sunday card, `Card.repeatable` for group-pressure cards.
@@ -35,3 +40,6 @@ CONTENT_GUIDE.md  how to write cards
 - Promises still open at the election come due then: paid if the town has the money, otherwise broken.
 - An option that would push Money straight below -$50k cannot be picked. Upkeep can still take you there.
 - Deputy Dave's outcome is independent of the card he was given (one shared table).
+- Approval fades every month (`TUNING.fade` 4, plus 0.2 per point above 50, less below 50, never under 0). Shown in the month report as "the mood this month".
+- A conditional card arrives stamped URGENT; ignoring it costs double.
+- You can start on any day. Deputy Dave governs the days you missed (`src/engine/dave.ts`); the town is handed back with every group at 45 or more, money between $40k and $90k, and no recalls or broken promises from his watch.
