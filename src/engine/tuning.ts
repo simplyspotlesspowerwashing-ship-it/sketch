@@ -35,7 +35,7 @@ export const TUNING = {
   bankruptAt: -50,
   recall: { approval: 40, money: 20, election: -8, max: 2, high: 100 }, // high: a group this fond of you is also trouble
   // Every group loses this much approval each month: the honeymoon fades. FADE env var overrides for experiments.
-  fade: Number(globalThis.process?.env?.FADE ?? 2.75),
+  fade: Number(globalThis.process?.env?.FADE ?? 3.75),
   // Rubber band: the fade grows by this much per approval point above 50 and shrinks below 50 (never under 0).
   fadeSlope: Number(globalThis.process?.env?.FADEK ?? 0.1),
   fadeMax: 7,

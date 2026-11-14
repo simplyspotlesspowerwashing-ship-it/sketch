@@ -44,7 +44,7 @@ CONTENT_GUIDE.md  how to write cards
 - Every desk card is played through a mini-game (`Card.game`, sixteen types in `src/ui/minigames.tsx`: catch, dodge, whack, match, stack, simon, tug, flap, jump, snake, slice, invaders, breakout, rhythm, cross, sort). The UI passes a `skill` on the `choose` action: 2 clean, 1 sloppy, 0 flop. There is no bonus: clean gives exactly the chosen trade, sloppy costs 5 approval from the card's group, a flop costs 10 and $5k. Doubled on URGENT cards.
 - Sending Deputy Dave instead costs 1 Favor (no game, random outcome from his table).
 - Conditional cards (escalations, crises, group pressure, secrets) arrive URGENT; up to two a month from Thursday. A protest (People under 35) makes every card URGENT the next month.
-- Approval fades after each desk (`TUNING.fade` 2.75, plus 0.1 per point above 50, never below 0).
+- Approval fades after each desk (`TUNING.fade` 3.75, plus 0.1 per point above 50, never below 0).
 - Gamble options show their odds and both outcomes; the roll is seeded per player.
 - Decrees last the term, pay or cost every month, and appear in the law book and on the map's notice board.
 - Town setup (names, base group, one head start) happens once, at the end of the first day played. Names can be changed later.
