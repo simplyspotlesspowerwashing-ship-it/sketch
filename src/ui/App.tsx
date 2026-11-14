@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { week1Content as content } from '../content/index.ts';
 import { coverMissedDays } from '../engine/dave.ts';
 import { voteShare } from '../engine/election.ts';
-import { blocked, botchCost, campaignCard, daveCost, fadeFor, findCard, legalActions, monthOfDay, newTerm, reduce, upfront } from '../engine/engine.ts';
+import { agenda, blocked, botchCost, campaignCard, daveCost, fadeFor, findCard, legalActions, monthOfDay, newTerm, reduce, upfront } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
 import { GROUPS } from '../engine/types.ts';
 import type { Action, Card, Decree, Initiative, MonthReport, Effects, GroupId, Option, PerkId, Profile, Skill, State, TaxLevel } from '../engine/types.ts';
@@ -56,6 +56,23 @@ function EffectChips({ effects }: { effects: Effects | undefined }) {
 function BotchChips({ card, skill, urgent }: { card: Card; skill: 0 | 1; urgent?: boolean }) {
   const c = botchCost(card, skill, urgent);
   return <>{c.money ? <MoneyChip value={c.money} /> : null}<EffectChips effects={c.effects} /></>;
+}
+
+/** Before choosing, a card shows only what you must know to pick: Favors it needs and what kind of deal it is.
+ *  Where the effects land is revealed afterwards (see Reveal). */
+function OptionHint({ o }: { o: Option }) {
+  const tags: string[] = [];
+  if (o.project) tags.push('Builds something');
+  if (o.promise) tags.push('A promise: pay later');
+  if (o.gamble) tags.push('A gamble');
+  if (o.lasting) tags.push('Will linger');
+  if (o.monthly) tags.push('An ongoing cost');
+  return (
+    <span class="costs">
+      {o.favors ? <span class="chip favor" aria-label={`costs ${Math.abs(o.favors)} Favor`}><Icon.ticket size={14} />−{Math.abs(o.favors)}</span> : null}
+      {tags.map((t) => <span key={t} class="chip hintchip">{t}</span>)}
+    </span>
+  );
 }
 
 function OptionCosts({ o }: { o: Option }) {
@@ -122,6 +139,46 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
 
 interface Outcome { card: Card; option: number | 'dave'; daveText?: string; before: State; after: State; won?: boolean; skill?: Skill; urgent?: boolean }
 
+/** The reveal: what your choice actually did, one meter at a time. */
+function Reveal({ before, after, money: dm, diff, lines, seed }: { before: State; after: State; money: number; diff: Effects; lines: [string[], string[]]; seed: number }) {
+  const groups = GROUPS.filter((g) => diff[g]);
+  const [n, setN] = useState(reduced() ? groups.length + 1 : 0);
+  useEffect(() => {
+    if (n > groups.length) return;
+    const t = setTimeout(() => {
+      setN(n + 1);
+      const g = groups[n];
+      if (n === 0 && dm) sfx(dm > 0 ? 'coin' : 'spend');
+      else if (g) sfx(diff[g]! > 0 ? 'coin' : 'warn');
+    }, n === 0 ? 450 : 520);
+    return () => clearTimeout(t);
+  }, [n]);
+  return (
+    <div class="reveal" aria-live="polite">
+      <p class="reveal-head">What it did</p>
+      {dm !== 0 && n >= 1 && (
+        <div class="reveal-row money">
+          <Icon.coin size={30} /><span class="reveal-name">Money</span>
+          <b class={dm > 0 ? 'up' : 'down'}>{dm > 0 ? '+' : '−'}${Math.abs(dm)}k</b>
+        </div>
+      )}
+      {groups.map((g, i) => {
+        const shown = n >= i + (dm !== 0 ? 2 : 1);
+        if (!shown) return null;
+        const up = diff[g]! > 0;
+        return (
+          <div key={g} class={`reveal-row ${up ? 'up' : 'down'}`} style={{ '--g': GROUP_COLOR[g] }}>
+            <Portrait who={LEADER[g]!} mood={up ? 'pleased' : 'annoyed'} size={38} ring={GROUP_COLOR[g]} />
+            <span class="reveal-name">{GROUP_NAME[g]}<em>{(up ? lines[0] : lines[1])[(seed + i) % 4]}</em></span>
+            <span class="reveal-bar"><i class="was" style={{ width: `${before.approval[g]}%` }} /><i class="now" style={{ width: `${after.approval[g]}%` }} /></span>
+            <b class={up ? 'up' : 'down'}>{up ? '▲ +' : '▼ '}{diff[g]}</b>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function ResultPanel({ r, onDone }: { r: Outcome; onDone: () => void }) {
   const o = typeof r.option === 'number' ? r.card.options[r.option]! : null;
   const diff: Effects = {};
@@ -147,16 +204,7 @@ function ResultPanel({ r, onDone }: { r: Outcome; onDone: () => void }) {
         </div>
       )}
       {o?.gamble && r.won !== undefined && <div class={`dice ${r.won ? 'won' : 'lost'}`}><b>{r.won ? 'It worked!' : 'It did not work.'}</b> {(r.won ? o.gamble.win : o.gamble.lose).text}</div>}
-      <div class="reactions">
-        {dm !== 0 && <MoneyChip value={dm} />}
-        {GROUPS.filter((g) => diff[g]).map((g, i) => (
-          <span key={g} class="react" style={{ 'animation-delay': `${120 + i * 110}ms` }}>
-            <Portrait who={LEADER[g]!} mood={diff[g]! > 0 ? 'pleased' : 'annoyed'} size={30} ring={GROUP_COLOR[g]} />
-            <Arrows group={g} value={diff[g]!} />
-            <em>{(diff[g]! > 0 ? UP : DOWN)[(r.card.id.length + i) % 4]}</em>
-          </span>
-        ))}
-      </div>
+      {(dm !== 0 || Object.keys(diff).length > 0) && <Reveal before={r.before} after={r.after} money={dm} diff={diff} lines={[UP, DOWN]} seed={r.card.id.length} />}
       {pct !== null && (
         <div class={`crowd ${pct < 15 ? 'maverick' : ''}`}>
           <div class="crowd-bar"><i style={{ width: `${Math.max(3, pct)}%` }} /></div>
@@ -197,19 +245,13 @@ function CardSheet({ card, s, mode, urgent, onChoose, onDave, onSkip, onClose }:
           {card.advisors.map((a) => <div key={a.who} class="adv"><Portrait who={a.who} size={36} /><span class="bubble small"><b>{(NAMES[a.who] ?? a.who).split(',')[0]}:</b> {a.line}</span></div>)}
         </div>
       )}
-      {mode === 'desk' && card.game && (
-        <div class="stakes">
-          <span class="stakes-top"><Sprite theme={card.game.theme} size={26} /><b>{card.stages ? `Then three jobs: ${card.stages.map((x) => x.title).join(', then ')}` : `Then you'll have to: ${card.game.title}`}</b></span>
-          <span class="costs"><span class="odds">Sloppy</span><BotchChips card={card} skill={1} urgent={urgent} /><span class="odds bad">Flop</span><BotchChips card={card} skill={0} urgent={urgent} /></span>
-        </div>
-      )}
       <div class="options">
         {card.options.map((o, i) => {
           const why = blocked(s, o, content);
           return (
             <button key={o.label} class={`option ${o.kind}`} disabled={noActions || Boolean(why)} onClick={() => onChoose(i)}>
               <span class="opt-top"><kbd>{i + 1}</kbd><b>{o.label}</b>{why && <span class="why">{why}</span>}</span>
-              <OptionCosts o={o} />
+              {mode === 'campaign' ? <OptionCosts o={o} /> : <OptionHint o={o} />}
             </button>
           );
         })}
@@ -400,6 +442,22 @@ function DecreeCosts({ d, ongoing }: { d: Decree; ongoing?: boolean }) {
   );
 }
 
+/** The day's running order, always on the desk, with your own moves (midday, tonight) one tap away. */
+function Agenda({ s, onOpen, top }: { s: State; onOpen: (which: 'midday' | 'tonight') => void; top?: boolean }) {
+  if (!top) return null;
+  const m = monthOfDay(s.month);
+  const midDone = m === 2;
+  const ag = agenda(s, content);
+  return (
+    <div class="agenda" aria-label="Today's running order">
+      <span class={`ag-step ${m === 1 ? 'now' : 'done'}`}><b>1</b>Today's three</span>
+      <button class={`ag-step move ${midDone ? 'done' : ''}`} disabled={midDone} onClick={() => onOpen('midday')}><b>2</b>Midday: your move<small>{midDone ? 'done' : `${ag.initiatives.length} things to do ▸`}</small></button>
+      <span class={`ag-step ${m === 2 ? 'now' : ''}`}><b>3</b>Your town's three</span>
+      <button class="ag-step move law" onClick={() => onOpen('tonight')}><b>4</b>Tonight: make laws<small>{s.decrees.length} in force · up to {TUNING.decreesPerDay} more ▸</small></button>
+    </div>
+  );
+}
+
 // ---------- guide, timeline, setup ----------
 const whyText = (why: string) => why === 'major' ? 'Disaster' : why.startsWith('low:') ? `${GROUP_NAME[why.slice(4) as GroupId]} is unhappy` : why === 'choice' ? 'You did this' : why === 'crisis' ? 'Late-week crisis' : 'Around town';
 
@@ -518,6 +576,7 @@ export function App() {
   const [pulse, setPulse] = useState<Pulse | null>(null);
   const [fresh, setFresh] = useState<{ endings: string[]; deeds: string[] }>({ endings: [], deeds: [] });
   const [book, setBook] = useState(false);
+  const [peek, setPeek] = useState<'midday' | 'tonight' | null>(null);
   const [burst, setBurst] = useState<Burst | null>(null);
   const [playing, setPlaying] = useState<{ card: Card; option: number } | null>(null);
   const [doing, setDoing] = useState<Initiative | null>(null);
@@ -678,6 +737,7 @@ export function App() {
 
       {s.phase === 'desk' && (
         <main class="desk">
+          <Agenda s={s} top onOpen={(which) => { setPeek(which); sfx('paper'); }} />
           <Guide s={s} open={openCards} first={!save.tutorialDone} />
           <h2 class="deskhead">{m === 1 ? <>Today's three <small>every mayor gets these</small></> : <>Your town's three <small>because of how things are going</small></>}</h2>
           <div class="cards">
@@ -689,7 +749,6 @@ export function App() {
                   {slot.urgent && <span class="ribbon small">URGENT</span>}
                   {slot.major && <span class="ribbon small major">CATASTROPHE · 3 games</span>}
                   {m === 2 && slot.why && <span class="why-chip" style={{ '--g': slot.why.startsWith('low:') ? GROUP_COLOR[slot.why.slice(4) as GroupId] : '#6B6257' }}>{whyText(slot.why)}</span>}
-                  {card.game && !done && <span class="paper-game"><Sprite theme={card.game.theme} size={22} /></span>}
                   <Portrait who={card.who} size={40} ring={card.group ? GROUP_COLOR[card.group] : undefined} />
                   <span class="paper-text"><b>{(NAMES[card.who] ?? card.who).split(',')[0]}{card.rare ? ' · RARE' : ''}</b>{card.text}</span>
                   {done && <span class={`stamp mini ${slot.status === 'dave' ? 'dave' : card.options[slot.option ?? 0]?.kind === 'refuse' ? 'denied' : ''}`}>{slot.status === 'dave' ? "DAVE'D" : card.options[slot.option ?? 0]?.kind === 'refuse' ? 'DENIED' : 'DONE'}</span>}
@@ -698,7 +757,7 @@ export function App() {
             })}
           </div>
           {openCards > 0 && !legal.some((x) => x.type === 'choose') && <button class="btn" onClick={() => { act({ type: 'endDesk' }); sfx('paper'); }}>Nothing more can be done here. Move on</button>}
-          <button class="hourstrip" onClick={() => { setLawBook(true); sfx('tap'); }}><Icon.scroll /><span><b>The law, as it stands:</b> {s.decrees.length ? s.decrees.map((id) => content.pack.decrees.find((d) => d.id === id)!.name).join(' · ') : 'nothing yet. Tonight you can make up to two.'}</span></button>
+          <Agenda s={s} onOpen={(which) => { setPeek(which); sfx('paper'); }} />
         </main>
       )}
 
@@ -881,6 +940,21 @@ export function App() {
         </Sheet>
       )}
       {book && <Scrapbook save={save} onClose={() => setBook(false)} />}
+      {peek && (() => {
+        const ag = agenda(s, content);
+        return (
+          <Sheet label={peek === 'midday' ? 'Midday options' : "Tonight's laws"} onClose={() => setPeek(null)}>
+            <h2 class="display">{peek === 'midday' ? 'Midday: your move' : "Tonight: the Mayor's Hour"}</h2>
+            <p class="hint">{peek === 'midday' ? "After today's three you get to go and do one of these. Done well, they pay off." : `After your town's three you can make up to ${TUNING.decreesPerDay} of these law. They last all week.`}</p>
+            <div class="options">
+              {peek === 'midday' ? ag.initiatives.map((id) => { const it = content.pack.initiatives.find((x) => x.id === id)!; return <div key={id} class="option initiative preview"><span class="opt-top"><Portrait who={it.who} size={30} /><b>{it.name}</b></span><span class="decree-text">{it.text}</span></div>; })
+                : ag.decrees.map((id) => { const d = content.pack.decrees.find((x) => x.id === id)!; return <div key={id} class={`option decree ${d.kind} preview`}><span class="opt-top"><span class="kind">{d.kind}</span><b>{d.name}</b></span><span class="decree-text">{d.text}</span></div>; })}
+            </div>
+            {peek === 'tonight' && <p class="hint"><b>In force now:</b> {s.decrees.length ? s.decrees.map((id) => content.pack.decrees.find((d) => d.id === id)!.name).join(' · ') : 'nothing yet.'}</p>}
+            <button class="btn primary" onClick={() => setPeek(null)}>Back to the desk</button>
+          </Sheet>
+        );
+      })()}
       {overlay === 'recall' && (
         <Sheet label="Recalled" tone="recall">
           <div class="stamp denied big">RECALLED</div>

@@ -333,6 +333,17 @@ function finish(s: State, endedEarly: boolean) {
   s.phase = 'results';
 }
 
+/** Today's midday activities and tonight's decrees, computed the same way the engine will offer them,
+ *  so the UI can show the day's agenda in advance. */
+export function agenda(s: State, content: Content, rng: Rng = seededRng): { initiatives: string[]; decrees: string[] } {
+  const ini = content.pack.initiatives.filter((i) => !s.initiativesDone.includes(i.id)).map((i) => i.id);
+  const dec = content.pack.decrees.filter((d) => !s.decrees.includes(d.id)).map((d) => d.id);
+  return {
+    initiatives: shuffled(ini, rng(`${s.weekId}|initiatives|${s.day}`)).slice(0, TUNING.initiativesOffered),
+    decrees: shuffled(dec, rng(`${s.weekId}|decrees|${s.day}`)).slice(0, TUNING.decreesOffered),
+  };
+}
+
 // ---------- public API ----------
 
 export function newTerm(weekId: string, playerSeed: string, content: Content, rng: Rng = seededRng): State {

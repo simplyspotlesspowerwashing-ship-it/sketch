@@ -41,7 +41,7 @@ CONTENT_GUIDE.md  how to write cards
 - Your town's three are, in order: cards that follow from your choices, late-week crises and group-pressure cards (all URGENT; one a day early in the week, two from Thursday), then ordinary cards from whichever groups like you least. Each carries a reason (`DeskSlot.why`) the UI shows.
 - Nobody ends the month by hand: the desk closes when its three cards are done.
 - Every desk has 3 requests and all 3 must be dealt with. There is no action limit and no ignoring.
-- Every desk card is played through a mini-game (`Card.game`, twelve types in `src/ui/minigames.tsx`: catch, dodge, whack, match, stack, simon, tug, flap, jump, snake, slice, invaders). The UI passes a `skill` on the `choose` action: 2 clean, 1 sloppy, 0 flop. There is no bonus: clean gives exactly the chosen trade, sloppy costs 5 approval from the card's group, a flop costs 10 and $5k. Doubled on URGENT cards.
+- Every desk card is played through a mini-game (`Card.game`, sixteen types in `src/ui/minigames.tsx`: catch, dodge, whack, match, stack, simon, tug, flap, jump, snake, slice, invaders, breakout, rhythm, cross, sort). The UI passes a `skill` on the `choose` action: 2 clean, 1 sloppy, 0 flop. There is no bonus: clean gives exactly the chosen trade, sloppy costs 5 approval from the card's group, a flop costs 10 and $5k. Doubled on URGENT cards.
 - Sending Deputy Dave instead costs 1 Favor (no game, random outcome from his table).
 - Conditional cards (escalations, crises, group pressure, secrets) arrive URGENT; up to two a month from Thursday. A protest (People under 35) makes every card URGENT the next month.
 - Approval fades after each desk (`TUNING.fade` 2.75, plus 0.1 per point above 50, never below 0).
@@ -56,3 +56,6 @@ Browser checks: `node e2e/smoke.cjs <dir> [dayOffset]` plays to election night (
 - Both ends are dangerous: a group at 0 or at 100 recalls you. Each cause (`low:<group>`, `high:<group>`, `bankrupt`) has its own named ending in `pack.endings`, as do the four ways a week can end (`term:*`).
 - The scrapbook (book icon) keeps unlocked endings, a career record and twelve deeds across weeks in the save (`scrapbook`, `career`, `deeds`). Deeds are cosmetic so the shared daily content stays identical for everyone.
 - Options can carry a `lasting` effect (a feud, a fan club, a deal) that ticks every month for a set number of months and shows as an alert while active.
+- Like Reigns, a card does not show its effects before you choose. Options show only what you must know to pick (Favors needed, and whether it builds, promises, gambles or lingers); the game you'll play is revealed by the clip; where the effects landed is revealed afterwards, meter by meter. The Sunday campaign card still shows its effect on the vote.
+- The day's agenda (today's three, midday, your town's three, tonight's laws) sits on the desk; midday and tonight can be previewed at any time (`agenda()` in the engine computes the same offers the engine will make).
+- The town's weather follows the average mood (rain below 40, sunshine from 60), and after each choice a crowd runs to the affected group's building to cheer or protest.

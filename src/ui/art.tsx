@@ -283,6 +283,8 @@ export function Town({ s, pulse, scene, burst }: { s: State; pulse?: Pulse | nul
   const walkers = Math.max(1, Math.round(s.approval.people / 18));
   const cars = Math.max(0, Math.round(s.approval.business / 28));
   const town = (s.profile?.town ?? 'Bad Town').toUpperCase();
+  const avg = GROUPS.reduce((n, g) => n + s.approval[g], 0) / 4;
+  const gloomy = avg < 40, sunny = avg >= 60;
   return (
     <svg class={`town ${burst && burst.skill === 0 ? 'quake' : ''}`} key={burst && burst.skill === 0 ? burst.key : 0} viewBox="0 0 400 170" role="img" aria-label={`${s.profile?.town ?? 'The town'}. Built: ${s.projects.map((p) => p.id).join(', ') || 'nothing yet'}.`}>
       <rect width="400" height="170" fill={sky} />
@@ -290,6 +292,12 @@ export function Town({ s, pulse, scene, burst }: { s: State; pulse?: Pulse | nul
         : <g class="sun"><circle cx={60 + s.day * 45} cy={s.day > 4 ? 50 : 28} r="15" fill="#F7D774" stroke={INK} stroke-width="2" /></g>}
       {(f.moon || f.moonSold) && <g class="built" transform="translate(28 26)"><circle r="11" fill="#F2EBDD" stroke={INK} stroke-width="1.6" /><circle cx="-3" cy="-2" r="2.5" fill="#D9CDB6" /><circle cx="4" cy="4" r="1.8" fill="#D9CDB6" /><path d="M2 -10 v-12 l10 3 l-10 3" fill={f.moonSold ? '#3F8F5A' : '#C23B3B'} stroke={INK} stroke-width="1.4" stroke-linejoin="round" /></g>}
       {f.fireworks && [[120, 26, '#D9653B'], [250, 18, '#F7D774'], [180, 34, '#3B6FB6']].map(([x, y, c], i) => <g key={i} class="firework" style={{ 'animation-delay': `${i * 0.9}s` }} transform={`translate(${x} ${y})`}>{[0, 45, 90, 135, 180, 225, 270, 315].map((r) => <path key={r} d="M0 -4 v-7" stroke={c as string} stroke-width="2.2" stroke-linecap="round" transform={`rotate(${r})`} />)}</g>)}
+      {/* weather follows the town's mood */}
+      {gloomy && <rect width="400" height="170" fill="#3B4470" opacity=".22" />}
+      {gloomy && [30, 150, 270].map((x, i) => <g key={x} class="cloud" style={{ 'animation-duration': `${50 + i * 15}s`, 'animation-delay': `${-i * 12}s` }}><path d={`M${x} 34 q-12 0 -11 -9 q1 -8 11 -7 q5 -10 16 -6 q10 3 8 13 q7 2 4 9z`} fill="#8C97A3" stroke={INK} stroke-width="1.5" /></g>)}
+      {gloomy && Array.from({ length: 34 }, (_, i) => <path key={`r${i}`} class="rain" style={{ 'animation-delay': `${(i * 0.137) % 1}s` }} d={`M${(i * 37) % 400} ${(i * 23) % 60} l-3 9`} stroke="#7FB7D9" stroke-width="1.6" stroke-linecap="round" />)}
+      {sunny && !night && [0, 1, 2, 3, 4, 5].map((i) => <path key={`b${i}`} class="sunbeam" style={{ 'animation-delay': `${i * 0.4}s` }} d={`M${60 + s.day * 45} ${s.day > 4 ? 50 : 28} l${Math.cos(i) * 26} ${Math.sin(i) * 26}`} stroke="#F7D774" stroke-width="3" stroke-linecap="round" />)}
+      {!night && [0, 1, 2].map((i) => <g key={`bird${i}`} class="bird" style={{ 'animation-delay': `${-i * 6}s`, 'animation-duration': `${18 + i * 4}s` }}><path class="flapw" d={`M0 ${20 + i * 9} q4 -4 7 0 q3 -4 7 0`} fill="none" stroke={INK} stroke-width="1.4" stroke-linecap="round" /></g>)}
       <g class="cloud"><path d="M40 40 q-10 0 -9 -8 q1 -7 9 -6 q4 -8 13 -5 q8 3 6 11 q6 2 3 8z" fill="#fff" opacity=".85" /></g>
       <g class="cloud slow"><path d="M40 62 q-8 0 -7 -6 q1 -6 7 -5 q3 -6 10 -4 q6 2 5 9 q5 2 2 6z" fill="#fff" opacity=".6" /></g>
       <path d="M0 110 q60 -40 130 -14 q60 -34 130 -8 q70 -30 140 6 v76 h-400z" fill={night ? '#3D5A47' : '#9DBF8A'} />
@@ -301,6 +309,7 @@ export function Town({ s, pulse, scene, burst }: { s: State; pulse?: Pulse | nul
         {has('school') ? <g class={fresh('school')}><rect x="0" y="6" width="74" height="40" fill="#D9653B" {...O} /><path d="M-4 8 l41 -22 l41 22z" fill="#8A3B22" {...O} /><rect x="30" y="26" width="14" height="20" fill="#5C3A2A" {...O} />{[8, 54].map((x) => <rect key={x} x={x} y="18" width="12" height="12" fill={win} {...O} />)}<path d="M37 -14 v-12 l12 4 l-12 4" fill="#F7D774" {...O} /></g>
           : <g><rect x="12" y="20" width="44" height="26" fill="#C9B8A0" {...O} /><path d="M8 22 l26 -12 l26 12z" fill="#8C7A64" {...O} /><rect x="28" y="32" width="10" height="14" fill="#5C3A2A" {...O} /></g>}
       </g>
+      {[[44, 66], [300, 74]].map(([x, y], i) => <g key={`sm${i}`}>{[0, 1, 2].map((k) => <circle key={k} class="chimney" style={{ 'animation-delay': `${k * 0.9 + i * 0.4}s` }} cx={x} cy={y} r="3.5" fill="#fff" opacity=".7" />)}</g>)}
       {/* library / casino */}
       <g transform="translate(104 70)">
         <rect x="0" y="12" width="62" height="38" fill="#E6DBC6" {...O} /><path d="M-3 12 h68 l-6 -10 h-56z" fill="#B8A98C" {...O} />
@@ -383,6 +392,18 @@ export function Town({ s, pulse, scene, burst }: { s: State; pulse?: Pulse | nul
         );
       })}
       {scene && [0, 1, 2, 3, 4, 5].map((i) => <g key={`${scene}${i}`} class={`parade ${i % 2 ? 'rev' : ''}`} style={{ 'animation-delay': `${-i * 0.9}s` }}><g class="hop" style={{ 'animation-delay': `${i * 0.11}s`, 'animation-duration': '.35s' }}><g transform={`translate(0 ${118 + (i % 3) * 9}) scale(.62)`}>{spriteBody(scene)}</g></g></g>)}
+      {pulse && GROUPS.filter((g) => pulse.effects[g]).map((g) => {
+        const up = pulse.effects[g]! > 0;
+        const [x] = HOME[g];
+        return [0, 1, 2, 3, 4].map((i) => (
+          <g key={`${pulse.key}crowd${g}${i}`} class={`crowd ${x > 200 ? 'fromleft' : 'fromright'}`} style={{ 'animation-delay': `${i * 0.08}s` }} transform={`translate(${x - 18 + i * 9} 121)`}>
+            <g class="cheer" style={{ 'animation-delay': `${0.9 + i * 0.07}s` }}>
+              <path d="M-3 0 q3 -9 6 0z" fill={GROUP_COLOR[g]} stroke={INK} stroke-width="1.1" /><circle cy="-9" r="2.8" fill={['#F0C4A0', '#B9794E', '#E2A878', '#8A5A3C'][i % 4]} stroke={INK} stroke-width="1.1" />
+              {up ? <path d="M3 -12 l4 -7" stroke={INK} stroke-width="1.2" /> : <><path d="M3 -8 v-10" stroke={INK} stroke-width="1.2" /><rect x="0" y="-24" width="9" height="6" fill="#fff" stroke={INK} stroke-width="1" /><path d="M2 -21 h5" stroke="#C23B3B" stroke-width="1.4" /></>}
+            </g>
+          </g>
+        ));
+      })}
       {pulse && GROUPS.filter((g) => pulse.effects[g]).map((g) => {
         const up = pulse.effects[g]! > 0;
         const [x, y, hw] = HOME[g];

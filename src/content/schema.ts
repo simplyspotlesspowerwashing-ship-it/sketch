@@ -12,7 +12,7 @@ const condition = z.strictObject({
 
 const outcome = z.strictObject({ text: z.string().min(1).max(90), money: z.number().optional(), favors: z.number().optional(), effects: effects.optional(), setFlag: z.string().optional() });
 
-const game = z.strictObject({ type: z.enum(['catch', 'dodge', 'whack', 'match', 'stack', 'simon', 'tug', 'flap', 'jump', 'snake', 'slice', 'invaders']), theme: z.string(), bad: z.string().optional(), title: z.string().min(1).max(40), flop: z.string().min(1).max(90) });
+const game = z.strictObject({ type: z.enum(['catch', 'dodge', 'whack', 'match', 'stack', 'simon', 'tug', 'flap', 'jump', 'snake', 'slice', 'invaders', 'breakout', 'rhythm', 'cross', 'sort']), theme: z.string(), bad: z.string().optional(), title: z.string().min(1).max(40), flop: z.string().min(1).max(90) });
 
 const option = z.strictObject({
   label: z.string().min(1).max(28),

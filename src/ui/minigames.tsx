@@ -546,6 +546,170 @@ function Invaders({ g, done }: { g: CardGame; done: Done }) {
   );
 }
 
+// ---- 13. Breakout: bounce the ball off your paddle to knock out every brick ----
+function Breakout({ g, done }: { g: CardGame; done: Done }) {
+  const T = 30, ROWS = 3, COLS = 6;
+  const st = useRef({ px: 50, bx: 50, by: 70, vx: 26, vy: -95, stuck: true, stuckFor: 0, lives: 3, bricks: Array.from({ length: ROWS * COLS }, (_, i) => ({ id: i, c: i % COLS, r: Math.floor(i / COLS), alive: true })), broken: 0, t: 0, over: false, flash: 0 });
+  const arena = useRef<HTMLDivElement>(null);
+  const bx0 = (c: number) => 8 + c * 14, by0 = (r: number) => 10 + r * 10;
+  useLoop((dt, t) => {
+    const s = st.current;
+    if (s.over) return false;
+    s.t = t; s.flash = Math.max(0, s.flash - dt);
+    if (t >= T) { s.over = true; done(s.broken >= 14 && s.lives >= 2 ? 2 : s.broken >= 9 ? 1 : 0); return false; }
+    if (s.stuck) { s.bx = s.px; s.by = 84; s.stuckFor += dt; if (s.stuckFor > 1.5) { s.stuck = false; s.stuckFor = 0; s.vx = rnd(-30, 30); s.vy = -95; } return; }
+    const speed = 1 + t / T * 0.5;
+    s.bx += s.vx * speed * dt; s.by += s.vy * speed * dt;
+    if (s.bx < 3 || s.bx > 97) { s.vx *= -1; s.bx = clamp(s.bx, 3, 97); }
+    if (s.by < 3) { s.vy = Math.abs(s.vy); }
+    if (s.vy > 0 && s.by > 85 && s.by < 94 && Math.abs(s.bx - s.px) < 12) { s.vy = -Math.abs(s.vy); s.vx = (s.bx - s.px) * 6.5; if (Math.abs(s.vx) < 16) s.vx = (s.vx < 0 || (s.vx === 0 && Math.random() < 0.5) ? -1 : 1) * 16; sfx('tap'); }
+    for (const b of s.bricks) {
+      if (!b.alive || Math.abs(s.bx - bx0(b.c)) > 7 || Math.abs(s.by - by0(b.r)) > 5) continue;
+      b.alive = false; s.broken += 1; s.vy *= -1; sfx('stamp'); if (s.broken % 4 === 0) good();
+      break;
+    }
+    if (s.by > 100) { s.lives -= 1; s.stuck = true; s.flash = 0.4; sfx('warn'); bad(); if (s.lives <= 0) { s.over = true; done(s.broken >= 9 ? 1 : 0); return false; } }
+    if (s.broken === ROWS * COLS) { s.over = true; done(s.lives >= 2 ? 2 : 1); return false; }
+  });
+  const move = (e: PointerEvent) => { const r = arena.current!.getBoundingClientRect(); st.current.px = clamp(((e.clientX - r.left) / r.width) * 100, 10, 90); };
+  const launch = () => { const s = st.current; if (s.stuck) { s.stuck = false; s.stuckFor = 0; s.vx = rnd(-30, 30); s.vy = -95; } };
+  useEffect(() => { const k = (e: KeyboardEvent) => { if (e.key === 'ArrowLeft') st.current.px = clamp(st.current.px - 7, 10, 90); if (e.key === 'ArrowRight') st.current.px = clamp(st.current.px + 7, 10, 90); if (e.key === ' ') { e.preventDefault(); launch(); } }; addEventListener('keydown', k); return () => removeEventListener('keydown', k); }, []);
+  const s = st.current;
+  return (
+    <>
+      <Hud left={T - s.t} total={T}><b>{s.broken}</b> of {ROWS * COLS} · {s.lives} ball{s.lives === 1 ? '' : 's'} left · 14 is clean</Hud>
+      <div ref={arena} class={`mg-arena night ${s.flash > 0 ? 'shake' : ''}`} onPointerMove={move} onPointerDown={(e) => { move(e); launch(); }}>
+        {s.bricks.filter((b) => b.alive).map((b) => <span key={b.id} class="mg-brick" style={{ left: `${bx0(b.c)}%`, top: `${by0(b.r)}%` }}><Sprite theme={g.theme} size={30} /></span>)}
+        <span class="mg-ball" style={{ left: `${s.bx}%`, top: `${s.by}%` }} />
+        <span class="mg-paddle" style={{ left: `${s.px}%` }} />
+        {s.stuck && <span class="mg-tip">Tap to launch</span>}
+      </div>
+      <p class="hint">Drag the paddle. Knock out fourteen or more without losing two balls.</p>
+    </>
+  );
+}
+
+// ---- 14. Rhythm: notes fall down three lanes; tap the lane as each one hits the line ----
+function Rhythm({ g, done }: { g: CardGame; done: Done }) {
+  const T = 22;
+  const st = useRef((() => {
+    const notes: { id: number; lane: number; at: number; state: 0 | 1 | 2 }[] = [];
+    let at = 1.4, id = 0;
+    while (at < T - 1.5) { notes.push({ id: id++, lane: Math.floor(Math.random() * 3), at, state: 0 }); if (Math.random() < 0.25) notes.push({ id: id++, lane: Math.floor(Math.random() * 3), at: at + 0.001, state: 0 }); at += [0.45, 0.6, 0.6, 0.9][Math.floor(Math.random() * 4)]! - at / T * 0.12; }
+    return { notes, t: 0, hits: 0, misses: 0, over: false, flash: [0, 0, 0], combo: 0 };
+  })());
+  const FALL = 1.6; // seconds from top to the line
+  useLoop((dt, t) => {
+    const s = st.current;
+    if (s.over) return false;
+    s.t = t; s.flash = s.flash.map((f) => Math.max(0, f - dt));
+    for (const n of s.notes) if (n.state === 0 && t - n.at > 0.22) { n.state = 2; s.misses += 1; s.combo = 0; if (s.misses % 3 === 1) bad(); }
+    if (t >= T) { s.over = true; const ratio = s.hits / s.notes.length; done(ratio >= 0.85 ? 2 : ratio >= 0.6 ? 1 : 0); return false; }
+  });
+  const press = (lane: number) => {
+    const s = st.current;
+    if (s.over) return;
+    s.flash[lane] = 0.15;
+    const n = s.notes.find((x) => x.state === 0 && x.lane === lane && Math.abs(x.at - s.t) < 0.2);
+    if (n) { n.state = 1; s.hits += 1; s.combo += 1; sfx('tap'); if (s.combo % 6 === 0) good(); }
+    else { s.combo = 0; sfx('warn'); }
+  };
+  useEffect(() => { const k = (e: KeyboardEvent) => { const i = ['ArrowLeft', 'ArrowDown', 'ArrowRight'].indexOf(e.key); if (i >= 0 && !e.repeat) { e.preventDefault(); press(i); } }; addEventListener('keydown', k); return () => removeEventListener('keydown', k); }, []);
+  const s = st.current;
+  return (
+    <>
+      <Hud left={T - s.t} total={T}><b>{s.hits}</b> hit · {s.misses} missed{s.combo >= 4 ? ` · combo ×${s.combo}` : ''}</Hud>
+      <div class="mg-arena stage">
+        {[0, 1, 2].map((l) => <span key={l} class={`mg-track ${s.flash[l]! > 0 ? 'lit' : ''}`} style={{ left: `${l * 33.34}%` }} />)}
+        <span class="mg-line" style={{ top: '84%', left: 0, right: 0, borderLeft: 0, borderTop: '3px dashed #F7D774' }} />
+        {s.notes.filter((n) => n.state !== 1 && s.t > n.at - FALL && s.t < n.at + 0.4).map((n) => <span key={n.id} class={`mg-ent ${n.state === 2 ? 'gone' : ''}`} style={{ left: `${16.67 + n.lane * 33.34}%`, top: `${84 - ((n.at - s.t) / FALL) * 80}%` }}><Sprite theme={g.theme} size={38} /></span>)}
+      </div>
+      <div class="mg-lanes">{[0, 1, 2].map((l) => <button key={l} class={`btn mg-lanebtn l${l}`} aria-label={`Lane ${l + 1}`} onPointerDown={() => press(l)}>{['◀', '▼', '▶'][l]}</button>)}</div>
+      <p class="hint">Tap the lane as each one reaches the line. Keep the combo going.</p>
+    </>
+  );
+}
+
+// ---- 15. Cross: get across the busy road, again and again (the road-crossing genre) ----
+function Cross({ g, done }: { g: CardGame; done: Done }) {
+  const T = 26, LANES = 5, GOAL = 3;
+  const st = useRef((() => ({
+    x: 50, row: LANES, t: 0, over: false, crossed: 0, hits: 0, flash: 0,
+    lanes: Array.from({ length: LANES }, (_, i) => ({ dir: i % 2 ? -1 : 1, speed: rnd(14, 24) + i * 2, cars: Array.from({ length: 2 + (i % 2) }, (_, k) => k * rnd(34, 46) + rnd(0, 20)) })),
+  }))());
+  const rowY = (r: number) => 8 + r * (84 / LANES);
+  useLoop((dt, t) => {
+    const s = st.current;
+    if (s.over) return false;
+    s.t = t; s.flash = Math.max(0, s.flash - dt);
+    const k = 1 + t / T * 0.7;
+    s.lanes.forEach((ln, i) => {
+      ln.cars = ln.cars.map((x) => { let nx = x + ln.dir * ln.speed * k * dt; if (nx > 112) nx -= 124; if (nx < -12) nx += 124; return nx; });
+      if (s.row === i && ln.cars.some((cx) => Math.abs(cx - s.x) < 7)) { s.hits += 1; s.flash = 0.4; s.row = LANES; sfx('warn'); bad(); }
+    });
+    if (t >= T) { s.over = true; done(s.crossed >= GOAL && s.hits <= 1 ? 2 : s.crossed >= 2 ? 1 : 0); return false; }
+  });
+  const step = (dx: number, dy: number) => {
+    const s = st.current;
+    if (s.over) return;
+    s.x = clamp(s.x + dx * 12, 6, 94); s.row = clamp(s.row + dy, -1, LANES);
+    sfx('paper');
+    if (s.row === -1) { s.crossed += 1; s.row = LANES; s.x = 50; sfx('coin'); good(); if (s.crossed >= GOAL && s.hits <= 1) { s.over = true; done(2); } }
+  };
+  useEffect(() => { const k = (e: KeyboardEvent) => { const m: Record<string, [number, number]> = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] }; const v = m[e.key]; if (v) { e.preventDefault(); step(...v); } }; addEventListener('keydown', k); return () => removeEventListener('keydown', k); }, []);
+  const s = st.current;
+  return (
+    <>
+      <Hud left={T - s.t} total={T}><b>{s.crossed}</b> of {GOAL} across · {s.hits} squashed</Hud>
+      <button class={`mg-arena crossing ${s.flash > 0 ? 'shake' : ''}`} onPointerDown={() => step(0, -1)} aria-label="Step forward">
+        {s.lanes.map((ln, i) => ln.cars.map((cx, j) => <span key={`${i}-${j}`} class="mg-ent" style={{ left: `${cx}%`, top: `${rowY(i)}%`, scale: ln.dir < 0 ? '-1 1' : undefined }}><Sprite theme={g.bad ?? 'car'} size={40} /></span>))}
+        <span class="mg-ent me" style={{ left: `${s.x}%`, top: `${s.row === -1 ? 2 : rowY(s.row)}%` }}><Sprite theme={g.theme} size={36} /></span>
+      </button>
+      <div class="mg-dpad">{([['◀', -1, 0], ['▲', 0, -1], ['▼', 0, 1], ['▶', 1, 0]] as const).map(([l, x, y]) => <button key={l} class="btn" aria-label={l} onPointerDown={() => step(x, y)}>{l}</button>)}</div>
+      <p class="hint">Tap the road (or ▲) to hop forward. Get across {GOAL} times, squashed once at most.</p>
+    </>
+  );
+}
+
+// ---- 16. Sort: things arrive one at a time; send each to the right side, fast ----
+function Sort({ g, done }: { g: CardGame; done: Done }) {
+  const COUNT = 18;
+  const st = useRef((() => ({ items: Array.from({ length: COUNT }, () => Math.random() < 0.55), i: 0, left: 1.6, right: 0, wrong: 0, over: false, t: 0, fly: 0 as -1 | 0 | 1 }))());
+  useLoop((dt, t) => {
+    const s = st.current;
+    if (s.over) return false;
+    s.t = t; s.left -= dt;
+    if (s.left <= 0) { s.wrong += 1; sfx('warn'); bad(); next(); }
+    if (s.i >= COUNT) { s.over = true; done(s.wrong <= 1 ? 2 : s.wrong <= 4 ? 1 : 0); return false; }
+  });
+  function next() { const s = st.current; s.i += 1; s.left = Math.max(0.75, 1.6 - s.i * 0.05); }
+  const send = (side: -1 | 1) => {
+    const s = st.current;
+    if (s.over || s.i >= COUNT) return;
+    const isGood = s.items[s.i]!;
+    if ((side === -1) === isGood) { s.right += 1; sfx('coin'); if (s.right % 5 === 0) good(); } else { s.wrong += 1; sfx('warn'); bad(); }
+    s.fly = side; setTimeout(() => { st.current.fly = 0; }, 120);
+    next();
+  };
+  useEffect(() => { const k = (e: KeyboardEvent) => { if (e.key === 'ArrowLeft') send(-1); if (e.key === 'ArrowRight') send(1); }; addEventListener('keydown', k); return () => removeEventListener('keydown', k); }, []);
+  const start = useRef<number | null>(null);
+  const s = st.current;
+  const cur = s.items[s.i];
+  return (
+    <>
+      <Hud left={(s.left / 1.6) * 10} total={10}><b>{Math.min(s.i, COUNT)}</b> of {COUNT} sorted · {s.wrong} wrong</Hud>
+      <div class="mg-arena sorter" onPointerDown={(e) => { start.current = e.clientX; }} onPointerUp={(e) => { if (start.current !== null && Math.abs(e.clientX - start.current) > 30) send(e.clientX < start.current ? -1 : 1); start.current = null; }}>
+        <span class="mg-bin left"><Sprite theme={g.theme} size={30} /><b>KEEP</b></span>
+        <span class="mg-bin right"><Sprite theme={g.bad ?? 'raccoon'} size={30} /><b>BIN</b></span>
+        {cur !== undefined && <span key={s.i} data-good={cur ? "1" : "0"} class={`mg-ent sortme ${s.fly < 0 ? 'flyl' : s.fly > 0 ? 'flyr' : ''}`} style={{ left: '50%', top: '45%' }}><Sprite theme={cur ? g.theme : g.bad ?? 'raccoon'} size={70} /></span>}
+        <span class="mg-belt" />
+      </div>
+      <div class="mg-lanes two"><button class="btn mg-lanebtn l0" onPointerDown={() => send(-1)}>◀ Keep</button><button class="btn mg-lanebtn l2" onPointerDown={() => send(1)}>Bin ▶</button></div>
+      <p class="hint">Swipe or tap: keep the <Sprite theme={g.theme} size={18} />, bin the <Sprite theme={g.bad ?? 'raccoon'} size={18} />. Each one gets less time.</p>
+    </>
+  );
+}
+
 const HOW: Record<CardGame['type'], string> = {
   catch: 'Drag the basket. Catch the right things, dodge the wrong ones. 20 seconds.',
   dodge: 'Tap a lane to move. Don\'t crash. 20 seconds, and it speeds up.',
@@ -559,6 +723,10 @@ const HOW: Record<CardGame['type'], string> = {
   snake: 'Steer to collect twelve. Don\'t hit the walls or your own tail.',
   slice: 'Swipe through everything thrown up. Never the bombs. 20 seconds.',
   invaders: 'Drag to move, tap to fire. Clear them before they land. Three lives.',
+  breakout: 'Drag the paddle, bounce the ball, knock out every brick. Three balls.',
+  rhythm: 'Tap each lane as things hit the line. Keep the combo going.',
+  cross: 'Hop across the busy road three times. Getting squashed sends you back.',
+  sort: 'Keep or bin, one at a time. Swipe left or right. It gets faster.',
 };
 
 const SHOUT: Record<string, string> = {
@@ -696,5 +864,9 @@ function PlayGame({ g, done }: { g: CardGame; done: Done }) {
     case 'snake': return <Snake g={g} done={done} />;
     case 'slice': return <Slice g={g} done={done} />;
     case 'invaders': return <Invaders g={g} done={done} />;
+    case 'breakout': return <Breakout g={g} done={done} />;
+    case 'rhythm': return <Rhythm g={g} done={done} />;
+    case 'cross': return <Cross g={g} done={done} />;
+    case 'sort': return <Sort g={g} done={done} />;
   }
 }

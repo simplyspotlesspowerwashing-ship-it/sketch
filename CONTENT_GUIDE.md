@@ -5,7 +5,7 @@ Content is data. A week is one JSON pack in `src/content/packs/`, checked by `np
 ## Writing rules
 
 1. Short setup, clear ask. Card text is 140 characters at most; option labels 28.
-2. Both options hurt. If one option is obviously right, rewrite the card. `npm run sim` flags any option the sensible bot picks over 85% or under 5% of the time.
+2. Both options hurt. Players no longer see effects before choosing, so the card text and the advisors' lines are their only clues: make sure the clues are fair. If one option is obviously right, rewrite the card. `npm run sim` flags any option the sensible bot picks over 85% or under 5% of the time.
 3. One joke per card, and it lives in the situation, not in a pun.
 4. Recurring characters stay in character (see the cast below).
 5. Never punch at real groups. No real politics, parties, countries or public figures. PG throughout.
@@ -49,7 +49,7 @@ An option may carry `gamble: { chance, win, lose }`. Both outcomes are shown bef
 
 Every desk card needs `game: { type, theme, bad?, title, flop }`.
 
-- `type`: `catch` (slide a basket), `dodge` (three lanes), `whack` (tap the right ones), `match` (pairs), `stack` (drop pieces), `simon` (repeat signals), `tug` (tap on green), `flap` (tap to fly through gaps), `jump` (runner), `snake` (steer and collect), `slice` (swipe, avoid bombs), `invaders` (move and shoot).
+- `type`: `catch` (slide a basket), `dodge` (three lanes), `whack` (tap the right ones), `match` (pairs), `stack` (drop pieces), `simon` (repeat signals), `tug` (tap on green), `flap` (tap to fly through gaps), `jump` (runner), `snake` (steer and collect), `slice` (swipe, avoid bombs), `invaders` (move and shoot), `breakout` (paddle and bricks), `rhythm` (tap lanes on the beat), `cross` (hop across traffic), `sort` (keep or bin).
 - `theme` is the sprite the player handles; `bad` is the one to avoid (catch, dodge, whack). Sprites are in `src/ui/art.tsx`.
 - `title` (max 40) is the job, written as something the mayor physically does: "Herd the geese to the pond".
 - `flop` (max 90) is the comic line when it goes wrong.

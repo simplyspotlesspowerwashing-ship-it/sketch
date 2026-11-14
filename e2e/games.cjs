@@ -2,7 +2,7 @@
 // reachable, that the game ends on time, and to take a mid-game screenshot.
 //   node e2e/games.cjs <url> <screenshot-dir> [idle]     ("idle" = no input, to check the flop path)
 const { chromium } = require('playwright');
-const CARDS = { catch: 'parkingMeters', dodge: 'mallParking', whack: 'curfew', match: 'buglePress', stack: 'newSchool', simon: 'tvStation', tug: 'bearStory', flap: 'helicopter', jump: 'pothole', snake: 'goosePond', slice: 'cheeseVault', invaders: 'raccoonBins' };
+const CARDS = { catch: 'parkingMeters', dodge: 'mallParking', whack: 'curfew', match: 'buglePress', stack: 'newSchool', simon: 'tvStation', tug: 'bearStory', flap: 'helicopter', jump: 'pothole', snake: 'goosePond', slice: 'cheeseVault', invaders: 'raccoonBins', breakout: 'clockWizard', rhythm: 'karaoke', cross: 'zebra', sort: 'recycling' };
 const only = process.env.ONLY ? process.env.ONLY.split(',') : null;
 (async () => {
   const [url, out, mode] = process.argv.slice(2);
@@ -96,6 +96,24 @@ const only = process.env.ONLY ? process.env.ONLY.split(',') : null;
           return foes.length ? foes.reduce((a, b) => (Math.abs(b - me) < Math.abs(a - me) ? b : a)) : me;
         });
         if (box) { await pg.mouse.move(box.x + box.width * x / 100, box.y + box.height * 0.85); await pg.mouse.down(); await pg.mouse.up(); }
+      } else if (type === 'breakout') {
+        const box = await pg.locator('.mg-arena').boundingBox({ timeout: 500 }).catch(() => null);
+        const bx = await pg.evaluate(() => parseFloat(document.querySelector('.mg-ball')?.style.left ?? '50'));
+        if (box) { await pg.mouse.move(box.x + box.width * bx / 100, box.y + box.height * 0.9); await pg.mouse.down(); await pg.mouse.up(); }
+      } else if (type === 'rhythm') {
+        const lanes = await pg.evaluate(() => [...document.querySelectorAll('.mg-arena.stage .mg-ent:not(.gone)')].filter((e) => { const y = parseFloat(e.style.top); return y > 78 && y < 90; }).map((e) => Math.round((parseFloat(e.style.left) - 16.67) / 33.34)));
+        for (const l of [...new Set(lanes)]) await pg.locator('.mg-lanebtn').nth(l).dispatchEvent('pointerdown');
+        await pg.waitForTimeout(-20 + 30);
+      } else if (type === 'cross') {
+        const safe = await pg.evaluate(() => {
+          const me = document.querySelector('.mg-ent.me'); const my = parseFloat(me.style.top), mx = parseFloat(me.style.left);
+          const rowH = 84 / 5, next = my - rowH;
+          return ![...document.querySelectorAll('.mg-arena.crossing .mg-ent:not(.me)')].some((c) => Math.abs(parseFloat(c.style.top) - next) < 2 && Math.abs(parseFloat(c.style.left) - mx) < 18);
+        });
+        if (safe) await pg.keyboard.press('ArrowUp');
+      } else if (type === 'sort') {
+        const g = await pg.evaluate(() => document.querySelector('.sortme')?.dataset.good);
+        if (g !== undefined) { await pg.keyboard.press(g === '1' ? 'ArrowLeft' : 'ArrowRight'); await pg.waitForTimeout(150); }
       } else if (type === 'tug') {
         if (await pg.locator('.mg-big.go').count()) await pg.locator('.mg-big').dispatchEvent('pointerdown').catch(() => {});
       }

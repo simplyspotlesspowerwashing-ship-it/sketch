@@ -549,10 +549,10 @@
     }
    ],
    "game": {
-    "type": "stack",
+    "type": "breakout",
     "theme": "coin",
-    "title": "Stack the casino chips",
-    "flop": "The chips fell. Into the quiet reading area."
+    "title": "Break the bank at blackjack",
+    "flop": "You broke the library instead. Quietly."
    }
   },
   {
@@ -1034,6 +1034,645 @@
    }
   },
   {
+   "id": "portrait",
+   "who": "marge",
+   "text": "Your official portrait is done. The artist painted you as a bear. A good bear. A dignified bear.",
+   "options": [
+    {
+     "label": "Hang it proudly",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "The bear looks over City Hall. People salute it."
+    },
+    {
+     "label": "Pay for a repaint",
+     "kind": "pay",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "Now you're a smaller bear. Progress.",
+     "money": -8
+    },
+    {
+     "label": "Burn it",
+     "kind": "refuse",
+     "effects": {
+      "press": -10
+     },
+     "reaction": "The bear will be remembered. You, less so."
+    }
+   ],
+   "ignored": {
+    "press": -5
+   },
+   "game": {
+    "type": "match",
+    "theme": "bear",
+    "title": "Find your face among the bears",
+    "flop": "You picked a real bear. It was flattered."
+   },
+   "draft": true,
+   "group": "press"
+  },
+  {
+   "id": "marathon",
+   "who": "pam",
+   "text": "The town marathon is today. Nobody trained. The route goes through the bakery. Twice.",
+   "options": [
+    {
+     "label": "Run it yourself",
+     "kind": "pay",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "You finished. You also ate a pie. Nobody's counting."
+    },
+    {
+     "label": "Hand out water",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "Hydrated. Everyone stopped at the bakery anyway.",
+     "money": -6
+    },
+    {
+     "label": "Postpone it",
+     "kind": "refuse",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Postponed. Three people are still running."
+    }
+   ],
+   "ignored": {
+    "people": -5
+   },
+   "game": {
+    "type": "jump",
+    "theme": "kid",
+    "title": "Run the marathon, hop the pies",
+    "flop": "You stopped for a pie. Then another. Then you lived there.",
+    "bad": "pie"
+   },
+   "draft": true,
+   "group": "people"
+  },
+  {
+   "id": "ghostTours",
+   "who": "linda",
+   "text": "I'd like to run ghost tours of City Hall. The ghost wants a cut. Forty per cent. It's a strong negotiator.",
+   "options": [
+    {
+     "label": "Give the ghost its cut",
+     "kind": "pay",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "The ghost is pleased. It rattled something, warmly.",
+     "money": 6
+    },
+    {
+     "label": "Run tours, stiff the ghost",
+     "kind": "pay",
+     "effects": {
+      "law": -5,
+      "press": -5
+     },
+     "reaction": "The ghost has unionised. With the geese.",
+     "money": 12
+    },
+    {
+     "label": "No ghosts on the payroll",
+     "kind": "refuse",
+     "effects": {
+      "press": -5
+     },
+     "reaction": "The ghost is haunting HR now."
+    }
+   ],
+   "ignored": {
+    "press": -5
+   },
+   "game": {
+    "type": "invaders",
+    "theme": "ghost",
+    "title": "Herd the ghosts onto the tour",
+    "flop": "The ghosts toured you. You're in the basement now."
+   },
+   "draft": true
+  },
+  {
+   "id": "greenLights",
+   "who": "doug",
+   "text": "Every traffic light went green at once. Nobody has crashed. Everyone is just being polite. Nobody can leave.",
+   "options": [
+    {
+     "label": "Fix the lights",
+     "kind": "pay",
+     "effects": {
+      "business": 5,
+      "law": 5
+     },
+     "reaction": "Red, amber, green. The town wept with relief.",
+     "money": -10
+    },
+    {
+     "label": "Leave them green",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "law": -10
+     },
+     "reaction": "Society has entered a politeness spiral. It's beautiful."
+    },
+    {
+     "label": "Replace them with Barb",
+     "kind": "pay",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "Barb is every light now. She's never been happier."
+    }
+   ],
+   "ignored": {
+    "business": -5,
+    "law": -5
+   },
+   "game": {
+    "type": "cross",
+    "theme": "kid",
+    "title": "Get across the polite traffic",
+    "flop": "Everyone waved you across. Into the river.",
+    "bad": "car"
+   },
+   "draft": true
+  },
+  {
+   "id": "pieThief",
+   "who": "pam",
+   "text": "Someone is stealing pies from windowsills. The crumbs lead to the police station. Barb says crumbs are 'circumstantial'.",
+   "options": [
+    {
+     "label": "Investigate Barb",
+     "kind": "pay",
+     "effects": {
+      "people": 10,
+      "law": -10
+     },
+     "reaction": "Barb confessed. To 'a few'. It was eleven."
+    },
+    {
+     "label": "Pie locks for everyone",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "Locks sold out. The thief now steals locks.",
+     "money": -8
+    },
+    {
+     "label": "Bake more pies",
+     "kind": "pay",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "More pies, more theft. The economy of crumbs grows.",
+     "money": -4
+    }
+   ],
+   "ignored": {
+    "people": -5
+   },
+   "game": {
+    "type": "sort",
+    "theme": "pie",
+    "title": "Sort the pies from the pie thieves",
+    "flop": "You arrested a pie. It had an alibi.",
+    "bad": "raccoon"
+   },
+   "draft": true,
+   "group": "people"
+  },
+  {
+   "id": "alienSignal",
+   "who": "steve",
+   "text": "My radar picked up a signal from space. It just says 'HONK'. Gerald denies everything. He's packing.",
+   "options": [
+    {
+     "label": "Reply 'HONK'",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "They replied. It was rude. Gerald blushed."
+    },
+    {
+     "label": "Build a goose shield",
+     "kind": "pay",
+     "effects": {
+      "law": 10
+     },
+     "reaction": "The shield works. Also on pigeons. Linda is livid.",
+     "money": -12
+    },
+    {
+     "label": "Hand Gerald over",
+     "kind": "refuse",
+     "effects": {
+      "people": -10,
+      "law": 5
+     },
+     "reaction": "They sent him back. He brought souvenirs."
+    }
+   ],
+   "ignored": {
+    "press": -5
+   },
+   "game": {
+    "type": "invaders",
+    "theme": "goose",
+    "title": "Hold off the space geese",
+    "flop": "The space geese landed. They want the pond. Everyone wants the pond."
+   },
+   "draft": true
+  },
+  {
+   "id": "bandstand",
+   "who": "pam",
+   "text": "The brass band only knows one song. It's the bin schedule set to music. They'd like a second song, and money.",
+   "options": [
+    {
+     "label": "Fund music lessons",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "They know two songs now. Both are about bins.",
+     "money": -8
+    },
+    {
+     "label": "Teach them yourself",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "They now know 'Hot Cross Buns'. Badly. Proudly."
+    },
+    {
+     "label": "One song is plenty",
+     "kind": "refuse",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "They played it at you. For an hour."
+    }
+   ],
+   "ignored": {
+    "people": -5
+   },
+   "game": {
+    "type": "rhythm",
+    "theme": "note",
+    "title": "Conduct the brass band",
+    "flop": "The trombone went one way. The band went the other."
+   },
+   "draft": true,
+   "group": "people"
+  },
+  {
+   "id": "arcade",
+   "who": "chad",
+   "text": "I want to open an arcade in the old fire station. The fire engine is a ride now. It still has water in it.",
+   "options": [
+    {
+     "label": "Open the arcade",
+     "kind": "pay",
+     "effects": {
+      "business": 10,
+      "law": -5
+     },
+     "reaction": "First ride soaked the deputy mayor. Fun for all.",
+     "money": 10
+    },
+    {
+     "label": "Arcade, minus the engine",
+     "kind": "pay",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "Fine. The engine is sulking in the car park.",
+     "money": -4
+    },
+    {
+     "label": "Firefighters only",
+     "kind": "refuse",
+     "effects": {
+      "business": -10,
+      "law": 5
+     },
+     "reaction": "The firefighters have the high score. Of course."
+    }
+   ],
+   "ignored": {
+    "business": -5
+   },
+   "game": {
+    "type": "breakout",
+    "theme": "coin",
+    "title": "Beat the high score",
+    "flop": "You lost to the fire engine. It doesn't have hands."
+   },
+   "draft": true,
+   "group": "business"
+  },
+  {
+   "id": "zebra",
+   "who": "barb",
+   "text": "Someone painted a zebra crossing. With a real zebra. It won't move. Traffic has stopped. The zebra seems content.",
+   "options": [
+    {
+     "label": "Hire a zebra wrangler",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "business": 5
+     },
+     "reaction": "Moved. It's on the roundabout now. Content.",
+     "money": -10
+    },
+    {
+     "label": "Make it official",
+     "kind": "pay",
+     "effects": {
+      "people": 10,
+      "business": -10
+     },
+     "reaction": "Everyone crosses by the zebra. It nods at them."
+    },
+    {
+     "label": "Barb can arrest a zebra",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "I tried. It looked at me. I'm not okay."
+    }
+   ],
+   "ignored": {
+    "business": -10
+   },
+   "game": {
+    "type": "cross",
+    "theme": "kid",
+    "title": "Walk the zebra across",
+    "flop": "The zebra walked you across. Backwards. Twice.",
+    "bad": "car"
+   },
+   "draft": true,
+   "group": "law"
+  },
+  {
+   "id": "dogShow",
+   "who": "timmy",
+   "text": "The dog show needs a judge. All forty dogs are Sergeant Biscuit. Barb says that's 'not possible'. It is happening.",
+   "options": [
+    {
+     "label": "Every dog wins",
+     "kind": "pay",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Forty rosettes. All Biscuit. He's unbearable now.",
+     "money": -6
+    },
+    {
+     "label": "Find the real Biscuit",
+     "kind": "pay",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "Found him. The other thirty-nine were raccoons."
+    },
+    {
+     "label": "Cancel the dog show",
+     "kind": "refuse",
+     "effects": {
+      "people": -10
+     },
+     "reaction": "Forty Biscuits are sad. That's a lot of sad."
+    }
+   ],
+   "ignored": {
+    "people": -5
+   },
+   "game": {
+    "type": "sort",
+    "theme": "dog",
+    "title": "Spot the dogs, bin the raccoons",
+    "flop": "You gave Best in Show to a raccoon. It accepted.",
+    "bad": "raccoon"
+   },
+   "draft": true
+  },
+  {
+   "id": "recycling",
+   "who": "pam",
+   "text": "The recycling has piled up so high it has a view. Children are climbing it. One of them has planted a flag.",
+   "options": [
+    {
+     "label": "Hire sorters",
+     "kind": "pay",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "Sorted. The flag was donated to the museum.",
+     "money": -12
+    },
+    {
+     "label": "Ship it to Worse Town",
+     "kind": "pay",
+     "effects": {
+      "press": -10,
+      "people": 5
+     },
+     "reaction": "Worse Town said thank you. That's the saddest part.",
+     "money": 5
+    },
+    {
+     "label": "Call it public art",
+     "kind": "pay",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "It won a prize. The prize was more recycling."
+    }
+   ],
+   "ignored": {
+    "people": -10
+   },
+   "game": {
+    "type": "sort",
+    "theme": "paper",
+    "title": "Sort the recycling, bin the cheese",
+    "flop": "You recycled the cheese. It's a bench now. It smells like a bench.",
+    "bad": "cheese"
+   },
+   "draft": true,
+   "group": "people"
+  },
+  {
+   "id": "karaoke",
+   "who": "marge",
+   "text": "The Bugle wants to host karaoke night at City Hall. You'd sing first. You'd sing 'the hard one'.",
+   "options": [
+    {
+     "label": "Sing the hard one",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "Your high note broke a window. Front page."
+    },
+    {
+     "label": "Lip-sync it",
+     "kind": "favor",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "Nobody noticed. Except Marge. Marge always notices.",
+     "favors": -1
+    },
+    {
+     "label": "No singing in City Hall",
+     "kind": "refuse",
+     "effects": {
+      "press": -5,
+      "people": -5
+     },
+     "reaction": "The silence is deafening. Marge is writing about it."
+    }
+   ],
+   "ignored": {
+    "press": -5
+   },
+   "game": {
+    "type": "rhythm",
+    "theme": "note",
+    "title": "Hit every note of the hard one",
+    "flop": "You hit a note nobody has heard before. Dogs howled."
+   },
+   "draft": true,
+   "group": "press"
+  },
+  {
+   "id": "busRoute",
+   "who": "doug",
+   "text": "The bus route has become a circle. It's been going round for a week. The passengers have formed a government.",
+   "options": [
+    {
+     "label": "Add a stop",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "They got off. Some of them got back on. They miss it.",
+     "money": -10
+    },
+    {
+     "label": "Recognise their government",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "They've declared independence. Seat 14 is the capital."
+    },
+    {
+     "label": "Sell the bus",
+     "kind": "pay",
+     "effects": {
+      "people": -10
+     },
+     "reaction": "Sold. To the passengers. They're still on it.",
+     "money": 12
+    }
+   ],
+   "ignored": {
+    "people": -5,
+    "business": -5
+   },
+   "game": {
+    "type": "cross",
+    "theme": "kid",
+    "title": "Cross the bus lanes to reach them",
+    "flop": "You got on the wrong bus. You've been elected Seat 9.",
+    "bad": "car"
+   },
+   "draft": true
+  },
+  {
+   "id": "clockWizard",
+   "who": "linda",
+   "text": "A wizard has moved into the clock tower. Every hour, instead of chiming, it says 'Ooooh'. He pays rent in sparkles.",
+   "options": [
+    {
+     "label": "Evict the wizard",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "He left. The clock still says 'Ooooh'. It's personal now."
+    },
+    {
+     "label": "Charge him real rent",
+     "kind": "pay",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "He paid in coins. Three of them are frogs.",
+     "money": 8
+    },
+    {
+     "label": "Make him town magician",
+     "kind": "pay",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "He turned the bins into doves. The doves are bins now.",
+     "money": -6
+    }
+   ],
+   "ignored": {
+    "press": -5
+   },
+   "game": {
+    "type": "breakout",
+    "theme": "star",
+    "title": "Knock the sparkles off the clock",
+    "flop": "You broke the clock. It's now always 'Ooooh' o'clock."
+   },
+   "draft": true
+  },
+  {
    "id": "pothole",
    "who": "doug",
    "text": "Main Street has a pothole so big it has a name. The name is Kevin. Kevin got a letter today. It was a jury summons.",
@@ -1275,10 +1914,11 @@
     }
    ],
    "game": {
-    "type": "match",
+    "type": "sort",
     "theme": "paper",
     "title": "Sort the front pages",
-    "flop": "Tomorrow's paper is all page four. Forty times."
+    "flop": "Tomorrow's paper is all cheese. Marge is calling it a scoop.",
+    "bad": "cheese"
    }
   },
   {
@@ -1511,10 +2151,11 @@
     }
    ],
    "game": {
-    "type": "match",
+    "type": "sort",
     "theme": "paper",
-    "title": "Shelve the whispering books",
-    "flop": "The books are shelved wrong. They're arguing."
+    "title": "Shelve the books, bin the ghosts",
+    "flop": "You shelved a ghost. It's in non-fiction. Furious.",
+    "bad": "ghost"
    }
   },
   {
@@ -1751,10 +2392,10 @@
     }
    ],
    "game": {
-    "type": "simon",
+    "type": "rhythm",
     "theme": "goose",
-    "title": "Do the secret union honk",
-    "flop": "You honked something rude. About Gerald's mother."
+    "title": "Honk in time with the union",
+    "flop": "You honked off-beat. The union is drafting a statement."
    }
   },
   {
@@ -1929,10 +2570,10 @@
     }
    ],
    "game": {
-    "type": "match",
+    "type": "rhythm",
     "theme": "note",
-    "title": "Remember who sang what",
-    "flop": "You gave first prize to a coat on a chair."
+    "title": "Keep time for forty children",
+    "flop": "You lost the beat. Forty children lost it with you."
    }
   },
   {
@@ -2388,7 +3029,7 @@
     }
    ],
    "game": {
-    "type": "dodge",
+    "type": "cross",
     "theme": "kid",
     "title": "Walk the children across",
     "flop": "You crossed alone. The children are still waving.",
@@ -2454,10 +3095,11 @@
     }
    ],
    "game": {
-    "type": "match",
+    "type": "sort",
     "theme": "paper",
-    "title": "Spot the copied headlines",
-    "flop": "You shut down the wrong paper. It was a menu."
+    "title": "Sort real news from fake news",
+    "flop": "You printed the fake ones. They sold better.",
+    "bad": "bomb"
    }
   },
   {
@@ -2823,7 +3465,7 @@
     }
    ],
    "game": {
-    "type": "dodge",
+    "type": "cross",
     "theme": "car",
     "title": "Drive out of the roundabout",
     "flop": "You waved a bus in. It has forty passengers.",
@@ -3139,9 +3781,9 @@
     }
    ],
    "game": {
-    "type": "simon",
+    "type": "rhythm",
     "theme": "note",
-    "title": "Clap at the right moments",
+    "title": "Clap in time at the opera",
     "flop": "You clapped at your own death. Then asked for more."
    }
   },
@@ -3510,10 +4152,11 @@
     }
    ],
    "game": {
-    "type": "match",
+    "type": "sort",
     "theme": "paper",
-    "title": "Find the matching receipts",
-    "flop": "You handed him Dave's diary. He's read page one."
+    "title": "Sort the receipts from the raccoons",
+    "flop": "You handed him Dave's diary. He's read page one.",
+    "bad": "raccoon"
    }
   },
   {
@@ -3965,7 +4608,7 @@
     "people": -5
    },
    "game": {
-    "type": "dodge",
+    "type": "cross",
     "theme": "kid",
     "title": "Walk home without being arrested",
     "flop": "You were arrested for walking. And 'looking walky'.",
@@ -5011,6 +5654,67 @@
    "perMonth": {
     "people": -1
    }
+  },
+  {
+   "id": "waveLaw",
+   "kind": "law",
+   "who": "pam",
+   "name": "Mandatory Waving",
+   "text": "Every citizen must wave at every other citizen. The town's arms are tired by noon.",
+   "reaction": "I waved at a bus. The bus waved back. I think.",
+   "draft": true,
+   "effects": {
+    "people": 5
+   },
+   "perMonth": {
+    "business": -1
+   }
+  },
+  {
+   "id": "puddleLevy",
+   "kind": "tax",
+   "who": "steve",
+   "name": "The Puddle Levy",
+   "text": "A small fee for stepping in puddles. Steve will measure each puddle personally.",
+   "reaction": "Big puddle on Elm Street. That one's a premium puddle.",
+   "draft": true,
+   "monthly": 4,
+   "effects": {
+    "press": -5
+   },
+   "perMonth": {
+    "people": -1
+   }
+  },
+  {
+   "id": "goldStatue",
+   "kind": "stunt",
+   "who": "chad",
+   "name": "A Golden Statue of You",
+   "text": "Forty feet. Gold. Your face. It is slightly bigger than Chad's statue. Chad is aware.",
+   "reaction": "It's lovely. It's bigger than mine. I'm going to need a minute.",
+   "draft": true,
+   "money": -12,
+   "effects": {
+    "press": 10,
+    "business": 5
+   }
+  },
+  {
+   "id": "nightShops",
+   "kind": "law",
+   "who": "chad",
+   "name": "Shops Open All Night",
+   "text": "Every shop stays open all night. Nobody needs a sofa at 3am. They buy one anyway.",
+   "reaction": "Profits up. Sleep down. Worth it.",
+   "draft": true,
+   "monthly": 3,
+   "effects": {
+    "business": 10
+   },
+   "perMonth": {
+    "law": -1
+   }
   }
  ],
  "catastrophes": [
@@ -5682,6 +6386,132 @@
      "people": -5
     },
     "money": -4
+   },
+   "draft": true
+  },
+  {
+   "id": "arcadeNight",
+   "who": "chad",
+   "name": "High-score night at the arcade",
+   "text": "Chad's arcade, one night only. The town watches you play. Losing to a child would be very bad. There are many children.",
+   "game": {
+    "type": "breakout",
+    "theme": "coin",
+    "title": "Set the high score",
+    "flop": "You lost to Timmy. He did a dance."
+   },
+   "clean": {
+    "text": "New high score! The town chants your name.",
+    "effects": {
+     "people": 5,
+     "business": 5
+    }
+   },
+   "sloppy": {
+    "text": "Respectable. Third place.",
+    "effects": {
+     "business": 5
+    }
+   },
+   "flop": {
+    "text": "Timmy beat you. He told everyone.",
+    "effects": {
+     "people": -5,
+     "press": -5
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "choir",
+   "who": "pam",
+   "name": "Lead the town choir",
+   "text": "The choir needs a leader for the festival. They sing whatever you conduct. Conduct well.",
+   "game": {
+    "type": "rhythm",
+    "theme": "note",
+    "title": "Lead the choir in time",
+    "flop": "The choir sang three different songs at once."
+   },
+   "clean": {
+    "text": "Standing ovation. A Favor from the PTA.",
+    "effects": {
+     "people": 5
+    },
+    "favors": 1
+   },
+   "sloppy": {
+    "text": "Some harmony occurred.",
+    "effects": {
+     "people": 5
+    }
+   },
+   "flop": {
+    "text": "The choir walked out mid-verse.",
+    "effects": {
+     "people": -10
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "ducklings",
+   "who": "gerald",
+   "name": "Help the goslings across",
+   "text": "Gerald's nephews need to cross Main Street. All nineteen. In a line. Traffic is not slowing down.",
+   "game": {
+    "type": "cross",
+    "theme": "goose",
+    "title": "Get the goslings across",
+    "flop": "A gosling took the bus. It's in Worse Town now.",
+    "bad": "car"
+   },
+   "clean": {
+    "text": "All nineteen across. Gerald saluted with a wing.",
+    "effects": {
+     "people": 10
+    }
+   },
+   "sloppy": {
+    "text": "Most of them made it.",
+    "effects": {
+     "people": 5
+    }
+   },
+   "flop": {
+    "text": "Gerald has started a petition about you.",
+    "effects": {
+     "people": -5,
+     "law": -5
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "lostProperty",
+   "who": "linda",
+   "name": "Sort out lost property",
+   "text": "The lost property box has been 'lost' since 1991. Linda found it. Some of it is still warm.",
+   "game": {
+    "type": "sort",
+    "theme": "paper",
+    "title": "Keep the treasures, bin the ghosts",
+    "flop": "You kept a ghost. It's in your coat now.",
+    "bad": "ghost"
+   },
+   "clean": {
+    "text": "Treasure! $12k of forgotten valuables.",
+    "money": 12
+   },
+   "sloppy": {
+    "text": "$5k and a single shoe.",
+    "money": 5
+   },
+   "flop": {
+    "text": "You found the 1991 mayor. Still in there.",
+    "effects": {
+     "press": -5
+    }
    },
    "draft": true
   }

@@ -38,7 +38,7 @@ export interface Option {
   gamble?: { chance: number; win: Outcome_; lose: Outcome_ };
 }
 
-export type GameId = 'catch' | 'dodge' | 'whack' | 'match' | 'stack' | 'simon' | 'tug' | 'flap' | 'jump' | 'snake' | 'slice' | 'invaders';
+export type GameId = 'catch' | 'dodge' | 'whack' | 'match' | 'stack' | 'simon' | 'tug' | 'flap' | 'jump' | 'snake' | 'slice' | 'invaders' | 'breakout' | 'rhythm' | 'cross' | 'sort';
 /** The mini-game every desk card is played through. There is no upside: a clean job gives exactly the trade
  *  you chose, a sloppy one costs extra, a flop costs more. */
 export interface CardGame {
