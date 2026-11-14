@@ -18,7 +18,7 @@ const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-r
 
 function boot(save: Save): State {
   const cal = calendar(save.dayOffset);
-  const kept = save.state && save.state.v === 1 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  const kept = save.state && save.state.v === 2 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, content), content, cal.today);
 }
 

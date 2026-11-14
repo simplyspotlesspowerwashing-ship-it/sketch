@@ -278,7 +278,7 @@ function finish(s: State, endedEarly: boolean) {
 export function newTerm(weekId: string, playerSeed: string, content: Content, rng: Rng = seededRng): State {
   const a = TUNING.startApproval;
   const s: State = {
-    v: 1, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
+    v: 2, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
     money: TUNING.startMoney, favors: TUNING.startFavors,
     approval: { people: a, business: a, law: a, press: a },
     tax: 'medium', actionsLeft: 0, boughtActionToday: false, delegationsThisMonth: 0, protestNext: false,

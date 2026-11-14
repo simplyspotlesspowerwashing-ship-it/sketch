@@ -169,7 +169,7 @@ export interface Result {
 }
 
 export interface State {
-  v: 1;
+  v: 2; // bump when the state shape changes; older saves start a fresh term
   weekId: string;
   playerSeed: string;
   day: number; // 1..6 governing, 7 = Sunday
