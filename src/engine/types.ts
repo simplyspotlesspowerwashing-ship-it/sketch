@@ -159,7 +159,10 @@ export type Phase = 'decree' | 'promises' | 'desk' | 'event' | 'report' | 'dayEn
 export interface DeskSlot {
   cardId: string;
   status: 'open' | 'done' | 'dave' | 'ignored';
-  urgent?: boolean; // conditional card: ignoring it hurts double
+  urgent?: boolean; // a bad job here costs double
+  /** Why this card is on the desk: 'shared' (everyone gets it today), 'low:<group>' (that group is your weakest),
+   *  'choice' (follows from something you did), 'crisis' (late-week), 'town' (general). */
+  why?: string;
   option?: number;
 }
 
@@ -203,7 +206,7 @@ export interface Result {
 }
 
 export interface State {
-  v: 4; // bump when the state shape changes; older saves start a fresh term
+  v: 5; // bump when the state shape changes; older saves start a fresh term
   weekId: string;
   playerSeed: string;
   day: number; // 1..6 governing, 7 = Sunday
@@ -236,7 +239,8 @@ export interface State {
   polls: number[];
   campaignEffect: number;
   decrees: string[]; // enacted this term
-  decreeOffer: string[]; // today's three
+  decreeOffer: string[]; // what is still on offer today
+  decreesToday: number;
   profile: Profile | null; // set by the town setup; null until the player has done it
   daveDays: number[]; // days Deputy Dave governed while the player was away
   result: Result | null;

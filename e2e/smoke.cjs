@@ -33,9 +33,8 @@ const { chromium } = require('playwright');
     if (await pg.locator('.desk').count()) {
       if (shots === 0) { await pg.screenshot({ path: out + '/2-desk.png' }); shots++; }
       const open = pg.locator('.paper:not([disabled])');
-      const pips = await pg.locator('.pips i.on').count();
-      if (await open.count() && pips > 0) { await open.first().click(); continue; }
-      const end = pg.locator('.desk-foot .btn.primary'); await end.click();
+      if (await open.count()) { await open.first().click(); continue; }
+      await pg.waitForTimeout(250);   // the desk closes itself once every card is done
       continue;
     }
     if (await pg.locator('.promise-row').count()) { await click('.promise-row .option:not([disabled])'); continue; }

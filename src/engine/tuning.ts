@@ -10,7 +10,9 @@ export const TUNING = {
   // Mini-game penalties, taken from the card's own group. Doubled on URGENT cards.
   botch: { sloppy: { approval: -5, money: 0 }, flop: { approval: -10, money: -5 } },
   daveCost: 1, // Favors to send Dave instead of playing
-  decreesOffered: 3,
+  decreesOffered: 4,
+  decreesPerDay: 2,
+  sharedPerDay: 3, // the first desk of the day is the same three cards for every mayor
   lateCrisisFromMonth: 7, // from here a second URGENT card can land on the desk each month
   setup: { base: 8, rival: -4, chest: 30, friends: 2 },
   months: 12,
@@ -29,7 +31,7 @@ export const TUNING = {
   bankruptAt: -50,
   recall: { approval: 40, money: 20, election: -8, max: 2 },
   // Every group loses this much approval each month: the honeymoon fades. FADE env var overrides for experiments.
-  fade: Number(globalThis.process?.env?.FADE ?? 1),
+  fade: Number(globalThis.process?.env?.FADE ?? 2.5),
   // Rubber band: the fade grows by this much per approval point above 50 and shrinks below 50 (never under 0).
   fadeSlope: Number(globalThis.process?.env?.FADEK ?? 0.1),
   fadeMax: 7,

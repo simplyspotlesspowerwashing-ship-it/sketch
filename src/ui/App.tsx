@@ -6,9 +6,9 @@ import { blocked, botchCost, campaignCard, daveCost, fadeFor, findCard, legalAct
 import { TUNING } from '../engine/tuning.ts';
 import { GROUPS } from '../engine/types.ts';
 import type { Action, Card, Decree, Effects, GroupId, Option, PerkId, Profile, Skill, State, TaxLevel } from '../engine/types.ts';
-import { MiniGame } from './minigames.tsx';
+import { Aftermath, MiniGame } from './minigames.tsx';
 import { Arrows, GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Sprite, Town } from './art.tsx';
-import type { Mood, Pulse } from './art.tsx';
+import type { Burst, Mood, Pulse } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, previewStats, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
 
@@ -19,7 +19,7 @@ const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-r
 
 function boot(save: Save): State {
   const cal = calendar(save.dayOffset);
-  const kept = save.state && save.state.v === 4 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  const kept = save.state && save.state.v === 5 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, content), content, cal.today);
 }
 
@@ -127,13 +127,14 @@ function ResultPanel({ r, onDone }: { r: Outcome; onDone: () => void }) {
   for (const g of GROUPS) if (r.after.approval[g] !== r.before.approval[g] && r.after.recalls === r.before.recalls) diff[g] = r.after.approval[g] - r.before.approval[g];
   const dm = r.after.recalls === r.before.recalls ? r.after.money - r.before.money : 0;
   const own = r.card.group ? diff[r.card.group] ?? 0 : GROUPS.reduce((n, g) => n + (diff[g] ?? 0), 0);
-  const mood: Mood = o ? (o.kind === 'refuse' || own < 0 ? 'annoyed' : 'pleased') : 'neutral';
+  const mood: Mood = o ? (o.kind === 'refuse' || own < 0 || r.skill === 0 ? 'annoyed' : 'pleased') : 'neutral';
   const split = o ? stats.getSplit(r.after.weekId, r.card.id) : null;
   const pct = split && typeof r.option === 'number' ? split[r.option] ?? 0 : null;
   const stamp = !o ? "DAVE'D" : o.kind === 'refuse' ? 'DENIED' : o.kind === 'promise' ? 'PROMISED' : 'APPROVED';
   const UP = ['Lovely.', 'Finally.', 'Yes!', 'Good.'], DOWN = ['Hmph.', 'Rude.', 'Noted.', 'Wow.'];
   return (
     <div class="result">
+      {o && r.card.game && r.skill !== undefined && <Aftermath card={r.card} skill={r.skill} />}
       <div class={`stamp ${!o ? 'dave' : o.kind === 'refuse' ? 'denied' : ''}`}>{stamp}</div>
       <div class="speaker">
         <Portrait who={o ? r.card.who : 'dave'} mood={mood} size={72} />
@@ -323,6 +324,8 @@ function DecreeCosts({ d, ongoing }: { d: Decree; ongoing?: boolean }) {
 }
 
 // ---------- guide, timeline, setup ----------
+const whyText = (why: string) => why.startsWith('low:') ? `${GROUP_NAME[why.slice(4) as GroupId]} is unhappy` : why === 'choice' ? 'You did this' : why === 'crisis' ? 'Late-week crisis' : 'Around town';
+
 function alerts(s: State): { text: string; bad: boolean }[] {
   const out: { text: string; bad: boolean }[] = [];
   const a = s.approval;
@@ -338,11 +341,11 @@ function alerts(s: State): { text: string; bad: boolean }[] {
 }
 
 function Guide({ s, open, first }: { s: State; open: number; first: boolean }) {
-  const step = open === 0 ? 'Desk clear. End the month.' : `Deal with all ${open}. Pick your trade, then do the job yourself.`;
+  const step = open === 0 ? 'Desk clear.' : `${open} to go. Pick your trade, then do the job yourself.`;
   const list = alerts(s);
   return (
     <div class="guide">
-      <p class="step"><span class="num">{monthOfDay(s.month)}/2</span><b>{step}</b></p>
+      <p class="step"><span class="num">{monthOfDay(s.month) === 1 ? '1 of 3' : '2 of 3'}</span><b>{step}</b></p>
       {first && <p class="hint">Tap a request. Every choice costs something, and every one ends in a short game. Play it well or the deal gets worse.</p>}
       {list.length > 0 && <div class="alerts">{list.map((x) => <span key={x.text} class={`alert ${x.bad ? 'bad' : ''}`}>{x.bad ? '!' : '★'} {x.text}</span>)}</div>}
     </div>
@@ -435,6 +438,7 @@ export function App() {
   const [outcome, setOutcome] = useState<Outcome | null>(null);
   const [overlay, setOverlay] = useState<'tax' | 'dev' | 'recall' | 'names' | null>(null);
   const [pulse, setPulse] = useState<Pulse | null>(null);
+  const [burst, setBurst] = useState<Burst | null>(null);
   const [playing, setPlaying] = useState<{ card: Card; option: number } | null>(null);
   const [lawBook, setLawBook] = useState(false);
   const [enacted, setEnacted] = useState<Decree | null>(null);
@@ -471,6 +475,7 @@ export function App() {
     const won = after.history[after.history.length - 1]?.won;
     if (o.gamble) setTimeout(() => sfx(won ? 'win' : 'lose'), 420);
     bump(before, after);
+    if (skill !== undefined) setBurst({ key: Date.now(), skill });
     if (before.phase === 'desk' || o.gamble) setOutcome({ card, option, before, after, won, skill, urgent });
     else setFocus(null);
   };
@@ -510,6 +515,14 @@ export function App() {
     setSave({ ...sv, state: next }); setS(next); writeSave({ ...sv, state: next });
   };
 
+  // When every card on the desk is dealt with, the day moves on by itself.
+  useEffect(() => {
+    if (s.phase !== 'desk' || focus || outcome || playing || overlay || showIntro) return;
+    if (s.desk.some((d) => d.status === 'open')) return;
+    const t = setTimeout(() => { act({ type: 'endDesk' }); sfx('paper'); }, 700);
+    return () => clearTimeout(t);
+  });
+
   // Enter advances simple screens.
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -545,13 +558,13 @@ export function App() {
       <header class="top">
         <h1 onClick={titleTap}>Mayor of <span>{s.profile?.town ?? 'Bad Town'}</span></h1>
         <div class="top-right">
-          <span class="daychip">{dayName}{s.day <= 6 && s.phase !== 'dayEnd' ? ` · month ${m} of 2` : ''}</span>
+          <span class="daychip">{dayName}{s.day <= 6 && s.phase !== 'dayEnd' ? (s.phase === 'decree' ? " · Mayor's Hour" : m === 1 ? " · today's three" : " · your town's three") : ''}</span>
           {s.profile && <button class="icon" aria-label="Change your name or the town's name" onClick={() => { setOverlay('names'); sfx('tap'); }}><Icon.pen /></button>}
           <button class="icon" aria-label={save.muted ? 'Turn sound on' : 'Turn sound off'} onClick={() => { setMuted(!save.muted); persist(s, { muted: !save.muted }); }}><Icon.sound on={!save.muted} /></button>
         </div>
       </header>
 
-      <Town s={s} pulse={pulse} scene={playing?.card.game?.theme} />
+      <Town s={s} pulse={pulse} scene={playing?.card.game?.theme} burst={burst} />
       <Timeline s={s} />
 
       <section class="hud" aria-label="Town status">
@@ -567,6 +580,7 @@ export function App() {
       {s.phase === 'desk' && (
         <main class="desk">
           <Guide s={s} open={openCards} first={!save.tutorialDone} />
+          <h2 class="deskhead">{m === 1 ? <>Today's three <small>every mayor gets these</small></> : <>Your town's three <small>because of how things are going</small></>}</h2>
           <div class="cards">
             {s.desk.map((slot, i) => {
               const card = findCard(content, slot.cardId);
@@ -574,6 +588,7 @@ export function App() {
               return (
                 <button key={slot.cardId} class={`paper tilt${i % 3} ${done ? 'done' : ''} ${slot.urgent ? 'urgent' : ''}`} disabled={done} onClick={() => { setFocus(card.id); sfx('paper'); }}>
                   {slot.urgent && <span class="ribbon small">URGENT</span>}
+                  {m === 2 && slot.why && <span class="why-chip" style={{ '--g': slot.why.startsWith('low:') ? GROUP_COLOR[slot.why.slice(4) as GroupId] : '#6B6257' }}>{whyText(slot.why)}</span>}
                   {card.game && !done && <span class="paper-game"><Sprite theme={card.game.theme} size={22} /></span>}
                   <Portrait who={card.who} size={40} ring={card.group ? GROUP_COLOR[card.group] : undefined} />
                   <span class="paper-text"><b>{(NAMES[card.who] ?? card.who).split(',')[0]}{card.rare ? ' · RARE' : ''}</b>{card.text}</span>
@@ -582,15 +597,14 @@ export function App() {
               );
             })}
           </div>
-          <div class="desk-foot">
-            <button class="btn primary" disabled={openCards > 0 && legal.some((a) => a.type === 'choose')} onClick={() => { act({ type: 'endDesk' }); sfx('paper'); }}>{openCards > 0 ? `${openCards} still to do` : 'End the month'}</button>
-          </div>
+          {openCards > 0 && !legal.some((x) => x.type === 'choose') && <button class="btn" onClick={() => { act({ type: 'endDesk' }); sfx('paper'); }}>Nothing more can be done here. Move on</button>}
+          <button class="hourstrip" onClick={() => { setLawBook(true); sfx('tap'); }}><Icon.scroll /><span><b>Mayor's Hour comes after today's six cards.</b> You may enact up to {TUNING.decreesPerDay} decrees. {s.decrees.length} in force.</span></button>
         </main>
       )}
 
       {s.phase === 'decree' && !needSetup && !showIntro && (
         <main class="panel">
-          <div class="guide"><p class="step"><span class="num">★</span><b>Cards done. Now the Mayor's Hour: enact one thing, or nothing.</b></p><p class="hint">Nobody asked for these. That's the fun. A decree lasts all week. Everyone gets the same three today.</p></div>
+          <div class="guide"><p class="step"><span class="num">3 of 3</span><b>Mayor's Hour: enact up to {TUNING.decreesPerDay} things. {TUNING.decreesPerDay - s.decreesToday} left.</b></p><p class="hint">Nobody asked for these. That's the fun. A decree lasts all week. Every mayor is offered the same ones today.</p></div>
           <div class="options">
             {s.decreeOffer.map((id) => {
               const d = content.pack.decrees.find((x) => x.id === id)!;
@@ -604,7 +618,7 @@ export function App() {
               );
             })}
           </div>
-          <button class="btn ghost" onClick={() => { act({ type: 'skipDecree' }); sfx('paper'); }}>Enact nothing today</button>
+          <button class="btn primary" onClick={() => { act({ type: 'skipDecree' }); sfx('paper'); }}>{s.decreesToday > 0 ? "That's enough law for one day" : 'Enact nothing today'}</button>
         </main>
       )}
 
@@ -629,7 +643,7 @@ export function App() {
 
       {s.phase === 'report' && report && (
         <main class="panel">
-          <Bugle kicker={`${dayName} · month ${m} of 2`} headline={report.headline}>
+          <Bugle kicker={`${dayName} · ${m === 1 ? 'midday' : 'evening'} edition`} headline={report.headline}>
             <table class="ledger">
               <tbody>
                 <tr><td>Tax income</td><td class="up">{signed(report.income)}</td></tr>
@@ -644,7 +658,7 @@ export function App() {
             {report.objectives.map((id) => <p key={id} class="bonus"><b>Objective done:</b> {content.pack.objectives.find((o) => o.id === id)!.text} <span class="chip vote">Votes ▲ +2%</span></p>)}
             {s.promises.length > 0 && <p class="hint">Promises outstanding: {s.promises.map((p) => `${money(p.money)} in ${Math.max(0, p.dueMonth - s.month)} mo`).join(' · ')}</p>}
           </Bugle>
-          <button class="btn primary" onClick={() => { act({ type: 'next' }); sfx('paper'); }} autoFocus>{m === 2 ? 'See today’s poll' : 'Next month'}</button>
+          <button class="btn primary" onClick={() => { act({ type: 'next' }); sfx('paper'); }} autoFocus>{m === 2 ? "On to the Mayor's Hour" : "On to your town's three"}</button>
         </main>
       )}
 
@@ -710,7 +724,7 @@ export function App() {
             <h2 class="display">{enacted.name}</h2>
             <div class="speaker"><Portrait who={enacted.who} size={72} mood={(enacted.effects && Object.values(enacted.effects).some((v) => v < 0)) ? 'annoyed' : 'pleased'} /><p class="bubble">{enacted.reaction}</p></div>
             <DecreeCosts d={enacted} />
-            <button class="btn primary" autoFocus onClick={() => setEnacted(null)}>See today's poll</button>
+            <button class="btn primary" autoFocus onClick={() => setEnacted(null)}>Carry on</button>
           </div>
         </Sheet>
       )}

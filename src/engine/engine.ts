@@ -146,39 +146,54 @@ function breakPromise(s: State, id: string) {
   s.promises = s.promises.filter((x) => x.id !== id);
 }
 
+/** The week's ordinary cards in a fixed shared order. The first 18 are the daily threes; the rest feed personal desks. */
+function weekPool(content: Content, weekId: string, rng: Rng): string[] {
+  return shuffled(content.pack.cards.filter((c) => !c.day && !c.requires && !c.rare && !c.secret).map((c) => c.id), rng(`${weekId}|pool`));
+}
+
+/**
+ * Each day has two desks of three.
+ *  - First: "today's three", the same for every mayor (so choices can be compared).
+ *  - Second: "your town's three", drawn from your own situation: cards that follow from your choices,
+ *    late-week crises, group-pressure cards, and then ordinary cards from whichever groups like you least.
+ */
 function drawDesk(s: State, content: Content, rng: Rng): DeskSlot[] {
   const { cards } = content.pack;
   const d = dayOfMonth(s.month);
-  const m = monthOfDay(s.month);
-  const ids = cards.filter((c) => c.day === d && (c.month ?? 1) === m).map((c) => c.id);
-  // Fill from the shared pool (same order for everyone) when the pack has fewer than 3 fixed cards.
-  const pool = shuffled(
-    cards.filter((c) => !c.day && !c.requires && !c.rare && !c.secret).map((c) => c.id),
-    rng(`${s.weekId}|pool`),
-  );
-  let guard = 0;
-  while (ids.length < TUNING.deskSize && pool.length > 0 && guard++ < pool.length * 2) {
-    const id = pool[s.poolCursor % pool.length]!;
-    s.poolCursor += 1;
-    if (!ids.includes(id)) ids.push(id);
+  const pool = weekPool(content, s.weekId, rng);
+  const nShared = TUNING.sharedPerDay * 6;
+  const slots: DeskSlot[] = [];
+  const add = (cardId: string, why: string, urgent = false) => slots.push({ cardId, status: 'open', why, ...(urgent ? { urgent: true } : {}) });
+
+  if (monthOfDay(s.month) === 1) {
+    for (const id of pool.slice((d - 1) * TUNING.sharedPerDay, d * TUNING.sharedPerDay)) add(id, 'shared');
+    // Rare card: a shared 1-in-50 draw, so everyone who gets it gets it together.
+    const rares = cards.filter((c) => c.rare);
+    const r = rng(`${s.weekId}|rare|${s.month}`);
+    if (rares.length > 0 && slots.length > 0 && r() < TUNING.rareChance) slots[0] = { cardId: rares[Math.floor(r() * rares.length)]!.id, status: 'open', why: 'shared' };
+  } else {
+    const maxUrgent = s.month >= TUNING.lateCrisisFromMonth ? 2 : 1;
+    for (const c of cards) {
+      if (slots.length >= maxUrgent) break;
+      if (c.day || c.rare || !(c.requires || c.secret) || !holds(s, c.requires)) continue;
+      if (!c.repeatable && s.usedCards.includes(c.id)) continue;
+      const q = c.requires ?? {};
+      add(c.id, q.flags || q.projects || c.secret ? 'choice' : q.fromMonth ? 'crisis' : `low:${c.group ?? 'people'}`, true);
+    }
+    // Fill the rest from the groups that like you least.
+    const rest = pool.slice(nShared).filter((id) => !s.usedCards.includes(id));
+    // Cards with no group (the treasurer, the librarian...) rank as your average, so they still turn up.
+    const mean = GROUPS.reduce((n, g) => n + s.approval[g], 0) / GROUPS.length;
+    const weak = (id: string) => { const g = findCard(content, id).group; return g ? s.approval[g] : mean - 1; };
+    const ranked = rest.map((id, i) => ({ id, i })).sort((x, y) => weak(x.id) - weak(y.id) || x.i - y.i);
+    for (const { id } of ranked) {
+      if (slots.length >= TUNING.deskSize) break;
+      const g = findCard(content, id).group;
+      add(id, g && s.approval[g] < 50 ? `low:${g}` : 'town');
+    }
   }
-  // Conditional cards (escalations, group pressure, late-week crises, secrets) take the last slots and
-  // arrive URGENT. One per month early in the week, up to two from Thursday on.
-  const maxInject = s.month >= TUNING.lateCrisisFromMonth ? 2 : 1;
-  const urgent: string[] = [];
-  for (const c of cards) {
-    if (urgent.length >= maxInject) break;
-    if (c.day || c.rare || !(c.requires || c.secret) || !holds(s, c.requires)) continue;
-    if ((!c.repeatable && s.usedCards.includes(c.id)) || ids.includes(c.id)) continue;
-    ids[Math.min(TUNING.deskSize - 1 - urgent.length, ids.length)] = c.id;
-    urgent.push(c.id);
-  }
-  // Rare card: shared 1-in-50 draw per month, takes the middle slot.
-  const rares = cards.filter((c) => c.rare && holds(s, c.requires) && !s.usedCards.includes(c.id));
-  const r = rng(`${s.weekId}|rare|${s.month}`);
-  if (rares.length > 0 && r() < TUNING.rareChance) ids[0] = rares[Math.floor(r() * rares.length)]!.id;
-  for (const id of ids) if (!s.usedCards.includes(id)) s.usedCards.push(id);
-  return ids.slice(0, TUNING.deskSize).map((cardId) => ({ cardId, status: 'open' as const, ...(urgent.includes(cardId) ? { urgent: true } : {}) }));
+  for (const slot of slots) if (!s.usedCards.includes(slot.cardId)) s.usedCards.push(slot.cardId);
+  return slots.slice(0, TUNING.deskSize);
 }
 
 function startMonth(s: State, content: Content, rng: Rng) {
@@ -294,13 +309,13 @@ function finish(s: State, endedEarly: boolean) {
 export function newTerm(weekId: string, playerSeed: string, content: Content, rng: Rng = seededRng): State {
   const a = TUNING.startApproval;
   const s: State = {
-    v: 4, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
+    v: 5, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
     money: TUNING.startMoney, favors: TUNING.startFavors,
     approval: { people: a, business: a, law: a, press: a },
     tax: 'medium', actionsLeft: 0, delegationsThisMonth: 0, protestNext: false,
     desk: [], eventId: null, projects: [], leases: [], promises: [], duePromises: [], brokenPromises: 0,
     recalls: 0, lastRecall: null, flags: {}, objectivesDone: [], combosDone: [], usedCards: [], poolCursor: 0,
-    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, decrees: [], decreeOffer: [], profile: null, daveDays: [], result: null,
+    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, decrees: [], decreeOffer: [], decreesToday: 0, profile: null, daveDays: [], result: null,
   };
   startMonth(s, content, rng);
   return s;
@@ -389,8 +404,10 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
       applyEffects(s, d.effects);
       if (d.setFlag) s.flags[d.setFlag] = true;
       s.monthTags.push(d.headlineTag ?? 'decree');
-      s.decreeOffer = [];
-      if (!checkRecall(s, content, rng)) { s.polls.push(voteShare(s, 0)); s.phase = 'dayEnd'; }
+      s.decreeOffer = s.decreeOffer.filter((id) => id !== d.id);
+      s.decreesToday += 1;
+      if (checkRecall(s, content, rng)) return s;
+      if (s.decreesToday >= TUNING.decreesPerDay || s.decreeOffer.length === 0) { s.decreeOffer = []; s.polls.push(voteShare(s, 0)); s.phase = 'dayEnd'; }
       return s;
     }
 
@@ -512,6 +529,7 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
           // The day's cards are done: now the Mayor's Hour. Three decrees, the same three for everyone.
           const fresh = content.pack.decrees.filter((d) => !s.decrees.includes(d.id)).map((d) => d.id);
           s.decreeOffer = shuffled(fresh, rng(`${s.weekId}|decrees|${s.day}`)).slice(0, TUNING.decreesOffered);
+          s.decreesToday = 0;
           if (s.decreeOffer.length > 0) s.phase = 'decree';
           else { s.polls.push(voteShare(s, 0)); s.phase = 'dayEnd'; }
         } else {

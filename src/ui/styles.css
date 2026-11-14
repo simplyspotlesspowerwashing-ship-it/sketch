@@ -31,6 +31,16 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .town .cloud { animation: drift 40s linear infinite; }
 
 .town .cloud.slow { animation-duration: 70s; animation-delay: -30s; }
+.town .halo { opacity: 0; animation: halo 1.3s ease-out both; }
+.town .emote.big { animation-duration: 2.2s; }
+.town .moodfill { transition: width .6s cubic-bezier(.3, 1.6, .5, 1); }
+.town .confetti { animation: confetti 1.9s ease-in both; }
+.town .smokeup { animation: smokeup 1.8s ease-out both; }
+.town.quake { animation: shake .45s 2; }
+@keyframes halo { 0% { opacity: 0; scale: .7; } 25% { opacity: .5; } 100% { opacity: 0; scale: 1.15; } }
+@keyframes confetti { 0% { translate: 0 -10px; opacity: 1; } 100% { translate: 0 190px; opacity: .2; rotate: 200deg; } }
+@keyframes smokeup { 0% { scale: .2; opacity: 0; } 25% { opacity: 1; } 100% { translate: 0 -60px; scale: 1.6; opacity: 0; } }
+.town .halo, .town .confetti { transform-box: fill-box; transform-origin: center; }
 .town .parade { animation: walk 5s linear infinite; }
 .town .parade.rev { animation-name: walkrev; animation-duration: 6s; }
 .town .walker { animation: walk 20s linear infinite; }
@@ -47,7 +57,7 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .town .emote { animation: rise 1.6s ease-out both; }
 @keyframes walk { from { transform: translateX(-20px); } to { transform: translateX(420px); } }
 @keyframes walkrev { from { transform: translateX(420px); } to { transform: translateX(-20px); } }
-@keyframes hop { 50% { transform: translateY(-1.5px); } }
+@keyframes hop { 50% { translate: 0 -1.5px; } }
 @keyframes orbit { 0% { transform: translate(22px, 0); } 25% { transform: translate(0, 7px); } 50% { transform: translate(-22px, 0); } 75% { transform: translate(0, -7px); } 100% { transform: translate(22px, 0); } }
 @keyframes burst { 0% { scale: .1; opacity: 0; } 20% { opacity: 1; } 70% { scale: 1.3; opacity: .9; } 100% { scale: 1.5; opacity: 0; } }
 @keyframes frog { 0%, 60%, 100% { translate: 0 0; } 30% { translate: 0 -9px; } }
@@ -112,7 +122,8 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .law { display: flex; flex-direction: column; gap: 3px; border-bottom: 1px dashed var(--line); padding-bottom: 8px; font-size: 14px; }
 .stakes { display: flex; flex-direction: column; gap: 5px; border: 2px dashed var(--ink); border-radius: 12px; padding: 7px 9px; background: #E9F1FB; font-size: 14px; }
 .stakes-top { display: flex; align-items: center; gap: 6px; }
-.paper-game { position: absolute; right: 6px; bottom: 4px; opacity: .9; }
+.paper-game { position: absolute; right: 6px; top: 50%; margin-top: -11px; opacity: .9; }
+.paper-text { padding-right: 24px; }
 .sprite { display: inline-block; vertical-align: middle; flex: none; }
 .hint .sprite { margin: 0 1px; }
 .mg { display: flex; flex-direction: column; gap: 10px; align-items: stretch; touch-action: none; user-select: none; -webkit-user-select: none; }
@@ -166,15 +177,39 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .mg-result.s2 { color: #2C6B41; } .mg-result.s0 { color: var(--alert); }
 .clip { display: flex; flex-direction: column; gap: 8px; align-items: stretch; background: none; border: 0; padding: 0; text-align: center; width: 100%; }
 .clip-cap { font-family: var(--serif); font-size: 22px; }
-.clip-stage { position: relative; height: 190px; border: 2.5px solid var(--ink); border-radius: 16px; overflow: hidden; background: linear-gradient(#F6D9A8 0 62%, #9DBF8A 62% 80%, #6B6257 80%); display: block; }
-.clip-run { position: absolute; left: -60px; animation: stampede 1.9s linear both; }
+.clip-stage, .after { position: relative; height: 200px; border: 2.5px solid var(--ink); border-radius: 16px; overflow: hidden; background: linear-gradient(#F6D9A8 0 58%, #9DBF8A 58% 84%, #6B6257 84%); display: block; }
+.after { height: 130px; }
+.clip-sun { position: absolute; right: 14%; top: 10%; width: 34px; height: 34px; border-radius: 50%; background: #F7D774; border: 2px solid var(--ink); }
+.clip-hill { position: absolute; left: -10%; right: -10%; top: 40%; height: 40%; border-radius: 50% 50% 0 0; background: #B7D1A3; }
+.clip-house { position: absolute; bottom: 42%; width: 13%; height: 22%; background: #F2EBDD; border: 2px solid var(--ink); border-bottom: 0; }
+.clip-house::before { content: ''; position: absolute; left: -12%; right: -12%; top: -46%; height: 46%; background: #C8704A; border: 2px solid var(--ink); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.clip-house.h1 { left: 8%; } .clip-house.h2 { left: 30%; height: 30%; background: #E6DBC6; } .clip-house.h3 { left: 52%; height: 18%; }
+.after .clip-house { bottom: 38%; }
+.clip-run { position: absolute; left: -70px; animation: stampede 2.2s linear both; }
 .clip-bounce { display: block; animation: bounce .28s ease-in-out infinite; }
-.clip-who { position: absolute; right: 10px; bottom: 6px; animation: popin .35s .5s cubic-bezier(.3, 1.7, .5, 1) both; }
-.clip-bang { position: absolute; top: -18px; left: -4px; font-size: 40px; font-weight: 700; color: var(--alert); animation: wiggle .5s .8s both; }
-.clip-title { font-size: 20px; font-weight: 700; background: var(--ink); color: var(--cream); border-radius: 12px; padding: 6px 12px; transform: rotate(-1.5deg); animation: thunk .3s 1.5s both; }
-@keyframes stampede { to { translate: 560px 0; } }
+.clip-shadow { position: absolute; left: 12%; right: 12%; bottom: -4px; height: 7px; border-radius: 50%; background: rgba(41, 35, 31, .28); }
+.clip-dust { position: absolute; left: -18px; bottom: 0; width: 16px; height: 16px; border-radius: 50%; background: rgba(242, 235, 221, .9); animation: dust .5s ease-out infinite; }
+.clip-who { position: absolute; right: 8px; bottom: 4px; display: flex; flex-direction: column; align-items: flex-end; animation: popin .35s .5s cubic-bezier(.3, 1.7, .5, 1) both; }
+.clip-shout { background: #fff; border: 2.5px solid var(--ink); border-radius: 12px 12px 2px 12px; padding: 2px 9px; font-weight: 700; font-size: 15px; margin-bottom: -4px; animation: wiggle .5s .9s both; }
+.clip-title { font-size: 20px; font-weight: 700; background: var(--ink); color: var(--cream); border-radius: 12px; padding: 6px 12px; transform: rotate(-1.5deg); animation: thunk .3s 1.7s both; }
+@keyframes stampede { to { translate: 600px 0; } }
 @keyframes bounce { 50% { translate: 0 -9px; } }
 @keyframes popin { from { scale: .2; } }
+@keyframes dust { from { scale: .3; opacity: .9; } to { scale: 1.5; translate: -16px -8px; opacity: 0; } }
+.after-it { position: absolute; bottom: 12%; }
+.after.clean .after-it { animation: settle .5s cubic-bezier(.3, 1.6, .5, 1) both, nod 1s ease-in-out .5s infinite; }
+.after.sloppy .after-it { animation: settle .5s both, stagger 1.1s ease-in-out .5s infinite; }
+.after.flop .after-it { animation: fling 1.5s ease-in both; }
+.after-star { position: absolute; animation: twinkle 1s ease-in-out infinite; }
+.after-puff { position: absolute; bottom: 20%; width: 34px; height: 34px; border-radius: 50%; background: #6B6257; opacity: 0; animation: puff 1.4s ease-out infinite; }
+.after-who { position: absolute; right: 6px; bottom: 4px; animation: popin .3s .3s both; }
+.after.flop { background: linear-gradient(#D9B5A0 0 58%, #8FA784 58% 84%, #6B6257 84%); }
+@keyframes settle { from { translate: -260px 0; } }
+@keyframes nod { 50% { translate: 0 -5px; } }
+@keyframes stagger { 25% { rotate: -14deg; translate: -4px 0; } 75% { rotate: 14deg; translate: 4px 0; } }
+@keyframes fling { 0% { translate: 0 0; rotate: 0deg; } 100% { translate: calc((var(--i) - 2.5) * 46px) -150px; rotate: calc((var(--i) - 2.5) * 220deg); } }
+@keyframes twinkle { 50% { scale: 1.4; rotate: 20deg; } }
+@keyframes puff { 0% { scale: .3; opacity: 0; } 30% { opacity: .85; } 100% { scale: 1.8; translate: 0 -50px; opacity: 0; } }
 .dice { border: 2.5px solid var(--ink); border-radius: 12px; padding: 8px 10px; font-size: 15px; animation: thunk .35s .25s both; }
 .dice.won { background: #DCEBDD; } .dice.lost { background: #F6DAD3; }
 .field { display: flex; flex-direction: column; gap: 3px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--soft); }
@@ -186,8 +221,12 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .pick-btn { display: flex; align-items: center; gap: 8px; text-align: left; background: #fff; border: 2.5px solid var(--ink); border-radius: 12px; padding: 5px 8px; }
 .pick-btn.on { background: var(--g); color: #fff; box-shadow: var(--shadow); }
 .pick-btn span { display: flex; flex-direction: column; line-height: 1.15; } .pick-btn small { font-weight: 600; min-height: 14px; }
+.deskhead { margin: 2px 0 -2px; font-size: 17px; font-weight: 700; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.deskhead small { font-weight: 400; font-size: 12px; color: var(--soft); }
+.why-chip { position: absolute; top: -9px; left: 10px; font-size: 10px; font-weight: 700; color: #fff; background: var(--g); border: 2px solid var(--ink); border-radius: 8px; padding: 0 6px; }
+.hourstrip { display: flex; align-items: center; gap: 8px; text-align: left; background: #FBF3D6; border: 2px dashed var(--ink); border-radius: 12px; padding: 7px 10px; font-size: 13px; margin-top: auto; }
 .coach { margin: 0; font-size: 13px; background: var(--gold); border: 2px solid var(--ink); border-radius: 12px; padding: 7px 10px; }
-.cards { display: flex; flex-direction: column; gap: 8px; background: #B58D55; border: 2.5px solid var(--ink); border-radius: 18px; padding: 12px 10px; box-shadow: var(--shadow), inset 0 0 0 4px rgba(41, 35, 31, .12); }
+.cards { display: flex; flex-direction: column; gap: 12px; background: #B58D55; border: 2.5px solid var(--ink); border-radius: 18px; padding: 12px 10px; box-shadow: var(--shadow), inset 0 0 0 4px rgba(41, 35, 31, .12); }
 .paper { position: relative; display: flex; align-items: center; gap: 10px; text-align: left; background: var(--paper); border: 2.5px solid var(--ink); border-radius: 6px 14px 8px 12px; padding: 7px 9px; box-shadow: 2px 4px 0 rgba(41, 35, 31, .55); transition: transform .12s; width: 100%; }
 .paper.tilt0 { transform: rotate(-.8deg); } .paper.tilt1 { transform: rotate(.6deg); } .paper.tilt2 { transform: rotate(-.4deg); }
 .paper:not(:disabled):hover, .paper:not(:disabled):active { transform: translateY(-3px) rotate(0); }

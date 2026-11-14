@@ -245,7 +245,6 @@ export function Arrows({ group, value }: { group: GroupId; value: number }) {
 const SKY = ['#F6D9A8', '#CFE3EE', '#BFDDF0', '#C9E2EC', '#F2D2A0', '#EBA97C', '#2B3355'];
 
 export interface Pulse { key: number; effects: Effects }
-const ANCHOR: Record<GroupId, [number, number]> = { people: [55, 78], law: [211, 50], press: [287, 76], business: [347, 44] };
 
 function Car({ color, police }: { color: string; police?: boolean }) {
   return (
@@ -258,20 +257,25 @@ function Car({ color, police }: { color: string; police?: boolean }) {
   );
 }
 
-export function Town({ s, pulse, scene }: { s: State; pulse?: Pulse | null; scene?: string | null }) {
+export interface Burst { key: number; skill: 0 | 1 | 2 }
+/** Where each group lives on the map: [centre x, top y, half width]. */
+const HOME: Record<GroupId, [number, number, number]> = { people: [55, 60, 40], law: [211, 28, 40], press: [287, 76, 28], business: [347, 30, 20] };
+const HOME_NAME: Record<GroupId, string> = { people: 'SCHOOL', law: 'TOWN HALL', press: 'BUGLE', business: 'CHAD' };
+
+export function Town({ s, pulse, scene, burst }: { s: State; pulse?: Pulse | null; scene?: string | null; burst?: Burst | null }) {
   const has = (id: string) => s.projects.some((p) => p.id === id);
   const fresh = (id: string) => (s.projects.find((p) => p.id === id)?.builtMonth === s.month ? 'built fresh' : 'built');
   const f = s.flags;
   const night = s.day >= 7;
   const sky = SKY[Math.min(6, s.day - 1)]!;
-  const geese = (f.gooseGrudge && !has('pond') ? 5 : 0) + (has('pond') ? 3 : 1);
+  const geese = (f.gooseGrudge && !has('pond') ? 3 : 0) + (has('pond') ? 3 : 1);
   const O = { stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' as const };
   const win = night ? '#F7D774' : '#F2EBDD';
   const walkers = Math.max(1, Math.round(s.approval.people / 18));
   const cars = Math.max(0, Math.round(s.approval.business / 28));
   const town = (s.profile?.town ?? 'Bad Town').toUpperCase();
   return (
-    <svg class="town" viewBox="0 0 400 170" role="img" aria-label={`${s.profile?.town ?? 'The town'}. Built: ${s.projects.map((p) => p.id).join(', ') || 'nothing yet'}.`}>
+    <svg class={`town ${burst && burst.skill === 0 ? 'quake' : ''}`} key={burst && burst.skill === 0 ? burst.key : 0} viewBox="0 0 400 170" role="img" aria-label={`${s.profile?.town ?? 'The town'}. Built: ${s.projects.map((p) => p.id).join(', ') || 'nothing yet'}.`}>
       <rect width="400" height="170" fill={sky} />
       {night ? <><circle cx="340" cy="30" r="14" fill="#F2EBDD" /><circle cx="346" cy="26" r="12" fill={sky} />{[30, 80, 140, 200, 260, 300, 370].map((x, i) => <circle key={x} class="blink" style={{ 'animation-delay': `${i * 0.3}s`, 'animation-duration': '3s' }} cx={x} cy={12 + ((i * 17) % 34)} r="1.4" fill="#F2EBDD" />)}</>
         : <g class="sun"><circle cx={60 + s.day * 45} cy={s.day > 4 ? 50 : 28} r="15" fill="#F7D774" stroke={INK} stroke-width="2" /></g>}
@@ -322,7 +326,7 @@ export function Town({ s, pulse, scene }: { s: State; pulse?: Pulse | null; scen
       {/* welcome sign */}
       <g transform="translate(4 116)"><path d="M8 0 v14 M52 0 v14" stroke={INK} stroke-width="2" /><rect x="0" y="-12" width="60" height="14" rx="2" fill="#F2EBDD" {...O} /><text x="30" y="-6.5" text-anchor="middle" font-size="4.2" fill={INK} font-family="Fredoka, sans-serif">WELCOME TO</text><text x="30" y="-0.8" text-anchor="middle" font-size={town.length > 11 ? 5 : 6.5} font-weight="700" fill={INK} font-family="Fredoka, sans-serif">{town.slice(0, 16)}</text>{f.speedTrap && <g class="built"><path d="M40 -12 q8 -12 16 0z" fill="#27497A" {...O} /><circle cx="45" cy="-13" r="1.2" fill="#fff" /><circle cx="51" cy="-13" r="1.2" fill="#fff" /></g>}</g>
       {f.goodLuck && <g class="built" transform="translate(366 120)"><path d="M14 0 v12" stroke={INK} stroke-width="2" /><rect x="0" y="-10" width="30" height="12" rx="2" fill="#F7D774" {...O} transform="rotate(-6)" /><text x="15" y="-2" text-anchor="middle" font-size="5" font-weight="700" fill={INK} font-family="Fredoka, sans-serif" transform="rotate(-6)">GOOD LUCK</text></g>}
-      {s.decrees.length > 0 && <g class="built" transform="translate(250 104)"><path d="M2 18 v8 M20 18 v8" stroke={INK} stroke-width="2" /><rect x="-2" y="0" width="26" height="19" rx="2" fill="#B58D55" {...O} />{s.decrees.slice(0, 6).map((id, i) => <rect key={id} x={1 + (i % 3) * 7.5} y={2 + Math.floor(i / 3) * 8} width="6" height="7" fill={['#fff', '#F7D774', '#F6DAD3'][i % 3]} stroke={INK} stroke-width=".9" transform={`rotate(${(i % 2 ? 4 : -5)} ${4 + (i % 3) * 7.5} ${5 + Math.floor(i / 3) * 8})`} />)}</g>}
+      {s.decrees.length > 0 && <g class="built" transform="translate(228 148)"><path d="M2 18 v8 M20 18 v8" stroke={INK} stroke-width="2" /><rect x="-2" y="0" width="26" height="19" rx="2" fill="#B58D55" {...O} />{s.decrees.slice(0, 6).map((id, i) => <rect key={id} x={1 + (i % 3) * 7.5} y={2 + Math.floor(i / 3) * 8} width="6" height="7" fill={['#fff', '#F7D774', '#F6DAD3'][i % 3]} stroke={INK} stroke-width=".9" transform={`rotate(${(i % 2 ? 4 : -5)} ${4 + (i % 3) * 7.5} ${5 + Math.floor(i / 3) * 8})`} />)}</g>}
       {/* walkers */}
       {!night && Array.from({ length: walkers }, (_, i) => <g key={i} class={`walker ${i % 2 ? 'rev' : ''}`} style={{ 'animation-duration': `${16 + i * 5}s`, 'animation-delay': `${-i * 4}s` }}><g class="hop" style={{ 'animation-delay': `${i * 0.13}s` }}><path d="M-3 126 q3 -9 6 0z" fill={['#D9653B', '#3B6FB6', '#B0892A', '#7A5C9C', '#3F8F5A'][i % 5]} stroke={INK} stroke-width="1.3" /><circle cx="0" cy="114.5" r="3" fill={['#F0C4A0', '#B9794E', '#E2A878', '#8A5A3C'][i % 4]} stroke={INK} stroke-width="1.3" />{s.approval.people < 35 && <path d="M-2 110 l4 0" stroke="#C23B3B" stroke-width="1.5" />}</g></g>)}
       {/* road */}
@@ -342,17 +346,48 @@ export function Town({ s, pulse, scene }: { s: State; pulse?: Pulse | null; scen
       {/* pond */}
       {has('pond') && <g class={fresh('pond')}><ellipse cx="70" cy="158" rx="46" ry="9" fill="#7FB7D9" {...O} /><path d="M52 157 q5 -3 10 0 M76 160 q5 -3 10 0" stroke="#fff" stroke-width="1.5" fill="none" /></g>}
       {/* spoon */}
-      {has('spoon') && <g class={fresh('spoon')} transform="translate(228 100) rotate(8)"><ellipse cx="0" cy="-10" rx="11" ry="15" fill="#D8DDE0" {...O} /><rect x="-3" y="4" width="6" height="52" rx="3" fill="#D8DDE0" {...O} /><ellipse cx="-3" cy="-13" rx="3" ry="6" fill="#fff" opacity=".7" /></g>}
+      {has('spoon') && <g class={fresh('spoon')} transform="translate(171 104) rotate(6) scale(.85)"><ellipse cx="0" cy="-10" rx="11" ry="15" fill="#D8DDE0" {...O} /><rect x="-3" y="4" width="6" height="52" rx="3" fill="#D8DDE0" {...O} /><ellipse cx="-3" cy="-13" rx="3" ry="6" fill="#fff" opacity=".7" /></g>}
       {/* geese */}
       {Array.from({ length: geese }, (_, i) => {
-        const x = has('pond') ? 40 + i * 18 : f.gooseGrudge ? 136 + i * 20 : 150;
+        const x = has('pond') ? 40 + i * 18 : f.gooseGrudge ? 122 + i * 16 : 150;
         return <g key={i} class="goose" style={{ 'animation-delay': `${i * 0.3}s` }} transform={`translate(${x} ${has('pond') ? 152 : 126})`}><ellipse cx="0" cy="0" rx="7" ry="4.5" fill="#fff" stroke={INK} stroke-width="1.6" /><path d="M5 -1 q3 -8 1 -11" stroke={INK} stroke-width="4.5" fill="none" stroke-linecap="round" /><path d="M5 -1 q3 -8 1 -11" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" /><path d="M7 -12 l5 1 l-5 2z" fill="#E8943A" stroke={INK} stroke-width="1" /></g>;
       })}
       {/* trouble overlays */}
-      {s.approval.law < 35 && <g class="built"><path d="M108 108 q6 -8 12 0 t12 0 t12 0" stroke="#C23B3B" stroke-width="3" fill="none" stroke-linecap="round" /><text x="184" y="118" font-size="9" font-weight="700" fill="#C23B3B" font-family="Fredoka, sans-serif" transform="rotate(-6 184 118)">BARB WUZ HERE</text><g transform="translate(372 150)"><ellipse cx="0" cy="0" rx="9" ry="6" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><circle cx="-8" cy="-5" r="5" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><path d="M-11 -6 h6" stroke={INK} stroke-width="3" /><path d="M8 -2 q8 -4 8 -12" stroke={INK} stroke-width="4" fill="none" stroke-linecap="round" /></g></g>}
+      {s.approval.law < 35 && <g class="built"><path d="M110 112 q5 -7 10 0 t10 0 t10 0 t10 0" stroke="#C23B3B" stroke-width="2.5" fill="none" stroke-linecap="round" /><g transform="translate(372 150)"><ellipse cx="0" cy="0" rx="9" ry="6" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><circle cx="-8" cy="-5" r="5" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><path d="M-11 -6 h6" stroke={INK} stroke-width="3" /><path d="M8 -2 q8 -4 8 -12" stroke={INK} stroke-width="4" fill="none" stroke-linecap="round" /></g></g>}
       {scene && [0, 1, 2, 3, 4, 5].map((i) => <g key={`${scene}${i}`} class={`parade ${i % 2 ? 'rev' : ''}`} style={{ 'animation-delay': `${-i * 0.9}s` }}><g class="hop" style={{ 'animation-delay': `${i * 0.11}s`, 'animation-duration': '.35s' }}><g transform={`translate(0 ${112 + (i % 3) * 9}) scale(.62)`}>{spriteBody(scene)}</g></g></g>)}
-      {pulse && GROUPS.filter((g) => pulse.effects[g]).map((g) => [0, 1, 2].map((i) => { const up = pulse.effects[g]! > 0; const [x, y] = ANCHOR[g]; return <g key={`${pulse.key}${g}${i}`} class="emote" style={{ 'animation-delay': `${i * 0.18}s` }} transform={`translate(${x + (i - 1) * 12} ${y})`}>{up ? <path d="M0 4 q-7 -5 -7 -9 q0 -4 3.5 -4 q2.5 0 3.5 2.5 q1 -2.5 3.5 -2.5 q3.5 0 3.5 4 q0 4 -7 9z" fill={GROUP_COLOR[g]} stroke={INK} stroke-width="1.4" /> : <g><circle r="6" fill="#F6DAD3" stroke={INK} stroke-width="1.4" /><path d="M-3 -3 l6 6 M3 -3 l-6 6" stroke="#C23B3B" stroke-width="2" stroke-linecap="round" /></g>}</g>; }))}
-      {s.approval.people < 35 && <g class="built">{[150, 168, 186].map((x, i) => <g key={x} class="goose" style={{ 'animation-delay': `${i * 0.2}s` }} transform={`translate(${x} 128)`}><rect x="-7" y="-22" width="14" height="10" fill="#fff" stroke={INK} stroke-width="1.5" /><path d="M0 -12 v12" stroke={INK} stroke-width="2" /><circle cx="0" cy="2" r="3.5" fill="#D9653B" stroke={INK} stroke-width="1.5" /><path d="M-4 -17 h8" stroke="#C23B3B" stroke-width="2" /></g>)}</g>}
+      {/* each group's building wears its mood: a gauge, and a badge when things are very bad or very good */}
+      {GROUPS.map((g) => {
+        const [x, y, hw] = HOME[g];
+        const v = s.approval[g];
+        const low = v < 35, high = v >= 65;
+        return (
+          <g key={g}>
+            {low && <rect class="gloom" x={x - hw} y={y} width={hw * 2} height={122 - y} rx="3" fill={INK} opacity=".3" />}
+            {low && <g class="hop" transform={`translate(${x} ${y - 12})`}><circle r="8" fill="#C23B3B" stroke={INK} stroke-width="1.6" /><text y="4" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="Fredoka, sans-serif">!</text></g>}
+            {high && <g class="hop" transform={`translate(${x} ${y - 12}) scale(.38)`}><g transform="translate(-22 -22)">{spriteBody('star')}</g></g>}
+            <g transform={`translate(${x - 19} 123)`}>
+              <rect width="38" height="9" rx="4.5" fill="#FBF7EE" stroke={INK} stroke-width="1.3" />
+              <rect x="1.5" y="1.5" width={Math.max(2, (35 * v) / 100)} height="6" rx="3" fill={low ? '#C23B3B' : GROUP_COLOR[g]} class="moodfill" />
+              <text x="19" y="6.8" text-anchor="middle" font-size="5" font-weight="700" fill={INK} font-family="Fredoka, sans-serif">{HOME_NAME[g]}</text>
+            </g>
+          </g>
+        );
+      })}
+      {scene && [0, 1, 2, 3, 4, 5].map((i) => <g key={`${scene}${i}`} class={`parade ${i % 2 ? 'rev' : ''}`} style={{ 'animation-delay': `${-i * 0.9}s` }}><g class="hop" style={{ 'animation-delay': `${i * 0.11}s`, 'animation-duration': '.35s' }}><g transform={`translate(0 ${118 + (i % 3) * 9}) scale(.62)`}>{spriteBody(scene)}</g></g></g>)}
+      {pulse && GROUPS.filter((g) => pulse.effects[g]).map((g) => {
+        const up = pulse.effects[g]! > 0;
+        const [x, y, hw] = HOME[g];
+        return (
+          <g key={`${pulse.key}${g}`}>
+            <ellipse class="halo" cx={x} cy={(y + 122) / 2} rx={hw + 10} ry={(122 - y) / 2 + 10} fill={up ? '#3F8F5A' : '#C23B3B'} />
+            {[0, 1, 2, 3].map((i) => <g key={i} class="emote" style={{ 'animation-delay': `${i * 0.16}s` }} transform={`translate(${x + (i - 1.5) * 13} ${y + 6})`}>{up ? <path d="M0 5 q-9 -6 -9 -11 q0 -5 4.5 -5 q3 0 4.5 3 q1.5 -3 4.5 -3 q4.5 0 4.5 5 q0 5 -9 11z" fill={GROUP_COLOR[g]} stroke={INK} stroke-width="1.5" /> : <g><circle r="7.5" fill="#F6DAD3" stroke={INK} stroke-width="1.5" /><path d="M-3.5 -3.5 l7 7 M3.5 -3.5 l-7 7" stroke="#C23B3B" stroke-width="2.4" stroke-linecap="round" /></g>}</g>)}
+            <g class="emote big" transform={`translate(${x} ${y - 2})`}><rect x="-17" y="-10" width="34" height="18" rx="9" fill={up ? '#DCEBDD' : '#F6DAD3'} stroke={INK} stroke-width="1.6" /><text y="3.5" text-anchor="middle" font-size="11" font-weight="700" fill={up ? '#2C6B41' : '#C23B3B'} font-family="Fredoka, sans-serif">{up ? '+' : '−'}{Math.abs(pulse.effects[g]!)}</text></g>
+          </g>
+        );
+      })}
+      {burst && burst.skill === 2 && Array.from({ length: 22 }, (_, i) => <rect key={`${burst.key}c${i}`} class="confetti" style={{ 'animation-delay': `${(i % 7) * 0.09}s` }} x={12 + i * 17.5} y={-8} width="5" height="8" rx="1" fill={['#D9653B', '#3F8F5A', '#3B6FB6', '#E8C55A'][i % 4]} transform={`rotate(${i * 37} ${12 + i * 17.5} -4)`} />)}
+      {burst && burst.skill === 0 && [60, 140, 215, 290, 350].map((x, i) => <g key={`${burst.key}s${i}`} class="smokeup" style={{ 'animation-delay': `${i * 0.12}s` }} transform={`translate(${x} ${96 + (i % 2) * 14})`}><circle r="11" fill="#6B6257" opacity=".85" /><circle cx="9" cy="-7" r="8" fill="#8C8577" opacity=".85" /><circle cx="-8" cy="-5" r="7" fill="#8C8577" opacity=".85" /></g>)}
+      {s.approval.people < 35 && <g class="built">{[22, 40, 58].map((x, i) => <g key={x} class="goose" style={{ 'animation-delay': `${i * 0.2}s` }} transform={`translate(${x} 128)`}><rect x="-7" y="-22" width="14" height="10" fill="#fff" stroke={INK} stroke-width="1.5" /><path d="M0 -12 v12" stroke={INK} stroke-width="2" /><circle cx="0" cy="2" r="3.5" fill="#D9653B" stroke={INK} stroke-width="1.5" /><path d="M-4 -17 h8" stroke="#C23B3B" stroke-width="2" /></g>)}</g>}
     </svg>
   );
 }

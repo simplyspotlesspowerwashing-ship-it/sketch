@@ -152,16 +152,38 @@ describe('the day', () => {
     expect(s.month).toBe(2);
     s = play(withDesk(s), { type: 'endDesk' }, { type: 'next' });
     expect(s.phase).toBe('decree');
-    expect(s.decreeOffer).toHaveLength(3);
+    expect(s.decreeOffer).toHaveLength(4);
     expect(s.polls).toHaveLength(0);
-    const d = content.pack.decrees.find((x) => x.id === s.decreeOffer[0])!;
-    const after = play(s, { type: 'decree', id: d.id });
-    expect(after.phase).toBe('dayEnd');
-    expect(after.decrees).toEqual([d.id]);
-    expect(after.polls).toHaveLength(1);
+    const [first, second] = s.decreeOffer as [string, string];
+    const one = play(s, { type: 'decree', id: first });
+    expect(one.phase).toBe('decree'); // a second decree is allowed
+    expect(one.decreeOffer).not.toContain(first);
+    expect(play(one, { type: 'skipDecree' }).phase).toBe('dayEnd');
+    const two = play(one, { type: 'decree', id: second });
+    expect(two.phase).toBe('dayEnd'); // two is the limit
+    expect(two.decrees).toEqual([first, second]);
+    expect(two.polls).toHaveLength(1);
     expect(play(s, { type: 'skipDecree' }).phase).toBe('dayEnd');
   });
-  it('offers everyone the same three decrees', () => {
+  it("today's three are the same for every mayor whatever state their town is in", () => {
+    const a = start('alice');
+    const b = { ...start('bob'), approval: { people: 20, business: 90, law: 10, press: 60 }, flags: { gooseGrudge: true as const } };
+    const day2 = (s: State) => coverMissedDays(s, content, 2).desk.map((d) => d.cardId);
+    expect(a.desk.map((d) => d.cardId)).toEqual(start('bob').desk.map((d) => d.cardId));
+    expect(day2(a)).toEqual(day2(b));
+    expect(a.desk.every((d) => d.why === 'shared')).toBe(true);
+  });
+  it("your town's three come from your weakest groups and your own choices", () => {
+    const second = (approval: State['approval'], flags: State['flags'] = {}) => play(withDesk({ ...start(), approval, flags }), { type: 'endDesk' }, { type: 'next' }).desk;
+    const lawless = second({ people: 60, business: 60, law: 20, press: 60 });
+    expect(lawless.map((d) => findCard(content, d.cardId).group)).toContain('law');
+    expect(lawless.some((d) => d.why === 'low:law')).toBe(true);
+    const hated = second({ people: 20, business: 60, law: 60, press: 60 });
+    expect(hated.map((d) => d.cardId)).not.toEqual(lawless.map((d) => d.cardId));
+    const geese = second({ people: 50, business: 50, law: 50, press: 50 }, { gooseGrudge: true });
+    expect(geese.find((d) => d.cardId === 'gooseOccupation')).toMatchObject({ urgent: true, why: 'choice' });
+  });
+  it('offers everyone the same decrees', () => {
     const at = (seed: string) => play(withDesk(finishDay(start(seed))), { type: 'endDesk' }, { type: 'next' });
     expect(at('alice').decreeOffer).toEqual(at('bob').decreeOffer);
   });

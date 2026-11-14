@@ -323,20 +323,47 @@ const HOW: Record<CardGame['type'], string> = {
 };
 const CLIP_LINES = ['Meanwhile, outside…', 'It has begun.', 'Reports are coming in.', 'The situation has developed.', 'Nobody panic. Some panic.', 'This is happening now.'];
 
+const SHOUT: Record<string, string> = {
+  gerald: 'HONK!', barb: 'Code red!', chad: 'My assets!', marge: 'Hold the front page!', pam: 'The children!', doug: 'The budget!',
+  linda: 'I knew it!', steve: 'Incoming!', timmy: 'WHOA!', stranger: 'Interesting…', dave: 'Boss? BOSS!',
+};
+
 /** A short comic clip of the problem arriving, before the game. */
 function Clip({ card, onEnd }: { card: Card; onEnd: () => void }) {
   const g = card.game!;
-  useEffect(() => { sfx(card.who === 'gerald' ? 'honk' : 'drum'); const t = setTimeout(onEnd, 2800); return () => clearTimeout(t); }, []);
+  useEffect(() => { sfx(card.who === 'gerald' ? 'honk' : 'drum'); const t = setTimeout(onEnd, 3200); return () => clearTimeout(t); }, []);
   const line = CLIP_LINES[(card.id.length + card.text.length) % CLIP_LINES.length]!;
   return (
     <button class="clip" onClick={onEnd} aria-label="Skip the clip">
       <span class="clip-cap">{line}</span>
       <span class="clip-stage">
-        {[0, 1, 2, 3, 4, 5, 6].map((i) => <span key={i} class="clip-run" style={{ 'animation-delay': `${i * 0.16}s`, top: `${18 + (i % 3) * 22}%` }}><span class="clip-bounce" style={{ 'animation-delay': `${i * 0.07}s` }}><Sprite theme={i % 4 === 3 && g.bad ? g.bad : g.theme} size={i % 2 ? 46 : 36} /></span></span>)}
-        <span class="clip-who"><Portrait who={card.who} mood="annoyed" size={84} /><span class="clip-bang">!</span></span>
+        <span class="clip-sun" /><span class="clip-hill" /><span class="clip-house h1" /><span class="clip-house h2" /><span class="clip-house h3" />
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
+          <span key={i} class="clip-run" style={{ 'animation-delay': `${i * 0.17}s`, top: `${34 + (i % 3) * 17}%` }}>
+            <span class="clip-dust" style={{ 'animation-delay': `${i * 0.17}s` }} />
+            <span class="clip-bounce" style={{ 'animation-delay': `${i * 0.07}s` }}><Sprite theme={i % 4 === 3 && g.bad ? g.bad : g.theme} size={i % 2 ? 48 : 38} /></span>
+            <span class="clip-shadow" />
+          </span>
+        ))}
+        <span class="clip-who"><span class="clip-shout">{SHOUT[card.who] ?? 'Mayor!'}</span><Portrait who={card.who} mood="annoyed" size={84} /></span>
       </span>
       <span class="clip-title">{g.title}</span>
     </button>
+  );
+}
+
+/** The resolution: what the town looks like once you've had a go. Shown at the top of the result. */
+export function Aftermath({ card, skill }: { card: Card; skill: Skill }) {
+  const g = card.game!;
+  const cls = ['flop', 'sloppy', 'clean'][skill]!;
+  return (
+    <div class={`after ${cls}`} role="img" aria-label={['It went badly.', 'It went sloppily.', 'It went well.'][skill]}>
+      <span class="clip-sun" /><span class="clip-hill" /><span class="clip-house h1" /><span class="clip-house h2" /><span class="clip-house h3" />
+      {[0, 1, 2, 3, 4, 5].map((i) => <span key={i} class="after-it" style={{ left: `${9 + i * 13}%`, '--i': i, 'animation-delay': `${i * 0.08}s` }}><Sprite theme={skill === 0 && i % 3 === 1 && g.bad ? g.bad : g.theme} size={38} /></span>)}
+      {skill === 2 && [0, 1, 2, 3, 4].map((i) => <span key={`s${i}`} class="after-star" style={{ left: `${10 + i * 19}%`, top: `${8 + (i % 2) * 14}%`, 'animation-delay': `${i * 0.15}s` }}><Sprite theme="star" size={20} /></span>)}
+      {skill === 0 && [0, 1, 2, 3].map((i) => <span key={`p${i}`} class="after-puff" style={{ left: `${14 + i * 22}%`, 'animation-delay': `${i * 0.2}s` }} />)}
+      <span class="after-who"><Portrait who={card.who} mood={skill === 2 ? 'pleased' : skill === 1 ? 'neutral' : 'annoyed'} size={64} /></span>
+    </div>
   );
 }
 
