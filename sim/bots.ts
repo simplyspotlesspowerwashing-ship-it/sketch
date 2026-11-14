@@ -33,7 +33,7 @@ function scored(opts: {
     if (s.phase === 'promises') {
       const id = s.duePromises[0]!;
       const p = s.promises.find((x) => x.id === id)!;
-      const canPay = legal.some((a) => a.type === 'resolvePromise' && a.pay);
+      const canPay = legal.some((a) => a.type === 'resolvePromise' && a.id === id && a.pay);
       return { type: 'resolvePromise', id, pay: canPay && (opts.payPromise?.(s, p.money) ?? true) };
     }
     if (s.phase === 'report' || s.phase === 'dayEnd') return { type: 'next' };
@@ -64,7 +64,7 @@ function scored(opts: {
     const actable = open.filter((c) => c.bestI >= 0 && c.gain > (opts.minGain ?? -Infinity)).sort((a, b) => b.gain - a.gain);
     if (s.actionsLeft > 0 && actable.length > 0) return { type: 'choose', cardId: actable[0]!.card.id, option: actable[0]!.bestI };
     if (opts.buyAction && s.actionsLeft === 0 && actable.length > 0 && actable[0]!.gain > 6 && legal.some((a) => a.type === 'buyAction')) return { type: 'buyAction' };
-    if (!s.delegatedThisMonth && open.length > 0) {
+    if (legal.some((a) => a.type === 'delegate') && open.length > 0) {
       // Dave gets the card that would hurt most to ignore.
       const worst = [...open].sort((a, b) => a.ig - b.ig)[0]!;
       return { type: 'delegate', cardId: worst.card.id };
@@ -153,6 +153,10 @@ const sensibleScore: Scorer = (s, _card, o, content) => {
     v += approvalValue(s, p.onBuild) + approvalValue(s, p.perMonth, left) + p.monthly * left * 0.1;
     if (p.favorEvery) v += Math.floor(left / p.favorEvery) * 1.5;
     v += 1; // objectives and combos
+  }
+  if (o.gamble) {
+    const val = (x: { money?: number; effects?: Effects }) => approvalValue(s, x.effects) + moneyValue(s, x.money ?? 0);
+    v += (o.gamble.chance / 100) * val(o.gamble.win) + (1 - o.gamble.chance / 100) * val(o.gamble.lose);
   }
   if (o.promise) {
     // A promise is a loan: fine if the money will be there, bad if it will have to be broken.

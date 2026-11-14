@@ -6,7 +6,7 @@ import { voteParts, voteShare } from './election.ts';
 import { seededRng, shuffled } from './rng.ts';
 import { TUNING } from './tuning.ts';
 import { GROUPS } from './types.ts';
-import type { Action, Card, Condition, Content, DeskSlot, Effects, MonthReport, Option, Rng, State } from './types.ts';
+import type { Action, Card, Condition, Content, DeskSlot, Effects, GroupId, MonthReport, Option, Outcome_, Rng, State } from './types.ts';
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 export const dayOfMonth = (month: number) => Math.ceil(month / 2);
@@ -16,6 +16,14 @@ export const monthOfDay = (month: number): 1 | 2 => (month % 2 === 1 ? 1 : 2);
 export function fadeFor(approval: number): number {
   return Math.round(clamp(TUNING.fade + (approval - 50) * TUNING.fadeSlope, 0, TUNING.fadeMax));
 }
+
+/** How many requests Deputy Dave will take per month. */
+export function daveLimit(s: State): number {
+  return s.profile?.perk === 'cousin' ? 2 : 1;
+}
+
+const RIVAL: Record<GroupId, GroupId> = { people: 'business', business: 'people', law: 'press', press: 'law' };
+const clean = (text: string, fallback: string) => text.replace(/[<>]/g, '').trim().slice(0, 18) || fallback;
 
 // ---------- lookups ----------
 
@@ -138,29 +146,34 @@ function drawDesk(s: State, content: Content, rng: Rng): DeskSlot[] {
     rng(`${s.weekId}|pool`),
   );
   let guard = 0;
-  while (ids.length < 3 && pool.length > 0 && guard++ < pool.length * 2) {
+  while (ids.length < TUNING.deskSize && pool.length > 0 && guard++ < pool.length * 2) {
     const id = pool[s.poolCursor % pool.length]!;
     s.poolCursor += 1;
     if (!ids.includes(id)) ids.push(id);
   }
-  // One conditional card per month takes the last slot: escalations, group-pressure, secret cards.
-  const inject = cards.find(
-    (c) => !c.day && !c.rare && (c.requires || c.secret) && holds(s, c.requires) && (c.repeatable || !s.usedCards.includes(c.id)) && !ids.includes(c.id),
-  );
-  if (inject) ids[Math.min(2, ids.length)] = inject.id;
-  const urgentId = inject?.id;
+  // Conditional cards (escalations, group pressure, late-week crises, secrets) take the last slots and
+  // arrive URGENT. One per month early in the week, up to two from Thursday on.
+  const maxInject = s.month >= TUNING.lateCrisisFromMonth ? 2 : 1;
+  const urgent: string[] = [];
+  for (const c of cards) {
+    if (urgent.length >= maxInject) break;
+    if (c.day || c.rare || !(c.requires || c.secret) || !holds(s, c.requires)) continue;
+    if ((!c.repeatable && s.usedCards.includes(c.id)) || ids.includes(c.id)) continue;
+    ids[Math.min(TUNING.deskSize - 1 - urgent.length, ids.length)] = c.id;
+    urgent.push(c.id);
+  }
   // Rare card: shared 1-in-50 draw per month, takes the middle slot.
   const rares = cards.filter((c) => c.rare && holds(s, c.requires) && !s.usedCards.includes(c.id));
   const r = rng(`${s.weekId}|rare|${s.month}`);
-  if (rares.length > 0 && r() < TUNING.rareChance) ids[Math.min(1, ids.length)] = rares[Math.floor(r() * rares.length)]!.id;
+  if (rares.length > 0 && r() < TUNING.rareChance) ids[0] = rares[Math.floor(r() * rares.length)]!.id;
   for (const id of ids) if (!s.usedCards.includes(id)) s.usedCards.push(id);
-  return ids.slice(0, 3).map((cardId) => ({ cardId, status: 'open' as const, ...(cardId === urgentId && ids.includes(cardId) ? { urgent: true } : {}) }));
+  return ids.slice(0, TUNING.deskSize).map((cardId) => ({ cardId, status: 'open' as const, ...(urgent.includes(cardId) ? { urgent: true } : {}) }));
 }
 
 function startMonth(s: State, content: Content, rng: Rng) {
   s.actionsLeft = Math.max(0, TUNING.actionsPerMonth - (s.protestNext ? 1 : 0));
   s.protestNext = false;
-  s.delegatedThisMonth = false;
+  s.delegationsThisMonth = 0;
   s.monthTags = [];
   s.lastRecall = null;
   if (monthOfDay(s.month) === 1) s.boughtActionToday = false;
@@ -268,10 +281,10 @@ export function newTerm(weekId: string, playerSeed: string, content: Content, rn
     v: 1, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
     money: TUNING.startMoney, favors: TUNING.startFavors,
     approval: { people: a, business: a, law: a, press: a },
-    tax: 'medium', actionsLeft: 0, boughtActionToday: false, delegatedThisMonth: false, protestNext: false,
+    tax: 'medium', actionsLeft: 0, boughtActionToday: false, delegationsThisMonth: 0, protestNext: false,
     desk: [], eventId: null, projects: [], leases: [], promises: [], duePromises: [], brokenPromises: 0,
     recalls: 0, lastRecall: null, flags: {}, objectivesDone: [], combosDone: [], usedCards: [], poolCursor: 0,
-    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, daveDays: [], result: null,
+    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, profile: null, daveDays: [], result: null,
   };
   startMonth(s, content, rng);
   return s;
@@ -296,7 +309,7 @@ export function legalActions(s: State, content: Content): Action[] {
         if (slot.status !== 'open') continue;
         const card = findCard(content, slot.cardId);
         if (s.actionsLeft > 0) card.options.forEach((o, option) => { if (!blocked(s, o, content)) out.push({ type: 'choose', cardId: card.id, option }); });
-        if (!s.delegatedThisMonth) out.push({ type: 'delegate', cardId: card.id });
+        if (s.delegationsThisMonth < daveLimit(s)) out.push({ type: 'delegate', cardId: card.id });
       }
       if (!s.boughtActionToday && s.favors >= 1) out.push({ type: 'buyAction' });
       tax();
@@ -325,6 +338,22 @@ export function legalActions(s: State, content: Content): Action[] {
 }
 
 export function reduce(state: State, action: Action, content: Content, rng: Rng = seededRng): State {
+  if (action.type === 'setup' || action.type === 'rename') {
+    const s: State = structuredClone(state);
+    if (action.type === 'rename') {
+      if (!s.profile) throw new Error('rename before setup');
+      s.profile.mayor = clean(action.mayor, s.profile.mayor);
+      s.profile.town = clean(action.town, s.profile.town);
+      return s;
+    }
+    if (s.profile || s.phase === 'results') throw new Error('setup is only allowed once per term');
+    const p = action.profile;
+    s.profile = { mayor: clean(p.mayor, 'Mayor'), town: clean(p.town, 'Bad Town'), base: p.base, perk: p.perk };
+    applyEffects(s, { [p.base]: TUNING.setup.base, [RIVAL[p.base]]: TUNING.setup.rival });
+    if (p.perk === 'chest') s.money += TUNING.setup.chest;
+    if (p.perk === 'friends') addFavors(s, TUNING.setup.friends);
+    return s;
+  }
   const legal = legalActions(state, content).some((a) => JSON.stringify(a) === JSON.stringify(action));
   if (!legal) throw new Error(`illegal action in phase ${state.phase}: ${JSON.stringify(action)}`);
   const s: State = structuredClone(state);
@@ -363,7 +392,7 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
       addFavors(s, outcome.favors ?? 0);
       applyEffects(s, outcome.effects);
       slot.status = 'dave';
-      s.delegatedThisMonth = true;
+      s.delegationsThisMonth += 1;
       s.monthTags.push('dave');
       s.history.push({ month: s.month, cardId: action.cardId, choice: 'dave', dave: outcome.id });
       checkRecall(s, content, rng);
@@ -373,7 +402,18 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
     case 'choose': {
       const card = findCard(content, action.cardId);
       applyOption(s, card, action.option, content);
-      s.history.push({ month: s.month, cardId: card.id, choice: action.option });
+      const entry: State['history'][number] = { month: s.month, cardId: card.id, choice: action.option };
+      const g = card.options[action.option]!.gamble;
+      if (g) {
+        // Luck is personal: two mayors making the same bet can get different results.
+        entry.won = rng(`${s.playerSeed}|${s.weekId}|gamble|${s.month}|${card.id}`)() * 100 < g.chance;
+        const out: Outcome_ = entry.won ? g.win : g.lose;
+        s.money += out.money ?? 0;
+        applyEffects(s, out.effects);
+        if (out.setFlag) s.flags[out.setFlag] = true;
+        s.monthTags.push(entry.won ? 'gambleWon' : 'gambleLost');
+      }
+      s.history.push(entry);
       if (s.phase === 'desk') {
         const slot = s.desk.find((d) => d.cardId === card.id)!;
         slot.status = 'done';

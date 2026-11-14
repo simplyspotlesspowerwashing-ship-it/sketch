@@ -59,7 +59,7 @@
    "id": "helicopter",
    "who": "barb",
    "group": "law",
-   "text": "We need a helicopter. For crime. And also, mostly, for fun.",
+   "text": "We need a helicopter. For crime. And also, mostly, for fun. I've already bought the sunglasses.",
    "options": [
     {
      "label": "Buy it",
@@ -308,7 +308,7 @@
    "id": "newSchool",
    "who": "pam",
    "group": "people",
-   "text": "The school has one textbook. It is about boats. We are not near water.",
+   "text": "The school has one textbook. It's about boats. We are four hundred miles from water. The children can all tie knots.",
    "options": [
     {
      "label": "Build a new school",
@@ -412,7 +412,7 @@
   {
    "id": "parkingMeters",
    "who": "doug",
-   "text": "We could put parking meters on Main Street. People will hate it. The budget will not.",
+   "text": "We could put parking meters on Main Street. People will hate it. The budget will weep with joy. I'll weep either way.",
    "options": [
     {
      "label": "Install meters",
@@ -463,7 +463,7 @@
    "id": "curfew",
    "who": "barb",
    "group": "law",
-   "text": "Teens are standing near the fountain. Just standing. I want a curfew.",
+   "text": "Teens are standing near the fountain. Just standing. One of them is leaning. I want a curfew and a helicopter.",
    "options": [
     {
      "label": "Curfew at 9 pm",
@@ -513,7 +513,7 @@
    "id": "taxBreak",
    "who": "chad",
    "group": "business",
-   "text": "I'd like a small tax break. Tiny. You'd need a telescope to see it. I own the telescope shop.",
+   "text": "I'd like a tiny tax break. So small you'd need a telescope to see it. I own the telescope shop. Telescopes are also going up.",
    "options": [
     {
      "label": "Grant the tax break",
@@ -575,7 +575,8 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "FROG DAY! FROG DAY!"
+     "reaction": "FROG DAY! FROG DAY!",
+     "setFlag": "frogs"
     },
     {
      "label": "Promise Frog Day soon",
@@ -617,7 +618,7 @@
   {
    "id": "pothole",
    "who": "doug",
-   "text": "Main Street has a pothole so big it has a name. The name is Kevin.",
+   "text": "Main Street has a pothole so big it has a name. The name is Kevin. Kevin got a letter today. It was a jury summons.",
    "options": [
     {
      "label": "Fill in Kevin",
@@ -627,7 +628,7 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "Goodbye, Kevin. You were expensive."
+     "reaction": "Goodbye, Kevin. He's survived by a smaller pothole. We've named it Kevin Junior."
     },
     {
      "label": "Sell tickets to see Kevin",
@@ -638,7 +639,8 @@
       "press": 5,
       "law": -5
      },
-     "reaction": "People are queuing. To look at a hole."
+     "reaction": "People are queuing. To look at a hole.",
+     "setFlag": "kevin"
     },
     {
      "label": "Leave Kevin alone",
@@ -647,13 +649,15 @@
       "people": -5,
       "business": -5
      },
-     "reaction": "Kevin is growing."
+     "reaction": "Kevin is growing.",
+     "setFlag": "kevin"
     }
    ],
    "draft": true,
    "ignored": {
     "people": -5,
-    "business": -5
+    "business": -5,
+    "setFlag": "kevin"
    },
    "advisors": [
     {
@@ -670,7 +674,7 @@
    "id": "statue",
    "who": "chad",
    "group": "business",
-   "text": "I'm giving the town a statue. Of me. It's forty feet tall and it winks.",
+   "text": "I'm giving the town a statue. Of me. It's forty feet tall, it winks, and at noon it says 'You're welcome'.",
    "options": [
     {
      "label": "Accept the statue",
@@ -680,7 +684,8 @@
       "business": 5,
       "people": -10
      },
-     "reaction": "It winks at night too. You'll get used to it."
+     "reaction": "It winks at night too. You'll get used to it.",
+     "setFlag": "statue"
     },
     {
      "label": "A statue of someone normal",
@@ -720,7 +725,7 @@
    "id": "raccoonBins",
    "who": "barb",
    "group": "law",
-   "text": "Raccoons are getting into the bins. They're organised. I think they have a leader.",
+   "text": "Raccoons are in the bins. They're organised. They have a leader. I have a sketch. It's a raccoon in a hat and coat.",
    "options": [
     {
      "label": "Raccoon-proof bins",
@@ -748,7 +753,8 @@
       "law": -10,
       "press": 5
      },
-     "reaction": "You're soft on raccoons. Suspiciously soft."
+     "reaction": "You're soft on raccoons. Suspiciously soft.",
+     "setFlag": "raccoons"
     }
    ],
    "draft": true,
@@ -818,7 +824,7 @@
    "id": "schoolLunch",
    "who": "pam",
    "group": "people",
-   "text": "School lunch is beige. All of it. The children have started calling it 'the paste'.",
+   "text": "School lunch is beige. All of it. The children call it 'the paste'. Yesterday the paste was seen leaving on its own.",
    "options": [
     {
      "label": "Pay for real food",
@@ -877,7 +883,8 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "BEST. MAYOR. EVER."
+     "reaction": "BEST. MAYOR. EVER.",
+     "setFlag": "fireworks"
     },
     {
      "label": "One sparkler",
@@ -1029,7 +1036,8 @@
       "business": 10,
       "people": -15
      },
-     "reaction": "Smell that? Asphalt. Progress."
+     "reaction": "Smell that? Asphalt. Progress.",
+     "setFlag": "paved"
     },
     {
      "label": "Only half the park",
@@ -1081,7 +1089,8 @@
       "law": 5,
       "business": -10
      },
-     "reaction": "Seventeen tickets before lunch. A good day."
+     "reaction": "Seventeen tickets before lunch. A good day.",
+     "setFlag": "speedTrap"
     },
     {
      "label": "Warning signs only",
@@ -1130,7 +1139,8 @@
       "press": 10,
       "business": -5
      },
-     "reaction": "He's damp. He's proud. He's ours."
+     "reaction": "He's damp. He's proud. He's ours.",
+     "setFlag": "wetSock"
     },
     {
      "label": "Hire a real designer",
@@ -1221,7 +1231,7 @@
   {
    "id": "bankError",
    "who": "doug",
-   "text": "I found $30k extra in the budget. It's Chad's. The bank made a mistake. Nobody knows.",
+   "text": "I found $30k extra in the budget. It's Chad's. The bank slipped. Nobody knows but me, you, and now this potted plant.",
    "options": [
     {
      "label": "Keep it quiet",
@@ -1322,7 +1332,7 @@
    "id": "talentShow",
    "who": "pam",
    "group": "people",
-   "text": "The PTA talent show needs a judge. It's you. Every child sings the same song.",
+   "text": "The PTA talent show needs a judge. It's you. Forty children. One song. It's the same song. It's about you.",
    "options": [
     {
      "label": "Judge honestly",
@@ -1381,7 +1391,8 @@
       "people": 10,
       "business": -10
      },
-     "reaction": "Enjoy your cheap carrots. I hope they're crunchy."
+     "reaction": "Enjoy your cheap carrots. I hope they're crunchy.",
+     "setFlag": "market"
     },
     {
      "label": "Ban the market",
@@ -1401,7 +1412,8 @@
       "people": 5,
       "business": -5
      },
-     "reaction": "A carrot tax. I can live with that."
+     "reaction": "A carrot tax. I can live with that.",
+     "setFlag": "market"
     }
    ],
    "draft": true,
@@ -1424,7 +1436,7 @@
    "id": "policeDog",
    "who": "barb",
    "group": "law",
-   "text": "The station needs a police dog. We have one. He is scared of crime.",
+   "text": "The station needs a police dog. We have one. His name is Sergeant Biscuit and he is afraid of crime, cats and Tuesdays.",
    "options": [
     {
      "label": "Buy a braver dog",
@@ -1653,7 +1665,8 @@
       "press": 5,
       "law": -10
      },
-     "reaction": "The sign is very popular. The bridge is not."
+     "reaction": "The sign is very popular. The bridge is not.",
+     "setFlag": "goodLuck"
     }
    ],
    "draft": true,
@@ -1686,7 +1699,8 @@
       "business": 5,
       "press": -10
      },
-     "reaction": "It lights up. You'll never need a lamp again."
+     "reaction": "It lights up. You'll never need a lamp again.",
+     "setFlag": "billboard"
     },
     {
      "label": "A small one, round the back",
@@ -1745,7 +1759,8 @@
       "law": -10
      },
      "reaction": "Traffic has stopped. All of it. For hours.",
-     "headlineTag": "goose"
+     "headlineTag": "goose",
+     "setFlag": "gooseGuard"
     },
     {
      "label": "Children can look both ways",
@@ -1823,6 +1838,674 @@
    ]
   },
   {
+   "id": "moonClaim",
+   "who": "linda",
+   "text": "I filed the paperwork. The town now legally owns the moon. We just need $9k for a flag and a very long pole.",
+   "options": [
+    {
+     "label": "Plant the flag",
+     "kind": "pay",
+     "money": -9,
+     "effects": {
+      "press": 10,
+      "business": -5
+     },
+     "reaction": "It's ours. Don't look at it without a permit.",
+     "setFlag": "moon",
+     "headlineTag": "moon"
+    },
+    {
+     "label": "Sell the moon to Chad",
+     "kind": "pay",
+     "money": 22,
+     "effects": {
+      "business": 5,
+      "people": -10
+     },
+     "reaction": "He's renamed it. It's 'Chad's Night Light' now.",
+     "setFlag": "moonSold"
+    },
+    {
+     "label": "Give the moon back",
+     "kind": "refuse",
+     "effects": {
+      "press": -5
+     },
+     "reaction": "To who? Linda won't say. She just pointed up."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "press": -5
+   },
+   "advisors": [
+    {
+     "who": "chad",
+     "line": "I'd pay good money for the moon. Bad money, too."
+    },
+    {
+     "who": "steve",
+     "line": "If we own it, are tides our fault?"
+    }
+   ]
+  },
+  {
+   "id": "cheeseVault",
+   "who": "doug",
+   "text": "The town's emergency fund is four tons of cheese. Stored since 1987. I went down to count it. It counted me back.",
+   "options": [
+    {
+     "label": "Sell it, fast",
+     "kind": "pay",
+     "effects": {},
+     "reaction": "Selling. Don't make eye contact with it.",
+     "gamble": {
+      "chance": 50,
+      "win": {
+       "text": "A collector paid cash. He did not ask questions.",
+       "money": 32
+      },
+      "lose": {
+       "text": "The cheese refused to leave. We paid for the truck anyway.",
+       "effects": {
+        "people": -5
+       },
+       "money": -10
+      }
+     }
+    },
+    {
+     "label": "Throw a cheese festival",
+     "kind": "pay",
+     "money": -10,
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Nine thousand people. One cheese. Zero survivors. Of the cheese."
+    },
+    {
+     "label": "Seal the vault",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "Sealed. It's knocking. Politely, so far."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "law": -5,
+    "people": -5
+   },
+   "advisors": [
+    {
+     "who": "barb",
+     "line": "I'm not arresting cheese. Again."
+    },
+    {
+     "who": "timmy",
+     "line": "Can I meet it?"
+    }
+   ]
+  },
+  {
+   "id": "mimeStrike",
+   "who": "pam",
+   "group": "people",
+   "text": "The town's mimes are on strike. Nobody can tell. They would like you to notice. Loudly.",
+   "options": [
+    {
+     "label": "Notice them, with a banner",
+     "kind": "pay",
+     "money": -8,
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "They're thrilled. I think. One of them is trapped in a box about it."
+    },
+    {
+     "label": "Negotiate in mime",
+     "kind": "pay",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "You agreed to something. Nobody knows what. You shook an invisible hand."
+    },
+    {
+     "label": "Ignore the mimes",
+     "kind": "refuse",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "They're booing. Silently. It's somehow worse."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "people": -5
+   },
+   "advisors": [
+    {
+     "who": "marge",
+     "line": "A silent protest. My reporters fell asleep."
+    },
+    {
+     "who": "barb",
+     "line": "One of them stole an invisible car."
+    }
+   ]
+  },
+  {
+   "id": "duckDuel",
+   "who": "gerald",
+   "group": "people",
+   "text": "A duck is running against Gerald for union president. They want you to judge the debate. In the pond. In a suit.",
+   "options": [
+    {
+     "label": "Back Gerald",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "HONK. (He says he'll remember this. He looks moved.)",
+     "setFlag": "gooseLoyal"
+    },
+    {
+     "label": "Back the duck",
+     "kind": "pay",
+     "effects": {},
+     "reaction": "The duck nods. Gerald stares. Nobody blinks.",
+     "gamble": {
+      "chance": 40,
+      "win": {
+       "text": "The duck won. The geese accept it. The bugs are terrified.",
+       "effects": {
+        "people": 10,
+        "press": 5
+       }
+      },
+      "lose": {
+       "text": "The duck lost and fled. Gerald knows what you did.",
+       "effects": {
+        "people": -10
+       },
+       "setFlag": "gooseGrudge"
+      }
+     }
+    },
+    {
+     "label": "Stay out of bird politics",
+     "kind": "refuse",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Both sides are disappointed. In unison. It's eerie."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "people": -5
+   },
+   "advisors": [
+    {
+     "who": "barb",
+     "line": "Election interference. By a duck. I need a new form."
+    },
+    {
+     "who": "marge",
+     "line": "'FOWL PLAY.' I've waited my whole career."
+    }
+   ]
+  },
+  {
+   "id": "timeCapsule",
+   "who": "timmy",
+   "text": "We dug up the 1974 time capsule! It's one note. It says 'THE TOWN OWES CHAD'S DAD $40'. Chad did the interest.",
+   "options": [
+    {
+     "label": "Settle with Chad",
+     "kind": "pay",
+     "money": -20,
+     "effects": {
+      "business": 10
+     },
+     "reaction": "A pleasure. Dad would be proud. He's alive, he just wouldn't say it."
+    },
+    {
+     "label": "Bury it again, deeper",
+     "kind": "pay",
+     "effects": {
+      "law": -5,
+      "press": -5
+     },
+     "reaction": "We buried it. Marge watched. Marge is writing.",
+     "setFlag": "buried"
+    },
+    {
+     "label": "Frame the note",
+     "kind": "pay",
+     "effects": {
+      "press": 5,
+      "business": -10
+     },
+     "reaction": "It's in the museum now. Under 'Debts We Enjoy'."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "business": -10
+   },
+   "advisors": [
+    {
+     "who": "doug",
+     "line": "Fifty years of interest. I've gone cold."
+    },
+    {
+     "who": "linda",
+     "line": "The capsule was the distraction. Dig under it."
+    }
+   ]
+  },
+  {
+   "id": "roundabout",
+   "who": "barb",
+   "group": "law",
+   "text": "I built a roundabout. It has no exits. Four cars have been in there since Tuesday. One has started a book club.",
+   "options": [
+    {
+     "label": "Rescue the drivers",
+     "kind": "pay",
+     "money": -10,
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "They're out. Two of them went back in. They miss it.",
+     "setFlag": "roundaboutFixed"
+    },
+    {
+     "label": "Sell tickets to watch",
+     "kind": "favor",
+     "money": 10,
+     "favors": -1,
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "The gift shop sells little cars that go nowhere.",
+     "setFlag": "roundabout"
+    },
+    {
+     "label": "It's working as intended",
+     "kind": "refuse",
+     "effects": {
+      "law": 5,
+      "people": -10,
+      "business": -5
+     },
+     "reaction": "A fifth car just joined. They waved it in.",
+     "setFlag": "roundabout"
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "people": -10,
+    "business": -5,
+    "setFlag": "roundabout"
+   },
+   "advisors": [
+    {
+     "who": "chad",
+     "line": "That's my delivery van. It's been 'ten minutes away' for days."
+    },
+    {
+     "who": "pam",
+     "line": "The book club is reading my husband's emails."
+    }
+   ]
+  },
+  {
+   "id": "pigeonAide",
+   "who": "stranger",
+   "text": "A pigeon has been signing papers at your desk for a week. I checked. Some of it is very good policy.",
+   "options": [
+    {
+     "label": "Hire the pigeon",
+     "kind": "pay",
+     "effects": {
+      "press": 5,
+      "people": 5
+     },
+     "reaction": "It wants an office. And the office must have a ledge.",
+     "monthly": -3,
+     "setFlag": "pigeon"
+    },
+    {
+     "label": "Let it sign today's stack",
+     "kind": "pay",
+     "effects": {},
+     "reaction": "The pigeon is reading. It's nodding. It's signing.",
+     "gamble": {
+      "chance": 50,
+      "win": {
+       "text": "It cut red tape and lowered rents. The pigeon is a genius.",
+       "effects": {
+        "business": 10,
+        "people": 5
+       }
+      },
+      "lose": {
+       "text": "It sold the fire station. To another pigeon.",
+       "effects": {
+        "law": -10,
+        "business": -5
+       }
+      }
+     }
+    },
+    {
+     "label": "Evict the pigeon",
+     "kind": "refuse",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "It left. It took your stapler. It knew which one was yours."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "press": -5
+   },
+   "advisors": [
+    {
+     "who": "dave",
+     "line": "Birds in government. Disgraceful. Anyway, how's the bin situation?"
+    },
+    {
+     "who": "doug",
+     "line": "Its expenses are just 'bread'. I approved them."
+    }
+   ]
+  },
+  {
+   "id": "lakeMonster",
+   "who": "steve",
+   "text": "There's a monster in the reservoir. It's very shy. I only know because it returned my umbrella.",
+   "options": [
+    {
+     "label": "Put it on the brochure",
+     "kind": "pay",
+     "money": -8,
+     "effects": {
+      "business": 10,
+      "law": -5
+     },
+     "reaction": "Tourists everywhere. The monster is hiding. It sent a note: 'please stop'.",
+     "setFlag": "monster",
+     "headlineTag": "monster"
+    },
+    {
+     "label": "Protect its privacy",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "It left a fish on your doorstep. I think you're friends now.",
+     "setFlag": "monsterFriend"
+    },
+    {
+     "label": "There is no monster",
+     "kind": "refuse",
+     "effects": {
+      "law": 5,
+      "press": -10
+     },
+     "reaction": "It heard you. It's sulking. The water tastes like sulking."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "press": -5
+   },
+   "advisors": [
+    {
+     "who": "chad",
+     "line": "Monster burgers. Monster parking. I'm already printing."
+    },
+    {
+     "who": "timmy",
+     "line": "It has my frisbee. It can keep it."
+    }
+   ]
+  },
+  {
+   "id": "chadRocket",
+   "who": "chad",
+   "group": "business",
+   "text": "I'm launching a rocket from the school field. It's safe. My guy says it's 'mostly up'.",
+   "options": [
+    {
+     "label": "Clear the launch",
+     "kind": "pay",
+     "money": 18,
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Ten, nine... where's the school going? Oh, that's just smoke.",
+     "gamble": {
+      "chance": 60,
+      "win": {
+       "text": "It went up! Mostly! The town is on the news for a good reason.",
+       "effects": {
+        "press": 10
+       }
+      },
+      "lose": {
+       "text": "It went sideways. It's in the reservoir now.",
+       "effects": {
+        "people": -10,
+        "law": -5
+       }
+      }
+     },
+     "setFlag": "rocket",
+     "headlineTag": "rocket"
+    },
+    {
+     "label": "Launch from your own lawn",
+     "kind": "favor",
+     "favors": -1,
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "My lawn? My lawn is imported."
+    },
+    {
+     "label": "No rockets near children",
+     "kind": "refuse",
+     "effects": {
+      "business": -10,
+      "people": 5
+     },
+     "reaction": "Fine. I'll launch something quieter. And bigger."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "business": -5
+   },
+   "advisors": [
+    {
+     "who": "pam",
+     "line": "The PTA voted. We want to press the button."
+    },
+    {
+     "who": "barb",
+     "line": "I have no rocket laws. I'm writing some now."
+    }
+   ]
+  },
+  {
+   "id": "squirrelLoan",
+   "who": "doug",
+   "text": "I gave some squirrels a loan. I was very tired. They put up acorns as collateral. They've defaulted.",
+   "options": [
+    {
+     "label": "Repossess the acorns",
+     "kind": "pay",
+     "money": 6,
+     "effects": {
+      "people": -5,
+      "press": 5
+     },
+     "reaction": "We own nine hundred acorns. The squirrels are outside. Watching."
+    },
+    {
+     "label": "Forgive the loan",
+     "kind": "pay",
+     "money": -10,
+     "effects": {
+      "people": 5
+     },
+     "reaction": "They chittered. I think it was applause. One saluted."
+    },
+    {
+     "label": "Send Dave to collect",
+     "kind": "pay",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Dave came back with the money, three acorns and a black eye."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "business": -5
+   },
+   "advisors": [
+    {
+     "who": "dave",
+     "line": "I know those squirrels. Don't lend to those squirrels."
+    },
+    {
+     "who": "chad",
+     "line": "Never take nuts as collateral. First rule of business."
+    }
+   ]
+  },
+  {
+   "id": "opera",
+   "who": "marge",
+   "group": "press",
+   "text": "The Bugle is staging an opera about you. It's four hours long. You die in act one. The rest is the funeral.",
+   "options": [
+    {
+     "label": "Attend and applaud",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "You cried at your own funeral. That's tomorrow's photo."
+    },
+    {
+     "label": "Pay for rewrites",
+     "kind": "pay",
+     "money": -10,
+     "effects": {
+      "press": 5,
+      "people": 5
+     },
+     "reaction": "Now you live till act two. Then a goose gets you."
+    },
+    {
+     "label": "Ban the opera",
+     "kind": "refuse",
+     "effects": {
+      "press": -15,
+      "law": 5
+     },
+     "reaction": "Banned. So now it's a musical. A longer one."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "press": -5
+   },
+   "advisors": [
+    {
+     "who": "gerald",
+     "line": "HONK. (He's in it. He plays himself.)"
+    },
+    {
+     "who": "pam",
+     "line": "The children are the chorus. They sing your crimes."
+    }
+   ]
+  },
+  {
+   "id": "twinTown",
+   "who": "pam",
+   "group": "people",
+   "text": "We've been twinned with a town called Worse Town. They're visiting today. They already look disappointed.",
+   "options": [
+    {
+     "label": "Throw a welcome party",
+     "kind": "pay",
+     "money": -15,
+     "effects": {
+      "people": 5,
+      "business": 5,
+      "press": 5
+     },
+     "reaction": "They loved it. They've asked to be adopted."
+    },
+    {
+     "label": "Show them the pothole",
+     "kind": "pay",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "Their mayor wept. 'It's bigger than ours,' he said."
+    },
+    {
+     "label": "Lock the gates",
+     "kind": "refuse",
+     "effects": {
+      "people": -5,
+      "press": -5
+     },
+     "reaction": "They're sitting outside. They've started a worse town there."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "people": -5,
+    "press": -5
+   },
+   "advisors": [
+    {
+     "who": "chad",
+     "line": "Do they have money? Even bad money?"
+    },
+    {
+     "who": "marge",
+     "line": "'WORSE TOWN: A REVIEW.' One star. Came back twice."
+    }
+   ]
+  },
+  {
    "id": "gooseOccupation",
    "who": "gerald",
    "group": "people",
@@ -1867,6 +2550,402 @@
      "line": "My car is in there."
     }
    ]
+  },
+  {
+   "id": "secretStranger",
+   "who": "stranger",
+   "text": "You found the ballots. Fine. I was mayor once. They voted for a goose instead. Help me, or expose me.",
+   "options": [
+    {
+     "label": "Expose him in The Bugle",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "law": 5
+     },
+     "reaction": "Print it. I've been run out of town by worse. By geese.",
+     "setFlag": "exposed"
+    },
+    {
+     "label": "Take his hush money",
+     "kind": "pay",
+     "money": 25,
+     "effects": {
+      "press": -10
+     },
+     "reaction": "Smart. Wrong, but smart.",
+     "setFlag": "hushMoney"
+    }
+   ],
+   "draft": true,
+   "secret": true,
+   "requires": {
+    "flags": [
+     "obj:basement"
+    ]
+   },
+   "ignored": {
+    "press": -5
+   }
+  },
+  {
+   "id": "moonRent",
+   "who": "chad",
+   "group": "business",
+   "text": "The moon shines on my mansion. Your moon. I'm billing the town for trespassing light. $12k.",
+   "options": [
+    {
+     "label": "Pay the moonlight bill",
+     "kind": "pay",
+     "money": -12,
+     "effects": {
+      "business": 5
+     },
+     "reaction": "Thank you. I've also invoiced the sun. That one's a courtesy."
+    },
+    {
+     "label": "Charge him for the view",
+     "kind": "pay",
+     "effects": {},
+     "reaction": "A counter-invoice. Bold. My lawyers are putting on their night suits.",
+     "gamble": {
+      "chance": 55,
+      "win": {
+       "text": "The judge laughed for a full minute. Chad paid up.",
+       "effects": {
+        "press": 5
+       },
+       "money": 15
+      },
+      "lose": {
+       "text": "His lawyers work in shifts. We lost. To moonlight.",
+       "effects": {
+        "business": -5
+       },
+       "money": -15
+      }
+     }
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "flags": [
+     "moon"
+    ]
+   },
+   "ignored": {
+    "business": -10
+   }
+  },
+  {
+   "id": "monsterPta",
+   "who": "pam",
+   "group": "people",
+   "text": "The reservoir monster has joined the PTA. It attends by gurgling. Its ideas are better than mine. I hate it.",
+   "options": [
+    {
+     "label": "Welcome the monster",
+     "kind": "pay",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "It's treasurer now. The books are damp but balanced."
+    },
+    {
+     "label": "Monsters can't be parents",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "people": -10
+     },
+     "reaction": "It has forty children. It showed us. We regret asking."
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "flags": [
+     "monster"
+    ]
+   },
+   "ignored": {
+    "people": -10
+   }
+  },
+  {
+   "id": "rocketLibrary",
+   "who": "linda",
+   "text": "Chad's rocket landed. On the library. The books on the top floor are in orbit now. Returns are due Friday.",
+   "options": [
+    {
+     "label": "Rebuild the library",
+     "kind": "pay",
+     "money": -18,
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "The new roof opens. In case the books come back."
+    },
+    {
+     "label": "Leave the rocket in",
+     "kind": "pay",
+     "effects": {
+      "press": 5,
+      "people": -5,
+      "business": 5
+     },
+     "reaction": "It's the reading rocket now. Story time has a countdown."
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "flags": [
+     "rocket"
+    ]
+   },
+   "ignored": {
+    "people": -10,
+    "law": -5
+   }
+  },
+  {
+   "id": "auditor",
+   "who": "stranger",
+   "text": "State auditor. I'll need the books, the receipts, and an explanation for 'Dave: $900, shiny things'.",
+   "options": [
+    {
+     "label": "Open the books",
+     "kind": "pay",
+     "money": -10,
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Hm. Hmm. This page is a drawing of a goose. I'll allow it."
+    },
+    {
+     "label": "Bribe him with cheese",
+     "kind": "favor",
+     "favors": -1,
+     "effects": {
+      "press": -5
+     },
+     "reaction": "This is highly irregular. Is it aged? ...Proceed."
+    },
+    {
+     "label": "Let Dave handle the audit",
+     "kind": "pay",
+     "effects": {},
+     "reaction": "Dave has taken the auditor 'for lunch'. Behind the diner.",
+     "gamble": {
+      "chance": 45,
+      "win": {
+       "text": "The auditor signed everything. He looks happy. He smells of bins.",
+       "effects": {
+        "business": 5,
+        "law": 5
+       }
+      },
+      "lose": {
+       "text": "The auditor found the second set of books. They're just more geese.",
+       "effects": {
+        "law": -10,
+        "press": -5
+       }
+      }
+     }
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "fromMonth": 5
+   },
+   "ignored": {
+    "law": -10,
+    "business": -5
+   },
+   "advisors": [
+    {
+     "who": "doug",
+     "line": "I'm not here. If he asks, I moved. To the sea."
+    }
+   ]
+  },
+  {
+   "id": "flood",
+   "who": "steve",
+   "text": "Good news: I found the reservoir. Bad news: it's on Main Street. The monster says hello.",
+   "options": [
+    {
+     "label": "Rent the pumps",
+     "kind": "pay",
+     "money": -25,
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "The street is dry. The shops smell like pond. They're calling it 'rustic'."
+    },
+    {
+     "label": "Rename it 'Little Venice'",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "business": -10
+     },
+     "reaction": "Gondolas. Chad hates it. The tourists don't.",
+     "setFlag": "flood"
+    },
+    {
+     "label": "Wait for it to dry",
+     "kind": "refuse",
+     "effects": {
+      "people": -10,
+      "business": -5
+     },
+     "reaction": "It's not drying. A duck has opened a ferry.",
+     "setFlag": "flood"
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "fromMonth": 7
+   },
+   "ignored": {
+    "people": -10,
+    "business": -10,
+    "setFlag": "flood"
+   },
+   "advisors": [
+    {
+     "who": "chad",
+     "line": "My shoe shop is a lake. A LAKE."
+    },
+    {
+     "who": "gerald",
+     "line": "HONK. (He's never been happier.)"
+    }
+   ]
+  },
+  {
+   "id": "diaryLeak",
+   "who": "marge",
+   "group": "press",
+   "text": "Your diary leaked. Page four ranks every citizen from best to worst. The town is reading it out loud.",
+   "options": [
+    {
+     "label": "Apologise to everyone",
+     "kind": "pay",
+     "effects": {
+      "press": -5,
+      "people": 5
+     },
+     "reaction": "You apologised in ranking order. That made it worse, then better."
+    },
+    {
+     "label": "Publish the whole diary",
+     "kind": "pay",
+     "effects": {},
+     "reaction": "Printing all 300 pages. Even the poems. Oh no, the poems.",
+     "gamble": {
+      "chance": 50,
+      "win": {
+       "text": "The poems are good. People are weeping. You rank them all first now.",
+       "effects": {
+        "people": 10,
+        "press": 10
+       }
+      },
+      "lose": {
+       "text": "Page ninety is about Pam. Pam has read page ninety.",
+       "effects": {
+        "people": -15
+       }
+      }
+     }
+    },
+    {
+     "label": "Blame the pigeon",
+     "kind": "pay",
+     "effects": {
+      "law": -5,
+      "press": -5
+     },
+     "reaction": "The pigeon has released a statement. It's a better writer than you."
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "fromMonth": 9
+   },
+   "ignored": {
+    "press": -10,
+    "people": -10
+   },
+   "advisors": [
+    {
+     "who": "pam",
+     "line": "I was forty-first. FORTY-FIRST."
+    }
+   ]
+  },
+  {
+   "id": "coneRally",
+   "who": "dave",
+   "text": "Boss. The traffic cone is holding a rally. Four hundred people. It hasn't said one word. They love that about it.",
+   "options": [
+    {
+     "label": "Hold a bigger rally",
+     "kind": "pay",
+     "money": -15,
+     "effects": {
+      "people": 10
+     },
+     "reaction": "Four hundred and one people. We counted Dave three times."
+    },
+    {
+     "label": "Debate the cone, live",
+     "kind": "pay",
+     "effects": {},
+     "reaction": "You're at the podium. The cone is on its podium. Silence.",
+     "gamble": {
+      "chance": 50,
+      "win": {
+       "text": "You won! The cone fell over. The crowd gasped, then cheered.",
+       "effects": {
+        "people": 10,
+        "press": 5
+       }
+      },
+      "lose": {
+       "text": "The cone said nothing. It was devastating. You lost.",
+       "effects": {
+        "press": -10,
+        "people": -5
+       }
+      }
+     }
+    },
+    {
+     "label": "Have the cone towed",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "people": -10,
+      "press": -5
+     },
+     "reaction": "'MAYOR TOWS RIVAL.' It's polling higher from the impound lot."
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "fromMonth": 11
+   },
+   "ignored": {
+    "people": -10,
+    "press": -5
+   }
   },
   {
    "id": "pettyCrime",
@@ -2087,43 +3166,6 @@
    "ignored": {
     "press": -10,
     "people": -5
-   }
-  },
-  {
-   "id": "secretStranger",
-   "who": "stranger",
-   "text": "You found the ballots. Fine. I was mayor once. They voted for a goose instead. Help me, or expose me.",
-   "options": [
-    {
-     "label": "Expose him in The Bugle",
-     "kind": "pay",
-     "effects": {
-      "press": 10,
-      "law": 5
-     },
-     "reaction": "Print it. I've been run out of town by worse. By geese.",
-     "setFlag": "exposed"
-    },
-    {
-     "label": "Take his hush money",
-     "kind": "pay",
-     "money": 25,
-     "effects": {
-      "press": -10
-     },
-     "reaction": "Smart. Wrong, but smart.",
-     "setFlag": "hushMoney"
-    }
-   ],
-   "draft": true,
-   "secret": true,
-   "requires": {
-    "flags": [
-     "obj:basement"
-    ]
-   },
-   "ignored": {
-    "press": -5
    }
   },
   {
@@ -2802,6 +3844,30 @@
   {
    "tag": "recall",
    "text": "MAYOR RECALLED, THEN UN-RECALLED, TOWN TIRED"
+  },
+  {
+   "tag": "moon",
+   "text": "TOWN CLAIMS MOON; MOON DECLINES TO COMMENT"
+  },
+  {
+   "tag": "monster",
+   "text": "Reservoir Monster 'Just Wants To Be Left Alone', Gets Gift Shop"
+  },
+  {
+   "tag": "rocket",
+   "text": "Billionaire's Rocket Goes 'Mostly Up'"
+  },
+  {
+   "tag": "gambleWon",
+   "text": "Mayor's Wild Gamble Pays Off; Mayor As Surprised As Anyone"
+  },
+  {
+   "tag": "gambleLost",
+   "text": "Mayor Rolls Dice, Dice Roll Mayor"
+  },
+  {
+   "tag": "urgentIgnored",
+   "text": "Crisis Left To 'Sort Itself Out'; It Did Not"
   }
  ]
 }

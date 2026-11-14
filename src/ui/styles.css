@@ -15,7 +15,7 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .app { max-width: 460px; min-height: 100%; margin: 0 auto; background: var(--cream); display: flex; flex-direction: column; gap: 10px; padding: 10px 12px 14px; position: relative; box-shadow: 0 0 0 2px var(--ink); }
 
 .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.top h1 { margin: 0; font-size: 19px; font-weight: 700; letter-spacing: -.01em; user-select: none; }
+.top h1 { margin: 0; font-size: 17px; line-height: 1.5; font-weight: 700; letter-spacing: -.01em; user-select: none; }
 .top h1 span { background: var(--ink); color: var(--cream); padding: 1px 8px 2px; border-radius: 8px; transform: rotate(-2deg); display: inline-block; }
 .top-right { display: flex; align-items: center; gap: 6px; }
 .daychip { font-size: 13px; font-weight: 600; border: 2px solid var(--ink); border-radius: 99px; padding: 2px 10px; background: var(--paper); white-space: nowrap; }
@@ -23,14 +23,39 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 
 .town { width: 100%; display: block; border: 2.5px solid var(--ink); border-radius: 16px; box-shadow: var(--shadow); background: #CFE3EE; }
 .town .built { transform-box: fill-box; transform-origin: 50% 100%; }
+.town .built[transform] { transform-box: view-box; transform-origin: 0 0; }
 .town .fresh { animation: build .7s cubic-bezier(.3, 1.7, .5, 1) both; }
 .town .heli { animation: bob 2.4s ease-in-out infinite; }
-.town .goose { animation: waddle 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.town .goose { animation: waddle 1.6s ease-in-out infinite; }
 .town .blink { animation: blink 1s steps(2) infinite; }
 .town .cloud { animation: drift 40s linear infinite; }
-@keyframes build { from { transform: scale(.2) translateY(20px); opacity: 0; } }
+
+.town .cloud.slow { animation-duration: 70s; animation-delay: -30s; }
+.town .walker { animation: walk 20s linear infinite; }
+.town .walker.rev { animation-name: walkrev; }
+.town .hop { animation: hop .5s ease-in-out infinite; }
+.town .drive { animation: walk 10s linear infinite; }
+.town .drive.rev { animation-name: walkrev; }
+.town .orbit { animation: orbit 6s linear infinite; }
+.town .firework { animation: burst 2.6s ease-out infinite; }
+.town .frog { animation: frog 1.4s ease-in-out infinite; }
+.town .peek { animation: peek 5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.town .smoke { animation: bob 1.2s ease-in-out infinite; }
+.town .wave { animation: wave 3s linear infinite; }
+.town .emote { animation: rise 1.6s ease-out both; }
+@keyframes walk { from { transform: translateX(-20px); } to { transform: translateX(420px); } }
+@keyframes walkrev { from { transform: translateX(420px); } to { transform: translateX(-20px); } }
+@keyframes hop { 50% { transform: translateY(-1.5px); } }
+@keyframes orbit { 0% { transform: translate(22px, 0); } 25% { transform: translate(0, 7px); } 50% { transform: translate(-22px, 0); } 75% { transform: translate(0, -7px); } 100% { transform: translate(22px, 0); } }
+@keyframes burst { 0% { scale: .1; opacity: 0; } 20% { opacity: 1; } 70% { scale: 1.3; opacity: .9; } 100% { scale: 1.5; opacity: 0; } }
+@keyframes frog { 0%, 60%, 100% { translate: 0 0; } 30% { translate: 0 -9px; } }
+@keyframes peek { 0%, 100% { transform: scaleY(.25); } 30%, 70% { transform: scaleY(1); } }
+@keyframes wave { to { transform: translateX(20px); } }
+@keyframes rise { 0% { translate: 0 8px; scale: .3; opacity: 0; } 20% { translate: 0 0; scale: 1.2; opacity: 1; } 100% { translate: 0 -34px; scale: 1; opacity: 0; } }
+/* Sprites with an SVG position use scale / rotate / translate, which combine with it (transform would replace it). */
+@keyframes build { from { scale: .2; translate: 0 20px; opacity: 0; } }
 @keyframes bob { 50% { transform: translateY(4px); } }
-@keyframes waddle { 50% { transform: rotate(-6deg) translateY(-1px); } }
+@keyframes waddle { 50% { rotate: -6deg; translate: 0 -1px; } }
 @keyframes blink { 50% { opacity: .25; } }
 @keyframes drift { from { transform: translateX(-80px); } to { transform: translateX(420px); } }
 
@@ -61,12 +86,37 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 @keyframes floatup { 0% { transform: translateY(8px) scale(.6); opacity: 0; } 15% { transform: translateY(0) scale(1.15); opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(-8px); opacity: 0; } }
 
 .desk { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.timeline li { border: 2px solid var(--line); border-radius: 9px; padding: 2px 0 3px; text-align: center; font-size: 10.5px; line-height: 1.15; color: var(--soft); background: var(--paper); position: relative; min-height: 32px; }
+.timeline li b { display: block; font-size: 12px; font-variant-numeric: tabular-nums; min-height: 14px; }
+.timeline li.past { border-color: var(--soft); }
+.timeline li.now { border-color: var(--ink); background: var(--gold); color: var(--ink); box-shadow: 0 2px 0 var(--ink); }
+.timeline li i { position: absolute; top: -7px; right: -2px; font-style: normal; font-size: 8px; font-weight: 700; background: #C8A26A; border: 1.5px solid var(--ink); border-radius: 5px; padding: 0 3px; color: var(--ink); }
+.guide { background: var(--paper); border: 2.5px solid var(--ink); border-radius: 14px; padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow); }
+.step { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 15px; }
+.step .num { flex: none; background: var(--ink); color: var(--cream); font-weight: 700; font-size: 12px; border-radius: 8px; padding: 2px 7px; }
+.alerts { display: flex; flex-wrap: wrap; gap: 5px; }
+.alert { font-size: 11.5px; font-weight: 600; border: 2px solid var(--ink); border-radius: 8px; padding: 1px 7px; background: var(--gold); }
+.alert.bad { background: #F6DAD3; color: #8E2A2A; border-color: var(--alert); }
+.gamble { display: grid; grid-template-columns: auto 1fr; gap: 4px 8px; align-items: center; width: 100%; border: 2px dashed var(--ink); border-radius: 10px; padding: 6px 8px; background: #FFF8DC; }
+.odds { font-size: 12px; white-space: nowrap; } .odds b { font-size: 15px; color: #2C6B41; } .odds.bad b { color: var(--alert); }
+.dice { border: 2.5px solid var(--ink); border-radius: 12px; padding: 8px 10px; font-size: 15px; animation: thunk .35s .25s both; }
+.dice.won { background: #DCEBDD; } .dice.lost { background: #F6DAD3; }
+.field { display: flex; flex-direction: column; gap: 3px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--soft); }
+.field-row { display: flex; gap: 6px; }
+.field input { flex: 1; min-width: 0; font: 600 18px var(--display); color: var(--ink); border: 2.5px solid var(--ink); border-radius: 12px; padding: 7px 10px; background: #fff; }
+.pick { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.pick legend { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--soft); padding: 0; margin-bottom: 4px; }
+.pick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.pick-btn { display: flex; align-items: center; gap: 8px; text-align: left; background: #fff; border: 2.5px solid var(--ink); border-radius: 12px; padding: 5px 8px; }
+.pick-btn.on { background: var(--g); color: #fff; box-shadow: var(--shadow); }
+.pick-btn span { display: flex; flex-direction: column; line-height: 1.15; } .pick-btn small { font-weight: 600; min-height: 14px; }
 .coach { margin: 0; font-size: 13px; background: var(--gold); border: 2px solid var(--ink); border-radius: 12px; padding: 7px 10px; }
-.cards { display: flex; flex-direction: column; gap: 10px; background: #B58D55; border: 2.5px solid var(--ink); border-radius: 18px; padding: 12px 10px; box-shadow: var(--shadow), inset 0 0 0 4px rgba(41, 35, 31, .12); }
-.paper { position: relative; display: flex; align-items: center; gap: 10px; text-align: left; background: var(--paper); border: 2.5px solid var(--ink); border-radius: 6px 14px 8px 12px; padding: 9px 10px; box-shadow: 2px 4px 0 rgba(41, 35, 31, .55); transition: transform .12s; width: 100%; }
+.cards { display: flex; flex-direction: column; gap: 8px; background: #B58D55; border: 2.5px solid var(--ink); border-radius: 18px; padding: 12px 10px; box-shadow: var(--shadow), inset 0 0 0 4px rgba(41, 35, 31, .12); }
+.paper { position: relative; display: flex; align-items: center; gap: 10px; text-align: left; background: var(--paper); border: 2.5px solid var(--ink); border-radius: 6px 14px 8px 12px; padding: 7px 9px; box-shadow: 2px 4px 0 rgba(41, 35, 31, .55); transition: transform .12s; width: 100%; }
 .paper.tilt0 { transform: rotate(-.8deg); } .paper.tilt1 { transform: rotate(.6deg); } .paper.tilt2 { transform: rotate(-.4deg); }
 .paper:not(:disabled):hover, .paper:not(:disabled):active { transform: translateY(-3px) rotate(0); }
-.paper-text { font-size: 13.5px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.paper-text { font-size: 13px; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .paper-text b { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--soft); }
 .paper.done { opacity: .78; }
 .paper.urgent { border-color: var(--alert); box-shadow: 2px 4px 0 var(--alert); }
@@ -174,4 +224,4 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 footer { font-size: 11px; color: var(--soft); text-align: center; margin-top: auto; padding-top: 4px; }
 
 @media (min-width: 520px) { .scrim { align-items: center; } .sheet { border-bottom: 2.5px solid var(--ink); border-radius: 22px; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+@media (prefers-reduced-motion: reduce) { .town .walker, .town .drive, .town .emote { display: none; } *, *::before, *::after { animation: none !important; transition: none !important; } }

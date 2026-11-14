@@ -32,6 +32,15 @@ export interface Option {
   reaction: string;
   headlineTag?: string;
   campaign?: number; // Sunday campaign card only: added to vote share
+  /** A visible gamble: `chance` percent to win. Both outcomes are shown before choosing; they apply on top of the option's own costs. */
+  gamble?: { chance: number; win: Outcome_; lose: Outcome_ };
+}
+
+export interface Outcome_ {
+  text: string;
+  money?: number;
+  effects?: Effects;
+  setFlag?: string;
 }
 
 export interface Card {
@@ -105,6 +114,14 @@ export interface Content {
   combos: ComboDef[];
 }
 
+export type PerkId = 'chest' | 'friends' | 'cousin';
+export interface Profile {
+  mayor: string;
+  town: string;
+  base: GroupId; // the group that got you elected: starts higher, its rival starts lower
+  perk: PerkId;
+}
+
 export type Phase = 'promises' | 'desk' | 'event' | 'report' | 'dayEnd' | 'campaign' | 'results';
 
 export interface DeskSlot {
@@ -141,6 +158,7 @@ export interface HistoryEntry {
   cardId: string;
   choice: number | 'ignored' | 'dave';
   dave?: string;
+  won?: boolean; // gamble result
 }
 
 export interface Result {
@@ -163,7 +181,7 @@ export interface State {
   tax: TaxLevel;
   actionsLeft: number;
   boughtActionToday: boolean;
-  delegatedThisMonth: boolean;
+  delegationsThisMonth: number;
   protestNext: boolean;
   desk: DeskSlot[];
   eventId: string | null;
@@ -184,6 +202,7 @@ export interface State {
   reports: MonthReport[];
   polls: number[];
   campaignEffect: number;
+  profile: Profile | null; // set by the town setup; null until the player has done it
   daveDays: number[]; // days Deputy Dave governed while the player was away
   result: Result | null;
 }
@@ -194,6 +213,8 @@ export type Action =
   | { type: 'buyAction' }
   | { type: 'setTax'; level: TaxLevel }
   | { type: 'resolvePromise'; id: string; pay: boolean }
+  | { type: 'setup'; profile: Profile } // once per term, any time before the results
+  | { type: 'rename'; mayor: string; town: string }
   | { type: 'endDesk' }
   | { type: 'skipEvent' }
   | { type: 'next' }; // report -> next month / day end; dayEnd -> next day

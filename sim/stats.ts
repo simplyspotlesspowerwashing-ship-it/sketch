@@ -3,15 +3,21 @@
 //   node sim/stats.ts [terms=3000]  -> src/content/packs/week1.stats.json
 import { writeFileSync } from 'node:fs';
 import { week1Content as content } from '../src/content/index.ts';
-import { autoplay, newTerm } from '../src/engine/engine.ts';
+import { autoplay, newTerm, reduce } from '../src/engine/engine.ts';
+import { GROUPS } from '../src/engine/types.ts';
 import { greedyApproval, peoplePleaser, random, sensible } from './bots.ts';
+
+// Every simulated mayor does the town setup, cycling through the base groups and perks.
+const PERKS = ['chest', 'friends', 'cousin'] as const;
+const setup = (s: ReturnType<typeof newTerm>, i: number) =>
+  reduce(s, { type: 'setup', profile: { mayor: 'Bot', town: 'Bad Town', base: GROUPS[i % 4]!, perk: PERKS[i % 3]! } }, content);
 
 const N = Number(process.argv[2] ?? 3000);
 const mix = [sensible, sensible, sensible, sensible, sensible, random, random, peoplePleaser, peoplePleaser, greedyApproval];
 const cards: Record<string, number[]> = {};
 const shares: number[] = [];
 for (let i = 0; i < N; i++) {
-  const end = autoplay(newTerm(content.pack.id, `crowd-${i}`, content), mix[i % mix.length]!, content, () => false);
+  const end = autoplay(setup(newTerm(content.pack.id, `crowd-${i}`, content), i), mix[i % mix.length]!, content, () => false);
   shares.push(end.result!.share);
   for (const h of end.history) {
     if (typeof h.choice !== 'number') continue;

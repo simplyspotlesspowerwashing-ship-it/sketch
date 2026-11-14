@@ -11,11 +11,11 @@ const { chromium } = require('playwright');
   await ctx.addInitScript((off) => { if (!localStorage.getItem('badtown.save')) localStorage.setItem('badtown.save', JSON.stringify({ schema: 1, state: null, playerSeed: 'smoke', muted: true, introSeen: '', tutorialDone: false, dayOffset: off })); }, Number(process.argv[3] ?? 0));
   await pg.goto(process.env.URL ?? 'http://localhost:4173/');
   await pg.waitForSelector('.sheet');
-  await pg.screenshot({ path: out + '/1-intro.png' });
   const click = async (sel) => { await pg.locator(sel).first().click(); };
-  let decisions = 0, shots = 0, recalls = 0;
+  let decisions = 0, shots = 0, recalls = 0, setupShot = false;
   for (let guard = 0; guard < 400; guard++) {
     if (await pg.locator('.election').count()) break;
+    if (await pg.locator('#mayor-name').count()) { if (!setupShot) { await pg.screenshot({ path: out + '/0-setup.png' }); setupShot = true; } await click('.sheet .btn.primary'); continue; }
     if (await pg.locator('.sheet.recall').count()) { await click('.sheet.recall .btn.primary'); recalls++; continue; }
     if (await pg.locator('.sheet .btn.primary').count() && !(await pg.locator('.sheet .option').count())) { await click('.sheet .btn.primary'); continue; }
     if (await pg.locator('.sheet .option:not([disabled])').count()) {       // event / campaign / open card

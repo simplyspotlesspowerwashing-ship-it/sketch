@@ -2,10 +2,16 @@
 //   npm run sim -- [terms=5000] [out=reports/balance.md]
 import { writeFileSync } from 'node:fs';
 import { week1Content } from '../src/content/index.ts';
-import { autoplay, findCard, newTerm } from '../src/engine/engine.ts';
+import { autoplay, findCard, newTerm, reduce } from '../src/engine/engine.ts';
+import { GROUPS } from '../src/engine/types.ts';
 import { TUNING } from '../src/engine/tuning.ts';
 import type { Content } from '../src/engine/types.ts';
 import { POLICIES } from './bots.ts';
+
+// Every simulated mayor does the town setup, cycling through the base groups and perks.
+const PERKS = ['chest', 'friends', 'cousin'] as const;
+const setup = (s: ReturnType<typeof newTerm>, i: number) =>
+  reduce(s, { type: 'setup', profile: { mayor: 'Bot', town: 'Bad Town', base: GROUPS[i % 4]!, perk: PERKS[i % 3]! } }, content);
 
 const N = Number(process.argv[2] ?? 5000);
 const OUT = process.argv[3] ?? 'reports/balance.md';
@@ -27,7 +33,7 @@ for (const [name, policy] of Object.entries(POLICIES)) {
   const cards = new Map<string, CardStat>();
   const projects = new Map<string, number>();
   for (let i = 0; i < N; i++) {
-    const end = autoplay(newTerm(content.pack.id, `${name}-${i}`, content), policy, content, () => false);
+    const end = autoplay(setup(newTerm(content.pack.id, `${name}-${i}`, content), i), policy, content, () => false);
     const r = end.result!;
     wins += r.won ? 1 : 0;
     recalled += end.recalls > 0 ? 1 : 0;

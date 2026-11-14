@@ -10,6 +10,8 @@ const condition = z.strictObject({
   min: effects, max: effects, fromMonth: z.number().int().min(1).max(12),
 }).partial();
 
+const outcome = z.strictObject({ text: z.string().min(1).max(90), money: z.number().optional(), effects: effects.optional(), setFlag: z.string().optional() });
+
 const option = z.strictObject({
   label: z.string().min(1).max(28),
   kind: z.enum(['pay', 'project', 'promise', 'refuse', 'favor']),
@@ -23,6 +25,7 @@ const option = z.strictObject({
   reaction: z.string().min(1).max(90),
   headlineTag: z.string().optional(),
   campaign: z.number().optional(),
+  gamble: z.strictObject({ chance: z.number().min(5).max(95), win: outcome, lose: outcome }).optional(),
 });
 
 const card = z.strictObject({

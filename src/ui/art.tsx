@@ -1,6 +1,7 @@
 // All art is original SVG authored here: flat paper cut-out shapes with a dark outline.
 import type { ComponentChildren } from 'preact';
-import type { GroupId, State } from '../engine/types.ts';
+import { GROUPS } from '../engine/types.ts';
+import type { Effects, GroupId, State } from '../engine/types.ts';
 
 export const INK = '#29231F';
 export const GROUP_COLOR: Record<GroupId, string> = { people: '#D9653B', business: '#3F8F5A', law: '#3B6FB6', press: '#B0892A' };
@@ -180,6 +181,12 @@ export const Icon = {
   coin: (p: { size?: number }) => (
     <svg width={p.size ?? 16} height={p.size ?? 16} viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#E8C55A" stroke={INK} stroke-width="2" /><path d="M12 7v10M9.5 9.5q2.5 -2 5 0q0 2.5 -2.5 2.500q-2.5 0 -2.5 2.500q2.5 2 5 0" fill="none" stroke={INK} stroke-width="1.8" stroke-linecap="round" /></svg>
   ),
+  pen: () => (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-5L16 4l4 4L9 19z" fill="#E8C55A" stroke={INK} stroke-width="2" stroke-linejoin="round" /><path d="M13 7l4 4" stroke={INK} stroke-width="2" /></svg>
+  ),
+  dice: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4" fill="#fff" stroke={INK} stroke-width="2" /><circle cx="8" cy="8" r="1.7" fill={INK} /><circle cx="16" cy="16" r="1.7" fill={INK} /><circle cx="12" cy="12" r="1.7" fill={INK} /><circle cx="16" cy="8" r="1.7" fill={INK} /><circle cx="8" cy="16" r="1.7" fill={INK} /></svg>
+  ),
   sound: (p: { on: boolean }) => (
     <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill={INK} />{p.on ? <path d="M16 8q3 4 0 8M19 5q5 7 0 14" fill="none" stroke={INK} stroke-width="2" stroke-linecap="round" /> : <path d="M16 9l6 6M22 9l-6 6" stroke={INK} stroke-width="2" stroke-linecap="round" />}</svg>
   ),
@@ -200,23 +207,45 @@ export function Arrows({ group, value }: { group: GroupId; value: number }) {
 // ---------- town scene ----------
 const SKY = ['#F6D9A8', '#CFE3EE', '#BFDDF0', '#C9E2EC', '#F2D2A0', '#EBA97C', '#2B3355'];
 
-export function Town({ s }: { s: State }) {
+export interface Pulse { key: number; effects: Effects }
+const ANCHOR: Record<GroupId, [number, number]> = { people: [55, 78], law: [211, 50], press: [287, 76], business: [347, 44] };
+
+function Car({ color, police }: { color: string; police?: boolean }) {
+  return (
+    <g>
+      <path d="M-13 0 v-6 l5 -6 h13 l6 6 h4 v6z" fill={color} stroke={INK} stroke-width="1.6" stroke-linejoin="round" />
+      <path d="M-6 -6 l3 -4 h4 v4z M3 -6 v-4 h3 l3 4z" fill="#CFE3EE" stroke={INK} stroke-width="1" />
+      <circle cx="-7" cy="1" r="3" fill={INK} /><circle cx="8" cy="1" r="3" fill={INK} />
+      {police && <rect class="blink" x="-2" y="-15" width="5" height="3" rx="1" fill="#C23B3B" stroke={INK} stroke-width="1" />}
+    </g>
+  );
+}
+
+export function Town({ s, pulse }: { s: State; pulse?: Pulse | null }) {
   const has = (id: string) => s.projects.some((p) => p.id === id);
   const fresh = (id: string) => (s.projects.find((p) => p.id === id)?.builtMonth === s.month ? 'built fresh' : 'built');
+  const f = s.flags;
   const night = s.day >= 7;
   const sky = SKY[Math.min(6, s.day - 1)]!;
-  const geese = (s.flags.gooseGrudge && !has('pond') ? 5 : 0) + (has('pond') ? 3 : 1);
+  const geese = (f.gooseGrudge && !has('pond') ? 5 : 0) + (has('pond') ? 3 : 1);
   const O = { stroke: INK, 'stroke-width': 2, 'stroke-linejoin': 'round' as const };
   const win = night ? '#F7D774' : '#F2EBDD';
+  const walkers = Math.max(1, Math.round(s.approval.people / 18));
+  const cars = Math.max(0, Math.round(s.approval.business / 28));
+  const town = (s.profile?.town ?? 'Bad Town').toUpperCase();
   return (
-    <svg class="town" viewBox="0 0 400 170" role="img" aria-label={`The town. Projects built: ${s.projects.map((p) => p.id).join(', ') || 'none'}.`}>
+    <svg class="town" viewBox="0 0 400 170" role="img" aria-label={`${s.profile?.town ?? 'The town'}. Built: ${s.projects.map((p) => p.id).join(', ') || 'nothing yet'}.`}>
       <rect width="400" height="170" fill={sky} />
-      {night ? <><circle cx="340" cy="30" r="14" fill="#F2EBDD" /><circle cx="346" cy="26" r="12" fill={sky} />{[30, 80, 140, 200, 260, 300, 370].map((x, i) => <circle key={x} cx={x} cy={12 + ((i * 17) % 34)} r="1.4" fill="#F2EBDD" />)}</>
-        : <circle cx={60 + s.day * 45} cy={s.day > 4 ? 50 : 28} r="15" fill="#F7D774" stroke={INK} stroke-width="2" />}
+      {night ? <><circle cx="340" cy="30" r="14" fill="#F2EBDD" /><circle cx="346" cy="26" r="12" fill={sky} />{[30, 80, 140, 200, 260, 300, 370].map((x, i) => <circle key={x} class="blink" style={{ 'animation-delay': `${i * 0.3}s`, 'animation-duration': '3s' }} cx={x} cy={12 + ((i * 17) % 34)} r="1.4" fill="#F2EBDD" />)}</>
+        : <g class="sun"><circle cx={60 + s.day * 45} cy={s.day > 4 ? 50 : 28} r="15" fill="#F7D774" stroke={INK} stroke-width="2" /></g>}
+      {(f.moon || f.moonSold) && <g class="built" transform="translate(28 26)"><circle r="11" fill="#F2EBDD" stroke={INK} stroke-width="1.6" /><circle cx="-3" cy="-2" r="2.5" fill="#D9CDB6" /><circle cx="4" cy="4" r="1.8" fill="#D9CDB6" /><path d="M2 -10 v-12 l10 3 l-10 3" fill={f.moonSold ? '#3F8F5A' : '#C23B3B'} stroke={INK} stroke-width="1.4" stroke-linejoin="round" /></g>}
+      {f.fireworks && [[120, 26, '#D9653B'], [250, 18, '#F7D774'], [180, 34, '#3B6FB6']].map(([x, y, c], i) => <g key={i} class="firework" style={{ 'animation-delay': `${i * 0.9}s` }} transform={`translate(${x} ${y})`}>{[0, 45, 90, 135, 180, 225, 270, 315].map((r) => <path key={r} d="M0 -4 v-7" stroke={c as string} stroke-width="2.2" stroke-linecap="round" transform={`rotate(${r})`} />)}</g>)}
       <g class="cloud"><path d="M40 40 q-10 0 -9 -8 q1 -7 9 -6 q4 -8 13 -5 q8 3 6 11 q6 2 3 8z" fill="#fff" opacity=".85" /></g>
+      <g class="cloud slow"><path d="M40 62 q-8 0 -7 -6 q1 -6 7 -5 q3 -6 10 -4 q6 2 5 9 q5 2 2 6z" fill="#fff" opacity=".6" /></g>
       <path d="M0 110 q60 -40 130 -14 q60 -34 130 -8 q70 -30 140 6 v76 h-400z" fill={night ? '#3D5A47' : '#9DBF8A'} />
       {/* helicopter */}
       {has('helicopter') && <g class={`${fresh('helicopter')} heli`}><g transform="translate(300 26)"><ellipse cx="0" cy="0" rx="16" ry="8" fill="#3B6FB6" {...O} /><path d="M14 -2 l18 -4 l0 5z" fill="#3B6FB6" {...O} /><path d="M-22 -11 h44" stroke={INK} stroke-width="2.5" stroke-linecap="round" /><path d="M0 -11 v4" stroke={INK} stroke-width="2" /><path d="M-10 -2 h8 v5 h-8z" fill="#CFE3EE" {...O} /><path d="M-8 12 h18 M-4 8 v4 M6 8 v4" stroke={INK} stroke-width="2" /></g></g>}
+      {f.rocket && <g class="built" transform="translate(92 96) rotate(24)"><path d="M-6 0 v-26 q6 -12 12 0 v26z" fill="#F2EBDD" {...O} /><path d="M-6 0 l-7 6 v-12z M6 0 l7 6 v-12z" fill="#C23B3B" {...O} /><circle cx="0" cy="-18" r="3.5" fill="#7FB7D9" {...O} /><g class="smoke"><circle cx="0" cy="8" r="5" fill="#fff" opacity=".8" /><circle cx="5" cy="14" r="4" fill="#fff" opacity=".6" /></g></g>}
       {/* school */}
       <g transform="translate(18 74)">
         {has('school') ? <g class={fresh('school')}><rect x="0" y="6" width="74" height="40" fill="#D9653B" {...O} /><path d="M-4 8 l41 -22 l41 22z" fill="#8A3B22" {...O} /><rect x="30" y="26" width="14" height="20" fill="#5C3A2A" {...O} />{[8, 54].map((x) => <rect key={x} x={x} y="18" width="12" height="12" fill={win} {...O} />)}<path d="M37 -14 v-12 l12 4 l-12 4" fill="#F7D774" {...O} /></g>
@@ -235,6 +264,8 @@ export function Town({ s }: { s: State }) {
         <path d="M35 -14 v-12 l12 4 l-12 4" fill="#C23B3B" {...O} />
         {[8, 22, 42, 56].map((x) => <rect key={x} x={x} y="30" width="6" height="40" fill="#fff" {...O} />)}
         <rect x="29" y="48" width="12" height="22" fill="#5C3A2A" {...O} />
+        {f.billboard && <g class="built"><rect x="-8" y="6" width="30" height="15" fill="#F7D774" {...O} /><text x="7" y="12.5" text-anchor="middle" font-size="5.5" font-weight="700" fill={INK} font-family="Fredoka, sans-serif">TRUST</text><text x="7" y="19" text-anchor="middle" font-size="5.5" font-weight="700" fill={INK} font-family="Fredoka, sans-serif">CHAD</text></g>}
+        {f.pigeon && <g class="goose" transform="translate(58 20)"><ellipse cx="0" cy="0" rx="5" ry="3.5" fill="#8C8577" stroke={INK} stroke-width="1.3" /><circle cx="4" cy="-4" r="2.6" fill="#8C8577" stroke={INK} stroke-width="1.3" /><path d="M6.5 -4 l3 1 l-3 1z" fill="#E8943A" /></g>}
         {night && <path d="M-6 26 q20 10 41 0 q21 10 41 0" fill="none" stroke="#C23B3B" stroke-width="2" />}
         {night && [0, 10, 20, 30, 41, 51, 61, 71].map((x, i) => <circle key={x} class="blink" style={{ 'animation-delay': `${i * 0.15}s` }} cx={x - 5} cy={i % 4 === 2 ? 31 : 28} r="2" fill={['#F7D774', '#D9653B', '#3F8F5A', '#3B6FB6'][i % 4]} />)}
       </g>
@@ -242,6 +273,7 @@ export function Town({ s }: { s: State }) {
       <g transform="translate(262 76)">
         <rect x="0" y="6" width="50" height="40" fill="#B0892A" {...O} /><rect x="6" y="12" width="38" height="9" fill="#F2EBDD" {...O} /><text x="25" y="19.5" text-anchor="middle" font-size="7" font-weight="700" fill={INK} font-family="serif">THE BUGLE</text>
         <rect x="8" y="26" width="10" height="10" fill={win} {...O} /><rect x="32" y="26" width="10" height="10" fill={win} {...O} /><rect x="20" y="30" width="10" height="16" fill="#5C3A2A" {...O} />
+        {f.bearClaim && <g class="built" transform="translate(58 34)"><ellipse cx="0" cy="2" rx="9" ry="11" fill="#7A5234" {...O} /><circle cx="0" cy="-12" r="7" fill="#7A5234" {...O} /><circle cx="-5" cy="-18" r="2.5" fill="#7A5234" {...O} /><circle cx="5" cy="-18" r="2.5" fill="#7A5234" {...O} /><circle cx="-2.5" cy="-13" r="1" fill={INK} /><circle cx="2.5" cy="-13" r="1" fill={INK} /><ellipse cx="0" cy="-10" rx="2.5" ry="1.8" fill="#E6C9A8" /></g>}
         {has('tv') && <g class={fresh('tv')}><path d="M25 6 v-26 M17 -8 l8 -8 l8 8 M13 -18 h24" stroke={INK} stroke-width="2.5" fill="none" stroke-linecap="round" /><circle class="blink" cx="25" cy="-22" r="3" fill="#C23B3B" stroke={INK} stroke-width="1" /></g>}
       </g>
       {/* Chad tower + billboards */}
@@ -249,19 +281,38 @@ export function Town({ s }: { s: State }) {
         <rect x="0" y="0" width="34" height="76" fill="#3F8F5A" {...O} />{[6, 20].map((x) => [8, 22, 36, 50].map((y) => <rect key={`${x}${y}`} x={x} y={y} width="8" height="8" fill={win} stroke={INK} stroke-width="1.2" />))}
         {s.approval.business > 65 && <g class="built"><rect x="-2" y="-18" width="38" height="16" fill="#F7D774" {...O} /><text x="17" y="-6.5" text-anchor="middle" font-size="8" font-weight="700" fill={INK} font-family="Fredoka, sans-serif">CHAD</text></g>}
       </g>
+      {f.statue && <g class="built" transform="translate(314 118)"><rect x="-8" y="-6" width="16" height="8" fill="#B8A98C" {...O} /><path d="M-5 -6 v-14 q5 -6 10 0 v14z" fill="#E8C55A" {...O} /><circle cx="0" cy="-27" r="6" fill="#E8C55A" {...O} /><circle cx="-2" cy="-28" r="1" fill={INK} /><path class="blink" style={{ 'animation-duration': '2.4s' }} d="M1 -28 h3" stroke={INK} stroke-width="1.4" /><path d="M5 -18 l7 -8" stroke="#E8C55A" stroke-width="3.5" stroke-linecap="round" /><path d="M5 -18 l7 -8" stroke={INK} stroke-width="1" /></g>}
+      {/* welcome sign */}
+      <g transform="translate(4 116)"><path d="M8 0 v14 M52 0 v14" stroke={INK} stroke-width="2" /><rect x="0" y="-12" width="60" height="14" rx="2" fill="#F2EBDD" {...O} /><text x="30" y="-6.5" text-anchor="middle" font-size="4.2" fill={INK} font-family="Fredoka, sans-serif">WELCOME TO</text><text x="30" y="-0.8" text-anchor="middle" font-size={town.length > 11 ? 5 : 6.5} font-weight="700" fill={INK} font-family="Fredoka, sans-serif">{town.slice(0, 16)}</text>{f.speedTrap && <g class="built"><path d="M40 -12 q8 -12 16 0z" fill="#27497A" {...O} /><circle cx="45" cy="-13" r="1.2" fill="#fff" /><circle cx="51" cy="-13" r="1.2" fill="#fff" /></g>}</g>
+      {f.goodLuck && <g class="built" transform="translate(366 120)"><path d="M14 0 v12" stroke={INK} stroke-width="2" /><rect x="0" y="-10" width="30" height="12" rx="2" fill="#F7D774" {...O} transform="rotate(-6)" /><text x="15" y="-2" text-anchor="middle" font-size="5" font-weight="700" fill={INK} font-family="Fredoka, sans-serif" transform="rotate(-6)">GOOD LUCK</text></g>}
+      {/* walkers */}
+      {!night && Array.from({ length: walkers }, (_, i) => <g key={i} class={`walker ${i % 2 ? 'rev' : ''}`} style={{ 'animation-duration': `${16 + i * 5}s`, 'animation-delay': `${-i * 4}s` }}><g class="hop" style={{ 'animation-delay': `${i * 0.13}s` }}><path d="M-3 126 q3 -9 6 0z" fill={['#D9653B', '#3B6FB6', '#B0892A', '#7A5C9C', '#3F8F5A'][i % 5]} stroke={INK} stroke-width="1.3" /><circle cx="0" cy="114.5" r="3" fill={['#F0C4A0', '#B9794E', '#E2A878', '#8A5A3C'][i % 4]} stroke={INK} stroke-width="1.3" />{s.approval.people < 35 && <path d="M-2 110 l4 0" stroke="#C23B3B" stroke-width="1.5" />}</g></g>)}
       {/* road */}
       <path d="M0 132 h400 v16 h-400z" fill="#6B6257" stroke={INK} stroke-width="2" /><path d="M8 140 h384" stroke="#F2EBDD" stroke-width="2" stroke-dasharray="14 12" />
+      {f.kevin && <g class="built" transform="translate(126 140)"><ellipse cx="0" cy="0" rx="13" ry="5" fill={INK} /><ellipse cx="0" cy="-1" rx="10" ry="3" fill="#3A322C" /><path d="M12 -2 v-12 l11 3 l-11 3" fill="#F2EBDD" stroke={INK} stroke-width="1.3" stroke-linejoin="round" /><text x="17" y="-9.2" text-anchor="middle" font-size="3.6" font-weight="700" fill={INK} font-family="Fredoka, sans-serif">KEVIN</text></g>}
+      {f.roundabout && !f.roundaboutFixed && <g class="built" transform="translate(214 140)"><ellipse cx="0" cy="0" rx="26" ry="9" fill="#6B6257" stroke={INK} stroke-width="2" /><ellipse cx="0" cy="0" rx="11" ry="3.5" fill="#9DBF8A" stroke={INK} stroke-width="1.5" />{[0, 1, 2, 3].map((i) => <g key={i} class="orbit" style={{ 'animation-delay': `${-i * 1.5}s` }}><g transform="scale(.5)"><Car color={['#D9653B', '#E8C55A', '#3B6FB6', '#F2EBDD'][i]!} /></g></g>)}</g>}
+      {!f.flood && Array.from({ length: cars }, (_, i) => <g key={i} class={`drive ${i % 2 ? 'rev' : ''}`} style={{ 'animation-duration': `${9 + i * 4}s`, 'animation-delay': `${-i * 3.3}s` }}><g transform={`translate(0 ${i % 2 ? 145 : 138}) scale(.62)`}><Car color={['#D9653B', '#3F8F5A', '#E8C55A', '#F2EBDD'][i % 4]!} /></g></g>)}
+      {!f.flood && s.approval.law >= 50 && <g class="drive" style={{ 'animation-duration': '13s', 'animation-delay': '-6s' }}><g transform="translate(0 138) scale(.62)"><Car color="#3B6FB6" police /></g></g>}
+      {f.flood && <g class="built"><path class="wave" d="M-20 128 q10 -5 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 v24 h-440z" fill="#7FB7D9" opacity=".88" stroke={INK} stroke-width="1.6" /><g class="drive" style={{ 'animation-duration': '22s' }}><g transform="translate(0 136)"><path d="M-16 0 q16 8 32 0 l4 -6 l-4 2 h-28 l-4 -2z" fill={INK} /><path d="M4 -2 v-14" stroke={INK} stroke-width="1.6" /><circle cx="4" cy="-18" r="3" fill="#F0C4A0" stroke={INK} stroke-width="1.2" /></g></g></g>}
+      {f.paved && !has('pond') && <g class="built"><rect x="14" y="150" width="96" height="16" fill="#8C8577" {...O} />{[26, 46, 66, 86].map((x) => <path key={x} d={`M${x} 151 v14`} stroke="#F2EBDD" stroke-width="1.4" />)}</g>}
+      {f.market && <g class="built" transform="translate(258 150)">{[0, 26].map((x, i) => <g key={x} transform={`translate(${x} 0)`}><rect x="0" y="2" width="20" height="10" fill="#C8A26A" {...O} /><path d="M-2 2 l4 -8 h16 l4 8z" fill={i ? '#3F8F5A' : '#C23B3B'} {...O} /><path d="M5 -6 l-2 8 M10 -6 v8 M15 -6 l2 8" stroke="#F2EBDD" stroke-width="2" /><circle cx="6" cy="6" r="2" fill="#E8943A" /><circle cx="13" cy="6" r="2" fill="#E8943A" /></g>)}</g>}
+      {(f.monster || f.monsterFriend) && <g class="built" transform="translate(340 158)"><ellipse cx="0" cy="2" rx="34" ry="7" fill="#7FB7D9" {...O} /><g class="peek"><path d="M-4 2 q-4 -22 6 -24 q9 0 8 8 q-6 -2 -6 4 v12z" fill="#5FA77A" {...O} /><circle cx="4" cy="-17" r="1.5" fill={INK} />{f.monsterFriend && <path d="M14 -26 q3 -4 6 0 q3 -4 6 0 q0 5 -6 8 q-6 -3 -6 -8z" fill="#C23B3B" stroke={INK} stroke-width="1" transform="scale(.6) translate(12 -22)" />}</g><path d="M14 2 q4 -8 8 0" fill="#5FA77A" {...O} /></g>}
+      {f.frogs && [150, 176, 300].map((x, i) => <g key={x} class="frog" style={{ 'animation-delay': `${i * 0.4}s` }} transform={`translate(${x} 160)`}><ellipse cx="0" cy="0" rx="5" ry="3.5" fill="#5FA77A" stroke={INK} stroke-width="1.3" /><circle cx="-2.5" cy="-3.5" r="1.6" fill="#fff" stroke={INK} stroke-width=".8" /><circle cx="2.5" cy="-3.5" r="1.6" fill="#fff" stroke={INK} stroke-width=".8" /></g>)}
+      {f.wetSock && <g class="goose" transform="translate(112 126)"><path d="M-4 -16 h8 v12 q8 0 8 5 q0 4 -6 4 h-10z" fill="#9CC9E8" {...O} /><path d="M-4 -13 h8" stroke="#C23B3B" stroke-width="2" /><circle cx="-1" cy="-8" r="1" fill={INK} /><circle cx="3" cy="-8" r="1" fill={INK} /><path d="M-2 8 q0 4 -2 5 M6 8 q0 4 2 5" stroke="#7FB7D9" stroke-width="1.5" fill="none" /></g>}
+      {f.gooseGuard && <g class="built" transform="translate(98 134)"><rect x="-2" y="-22" width="12" height="8" rx="2" fill="#C23B3B" stroke={INK} stroke-width="1.3" /><text x="4" y="-16" text-anchor="middle" font-size="4" font-weight="700" fill="#fff" font-family="Fredoka, sans-serif">NO</text><path d="M4 -14 v8" stroke={INK} stroke-width="1.5" /></g>}
+      {f.raccoons && s.approval.law >= 35 && <g class="built" transform="translate(372 150)"><ellipse cx="0" cy="0" rx="9" ry="6" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><circle cx="-8" cy="-5" r="5" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><path d="M-11 -6 h6" stroke={INK} stroke-width="3" /><path d="M8 -2 q8 -4 8 -12" stroke={INK} stroke-width="4" fill="none" stroke-linecap="round" /></g>}
       {/* pond */}
       {has('pond') && <g class={fresh('pond')}><ellipse cx="70" cy="158" rx="46" ry="9" fill="#7FB7D9" {...O} /><path d="M52 157 q5 -3 10 0 M76 160 q5 -3 10 0" stroke="#fff" stroke-width="1.5" fill="none" /></g>}
       {/* spoon */}
       {has('spoon') && <g class={fresh('spoon')} transform="translate(228 100) rotate(8)"><ellipse cx="0" cy="-10" rx="11" ry="15" fill="#D8DDE0" {...O} /><rect x="-3" y="4" width="6" height="52" rx="3" fill="#D8DDE0" {...O} /><ellipse cx="-3" cy="-13" rx="3" ry="6" fill="#fff" opacity=".7" /></g>}
       {/* geese */}
       {Array.from({ length: geese }, (_, i) => {
-        const x = has('pond') ? 40 + i * 18 : s.flags.gooseGrudge ? 120 + i * 20 : 150;
+        const x = has('pond') ? 40 + i * 18 : f.gooseGrudge ? 136 + i * 20 : 150;
         return <g key={i} class="goose" style={{ 'animation-delay': `${i * 0.3}s` }} transform={`translate(${x} ${has('pond') ? 152 : 126})`}><ellipse cx="0" cy="0" rx="7" ry="4.5" fill="#fff" stroke={INK} stroke-width="1.6" /><path d="M5 -1 q3 -8 1 -11" stroke={INK} stroke-width="4.5" fill="none" stroke-linecap="round" /><path d="M5 -1 q3 -8 1 -11" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" /><path d="M7 -12 l5 1 l-5 2z" fill="#E8943A" stroke={INK} stroke-width="1" /></g>;
       })}
       {/* trouble overlays */}
       {s.approval.law < 35 && <g class="built"><path d="M108 108 q6 -8 12 0 t12 0 t12 0" stroke="#C23B3B" stroke-width="3" fill="none" stroke-linecap="round" /><text x="184" y="118" font-size="9" font-weight="700" fill="#C23B3B" font-family="Fredoka, sans-serif" transform="rotate(-6 184 118)">BARB WUZ HERE</text><g transform="translate(372 150)"><ellipse cx="0" cy="0" rx="9" ry="6" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><circle cx="-8" cy="-5" r="5" fill="#B8B1A4" stroke={INK} stroke-width="1.6" /><path d="M-11 -6 h6" stroke={INK} stroke-width="3" /><path d="M8 -2 q8 -4 8 -12" stroke={INK} stroke-width="4" fill="none" stroke-linecap="round" /></g></g>}
+      {pulse && GROUPS.filter((g) => pulse.effects[g]).map((g) => [0, 1, 2].map((i) => { const up = pulse.effects[g]! > 0; const [x, y] = ANCHOR[g]; return <g key={`${pulse.key}${g}${i}`} class="emote" style={{ 'animation-delay': `${i * 0.18}s` }} transform={`translate(${x + (i - 1) * 12} ${y})`}>{up ? <path d="M0 4 q-7 -5 -7 -9 q0 -4 3.5 -4 q2.5 0 3.5 2.5 q1 -2.5 3.5 -2.5 q3.5 0 3.5 4 q0 4 -7 9z" fill={GROUP_COLOR[g]} stroke={INK} stroke-width="1.4" /> : <g><circle r="6" fill="#F6DAD3" stroke={INK} stroke-width="1.4" /><path d="M-3 -3 l6 6 M3 -3 l-6 6" stroke="#C23B3B" stroke-width="2" stroke-linecap="round" /></g>}</g>; }))}
       {s.approval.people < 35 && <g class="built">{[150, 168, 186].map((x, i) => <g key={x} class="goose" style={{ 'animation-delay': `${i * 0.2}s` }} transform={`translate(${x} 128)`}><rect x="-7" y="-22" width="14" height="10" fill="#fff" stroke={INK} stroke-width="1.5" /><path d="M0 -12 v12" stroke={INK} stroke-width="2" /><circle cx="0" cy="2" r="3.5" fill="#D9653B" stroke={INK} stroke-width="1.5" /><path d="M-4 -17 h8" stroke="#C23B3B" stroke-width="2" /></g>)}</g>}
     </svg>
   );

@@ -6,7 +6,7 @@ import { TUNING } from './tuning.ts';
 import { GROUPS } from './types.ts';
 import type { Content, Rng, State } from './types.ts';
 
-/** Dave's way of running a month: delegate one card to himself, wing one, forget the third. */
+/** Dave's way of running a month: delegate one card to himself, wing two, forget the fourth. */
 export const davePolicy: Policy = (s, legal, _content, rand) => {
   const pick = <T,>(list: T[]) => list[Math.floor(rand() * list.length)]!;
   switch (s.phase) {
@@ -14,10 +14,10 @@ export const davePolicy: Policy = (s, legal, _content, rand) => {
       return legal.find((a) => a.type === 'resolvePromise' && a.pay) ?? legal[0]!;
     case 'desk': {
       const delegate = legal.filter((a) => a.type === 'delegate');
-      if (delegate.length > 0) return delegate[0]!;
+      if (delegate.length > 0 && s.delegationsThisMonth === 0) return delegate[0]!;
       const chooses = legal.filter((a) => a.type === 'choose');
-      const winged = s.desk.some((d) => d.status === 'done');
-      if (!winged && chooses.length > 0) return pick(chooses);
+      const winged = s.desk.filter((d) => d.status === 'done').length;
+      if (winged < 2 && chooses.length > 0) return pick(chooses);
       return { type: 'endDesk' };
     }
     case 'event': {

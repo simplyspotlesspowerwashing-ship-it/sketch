@@ -41,4 +41,12 @@ Content is data. A week is one JSON pack in `src/content/packs/`, checked by `np
 
 `pay` (money and/or favors now), `project` (needs `project`; build cost and upkeep come from `src/content/core.ts`), `promise` (needs `promise: { dueIn, money }`; the effects are the benefit now), `refuse` (must be free), `favor` (must cost Favors).
 
+## Gambles
+
+An option may carry `gamble: { chance, win, lose }`. Both outcomes are shown before the player chooses, with the odds. Each outcome has `text` (max 90 characters), and optional `money`, `effects`, `setFlag`. Use them for the absurd bets, not for ordinary choices.
+
+## Making the map react
+
+If a choice should leave a mark on the town, set a flag and draw it in `Town` (`src/ui/art.tsx`). A card that changes the map feels heavier than one that only moves a meter.
+
 Mark anything not yet edited by a human with `"draft": true`.
