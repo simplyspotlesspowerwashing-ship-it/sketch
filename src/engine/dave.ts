@@ -10,6 +10,11 @@ import type { Content, Rng, State } from './types.ts';
 export const davePolicy: Policy = (s, legal, _content, rand) => {
   const pick = <T,>(list: T[]) => list[Math.floor(rand() * list.length)]!;
   switch (s.phase) {
+    case 'initiative': { // Dave has a go at something, with his usual results
+      const a = legal.filter((x) => x.type === 'initiative');
+      const r = rand();
+      return a.length && rand() < 0.6 ? { ...pick(a), skill: r < 0.4 ? 0 : r < 0.85 ? 1 : 2 } as typeof legal[number] : { type: 'skipInitiative' };
+    }
     case 'decree': // Dave enacts something about half the time, without reading it
       return rand() < 0.5 ? pick(legal) : { type: 'skipDecree' };
     case 'promises':

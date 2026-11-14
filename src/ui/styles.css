@@ -78,8 +78,8 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .stat small { flex-basis: 100%; font-size: 10.5px; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stat { min-width: 0; }
 .stat.money.neg b { color: var(--alert); }
-.pips { display: flex; gap: 4px; }
-.pips i { width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid var(--ink); background: transparent; }
+.pips { display: flex; gap: 3px; flex-wrap: wrap; }
+.pips i { width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid var(--ink); background: transparent; }
 .pips i.on { background: var(--gold); }
 
 .meters { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
@@ -221,6 +221,54 @@ button:focus-visible, .paper:focus-visible { outline: 3px solid var(--law); outl
 .pick-btn { display: flex; align-items: center; gap: 8px; text-align: left; background: #fff; border: 2.5px solid var(--ink); border-radius: 12px; padding: 5px 8px; }
 .pick-btn.on { background: var(--g); color: #fff; box-shadow: var(--shadow); }
 .pick-btn span { display: flex; flex-direction: column; line-height: 1.15; } .pick-btn small { font-weight: 600; min-height: 14px; }
+.advice { background: #F3ECE0; border-radius: 14px; padding: 8px; gap: 6px; }
+.advice-head { margin: 0; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--soft); }
+.adv { background: none; padding: 0; align-items: flex-start; }
+.bubble.small { font-size: 14px; padding: 6px 10px; border-width: 2px; }
+.ticker { margin: -4px 0 0; font-size: 13px; background: var(--ink); color: var(--cream); border-radius: 10px; padding: 5px 10px; animation: lift .3s both; }
+.ticker b { background: var(--alert); color: #fff; border-radius: 5px; padding: 0 5px; margin-right: 6px; font-size: 11px; }
+.option.initiative { gap: 6px; }
+.option.initiative .paper-game { position: static; margin: 0 0 0 auto; }
+.tiers { display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
+.tiers > span { display: flex; align-items: center; gap: 6px; }
+.tiers i { font-style: normal; font-weight: 700; width: 46px; color: var(--soft); }
+.bugle.mini { padding: 8px 10px; gap: 4px; transform: none; }
+.bugle.mini h2 { font-size: 21px; }
+.paper.major { border-color: var(--alert); background: #FFF0EB; box-shadow: 3px 5px 0 var(--alert); animation: tremble 2.5s ease-in-out infinite; }
+@keyframes tremble { 0%, 90%, 100% { translate: 0 0; } 92% { translate: -2px 0; } 94% { translate: 2px 0; } 96% { translate: -1px 0; } }
+.ribbon.major { background: #7A1F1F; }
+.ribbon.small.major { right: auto; left: 10px; }
+.heckle { display: flex; align-items: center; gap: 8px; }
+.heckle .bubble { font-size: 14px; padding: 5px 10px; animation: pop .25s cubic-bezier(.3, 1.7, .5, 1); }
+.howto { margin: 0; font-size: 16px; font-weight: 600; }
+.panel-tag { align-self: flex-start; font-size: 11px; font-weight: 700; letter-spacing: .08em; background: var(--ink); color: var(--cream); border-radius: 6px; padding: 1px 7px; }
+.clip-problem { display: flex; align-items: center; gap: 10px; text-align: left; animation: lift .3s both; }
+.clip-problem .bubble { font-size: 15px; }
+.clip-stage .clip-title { position: absolute; left: 8px; right: 8px; bottom: 8px; animation: thunk .3s 1.6s both; }
+.after-tag { position: absolute; top: 6px; left: 8px; }
+.mg-result small { display: block; font-size: 14px; font-weight: 600; color: var(--soft); margin-top: 6px; }
+.mg-arena.flap { cursor: pointer; }
+.mg-pipe { position: absolute; width: 13%; translate: -50% 0; background: #5FA77A; border: 2.5px solid var(--ink); border-radius: 6px; display: flex; justify-content: center; align-items: flex-end; overflow: hidden; }
+.mg-pipe.top { top: 0; border-top: 0; border-radius: 0 0 8px 8px; }
+.mg-pipe.bottom { bottom: 0; border-bottom: 0; border-radius: 8px 8px 0 0; }
+.mg-ent.blink { animation: blink .2s steps(2) infinite; }
+.mg-arena.run { background: linear-gradient(#F6D9A8 0 82%, #6B6257 82%); background-image: linear-gradient(#F6D9A8 0 82%, transparent 82%), repeating-linear-gradient(90deg, #6B6257 0 30px, #7D7366 30px 60px); cursor: pointer; }
+.mg-runbob { display: block; animation: bounce .3s ease-in-out infinite; }
+.mg-arena.snake { background: #9DBF8A; background-image: linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.12) 1px, transparent 1px); background-size: 9.0909% 9.0909%; aspect-ratio: 1; height: auto; }
+.mg-seg { position: absolute; background: #3F8F5A; border: 2px solid var(--ink); border-radius: 6px; box-sizing: border-box; display: grid; place-items: center; }
+.mg-seg.head { background: #E8C55A; border-radius: 10px; z-index: 1; }
+.mg-dpad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.mg-dpad .btn { min-height: 48px; font-size: 20px; touch-action: none; }
+.mg-arena.dojo { background: radial-gradient(circle at 50% 40%, #8A5A3C, #5C3A2A); }
+.mg-ent.cut { opacity: 0; scale: 1.5; transition: opacity .35s, scale .35s; }
+.mg-trail { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.mg-trail polyline { fill: none; stroke: #fff; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; opacity: .9; }
+.mg-arena.night { background: linear-gradient(#1F2440, #3B4470); }
+.mg-ent.march { animation: bounce .5s steps(2) infinite; }
+.mg-shot { position: absolute; width: 5px; height: 14px; margin-left: -2.5px; background: #F7D774; border: 1.5px solid var(--ink); border-radius: 3px; }
+.mg-drop { position: absolute; width: 10px; height: 10px; margin-left: -5px; background: #C23B3B; border: 1.5px solid var(--ink); border-radius: 50%; }
+.mg-cannon { display: block; width: 42px; height: 20px; background: #3B6FB6; border: 2.5px solid var(--ink); border-radius: 12px 12px 4px 4px; position: relative; }
+.mg-cannon::after { content: ''; position: absolute; left: 50%; top: -12px; width: 8px; height: 14px; margin-left: -4px; background: #3B6FB6; border: 2.5px solid var(--ink); border-bottom: 0; border-radius: 3px 3px 0 0; }
 .deskhead { margin: 2px 0 -2px; font-size: 17px; font-weight: 700; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .deskhead small { font-weight: 400; font-size: 12px; color: var(--soft); }
 .why-chip { position: absolute; top: -9px; left: 10px; font-size: 10px; font-weight: 700; color: #fff; background: var(--g); border: 2px solid var(--ink); border-radius: 8px; padding: 0 6px; }

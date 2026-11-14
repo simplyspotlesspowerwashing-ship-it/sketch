@@ -27,8 +27,12 @@ export function botchGroup(card: Card): GroupId {
   return card.group ?? GROUPS.find((g) => card.ignored?.[g]) ?? 'people';
 }
 
-/** What a sloppy (1) or flopped (0) mini-game costs on this card. */
+/** What a sloppy (1) or flopped (0) mini-game costs on this card. Catastrophes hit every group. */
 export function botchCost(card: Card, skill: 0 | 1, urgent = false): { money: number; effects: Effects } {
+  if (card.major) {
+    const m = skill === 0 ? TUNING.majorBotch.flop : TUNING.majorBotch.sloppy;
+    return { money: m.money, effects: { people: m.approval, business: m.approval, law: m.approval, press: m.approval } };
+  }
   const b = skill === 0 ? TUNING.botch.flop : TUNING.botch.sloppy;
   return { money: b.money, effects: { [botchGroup(card)]: b.approval * (urgent ? TUNING.urgentIgnoreScale : 1) } };
 }
@@ -40,7 +44,7 @@ const clean = (text: string, fallback: string) => text.replace(/[<>]/g, '').trim
 
 export function findCard(content: Content, id: string): Card {
   const p = content.pack;
-  const c = p.cards.find((x) => x.id === id) ?? p.events.find((x) => x.id === id) ?? p.campaign.find((x) => x.id === id);
+  const c = p.cards.find((x) => x.id === id) ?? p.events.find((x) => x.id === id) ?? p.campaign.find((x) => x.id === id) ?? p.catastrophes.find((x) => x.id === id);
   if (!c) throw new Error(`unknown card ${id}`);
   return c;
 }
@@ -161,16 +165,26 @@ function drawDesk(s: State, content: Content, rng: Rng): DeskSlot[] {
   const { cards } = content.pack;
   const d = dayOfMonth(s.month);
   const pool = weekPool(content, s.weekId, rng);
-  const nShared = TUNING.sharedPerDay * 6;
+  const nShared = (TUNING.sharedPerDay - 1) * 6;
   const slots: DeskSlot[] = [];
   const add = (cardId: string, why: string, urgent = false) => slots.push({ cardId, status: 'open', why, ...(urgent ? { urgent: true } : {}) });
 
   if (monthOfDay(s.month) === 1) {
-    for (const id of pool.slice((d - 1) * TUNING.sharedPerDay, d * TUNING.sharedPerDay)) add(id, 'shared');
+    // A catastrophe heads the desk on its days. Which two strike this week is the same for everyone.
+    const strike = TUNING.catastropheDays.indexOf(d);
+    if (strike >= 0 && content.pack.catastrophes.length > 0) {
+      const order = shuffled(content.pack.catastrophes.map((c) => c.id), rng(`${s.weekId}|catastrophes`));
+      slots.push({ cardId: order[strike % order.length]!, status: 'open', why: 'major', major: true });
+    }
+    // The day's own card (first whose condition holds), then cards from the shared pool.
+    const today = cards.find((c) => c.day === d && holds(s, c.requires));
+    if (today) add(today.id, 'shared');
+    const per = TUNING.sharedPerDay - 1;
+    for (const id of pool.slice((d - 1) * per, d * per)) add(id, 'shared');
     // Rare card: a shared 1-in-50 draw, so everyone who gets it gets it together.
     const rares = cards.filter((c) => c.rare);
     const r = rng(`${s.weekId}|rare|${s.month}`);
-    if (rares.length > 0 && slots.length > 0 && r() < TUNING.rareChance) slots[0] = { cardId: rares[Math.floor(r() * rares.length)]!.id, status: 'open', why: 'shared' };
+    if (rares.length > 0 && slots.length > 0 && r() < TUNING.rareChance) slots[slots.length - 1] = { cardId: rares[Math.floor(r() * rares.length)]!.id, status: 'open', why: 'shared' };
   } else {
     const maxUrgent = s.month >= TUNING.lateCrisisFromMonth ? 2 : 1;
     for (const c of cards) {
@@ -180,20 +194,21 @@ function drawDesk(s: State, content: Content, rng: Rng): DeskSlot[] {
       const q = c.requires ?? {};
       add(c.id, q.flags || q.projects || c.secret ? 'choice' : q.fromMonth ? 'crisis' : `low:${c.group ?? 'people'}`, true);
     }
-    // Fill the rest from the groups that like you least.
+    // Fill from the groups that like you least, keeping the last seat for a town character with no
+    // group (the treasurer, the librarian, the weatherman...) so they still turn up.
     const rest = pool.slice(nShared).filter((id) => !s.usedCards.includes(id));
-    // Cards with no group (the treasurer, the librarian...) rank as your average, so they still turn up.
-    const mean = GROUPS.reduce((n, g) => n + s.approval[g], 0) / GROUPS.length;
-    const weak = (id: string) => { const g = findCard(content, id).group; return g ? s.approval[g] : mean - 1; };
-    const ranked = rest.map((id, i) => ({ id, i })).sort((x, y) => weak(x.id) - weak(y.id) || x.i - y.i);
+    const groupOf = (id: string) => findCard(content, id).group;
+    const ranked = rest.filter((id) => groupOf(id)).map((id, i) => ({ id, i })).sort((x, y) => s.approval[groupOf(x.id)!] - s.approval[groupOf(y.id)!] || x.i - y.i);
+    const townie = rest.find((id) => !groupOf(id));
     for (const { id } of ranked) {
-      if (slots.length >= TUNING.deskSize) break;
-      const g = findCard(content, id).group;
-      add(id, g && s.approval[g] < 50 ? `low:${g}` : 'town');
+      if (slots.length >= TUNING.deskSize - (townie ? 1 : 0)) break;
+      const g = groupOf(id)!;
+      add(id, s.approval[g] < 50 ? `low:${g}` : 'town');
     }
+    if (townie && slots.length < TUNING.deskSize) add(townie, 'town');
   }
   for (const slot of slots) if (!s.usedCards.includes(slot.cardId)) s.usedCards.push(slot.cardId);
-  return slots.slice(0, TUNING.deskSize);
+  return slots.slice(0, TUNING.deskSize + 1);
 }
 
 function startMonth(s: State, content: Content, rng: Rng) {
@@ -309,13 +324,13 @@ function finish(s: State, endedEarly: boolean) {
 export function newTerm(weekId: string, playerSeed: string, content: Content, rng: Rng = seededRng): State {
   const a = TUNING.startApproval;
   const s: State = {
-    v: 5, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
+    v: 6, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
     money: TUNING.startMoney, favors: TUNING.startFavors,
     approval: { people: a, business: a, law: a, press: a },
     tax: 'medium', actionsLeft: 0, delegationsThisMonth: 0, protestNext: false,
     desk: [], eventId: null, projects: [], leases: [], promises: [], duePromises: [], brokenPromises: 0,
     recalls: 0, lastRecall: null, flags: {}, objectivesDone: [], combosDone: [], usedCards: [], poolCursor: 0,
-    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, decrees: [], decreeOffer: [], decreesToday: 0, profile: null, daveDays: [], result: null,
+    monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, decrees: [], decreeOffer: [], decreesToday: 0, initiativeOffer: [], initiativesDone: [], profile: null, daveDays: [], result: null,
   };
   startMonth(s, content, rng);
   return s;
@@ -328,6 +343,10 @@ export function legalActions(s: State, content: Content): Action[] {
     for (const level of ['low', 'medium', 'high'] as const) if (level !== s.tax) out.push({ type: 'setTax', level });
   };
   switch (s.phase) {
+    case 'initiative':
+      for (const id of s.initiativeOffer) out.push({ type: 'initiative', id });
+      out.push({ type: 'skipInitiative' });
+      break;
     case 'decree':
       for (const id of s.decreeOffer) {
         const d = content.pack.decrees.find((x) => x.id === id)!;
@@ -347,7 +366,7 @@ export function legalActions(s: State, content: Content): Action[] {
         if (slot.status !== 'open') continue;
         const card = findCard(content, slot.cardId);
         card.options.forEach((o, option) => { if (!blocked(s, o, content)) out.push({ type: 'choose', cardId: card.id, option }); });
-        if (daveCost(s) <= s.favors) out.push({ type: 'delegate', cardId: card.id });
+        if (daveCost(s) <= s.favors && !slot.major) out.push({ type: 'delegate', cardId: card.id }); // no Dave for a catastrophe
       }
       tax();
       out.push({ type: 'endDesk' });
@@ -391,7 +410,7 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
     if (p.perk === 'friends') addFavors(s, TUNING.setup.friends);
     return s;
   }
-  const bare = action.type === 'choose' ? { type: action.type, cardId: action.cardId, option: action.option } : action;
+  const bare = action.type === 'choose' ? { type: action.type, cardId: action.cardId, option: action.option } : action.type === 'initiative' ? { type: action.type, id: action.id } : action;
   const legal = legalActions(state, content).some((a) => JSON.stringify(a) === JSON.stringify(bare));
   if (!legal) throw new Error(`illegal action in phase ${state.phase}: ${JSON.stringify(action)}`);
   const s: State = structuredClone(state);
@@ -403,6 +422,7 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
       s.money += d.money ?? 0;
       applyEffects(s, d.effects);
       if (d.setFlag) s.flags[d.setFlag] = true;
+      s.flags[`law:${d.id}`] = true; // follow-up cards can react to a decree
       s.monthTags.push(d.headlineTag ?? 'decree');
       s.decreeOffer = s.decreeOffer.filter((id) => id !== d.id);
       s.decreesToday += 1;
@@ -410,6 +430,28 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
       if (s.decreesToday >= TUNING.decreesPerDay || s.decreeOffer.length === 0) { s.decreeOffer = []; s.polls.push(voteShare(s, 0)); s.phase = 'dayEnd'; }
       return s;
     }
+
+    case 'initiative': {
+      const it = content.pack.initiatives.find((x) => x.id === action.id)!;
+      const out = action.skill === 0 ? it.flop : action.skill === 1 ? it.sloppy : it.clean;
+      s.money += out.money ?? 0;
+      addFavors(s, out.favors ?? 0);
+      applyEffects(s, out.effects);
+      if (out.setFlag) s.flags[out.setFlag] = true;
+      s.initiativesDone.push(it.id);
+      s.history.push({ month: s.month, cardId: `init:${it.id}`, choice: 0, skill: action.skill ?? 2 });
+      s.initiativeOffer = [];
+      if (checkRecall(s, content, rng)) return s;
+      s.month += 1;
+      startMonth(s, content, rng);
+      return s;
+    }
+
+    case 'skipInitiative':
+      s.initiativeOffer = [];
+      s.month += 1;
+      startMonth(s, content, rng);
+      return s;
 
     case 'skipDecree':
       s.decreeOffer = [];
@@ -467,6 +509,7 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
         if (out.setFlag) s.flags[out.setFlag] = true;
         s.monthTags.push(entry.won ? 'gambleWon' : 'gambleLost');
       }
+      if (card.major) s.monthTags.push('catastrophe');
       if (s.phase === 'desk' && card.game && action.skill !== undefined && action.skill < 2) {
         // Played badly: the same trade, but worse.
         const cost = botchCost(card, action.skill as 0 | 1, s.desk.find((d) => d.cardId === card.id)?.urgent);
@@ -533,8 +576,11 @@ export function reduce(state: State, action: Action, content: Content, rng: Rng 
           if (s.decreeOffer.length > 0) s.phase = 'decree';
           else { s.polls.push(voteShare(s, 0)); s.phase = 'dayEnd'; }
         } else {
-          s.month += 1;
-          startMonth(s, content, rng);
+          // Midday: the mayor's own move. Three things to go and do, the same three for everyone.
+          const fresh = content.pack.initiatives.filter((i) => !s.initiativesDone.includes(i.id)).map((i) => i.id);
+          s.initiativeOffer = shuffled(fresh, rng(`${s.weekId}|initiatives|${s.day}`)).slice(0, TUNING.initiativesOffered);
+          if (s.initiativeOffer.length > 0) s.phase = 'initiative';
+          else { s.month += 1; startMonth(s, content, rng); }
         }
       } else if (s.day >= 6) {
         s.day = 7;

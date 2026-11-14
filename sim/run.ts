@@ -45,6 +45,7 @@ for (const [name, policy] of Object.entries(POLICIES)) {
     for (const p of end.projects) projects.set(p.id, (projects.get(p.id) ?? 0) + 1);
     for (const id of end.usedCards) seenEver.add(id);
     for (const h of end.history) {
+      if (h.cardId.startsWith('init:')) continue;
       const card = findCard(content, h.cardId);
       const st = cards.get(h.cardId) ?? { seen: 0, options: card.options.map(() => 0), ignored: 0, dave: 0 };
       st.seen += 1;

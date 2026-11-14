@@ -13,10 +13,11 @@ const { chromium } = require('playwright');
   await pg.goto(process.env.URL ?? 'http://localhost:4173/');
   await pg.waitForSelector('.sheet');
   const click = async (sel) => { await pg.locator(sel).first().click(); };
-  let decisions = 0, shots = 0, recalls = 0, setupShot = false, games = 0, decrees = 0, decreeShot = false; const played = new Set();
+  let decisions = 0, shots = 0, recalls = 0, setupShot = false, games = 0, decrees = 0, decreeShot = false, inits = 0; const played = new Set();
   for (let guard = 0; guard < 900; guard++) {
     if (await pg.locator('.election').count()) break;
     if (await pg.locator('.mg, .clip').count()) { games++; await pg.waitForTimeout(400); continue; }   // auto-finished by the test hook
+    if (await pg.locator('.option.initiative').count() && !(await pg.locator('.sheet').count())) { await pg.locator('.option.initiative').nth(guard % 3).click().catch(() => {}); inits++; continue; }
     if (await pg.locator('.option.decree').count() && !(await pg.locator('.sheet').count())) { if (!decreeShot) { await pg.screenshot({ path: out + '/a-decree.png' }); decreeShot = true; } await pg.locator('.option.decree:not([disabled])').nth(guard % 3).click().catch(() => {}); decrees++; continue; }
     if (await pg.locator('#mayor-name').count()) { if (!setupShot) { await pg.screenshot({ path: out + '/0-setup.png' }); setupShot = true; } await click('.sheet .btn.primary'); continue; }
     if (await pg.locator('.sheet.recall').count()) { await click('.sheet.recall .btn.primary'); recalls++; continue; }
@@ -45,7 +46,7 @@ const { chromium } = require('playwright');
   await pg.waitForSelector('.verdict', { timeout: 15000 });
   await pg.screenshot({ path: out + '/7-election.png', fullPage: true });
   const overflow = await pg.evaluate(() => document.documentElement.scrollWidth > innerWidth);
-  console.log('minigame screens', games, 'decrees', decrees);
+  console.log('minigame screens', games, 'midday activities', inits, 'decrees', decrees);
   console.log('decisions', decisions, 'recalls', recalls, 'overflow', overflow, 'errors', errs.slice(0, 5));
   console.log(await pg.locator('.share').first().textContent());
   await b.close();

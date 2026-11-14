@@ -24,6 +24,7 @@ function scored(opts: {
   tax?: (s: State) => State['tax'];
   payPromise?: (s: State, money: number) => boolean;
   decree?: (s: State, d: Decree) => number;
+  initiative?: (s: State, o: { money?: number; favors?: number; effects?: Effects }) => number;
   /** chance of [flop, sloppy, clean] at mini-games */
   skill?: [number, number, number];
 }): Policy {
@@ -36,6 +37,19 @@ function scored(opts: {
       const p = s.promises.find((x) => x.id === id)!;
       const canPay = legal.some((a) => a.type === 'resolvePromise' && a.id === id && a.pay);
       return { type: 'resolvePromise', id, pay: canPay && (opts.payPromise?.(s, p.money) ?? true) };
+    }
+    if (s.phase === 'initiative') {
+      const [flop, sloppy] = opts.skill ?? [0.3, 0.4, 0.3];
+      const val = (o: { money?: number; favors?: number; effects?: Effects }) => (opts.initiative ? opts.initiative(s, o) : sum(o.effects) + (o.money ?? 0) * 0.3 + (o.favors ?? 0) * 1.5);
+      let best: Action = { type: 'skipInitiative' };
+      let bestV = 0;
+      for (const id of s.initiativeOffer) {
+        const it = content.pack.initiatives.find((x) => x.id === id)!;
+        const v = flop * val(it.flop) + sloppy * val(it.sloppy) + (1 - flop - sloppy) * val(it.clean) + n();
+        if (v > bestV) [best, bestV] = [{ type: 'initiative', id }, v];
+      }
+      if (best.type === 'initiative') { const r = rand(); best = { ...best, skill: r < flop ? 0 : r < flop + sloppy ? 1 : 2 }; }
+      return best;
     }
     if (s.phase === 'decree') {
       let best: Action = { type: 'skipDecree' };
@@ -92,6 +106,7 @@ export const random: Policy = (s, legal, _content, rand) => {
     const a = pick(mine);
     return a.type === 'choose' ? { ...a, skill: Math.floor(rand() * 3) as 0 | 1 | 2 } : a;
   }
+  if (s.phase === 'initiative') { const a = pick(legal); return a.type === 'initiative' ? { ...a, skill: Math.floor(rand() * 3) as 0 | 1 | 2 } : a; }
   if (s.phase === 'event') return rand() < 0.2 ? { type: 'skipEvent' } : pick([...legal.filter((a) => a.type === 'choose'), { type: 'skipEvent' } as Action]);
   return pick(legal.filter((a) => a.type !== 'setTax'));
 };
@@ -175,6 +190,7 @@ const sensibleScore: Scorer = (s, _card, o, content) => {
 };
 
 export const sensible = scored({
+  initiative: (s, o) => approvalValue(s, o.effects) + moneyValue(s, o.money ?? 0) + (o.favors ?? 0) * 1.5,
   decree: (s, d) => approvalValue(s, d.effects) + approvalValue(s, d.perMonth, monthsLeft(s)) + moneyValue(s, (d.money ?? 0) + (d.monthly ?? 0) * monthsLeft(s)),
   skill: [0.15, 0.35, 0.5],
   score: sensibleScore,

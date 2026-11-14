@@ -7,7 +7,7 @@ Status: **playable preview** (M1-M3 scope in rough form: full week, art, sound, 
 ```bash
 npm install
 npm run dev         # play locally
-npm test            # 37 engine tests (Vitest)
+npm test            # 40 engine tests (Vitest)
 npm run validate    # schema-check the week pack
 npm run sim         # 5,000 terms per bot -> reports/balance.md
 node sim/stats.ts   # regenerate the labelled preview crowd data
@@ -34,14 +34,17 @@ CONTENT_GUIDE.md  how to write cards
 ## Rules as they stand (all open to change)
 
 - Money is in $k. One approval arrow = 5 points, two = 10.
-- A day is three steps: today's three (the same three cards for every mayor), your town's three (drawn from your own situation), then the Mayor's Hour (up to two decrees from four on offer). The shared daily event sits between the two desks. Then the poll. Sunday is the campaign card and the election.
+- A day is: today's three (the same for every mayor; the first is the day's own story card), midday (one of three activities, or rest), your town's three (drawn from your own situation), then the Mayor's Hour (up to two decrees from four on offer), then the poll. Sunday is the campaign card and the election.
+- Midday activities (`pack.initiatives`) are the only place a mini-game can pay off: clean, sloppy and flop each have their own outcome.
+- Two catastrophes a week (`pack.catastrophes`, on `TUNING.catastropheDays`, Wednesday and Saturday) head today's three. They are played as three games in a row; a sloppy or failed job costs every group and more money. Dave cannot take them.
+- Enacting a decree sets flag `law:<id>`; follow-up cards react to it.
 - Your town's three are, in order: cards that follow from your choices, late-week crises and group-pressure cards (all URGENT; one a day early in the week, two from Thursday), then ordinary cards from whichever groups like you least. Each carries a reason (`DeskSlot.why`) the UI shows.
 - Nobody ends the month by hand: the desk closes when its three cards are done.
 - Every desk has 3 requests and all 3 must be dealt with. There is no action limit and no ignoring.
-- Every desk card is played through a mini-game (`Card.game`, seven types in `src/ui/minigames.tsx`). The UI passes a `skill` on the `choose` action: 2 clean, 1 sloppy, 0 flop. There is no bonus: clean gives exactly the chosen trade, sloppy costs 5 approval from the card's group, a flop costs 10 and $5k. Doubled on URGENT cards.
+- Every desk card is played through a mini-game (`Card.game`, twelve types in `src/ui/minigames.tsx`: catch, dodge, whack, match, stack, simon, tug, flap, jump, snake, slice, invaders). The UI passes a `skill` on the `choose` action: 2 clean, 1 sloppy, 0 flop. There is no bonus: clean gives exactly the chosen trade, sloppy costs 5 approval from the card's group, a flop costs 10 and $5k. Doubled on URGENT cards.
 - Sending Deputy Dave instead costs 1 Favor (no game, random outcome from his table).
 - Conditional cards (escalations, crises, group pressure, secrets) arrive URGENT; up to two a month from Thursday. A protest (People under 35) makes every card URGENT the next month.
-- Approval fades after each desk (`TUNING.fade` 2.5, plus 0.1 per point above 50, never below 0).
+- Approval fades after each desk (`TUNING.fade` 2.75, plus 0.1 per point above 50, never below 0).
 - Gamble options show their odds and both outcomes; the roll is seeded per player.
 - Decrees last the term, pay or cost every month, and appear in the law book and on the map's notice board.
 - Town setup (names, base group, one head start) happens once, at the end of the first day played. Names can be changed later.

@@ -3,10 +3,327 @@
  "title": "Week 1: The Stranger",
  "cards": [
   {
+   "id": "evParade",
+   "who": "pam",
+   "text": "It's Founders' Day. The parade float is a papier-mache you. It's on fire. Slightly.",
+   "day": 1,
+   "options": [
+    {
+     "label": "Ride the float anyway",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You waved the whole time. While smoking."
+    },
+    {
+     "label": "Buy a new float",
+     "kind": "pay",
+     "money": -8,
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The new you has two eyes the same size."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "people": -5
+   },
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Steer the burning float",
+    "flop": "You steered the float into the fire station. Ironic.",
+    "bad": "cone"
+   }
+  },
+  {
+   "id": "evStorm",
+   "who": "steve",
+   "text": "Stormy Steve predicts 'weather'. He will not say which kind. He looks worried.",
+   "day": 2,
+   "options": [
+    {
+     "label": "Buy sandbags",
+     "kind": "pay",
+     "money": -8,
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Sandbags! Good for most weather. Not all."
+    },
+    {
+     "label": "Ignore Steve",
+     "kind": "refuse",
+     "effects": {
+      "press": -5,
+      "business": 5
+     },
+     "reaction": "That's what the last mayor did."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "people": -5
+   },
+   "game": {
+    "type": "catch",
+    "theme": "drop",
+    "title": "Bag the rain, dodge the lightning",
+    "flop": "Steve was struck twice. He says it's \"data\".",
+    "bad": "bolt"
+   }
+  },
+  {
+   "id": "evNote",
+   "who": "linda",
+   "text": "Someone slid a note under your door: 'LOOK IN THE BASEMENT.' The handwriting is very neat.",
+   "day": 3,
+   "options": [
+    {
+     "label": "Go and look",
+     "kind": "pay",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "Boxes. Hundreds of boxes. All marked 'DO NOT COUNT'.",
+     "setFlag": "basement"
+    },
+    {
+     "label": "Burn the note",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "A second note arrives. It says 'RUDE.'"
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "press": -5
+   },
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Match the mysterious notes",
+    "flop": "You matched two grocery lists. One says \"BASEMENT\"."
+   }
+  },
+  {
+   "id": "evBear",
+   "who": "marge",
+   "text": "A bear is in my office. It says you two need to talk.",
+   "day": 4,
+   "options": [
+    {
+     "label": "Apologise to the bear",
+     "kind": "pay",
+     "effects": {
+      "press": -10,
+      "people": 5
+     },
+     "reaction": "The bear accepts. It wants a column."
+    },
+    {
+     "label": "Wrestle it for real",
+     "kind": "pay",
+     "money": -10,
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "You lost. But we got photos."
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "flags": [
+     "bearClaim"
+    ]
+   },
+   "ignored": {
+    "press": -10
+   },
+   "game": {
+    "type": "tug",
+    "theme": "bear",
+    "title": "Arm-wrestle the bear",
+    "flop": "The bear won. Then it asked for a rematch. On camera."
+   }
+  },
+  {
+   "id": "evPower",
+   "who": "doug",
+   "text": "The power is out. The town is dark. Chad's mansion is still lit. He has 'a guy'.",
+   "day": 4,
+   "options": [
+    {
+     "label": "Pay Chad's guy",
+     "kind": "pay",
+     "money": -10,
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "The lights are on. The bill says 'guy stuff'."
+    },
+    {
+     "label": "Hand out candles",
+     "kind": "pay",
+     "money": -3,
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Cosy. Also four small fires."
+    },
+    {
+     "label": "Sit in the dark",
+     "kind": "refuse",
+     "effects": {
+      "people": -5,
+      "business": -5
+     },
+     "reaction": "Very atmospheric. Someone has started telling ghost stories."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "people": -5,
+    "business": -5
+   },
+   "game": {
+    "type": "simon",
+    "theme": "bolt",
+    "title": "Rewire the fuse box",
+    "flop": "You rewired the town backwards. The fridges are warm."
+   }
+  },
+  {
+   "id": "evBallots",
+   "who": "linda",
+   "text": "The basement boxes are old ballots. From the last election. Every single one says 'Gerald'.",
+   "day": 5,
+   "options": [
+    {
+     "label": "Tell the town",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "So the goose won. And nobody said.",
+     "setFlag": "foundOut"
+    },
+    {
+     "label": "Put the boxes back",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "You saw nothing. The boxes saw you."
+    }
+   ],
+   "draft": true,
+   "requires": {
+    "flags": [
+     "basement"
+    ]
+   },
+   "ignored": {
+    "press": -5
+   },
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Sort the old ballots",
+    "flop": "They all say Gerald. You sorted them anyway."
+   }
+  },
+  {
+   "id": "evFair",
+   "who": "timmy",
+   "text": "The county fair is here. Timmy entered you in the pie contest. As a pie eater. Against Gerald.",
+   "day": 5,
+   "options": [
+    {
+     "label": "Eat for the town",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "Second place. To a goose. Still, a medal!"
+    },
+    {
+     "label": "Decline politely",
+     "kind": "refuse",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Gerald wins by default. He's unbearable about it."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "people": -5
+   },
+   "game": {
+    "type": "slice",
+    "theme": "pie",
+    "title": "Slice the pies, not the fireworks",
+    "flop": "You sliced a firework. The pie contest is cancelled.",
+    "bad": "bomb"
+   }
+  },
+  {
+   "id": "evDebate",
+   "who": "marge",
+   "text": "Tonight: the mayoral debate. Your opponent is a traffic cone. It is polling well.",
+   "day": 6,
+   "options": [
+    {
+     "label": "Debate with facts",
+     "kind": "pay",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "You won on points. The cone won on charm."
+    },
+    {
+     "label": "Debate with insults",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "'Orange And Empty,' says Mayor. Crowd gasps."
+    }
+   ],
+   "draft": true,
+   "ignored": {
+    "press": -5,
+    "people": -5
+   },
+   "game": {
+    "type": "simon",
+    "theme": "note",
+    "title": "Hit your talking points",
+    "flop": "You said \"orange\" eleven times. The cone looked smug."
+   }
+  },
+  {
    "id": "goosePond",
    "who": "gerald",
    "group": "people",
-   "text": "The Goose Union demands a pond. Inside City Hall. In your office, specifically.",
+   "text": "The Goose Union demands a pond. Inside City Hall. In your office. They've already measured your desk for it.",
    "options": [
     {
      "label": "Build the pond",
@@ -55,11 +372,10 @@
     }
    ],
    "game": {
-    "type": "catch",
+    "type": "snake",
     "theme": "goose",
-    "title": "Herd the geese to the pond",
-    "flop": "Three geese are in your office now. They like it.",
-    "bad": "raccoon"
+    "title": "Lead the geese to the pond",
+    "flop": "You led them into City Hall. They like it there."
    }
   },
   {
@@ -85,7 +401,7 @@
      "effects": {
       "law": 5
      },
-     "reaction": "A rental. Fine. I'm still doing the noises.",
+     "reaction": "A rental. Fine. I'm still doing the noises. Chuka-chuka-chuka.",
      "monthly": -6
     },
     {
@@ -116,10 +432,10 @@
     }
    ],
    "game": {
-    "type": "dodge",
+    "type": "flap",
     "theme": "heli",
-    "title": "Fly the helicopter home",
-    "flop": "You landed on Doug's car. Doug watched.",
+    "title": "Fly the helicopter through town",
+    "flop": "You parked on the church spire. The vicar is furious.",
     "bad": "cloud"
    }
   },
@@ -173,10 +489,10 @@
     }
    ],
    "game": {
-    "type": "dodge",
+    "type": "jump",
     "theme": "car",
-    "title": "Plow the road, miss the snowmen",
-    "flop": "You plowed the bakery. It was not in the road.",
+    "title": "Plow ahead, hop the snowmen",
+    "flop": "You plowed a snowman. It was Steve. He's fine. Cold.",
     "bad": "snow"
    }
   },
@@ -184,7 +500,7 @@
    "id": "libraryCasino",
    "who": "chad",
    "group": "business",
-   "text": "Put a casino in the library. Books are just slow slot machines.",
+   "text": "Put a casino in the library. Books are just slow slot machines. The librarian already counts cards. And people.",
    "options": [
     {
      "label": "Build the casino",
@@ -243,7 +559,7 @@
    "id": "bearStory",
    "who": "marge",
    "group": "press",
-   "text": "The Bugle needs a front page. Can we say you wrestled a bear?",
+   "text": "The Bugle needs a front page. Can we say you wrestled a bear? Not a big one. Medium bear. Believable bear.",
    "options": [
     {
      "label": "Yes, I wrestled a bear",
@@ -290,7 +606,7 @@
   {
    "id": "giantSpoon",
    "who": "linda",
-   "text": "Every great town has a giant something. I have drawings of a spoon. Do not ask why a spoon.",
+   "text": "Every great town has a giant something. I have drawings of a spoon. Don't ask why. The spoon knows why.",
    "options": [
     {
      "label": "Build the spoon",
@@ -408,7 +724,7 @@
    "id": "tvStation",
    "who": "marge",
    "group": "press",
-   "text": "The Bugle wants a TV station. Print is dying. I'd like to watch it happen in colour.",
+   "text": "The Bugle wants a TV station. Print is dying. I'd like to watch it happen in colour, with adverts.",
    "options": [
     {
      "label": "Build the station",
@@ -549,7 +865,7 @@
       "law": -10,
       "people": 5
      },
-     "reaction": "Then I'm standing near them. Menacingly."
+     "reaction": "Then I'm standing near them. Menacingly. With a whistle I'm not afraid to use."
     }
    ],
    "draft": true,
@@ -636,7 +952,7 @@
    "id": "festival",
    "who": "timmy",
    "group": "people",
-   "text": "Can the town have a Frog Day? I already told everyone there's a Frog Day.",
+   "text": "Can the town have a Frog Day? I already told everyone there's a Frog Day. Also the frogs. They're coming.",
    "options": [
     {
      "label": "Fund Frog Day",
@@ -686,11 +1002,10 @@
     }
    ],
    "game": {
-    "type": "catch",
+    "type": "snake",
     "theme": "frog",
-    "title": "Catch the parade frogs",
-    "flop": "Frogs in the police station. Barb isn't laughing.",
-    "bad": "raccoon"
+    "title": "Lead the frog parade",
+    "flop": "The frogs led you. Into the police station."
    }
   },
   {
@@ -748,9 +1063,9 @@
     }
    ],
    "game": {
-    "type": "dodge",
+    "type": "jump",
     "theme": "car",
-    "title": "Drive round Kevin",
+    "title": "Jump Kevin in a hatchback",
     "flop": "Kevin ate the car. And the tow truck. And the plan.",
     "bad": "hole"
    }
@@ -769,7 +1084,7 @@
       "business": 5,
       "people": -10
      },
-     "reaction": "It winks at night too. You'll get used to it.",
+     "reaction": "It winks at night too. It also blinks in morse. It says 'CHAD'.",
      "setFlag": "statue"
     },
     {
@@ -863,11 +1178,10 @@
     }
    ],
    "game": {
-    "type": "whack",
+    "type": "invaders",
     "theme": "raccoon",
-    "title": "Shoo the raccoons",
-    "flop": "They shooed you. You live behind the diner now.",
-    "bad": "goose"
+    "title": "Repel the raccoon invasion",
+    "flop": "They overran the bins. Dave says he wasn't there."
    }
   },
   {
@@ -973,18 +1287,18 @@
     }
    ],
    "game": {
-    "type": "catch",
+    "type": "slice",
     "theme": "carrot",
-    "title": "Catch lunch before it lands",
-    "flop": "Custard on the fish. The children will never forget.",
-    "bad": "raccoon"
+    "title": "Chop lunch, not the fire alarm",
+    "flop": "You chopped the fire alarm. Lunch was outside.",
+    "bad": "bomb"
    }
   },
   {
    "id": "fireworks",
    "who": "timmy",
    "group": "people",
-   "text": "It's my birthday. Can the whole town have fireworks? I told the whole town yes.",
+   "text": "It's my birthday. Can the whole town have fireworks? I told the whole town yes. I'm eight. I'm in charge now.",
    "options": [
     {
      "label": "Fireworks for Timmy",
@@ -1040,7 +1354,7 @@
   {
    "id": "radar",
    "who": "steve",
-   "text": "I need a weather radar. Right now I lick my finger and guess.",
+   "text": "I need a weather radar. Right now I lick my finger and hold it up. My finger is tired. It's seen things.",
    "options": [
     {
      "label": "Buy the radar",
@@ -1216,7 +1530,7 @@
    "id": "speedTrap",
    "who": "barb",
    "group": "law",
-   "text": "Let me hide behind the 'Welcome' sign with a radar gun. Visitors drive so fast.",
+   "text": "Let me hide behind the 'Welcome' sign with a radar gun. I'll wear a bush. I've bought the bush.",
    "options": [
     {
      "label": "Approve the speed trap",
@@ -1331,7 +1645,7 @@
    "id": "gooseStrike",
    "who": "gerald",
    "group": "people",
-   "text": "The geese are on strike. Nobody is eating the bugs. The bugs have noticed.",
+   "text": "The geese are on strike. Nobody is eating the bugs. The bugs have noticed. The bugs are organising.",
    "options": [
     {
      "label": "Meet their demands",
@@ -1607,11 +1921,11 @@
     }
    ],
    "game": {
-    "type": "catch",
+    "type": "slice",
     "theme": "carrot",
-    "title": "Catch the flying carrots",
-    "flop": "You taxed a scarecrow. It has lodged an appeal.",
-    "bad": "raccoon"
+    "title": "Slice the flying carrots",
+    "flop": "You sliced the scarecrow. It has lodged an appeal.",
+    "bad": "bomb"
    }
   },
   {
@@ -1663,10 +1977,11 @@
     }
    ],
    "game": {
-    "type": "tug",
-    "theme": "star",
-    "title": "Coax Sergeant Biscuit out",
-    "flop": "He's hiding behind you now. So is the therapist."
+    "type": "jump",
+    "theme": "dog",
+    "title": "Run Biscuit through the course",
+    "flop": "Biscuit lay down halfway. He has filed a complaint.",
+    "bad": "raccoon"
    }
   },
   {
@@ -1775,17 +2090,16 @@
     }
    ],
    "game": {
-    "type": "whack",
+    "type": "invaders",
     "theme": "ghost",
-    "title": "Catch the ghost on camera",
-    "flop": "You caught Dave. Three times. He asks you to stop.",
-    "bad": "raccoon"
+    "title": "Bust the basement ghosts",
+    "flop": "They possessed the photocopier. It only prints 'BOO'."
    }
   },
   {
    "id": "heatwave",
    "who": "steve",
-   "text": "A heatwave is coming. Or a cold snap. It's one of those. The pool is cracked either way.",
+   "text": "A heatwave is coming. Or a cold snap. It's one of those. Either way, the pool is cracked and full of Doug.",
    "options": [
     {
      "label": "Fix the pool",
@@ -1959,7 +2273,7 @@
    "id": "crossingGuard",
    "who": "pam",
    "group": "people",
-   "text": "The school needs a crossing guard. The only volunteer is Gerald.",
+   "text": "The school needs a crossing guard. The only volunteer is Gerald. He's already bought the hat. It's a tiny hat.",
    "options": [
     {
      "label": "Hire a human",
@@ -2189,18 +2503,18 @@
     }
    ],
    "game": {
-    "type": "whack",
+    "type": "slice",
     "theme": "cheese",
-    "title": "Catch the escaping cheese",
-    "flop": "It's in the sewers now. It's learning.",
-    "bad": "raccoon"
+    "title": "Slice the runaway cheese",
+    "flop": "You sliced a firework. Cheese is now on the moon.",
+    "bad": "bomb"
    }
   },
   {
    "id": "mimeStrike",
    "who": "pam",
    "group": "people",
-   "text": "The town's mimes are on strike. Nobody can tell. They would like you to notice. Loudly.",
+   "text": "The town's mimes are on strike. Nobody can tell. They'd like you to notice. They're pointing at you. Hard.",
    "options": [
     {
      "label": "Notice them, with a banner",
@@ -2504,11 +2818,10 @@
     }
    ],
    "game": {
-    "type": "catch",
-    "theme": "paper",
-    "title": "Catch what the pigeon signs",
-    "flop": "It signed your resignation. Neat handwriting.",
-    "bad": "goose"
+    "type": "invaders",
+    "theme": "pigeon",
+    "title": "Fend off the pigeon cabinet",
+    "flop": "The pigeons voted you out. It was unanimous."
    }
   },
   {
@@ -2563,11 +2876,10 @@
     }
    ],
    "game": {
-    "type": "whack",
+    "type": "invaders",
     "theme": "monster",
     "title": "Photograph the monster",
-    "flop": "Every photo is of a goose. The goose is flattered.",
-    "bad": "goose"
+    "flop": "Every photo is of a goose. The goose is flattered."
    }
   },
   {
@@ -2639,10 +2951,10 @@
     }
    ],
    "game": {
-    "type": "dodge",
+    "type": "flap",
     "theme": "rocket",
-    "title": "Steer the rocket",
-    "flop": "It clipped the school flag. The flag is in orbit.",
+    "title": "Steer the rocket between buildings",
+    "flop": "It went through Doug's kitchen. Doug was making toast.",
     "bad": "cloud"
    }
   },
@@ -2695,18 +3007,17 @@
     }
    ],
    "game": {
-    "type": "catch",
+    "type": "snake",
     "theme": "acorn",
-    "title": "Grab the acorns",
-    "flop": "They grabbed your wallet instead. Fair is fair.",
-    "bad": "raccoon"
+    "title": "Collect the acorn collateral",
+    "flop": "You ate an acorn by accident. That was a payment."
    }
   },
   {
    "id": "opera",
    "who": "marge",
    "group": "press",
-   "text": "The Bugle is staging an opera about you. It's four hours long. You die in act one. The rest is the funeral.",
+   "text": "The Bugle is staging an opera about you. Four hours long. You die in act one. The rest is the funeral. It slaps.",
    "options": [
     {
      "label": "Attend and applaud",
@@ -3177,11 +3488,11 @@
     }
    ],
    "game": {
-    "type": "catch",
-    "theme": "drop",
-    "title": "Bail out Main Street",
-    "flop": "You pumped it uphill. It came back. With friends.",
-    "bad": "frog"
+    "type": "jump",
+    "theme": "kid",
+    "title": "Wade down Main Street",
+    "flop": "You fell in. A duck rescued you. It's charging.",
+    "bad": "drop"
    }
   },
   {
@@ -3246,11 +3557,11 @@
     }
    ],
    "game": {
-    "type": "whack",
+    "type": "slice",
     "theme": "paper",
-    "title": "Grab the loose pages",
-    "flop": "Page ninety got away. Pam has it.",
-    "bad": "goose"
+    "title": "Shred the leaked pages",
+    "flop": "Page ninety got away. Pam has read page ninety.",
+    "bad": "bomb"
    }
   },
   {
@@ -3442,11 +3753,11 @@
     "press": -15
    },
    "game": {
-    "type": "whack",
+    "type": "slice",
     "theme": "paper",
-    "title": "Grab the Bugles before they sell",
-    "flop": "You bought every copy. Marge printed more.",
-    "bad": "goose"
+    "title": "Shred every Bugle in town",
+    "flop": "You shredded Marge's birthday card. Marge noticed.",
+    "bad": "bomb"
    }
   },
   {
@@ -3484,11 +3795,11 @@
     "people": -15
    },
    "game": {
-    "type": "catch",
+    "type": "slice",
     "theme": "icecream",
-    "title": "Catch the ice creams",
-    "flop": "You dropped forty cones. A man lay down again.",
-    "bad": "raccoon"
+    "title": "Scoop ice cream, not dynamite",
+    "flop": "You served dynamite. The kid said it 'tasted spicy'.",
+    "bad": "bomb"
    }
   },
   {
@@ -3610,267 +3921,266 @@
     "flop": "You dropped it. It bounced. That's suspicious.",
     "bad": "raccoon"
    }
-  }
- ],
- "events": [
+  },
   {
-   "id": "evParade",
+   "id": "lawTuesday",
    "who": "pam",
-   "text": "It's Founders' Day. The parade float is a papier-mache you. It's on fire. Slightly.",
-   "day": 1,
+   "text": "It's the day formerly known as Tuesday. Nobody knows what to wear. The bins weren't collected. Bins were Tuesday.",
+   "requires": {
+    "flags": [
+     "law:noTuesday"
+    ]
+   },
    "options": [
     {
-     "label": "Ride the float anyway",
+     "label": "Give it back",
      "kind": "pay",
      "effects": {
-      "people": 5,
-      "law": -5
+      "people": -5,
+      "press": 5
      },
-     "reaction": "You waved the whole time. While smoking."
+     "reaction": "Tuesday's back. People cheered. Then went to work."
     },
     {
-     "label": "Buy a new float",
+     "label": "Rename it Funday",
      "kind": "pay",
-     "money": -8,
      "effects": {
-      "people": 5
+      "people": 10,
+      "business": -5
      },
-     "reaction": "The new you has two eyes the same size."
-    }
-   ],
-   "draft": true,
-   "ignored": {
-    "people": -5
-   }
-  },
-  {
-   "id": "evStorm",
-   "who": "steve",
-   "text": "Stormy Steve predicts 'weather'. He will not say which kind. He looks worried.",
-   "day": 2,
-   "options": [
-    {
-     "label": "Buy sandbags",
-     "kind": "pay",
-     "money": -8,
-     "effects": {
-      "people": 5
-     },
-     "reaction": "Sandbags! Good for most weather. Not all."
+     "reaction": "Funday! Shops are shut. Nobody knows why. It's fun.",
+     "money": -6
     },
     {
-     "label": "Ignore Steve",
+     "label": "Hold firm",
      "kind": "refuse",
      "effects": {
-      "press": -5,
-      "business": 5
-     },
-     "reaction": "That's what the last mayor did."
-    }
-   ],
-   "draft": true,
-   "ignored": {
-    "people": -5
-   }
-  },
-  {
-   "id": "evNote",
-   "who": "linda",
-   "text": "Someone slid a note under your door: 'LOOK IN THE BASEMENT.' The handwriting is very neat.",
-   "day": 3,
-   "options": [
-    {
-     "label": "Go and look",
-     "kind": "pay",
-     "effects": {
-      "press": 5,
+      "people": -5,
       "law": -5
      },
-     "reaction": "Boxes. Hundreds of boxes. All marked 'DO NOT COUNT'.",
-     "setFlag": "basement"
-    },
+     "reaction": "Firm. Like the bins. Which are full."
+    }
+   ],
+   "ignored": {
+    "people": -10
+   },
+   "game": {
+    "type": "simon",
+    "theme": "note",
+    "title": "Teach the new weekday song",
+    "flop": "You sang Tuesday by mistake. Twice."
+   },
+   "draft": true,
+   "group": "people"
+  },
+  {
+   "id": "lawGeese",
+   "who": "barb",
+   "text": "Geese have right of way. So now they direct traffic. Gerald has a whistle. He blows it at me. Specifically me.",
+   "requires": {
+    "flags": [
+     "law:gooseWay"
+    ]
+   },
+   "options": [
     {
-     "label": "Burn the note",
+     "label": "Give Barb a whistle too",
      "kind": "pay",
      "effects": {
       "law": 5,
-      "press": -5
+      "people": -5
      },
-     "reaction": "A second note arrives. It says 'RUDE.'"
-    }
-   ],
-   "draft": true,
-   "ignored": {
-    "press": -5
-   }
-  },
-  {
-   "id": "evBear",
-   "who": "marge",
-   "text": "A bear is in my office. It says you two need to talk.",
-   "day": 4,
-   "options": [
-    {
-     "label": "Apologise to the bear",
-     "kind": "pay",
-     "effects": {
-      "press": -10,
-      "people": 5
-     },
-     "reaction": "The bear accepts. It wants a column."
+     "reaction": "Two whistles. It's war. A very loud war.",
+     "money": -3
     },
     {
-     "label": "Wrestle it for real",
+     "label": "Goose lanes on every road",
      "kind": "pay",
-     "money": -10,
      "effects": {
-      "press": 10,
-      "law": -5
+      "people": 10,
+      "business": -5
      },
-     "reaction": "You lost. But we got photos."
+     "reaction": "The lanes are lovely. They're full of geese. Obviously.",
+     "money": -12
+    },
+    {
+     "label": "Let Gerald run it",
+     "kind": "refuse",
+     "effects": {
+      "law": -10,
+      "people": 5
+     },
+     "reaction": "HONK. (He has promoted himself.)"
     }
    ],
-   "draft": true,
-   "requires": {
-    "flags": [
-     "bearClaim"
-    ]
-   },
    "ignored": {
-    "press": -10
-   }
+    "law": -10
+   },
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Drive to work under goose law",
+    "flop": "You hit a goose. Legally, you're now the goose.",
+    "bad": "goose"
+   },
+   "draft": true,
+   "group": "law"
   },
   {
-   "id": "evPower",
+   "id": "lawHats",
+   "who": "chad",
+   "text": "The tall hat tax has driven my hat abroad. It lives in a tax haven now. It sends postcards. I miss it.",
+   "requires": {
+    "flags": [
+     "law:hatTax"
+    ]
+   },
+   "options": [
+    {
+     "label": "Exempt top hats",
+     "kind": "pay",
+     "effects": {
+      "business": 10,
+      "people": -5
+     },
+     "reaction": "My hat is coming home. I'm having it met at the airport.",
+     "money": -8
+    },
+    {
+     "label": "Tax the postcards",
+     "kind": "pay",
+     "effects": {
+      "business": -5,
+      "press": 5
+     },
+     "reaction": "Monstrous. Effective. Monstrous.",
+     "money": 6
+    },
+    {
+     "label": "Hats are hats",
+     "kind": "refuse",
+     "effects": {
+      "business": -10
+     },
+     "reaction": "Then I'll wear it upside down. As a bowl. Tax THAT."
+    }
+   ],
+   "ignored": {
+    "business": -10
+   },
+   "game": {
+    "type": "catch",
+    "theme": "coin",
+    "title": "Collect the hat tax",
+    "flop": "You taxed a lampshade. It paid.",
+    "bad": "raccoon"
+   },
+   "draft": true,
+   "group": "business"
+  },
+  {
+   "id": "lawDogs",
+   "who": "barb",
+   "text": "A deputy dog has arrested me. For 'being a cat'. I'm not a cat. He's adamant. The paperwork is very good.",
+   "requires": {
+    "flags": [
+     "law:dogDeputies"
+    ]
+   },
+   "options": [
+    {
+     "label": "Overrule the dog",
+     "kind": "pay",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The dog accepts. He's watching me though."
+    },
+    {
+     "label": "Promote the dog",
+     "kind": "pay",
+     "effects": {
+      "law": 10,
+      "press": 5
+     },
+     "reaction": "Sergeant Biscuit is chief now. I report to a dog.",
+     "money": -6
+    },
+    {
+     "label": "Let justice take its course",
+     "kind": "refuse",
+     "effects": {
+      "law": -10,
+      "people": 5
+     },
+     "reaction": "I'm in a cell. It's cosy. Biscuit brought me a stick."
+    }
+   ],
+   "ignored": {
+    "law": -10
+   },
+   "game": {
+    "type": "jump",
+    "theme": "dog",
+    "title": "Chase the deputy dog",
+    "flop": "You fell over. The dog arrested you too.",
+    "bad": "raccoon"
+   },
+   "draft": true,
+   "group": "law"
+  },
+  {
+   "id": "lawSighs",
    "who": "doug",
-   "text": "The power is out. The town is dark. Chad's mansion is still lit. He has 'a guy'.",
-   "day": 4,
-   "options": [
-    {
-     "label": "Pay Chad's guy",
-     "kind": "pay",
-     "money": -10,
-     "effects": {
-      "people": 5,
-      "business": 5
-     },
-     "reaction": "The lights are on. The bill says 'guy stuff'."
-    },
-    {
-     "label": "Hand out candles",
-     "kind": "pay",
-     "money": -3,
-     "effects": {
-      "people": 5,
-      "law": -5
-     },
-     "reaction": "Cosy. Also four small fires."
-    }
-   ],
-   "draft": true,
-   "ignored": {
-    "people": -5,
-    "business": -5
-   }
-  },
-  {
-   "id": "evBallots",
-   "who": "linda",
-   "text": "The basement boxes are old ballots. From the last election. Every single one says 'Gerald'.",
-   "day": 5,
-   "options": [
-    {
-     "label": "Tell the town",
-     "kind": "pay",
-     "effects": {
-      "press": 10,
-      "law": -5
-     },
-     "reaction": "So the goose won. And nobody said.",
-     "setFlag": "foundOut"
-    },
-    {
-     "label": "Put the boxes back",
-     "kind": "pay",
-     "effects": {
-      "law": 5,
-      "press": -5
-     },
-     "reaction": "You saw nothing. The boxes saw you."
-    }
-   ],
-   "draft": true,
+   "text": "Since the sigh tax, nobody sighs. They just... hold it in. The whole town is about to pop. I can feel it.",
    "requires": {
     "flags": [
-     "basement"
+     "law:sighTax"
     ]
    },
-   "ignored": {
-    "press": -5
-   }
-  },
-  {
-   "id": "evFair",
-   "who": "timmy",
-   "text": "The county fair is here. Timmy entered you in the pie contest. As a pie eater. Against Gerald.",
-   "day": 5,
    "options": [
     {
-     "label": "Eat for the town",
+     "label": "Declare a free sigh day",
      "kind": "pay",
      "effects": {
-      "people": 5,
-      "press": 5,
-      "law": -5
+      "people": 10
      },
-     "reaction": "Second place. To a goose. Still, a medal!"
+     "reaction": "Four thousand sighs at noon. A window broke.",
+     "money": -6
     },
     {
-     "label": "Decline politely",
+     "label": "Raise the sigh tax",
+     "kind": "pay",
+     "effects": {
+      "people": -10,
+      "business": -5
+     },
+     "reaction": "Now they sigh in whispers. It's eerie. It's profitable.",
+     "money": 8
+    },
+    {
+     "label": "Sigh for them",
      "kind": "refuse",
      "effects": {
-      "people": -5
-     },
-     "reaction": "Gerald wins by default. He's unbearable about it."
-    }
-   ],
-   "draft": true,
-   "ignored": {
-    "people": -5
-   }
-  },
-  {
-   "id": "evDebate",
-   "who": "marge",
-   "text": "Tonight: the mayoral debate. Your opponent is a traffic cone. It is polling well.",
-   "day": 6,
-   "options": [
-    {
-     "label": "Debate with facts",
-     "kind": "pay",
-     "effects": {
-      "press": 5,
-      "people": -5
-     },
-     "reaction": "You won on points. The cone won on charm."
-    },
-    {
-     "label": "Debate with insults",
-     "kind": "pay",
-     "effects": {
-      "people": 5,
       "press": -5
      },
-     "reaction": "'Orange And Empty,' says Mayor. Crowd gasps."
+     "reaction": "You sighed for an hour. It cost you $360."
     }
    ],
-   "draft": true,
    "ignored": {
-    "press": -5,
-    "people": -5
-   }
+    "people": -10
+   },
+   "game": {
+    "type": "tug",
+    "theme": "star",
+    "title": "Hold in the town's sigh",
+    "flop": "You sighed first. It echoed for a week."
+   },
+   "draft": true
   }
  ],
+ "events": [],
  "campaign": [
   {
    "id": "campaignTruth",
@@ -4308,6 +4618,14 @@
   {
    "tag": "sloppy",
    "text": "Job Done 'Technically', Sources Confirm"
+  },
+  {
+   "tag": "catastrophe",
+   "text": "TOWN SURVIVES DISASTER; MAYOR \"PROBABLY HELPED\""
+  },
+  {
+   "tag": "catastrophe",
+   "text": "CATASTROPHE! (AGAIN)"
   }
  ],
  "decrees": [
@@ -4609,6 +4927,679 @@
    "perMonth": {
     "people": -1
    }
+  }
+ ],
+ "catastrophes": [
+  {
+   "id": "catGoose",
+   "who": "gerald",
+   "text": "THE GREAT GOOSE UPRISING. Ten thousand geese have taken Main Street. They have a flag. They have demands. They have the bakery.",
+   "options": [
+    {
+     "label": "Negotiate with Gerald",
+     "kind": "pay",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "HONK. (Terms accepted. You now owe him a lake.)",
+     "money": -20
+    },
+    {
+     "label": "Send in Barb",
+     "kind": "pay",
+     "effects": {
+      "law": 10,
+      "people": -10,
+      "press": -5
+     },
+     "reaction": "Barb has a megaphone and a broom. It's a stalemate.",
+     "money": -10
+    },
+    {
+     "label": "Let them have the bakery",
+     "kind": "refuse",
+     "effects": {
+      "business": -15,
+      "people": 5
+     },
+     "reaction": "The geese run the bakery now. The bread is mostly feathers."
+    }
+   ],
+   "stages": [
+    {
+     "type": "snake",
+     "theme": "goose",
+     "title": "Round up the first wave",
+     "flop": "The first wave rounded you up instead."
+    },
+    {
+     "type": "invaders",
+     "theme": "goose",
+     "title": "Hold back the flying V",
+     "flop": "They flew through City Hall. In formation."
+    },
+    {
+     "type": "stack",
+     "theme": "brick",
+     "title": "Rebuild the bakery",
+     "flop": "It's a nest now. A very large nest."
+    }
+   ],
+   "ignored": {
+    "people": -15,
+    "business": -15
+   },
+   "major": true,
+   "game": {
+    "type": "snake",
+    "theme": "goose",
+    "title": "Round up the first wave",
+    "flop": "The first wave rounded you up instead."
+   },
+   "draft": true
+  },
+  {
+   "id": "catCheese",
+   "who": "doug",
+   "text": "THE CHEESE VAULT HAS BURST. Four tons of 1987 cheese are rolling downhill toward the school. It has momentum. It has intent.",
+   "options": [
+    {
+     "label": "Build a cracker wall",
+     "kind": "pay",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "A cracker wall. The cheese stopped. It looks hungry.",
+     "money": -25
+    },
+    {
+     "label": "Evacuate and sell tickets",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "people": -15
+     },
+     "reaction": "Front row seats. Splash zone extra.",
+     "money": 15
+    },
+    {
+     "label": "Let it roll",
+     "kind": "refuse",
+     "effects": {
+      "people": -10,
+      "law": -10
+     },
+     "reaction": "It rolled through town and out the other side. Then it came back."
+    }
+   ],
+   "stages": [
+    {
+     "type": "slice",
+     "theme": "cheese",
+     "title": "Cut through the cheese wall",
+     "flop": "You cut a fuse. The cheese now has a fuse.",
+     "bad": "bomb"
+    },
+    {
+     "type": "jump",
+     "theme": "kid",
+     "title": "Leap the cheese wheels",
+     "flop": "A wheel got you. You're a wedge now, emotionally.",
+     "bad": "cheese"
+    },
+    {
+     "type": "catch",
+     "theme": "kid",
+     "title": "Catch the evacuating children",
+     "flop": "You caught a cheese. It's been enrolled.",
+     "bad": "cheese"
+    }
+   ],
+   "ignored": {
+    "people": -15,
+    "law": -15
+   },
+   "major": true,
+   "game": {
+    "type": "slice",
+    "theme": "cheese",
+    "title": "Cut through the cheese wall",
+    "flop": "You cut a fuse. The cheese now has a fuse.",
+    "bad": "bomb"
+   },
+   "draft": true
+  },
+  {
+   "id": "catSinkhole",
+   "who": "barb",
+   "text": "KEVIN HAS GROWN. The pothole is now a sinkhole. It ate the post office. Kevin has a post office now. Kevin is getting mail.",
+   "options": [
+    {
+     "label": "Fill Kevin with concrete",
+     "kind": "pay",
+     "effects": {
+      "business": 10,
+      "law": 5
+     },
+     "reaction": "Kevin is sealed. We can hear him. Sulking.",
+     "money": -30
+    },
+    {
+     "label": "Make Kevin an attraction",
+     "kind": "pay",
+     "effects": {
+      "press": 10,
+      "business": 5,
+      "law": -15
+     },
+     "reaction": "Queues round the block. Two tourists fell in. They're fine. Kevin's fine.",
+     "money": 10
+    },
+    {
+     "label": "Move the town to the left",
+     "kind": "refuse",
+     "effects": {
+      "people": -15,
+      "business": -5
+     },
+     "reaction": "We moved. Kevin followed."
+    }
+   ],
+   "stages": [
+    {
+     "type": "dodge",
+     "theme": "car",
+     "title": "Drive round the cracks",
+     "flop": "You fell into a small Kevin. Kevin Junior.",
+     "bad": "hole"
+    },
+    {
+     "type": "whack",
+     "theme": "hole",
+     "title": "Plug the new holes",
+     "flop": "The holes are winning. They've unionised.",
+     "bad": "car"
+    },
+    {
+     "type": "stack",
+     "theme": "brick",
+     "title": "Rebuild the post office",
+     "flop": "The post office leans into Kevin. Kevin approves."
+    }
+   ],
+   "ignored": {
+    "business": -15,
+    "law": -15
+   },
+   "major": true,
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Drive round the cracks",
+    "flop": "You fell into a small Kevin. Kevin Junior.",
+    "bad": "hole"
+   },
+   "draft": true
+  },
+  {
+   "id": "catRocket",
+   "who": "chad",
+   "text": "MY ROCKET HAS COME BACK. It wasn't supposed to. It's circling the town, beeping. Beeping is bad, right? Asking for me.",
+   "options": [
+    {
+     "label": "Shoot it down",
+     "kind": "pay",
+     "effects": {
+      "law": 10,
+      "business": -10
+     },
+     "reaction": "Barb hit it with a shoe. It worked. Don't ask how.",
+     "money": -20
+    },
+    {
+     "label": "Land it on Chad's house",
+     "kind": "pay",
+     "effects": {
+      "people": 10,
+      "business": -15
+     },
+     "reaction": "Direct hit. Chad wasn't home. His other house was."
+    },
+    {
+     "label": "Ask the pigeon",
+     "kind": "refuse",
+     "effects": {
+      "press": -10,
+      "law": -10
+     },
+     "reaction": "The pigeon flew up and had a word. Unclear what word."
+    }
+   ],
+   "stages": [
+    {
+     "type": "flap",
+     "theme": "heli",
+     "title": "Chase it in the helicopter",
+     "flop": "You chased the moon by mistake. Lovely view.",
+     "bad": "cloud"
+    },
+    {
+     "type": "invaders",
+     "theme": "rocket",
+     "title": "Knock down the debris",
+     "flop": "A bolt landed in the mayor's soup. Your soup."
+    },
+    {
+     "type": "stack",
+     "theme": "brick",
+     "title": "Rebuild what it hit",
+     "flop": "You rebuilt the library upside down. Read from the bottom."
+    }
+   ],
+   "ignored": {
+    "business": -15,
+    "press": -15
+   },
+   "major": true,
+   "game": {
+    "type": "flap",
+    "theme": "heli",
+    "title": "Chase it in the helicopter",
+    "flop": "You chased the moon by mistake. Lovely view.",
+    "bad": "cloud"
+   },
+   "draft": true
+  }
+ ],
+ "initiatives": [
+  {
+   "id": "kissBabies",
+   "who": "pam",
+   "name": "Kiss babies at the market",
+   "text": "Classic politics. Tap the babies. Not the geese. The geese will bite back.",
+   "game": {
+    "type": "whack",
+    "theme": "kid",
+    "title": "Kiss the babies, dodge the geese",
+    "flop": "You kissed a goose. It kissed back. Hard.",
+    "bad": "goose"
+   },
+   "clean": {
+    "text": "Twelve babies, zero geese. Pam wept.",
+    "effects": {
+     "people": 10
+    }
+   },
+   "sloppy": {
+    "text": "Mostly babies.",
+    "effects": {
+     "people": 5
+    }
+   },
+   "flop": {
+    "text": "Front page: MAYOR KISSES GOOSE.",
+    "effects": {
+     "people": -5,
+     "press": -5
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "busk",
+   "who": "doug",
+   "name": "Busk for the budget",
+   "text": "Stand on Main Street and play. Every coin helps. Doug has brought a hat. It's his good hat.",
+   "game": {
+    "type": "simon",
+    "theme": "note",
+    "title": "Play the town anthem",
+    "flop": "You played the bin schedule. Nobody tipped."
+   },
+   "clean": {
+    "text": "A crowd! $15k in the hat.",
+    "money": 15
+   },
+   "sloppy": {
+    "text": "$6k and a button.",
+    "money": 6
+   },
+   "flop": {
+    "text": "You owe a man $4k for \"noise\".",
+    "effects": {
+     "press": -5
+    },
+    "money": -4
+   },
+   "draft": true
+  },
+  {
+   "id": "limoRace",
+   "who": "chad",
+   "name": "Race Chad to the bank",
+   "text": "Chad bets you can't beat his limo to the bank. Winner gets the town's business. Loser buys lunch.",
+   "game": {
+    "type": "jump",
+    "theme": "car",
+    "title": "Race Chad down Main Street",
+    "flop": "You lost to a limo with a chef in it.",
+    "bad": "hole"
+   },
+   "clean": {
+    "text": "You won. Chad is in awe. And in debt.",
+    "effects": {
+     "business": 10
+    },
+    "money": 8
+   },
+   "sloppy": {
+    "text": "A draw. Chad calls it a merger.",
+    "effects": {
+     "business": 5
+    }
+   },
+   "flop": {
+    "text": "You lost. And bought lunch. Lobster.",
+    "effects": {
+     "business": -5
+    },
+    "money": -8
+   },
+   "draft": true
+  },
+  {
+   "id": "rideAlong",
+   "who": "barb",
+   "name": "Ride along with Chief Barb",
+   "text": "Barb's on patrol. She wants you in the car. The siren's been on since Tuesday.",
+   "game": {
+    "type": "dodge",
+    "theme": "car",
+    "title": "Hold the radio, dodge the cones",
+    "flop": "You arrested Barb. She allowed it, then didn't.",
+    "bad": "cone"
+   },
+   "clean": {
+    "text": "Three arrests. One was legitimate.",
+    "effects": {
+     "law": 10
+    }
+   },
+   "sloppy": {
+    "text": "A quiet shift. Barb sang.",
+    "effects": {
+     "law": 5
+    }
+   },
+   "flop": {
+    "text": "You crashed into the station.",
+    "effects": {
+     "law": -5,
+     "press": -5
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "blimp",
+   "who": "marge",
+   "name": "Fly the Bugle blimp",
+   "text": "The Bugle has a blimp. Nobody can fly it. You're the mayor. Marge says that's basically the same thing.",
+   "game": {
+    "type": "flap",
+    "theme": "heli",
+    "title": "Fly the blimp over the fair",
+    "flop": "The blimp now lives in a tree. It seems happy.",
+    "bad": "cloud"
+   },
+   "clean": {
+    "text": "Aerial photos! Front page all week.",
+    "effects": {
+     "press": 10
+    }
+   },
+   "sloppy": {
+    "text": "Blurry photos. Still printed.",
+    "effects": {
+     "press": 5
+    }
+   },
+   "flop": {
+    "text": "You landed on the newsroom.",
+    "effects": {
+     "press": -10
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "gooseParade",
+   "who": "gerald",
+   "name": "Lead the goose parade",
+   "text": "Gerald has asked you, personally, to lead the parade. He's ironed his sash. He's ironed YOUR sash.",
+   "game": {
+    "type": "snake",
+    "theme": "goose",
+    "title": "Lead the geese down Main Street",
+    "flop": "The geese led you. Into the river."
+   },
+   "clean": {
+    "text": "A perfect V down Main Street. Honking, tears.",
+    "effects": {
+     "people": 5,
+     "press": 5
+    }
+   },
+   "sloppy": {
+    "text": "Most of the geese followed.",
+    "effects": {
+     "people": 5
+    }
+   },
+   "flop": {
+    "text": "Geese in the bank. Again.",
+    "effects": {
+     "people": -5,
+     "business": -5
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "pieJudge",
+   "who": "timmy",
+   "name": "Judge the pie contest",
+   "text": "Forty pies. One mayor. Timmy says some of the pies are \"experimental\". He made those.",
+   "game": {
+    "type": "slice",
+    "theme": "pie",
+    "title": "Slice and taste every pie",
+    "flop": "You ate Timmy's experimental pie. It was a firework.",
+    "bad": "bomb"
+   },
+   "clean": {
+    "text": "Every pie tasted. Every baker happy.",
+    "effects": {
+     "people": 5,
+     "business": 5
+    }
+   },
+   "sloppy": {
+    "text": "Most pies tasted.",
+    "effects": {
+     "people": 5
+    }
+   },
+   "flop": {
+    "text": "Hospitalised by pie. Briefly.",
+    "effects": {
+     "people": -10
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "pigeonDefence",
+   "who": "linda",
+   "name": "Defend the town from pigeons",
+   "text": "The pigeons are massing on the library roof. Linda says this is phase two. She won't say what phase one was.",
+   "game": {
+    "type": "invaders",
+    "theme": "pigeon",
+    "title": "Hold the library roof",
+    "flop": "The pigeons took the roof. And the clock."
+   },
+   "clean": {
+    "text": "Roof held. Linda nodded once.",
+    "effects": {
+     "law": 5,
+     "press": 5
+    }
+   },
+   "sloppy": {
+    "text": "A partial victory.",
+    "effects": {
+     "law": 5
+    }
+   },
+   "flop": {
+    "text": "The pigeons have a flag now.",
+    "effects": {
+     "press": -5,
+     "law": -5
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "factoryShake",
+   "who": "chad",
+   "name": "Shake hands at the factory",
+   "text": "Chad wants a photo of you shaking hands with every worker. There are two hundred. Hands are a resource.",
+   "game": {
+    "type": "tug",
+    "theme": "star",
+    "title": "Shake two hundred hands",
+    "flop": "You sprained the foreman."
+   },
+   "clean": {
+    "text": "Two hundred handshakes. A Favor owed.",
+    "effects": {
+     "business": 5
+    },
+    "favors": 1
+   },
+   "sloppy": {
+    "text": "A hundred handshakes.",
+    "effects": {
+     "business": 5
+    }
+   },
+   "flop": {
+    "text": "You shook a forklift.",
+    "effects": {
+     "business": -5
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "phoneIn",
+   "who": "marge",
+   "name": "Host a Town TV phone-in",
+   "text": "You, a phone, and the whole town calling. Marge has the delay button. She won't use it.",
+   "game": {
+    "type": "match",
+    "theme": "paper",
+    "title": "Match callers to their complaints",
+    "flop": "You answered a goose. Live."
+   },
+   "clean": {
+    "text": "Charming! A Favor from the network.",
+    "effects": {
+     "press": 5
+    },
+    "favors": 1
+   },
+   "sloppy": {
+    "text": "Mostly fine.",
+    "effects": {
+     "press": 5
+    }
+   },
+   "flop": {
+    "text": "Someone asked about the basement.",
+    "effects": {
+     "press": -10
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "binPatrol",
+   "who": "dave",
+   "name": "Patrol the bins at night",
+   "text": "Dave says the bins need watching. He says this from inside a bin. He suggests you do the other bins.",
+   "game": {
+    "type": "whack",
+    "theme": "raccoon",
+    "title": "Shoo the raccoons, spare the kids",
+    "flop": "You shooed a child. He was taking out the bins.",
+    "bad": "kid"
+   },
+   "clean": {
+    "text": "Not one bin raided. Dave seemed... disappointed.",
+    "effects": {
+     "law": 5
+    },
+    "money": 5
+   },
+   "sloppy": {
+    "text": "Some bins raided.",
+    "effects": {
+     "law": 5
+    }
+   },
+   "flop": {
+    "text": "The raccoons now run the bins. Dave won't comment.",
+    "effects": {
+     "people": -5
+    }
+   },
+   "draft": true
+  },
+  {
+   "id": "funRun",
+   "who": "pam",
+   "name": "Run the charity fun run",
+   "text": "The PTA fun run. 5k. You said \"fun\" in an interview. They took that personally.",
+   "game": {
+    "type": "jump",
+    "theme": "kid",
+    "title": "Finish the fun run",
+    "flop": "You finished last. Behind a man in a cheese costume.",
+    "bad": "hole"
+   },
+   "clean": {
+    "text": "Finished! $8k raised.",
+    "effects": {
+     "people": 5
+    },
+    "money": 8
+   },
+   "sloppy": {
+    "text": "Finished. Walked a bit.",
+    "money": 4
+   },
+   "flop": {
+    "text": "Taken away on a stretcher. A slow one.",
+    "effects": {
+     "people": -5
+    },
+    "money": -4
+   },
+   "draft": true
   }
  ]
 }

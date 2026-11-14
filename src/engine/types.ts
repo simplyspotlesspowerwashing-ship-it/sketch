@@ -36,7 +36,7 @@ export interface Option {
   gamble?: { chance: number; win: Outcome_; lose: Outcome_ };
 }
 
-export type GameId = 'catch' | 'dodge' | 'whack' | 'match' | 'stack' | 'simon' | 'tug';
+export type GameId = 'catch' | 'dodge' | 'whack' | 'match' | 'stack' | 'simon' | 'tug' | 'flap' | 'jump' | 'snake' | 'slice' | 'invaders';
 /** The mini-game every desk card is played through. There is no upside: a clean job gives exactly the trade
  *  you chose, a sloppy one costs extra, a flop costs more. */
 export interface CardGame {
@@ -69,6 +69,7 @@ export interface Decree {
 export interface Outcome_ {
   text: string;
   money?: number;
+  favors?: number;
   effects?: Effects;
   setFlag?: string;
 }
@@ -85,6 +86,9 @@ export interface Card {
   ignored?: Effects & { setFlag?: string };
   advisors?: { who: CharacterId; line: string }[];
   game?: CardGame; // desk cards
+  /** A catastrophe: played through three games in a row, with far heavier penalties across every group. */
+  major?: boolean;
+  stages?: CardGame[];
   rare?: boolean;
   secret?: boolean;
   repeatable?: boolean; // conditional cards fire once unless set
@@ -126,11 +130,26 @@ export interface DaveOutcome {
   effects?: Effects;
 }
 
+/** Something the mayor chooses to go and do between the two desks. Unlike a card, doing it well pays. */
+export interface Initiative {
+  id: string;
+  who: CharacterId;
+  name: string; // max 34 chars
+  text: string; // max 120 chars
+  game: CardGame;
+  clean: Outcome_;
+  sloppy: Outcome_;
+  flop: Outcome_;
+  draft?: boolean;
+}
+
 export interface WeekPack {
   id: string;
   title: string;
   cards: Card[]; // desk cards: fixed (day+month), pool (neither), conditional (requires)
   events: Card[]; // one per day, `day` set
+  initiatives: Initiative[]; // three are offered each midday (same three for everyone)
+  catastrophes: Card[]; // two strike each week, on the days in TUNING.catastropheDays
   decrees: Decree[]; // three are offered each morning (same three for everyone)
   campaign: Card[]; // first whose `requires` holds is used; last is the default
   objectives: Objective[]; // completing sets flag `obj:<id>` (secret cards require it)
@@ -154,12 +173,13 @@ export interface Profile {
   perk: PerkId;
 }
 
-export type Phase = 'decree' | 'promises' | 'desk' | 'event' | 'report' | 'dayEnd' | 'campaign' | 'results';
+export type Phase = 'initiative' | 'decree' | 'promises' | 'desk' | 'event' | 'report' | 'dayEnd' | 'campaign' | 'results';
 
 export interface DeskSlot {
   cardId: string;
   status: 'open' | 'done' | 'dave' | 'ignored';
   urgent?: boolean; // a bad job here costs double
+  major?: boolean; // catastrophe
   /** Why this card is on the desk: 'shared' (everyone gets it today), 'low:<group>' (that group is your weakest),
    *  'choice' (follows from something you did), 'crisis' (late-week), 'town' (general). */
   why?: string;
@@ -206,7 +226,7 @@ export interface Result {
 }
 
 export interface State {
-  v: 5; // bump when the state shape changes; older saves start a fresh term
+  v: 6; // bump when the state shape changes; older saves start a fresh term
   weekId: string;
   playerSeed: string;
   day: number; // 1..6 governing, 7 = Sunday
@@ -241,6 +261,8 @@ export interface State {
   decrees: string[]; // enacted this term
   decreeOffer: string[]; // what is still on offer today
   decreesToday: number;
+  initiativeOffer: string[];
+  initiativesDone: string[];
   profile: Profile | null; // set by the town setup; null until the player has done it
   daveDays: number[]; // days Deputy Dave governed while the player was away
   result: Result | null;
@@ -248,6 +270,8 @@ export interface State {
 
 export type Action =
   | { type: 'choose'; cardId: string; option: number; skill?: Skill } // desk, event or campaign card
+  | { type: 'initiative'; id: string; skill?: Skill }
+  | { type: 'skipInitiative' }
   | { type: 'decree'; id: string }
   | { type: 'skipDecree' }
   | { type: 'delegate'; cardId: string }

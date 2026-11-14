@@ -2,7 +2,8 @@
 // reachable, that the game ends on time, and to take a mid-game screenshot.
 //   node e2e/games.cjs <url> <screenshot-dir> [idle]     ("idle" = no input, to check the flop path)
 const { chromium } = require('playwright');
-const CARDS = { catch: 'goosePond', dodge: 'helicopter', whack: 'raccoonBins', match: 'buglePress', stack: 'newSchool', simon: 'tvStation', tug: 'bearStory' };
+const CARDS = { catch: 'parkingMeters', dodge: 'mallParking', whack: 'curfew', match: 'buglePress', stack: 'newSchool', simon: 'tvStation', tug: 'bearStory', flap: 'helicopter', jump: 'pothole', snake: 'goosePond', slice: 'cheeseVault', invaders: 'raccoonBins' };
+const only = process.env.ONLY ? process.env.ONLY.split(',') : null;
 (async () => {
   const [url, out, mode] = process.argv.slice(2);
   const b = await chromium.launch();
@@ -10,6 +11,7 @@ const CARDS = { catch: 'goosePond', dodge: 'helicopter', whack: 'raccoonBins', m
   const errs = []; pg.on('pageerror', (e) => errs.push(String(e)));
   await pg.goto(url);
   for (const [type, cardId] of Object.entries(CARDS)) {
+    if (only && !only.includes(type)) continue;
     await pg.evaluate((cardId) => {
       const sv = JSON.parse(localStorage.getItem('badtown.save')); const s = sv.state;
       s.phase = 'desk'; s.duePromises = []; s.decreeOffer = []; s.money = 300; s.projects = []; s.favors = 2;
@@ -21,15 +23,16 @@ const CARDS = { catch: 'goosePond', dodge: 'helicopter', whack: 'raccoonBins', m
     await pg.locator('.paper').first().click();
     if (type === 'catch') await pg.screenshot({ path: out + '/card.png' });
     await pg.locator('.sheet .option:not([disabled])').first().click();
-    await pg.waitForSelector('.clip'); await pg.waitForTimeout(900);
-    if (type === 'catch') await pg.screenshot({ path: out + '/clip.png' });
+    await pg.waitForSelector('.clip'); await pg.waitForTimeout(1900);
+    if (type === 'snake') await pg.screenshot({ path: out + '/clip.png' });
+    await pg.locator('.clip').click().catch(() => {});
     await pg.waitForSelector('.mg .btn.primary', { timeout: 6000 });
     await pg.locator('.mg .btn.primary').click();
     const t0 = Date.now();
     await pg.waitForSelector('.mg-hud', { timeout: 6000 });
     let shot = false, peek = null, seq = [], lastLit = -1, entered = 0;
     while (!(await pg.locator('.mg-result').count()) && Date.now() - t0 < 50000) {
-      if (!shot && Date.now() - t0 > 7000) { await pg.screenshot({ path: `${out}/${type}.png` }); shot = true; }
+      if (!shot && Date.now() - t0 > 9000) { await pg.screenshot({ path: `${out}/${type}.png` }); shot = true; }
       if (mode === 'idle') { await pg.waitForTimeout(100); continue; }
       if (type === 'catch') {
         const box = await pg.locator('.mg-arena').boundingBox({ timeout: 500 }).catch(() => null);
@@ -55,6 +58,44 @@ const CARDS = { catch: 'goosePond', dodge: 'helicopter', whack: 'raccoonBins', m
         const st = await pg.evaluate(() => ({ lit: [...document.querySelectorAll('.mg-padbtn')].findIndex((e) => e.classList.contains('lit')), watching: document.querySelector('.mg-padbtn').disabled }));
         if (st.watching) { if (st.lit !== lastLit) { if (st.lit >= 0) seq.push(st.lit); lastLit = st.lit; } entered = 0; }
         else if (entered < seq.length) { await pg.locator('.mg-padbtn').nth(seq[entered]).dispatchEvent('pointerdown'); entered++; await pg.waitForTimeout(150); if (entered === seq.length) { seq = []; lastLit = -1; await pg.waitForTimeout(250); } }
+      } else if (type === 'flap') {
+        const st = await pg.evaluate(() => {
+          const me = document.querySelector('.mg-ent.me'); const y = parseFloat(me.style.top);
+          let target = 50, best = 999;
+          for (const p of document.querySelectorAll('.mg-pipe.top')) { const x = parseFloat(p.style.left); if (x > 10 && x < best) { best = x; target = parseFloat(p.style.height) + 18; } }
+          return { y, target };
+        });
+        if (st.y > st.target + 3) await pg.locator('.mg-arena').dispatchEvent('pointerdown');
+      } else if (type === 'jump') {
+        const near = await pg.evaluate(() => [...document.querySelectorAll('.mg-ent:not(.me):not(.gone)')].some((e) => { const x = parseFloat(e.style.left); return x > 22 && x < 36; }));
+        if (near) await pg.locator('.mg-arena').dispatchEvent('pointerdown');
+      } else if (type === 'snake') {
+        const key = await pg.evaluate(() => {
+          const N = 11, a = document.querySelector('.mg-arena.snake');
+          const segs = [...a.querySelectorAll('.mg-seg')].map((e) => [Math.round(parseFloat(e.style.left) / (100 / N)), Math.round(parseFloat(e.style.top) / (100 / N))]);
+          const f = a.querySelector('.food'); const fx = Math.floor(parseFloat(f.style.left) / (100 / N)), fy = Math.floor(parseFloat(f.style.top) / (100 / N));
+          const [hx, hy] = segs[0];
+          const moves = [['ArrowUp', 0, -1], ['ArrowDown', 0, 1], ['ArrowLeft', -1, 0], ['ArrowRight', 1, 0]];
+          const safe = moves.filter(([, dx, dy]) => { const x = hx + dx, y = hy + dy; return x >= 0 && y >= 0 && x < N && y < N && !segs.slice(0, -1).some(([sx, sy]) => sx === x && sy === y) && !(segs[1] && segs[1][0] === x && segs[1][1] === y); });
+          safe.sort((m1, m2) => (Math.abs(hx + m1[1] - fx) + Math.abs(hy + m1[2] - fy)) - (Math.abs(hx + m2[1] - fx) + Math.abs(hy + m2[2] - fy)));
+          return safe[0] ? safe[0][0] : null;
+        });
+        if (key) await pg.keyboard.press(key);
+        await pg.waitForTimeout(60);
+      } else if (type === 'slice') {
+        const box = await pg.locator('.mg-arena').boundingBox({ timeout: 500 }).catch(() => null);
+        const pts = await pg.evaluate(() => [...document.querySelectorAll('.mg-arena.dojo .mg-ent:not(.cut):not([data-bad])')].map((e) => [parseFloat(e.style.left), parseFloat(e.style.top)]).filter(([, y]) => y > 8 && y < 92));
+        if (box) for (const [x, y] of pts) { await pg.mouse.move(box.x + box.width * x / 100, box.y + box.height * y / 100); await pg.mouse.down(); await pg.mouse.up(); }
+      } else if (type === 'invaders') {
+        const box = await pg.locator('.mg-arena').boundingBox({ timeout: 500 }).catch(() => null);
+        const x = await pg.evaluate(() => {
+          const me = parseFloat(document.querySelector('.cannon').style.left);
+          const danger = [...document.querySelectorAll('.mg-drop')].filter((d) => parseFloat(d.style.top) > 60 && Math.abs(parseFloat(d.style.left) - me) < 9);
+          const foes = [...document.querySelectorAll('.mg-ent.march')].map((e) => parseFloat(e.style.left));
+          if (danger.length) return me + (me > 50 ? -14 : 14);
+          return foes.length ? foes.reduce((a, b) => (Math.abs(b - me) < Math.abs(a - me) ? b : a)) : me;
+        });
+        if (box) { await pg.mouse.move(box.x + box.width * x / 100, box.y + box.height * 0.85); await pg.mouse.down(); await pg.mouse.up(); }
       } else if (type === 'tug') {
         if (await pg.locator('.mg-big.go').count()) await pg.locator('.mg-big').dispatchEvent('pointerdown').catch(() => {});
       }

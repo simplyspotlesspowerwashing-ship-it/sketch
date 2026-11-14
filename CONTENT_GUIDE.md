@@ -49,12 +49,16 @@ An option may carry `gamble: { chance, win, lose }`. Both outcomes are shown bef
 
 Every desk card needs `game: { type, theme, bad?, title, flop }`.
 
-- `type`: `catch` (slide a basket), `dodge` (three lanes), `whack` (tap the right ones), `match` (pairs), `stack` (drop pieces), `simon` (repeat signals), `tug` (tap on green).
+- `type`: `catch` (slide a basket), `dodge` (three lanes), `whack` (tap the right ones), `match` (pairs), `stack` (drop pieces), `simon` (repeat signals), `tug` (tap on green), `flap` (tap to fly through gaps), `jump` (runner), `snake` (steer and collect), `slice` (swipe, avoid bombs), `invaders` (move and shoot).
 - `theme` is the sprite the player handles; `bad` is the one to avoid (catch, dodge, whack). Sprites are in `src/ui/art.tsx`.
 - `title` (max 40) is the job, written as something the mayor physically does: "Herd the geese to the pond".
 - `flop` (max 90) is the comic line when it goes wrong.
 - The game should be the card. If the card is about geese, the player handles geese.
 - Every card also needs one option that costs no money or Favors up front, so the desk can always be cleared.
+
+## Catastrophes and midday activities
+
+A catastrophe is a card with `major: true` and `stages` (three games). Its options should all hurt; the games decide how much more. Midday activities (`initiatives`) have a `game` and three outcomes, `clean`, `sloppy` and `flop`, and should be things the mayor chooses to go and do.
 
 ## Decrees
 

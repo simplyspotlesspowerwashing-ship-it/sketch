@@ -12,7 +12,11 @@ export const TUNING = {
   daveCost: 1, // Favors to send Dave instead of playing
   decreesOffered: 4,
   decreesPerDay: 2,
-  sharedPerDay: 3, // the first desk of the day is the same three cards for every mayor
+  sharedPerDay: 3,
+  initiativesOffered: 3,
+  catastropheDays: [3, 6], // Wednesday and Saturday
+  // Catastrophe penalties hit every group.
+  majorBotch: { sloppy: { approval: -5, money: -10 }, flop: { approval: -10, money: -25 } }, // the first desk of the day is the same three cards for every mayor
   lateCrisisFromMonth: 7, // from here a second URGENT card can land on the desk each month
   setup: { base: 8, rival: -4, chest: 30, friends: 2 },
   months: 12,
@@ -31,7 +35,7 @@ export const TUNING = {
   bankruptAt: -50,
   recall: { approval: 40, money: 20, election: -8, max: 2 },
   // Every group loses this much approval each month: the honeymoon fades. FADE env var overrides for experiments.
-  fade: Number(globalThis.process?.env?.FADE ?? 2.5),
+  fade: Number(globalThis.process?.env?.FADE ?? 2.75),
   // Rubber band: the fade grows by this much per approval point above 50 and shrinks below 50 (never under 0).
   fadeSlope: Number(globalThis.process?.env?.FADEK ?? 0.1),
   fadeMax: 7,

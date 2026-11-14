@@ -20,7 +20,7 @@ for (let i = 0; i < N; i++) {
   const end = autoplay(setup(newTerm(content.pack.id, `crowd-${i}`, content), i), mix[i % mix.length]!, content, () => false);
   shares.push(end.result!.share);
   for (const h of end.history) {
-    if (typeof h.choice !== 'number') continue;
+    if (typeof h.choice !== 'number' || h.cardId.startsWith('init:')) continue;
     (cards[h.cardId] ??= [])[h.choice] = ((cards[h.cardId] ?? [])[h.choice] ?? 0) + 1;
   }
 }

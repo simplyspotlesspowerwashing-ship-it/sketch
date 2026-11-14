@@ -88,7 +88,7 @@ describe('desk', () => {
   });
   it('injects the escalation card once its flag is set', () => {
     let s = withDesk(start(), 'goosePond');
-    s = play(s, { type: 'choose', cardId: 'goosePond', option: 2, skill: 2 }, { type: 'endDesk' }, { type: 'next' });
+    s = play(s, { type: 'choose', cardId: 'goosePond', option: 2, skill: 2 }, { type: 'endDesk' }, { type: 'next' }, { type: 'skipInitiative' });
     expect(s.month).toBe(2);
     expect(s.desk.find((d) => d.cardId === 'gooseOccupation')?.urgent).toBe(true);
   });
@@ -146,7 +146,7 @@ describe('month end', () => {
 
 describe('the day', () => {
   /** Finish the current day's two months with an empty desk. */
-  const finishDay = (s: State) => play(withDesk(s), { type: 'endDesk' }, { type: 'next' }, ...([] as Action[]));
+  const finishDay = (s: State) => play(withDesk(s), { type: 'endDesk' }, { type: 'next' }, { type: 'skipInitiative' });
   it('runs cards first, then the Mayor\'s Hour, then the poll', () => {
     let s = finishDay(start()); // month 2 desk
     expect(s.month).toBe(2);
@@ -174,7 +174,7 @@ describe('the day', () => {
     expect(a.desk.every((d) => d.why === 'shared')).toBe(true);
   });
   it("your town's three come from your weakest groups and your own choices", () => {
-    const second = (approval: State['approval'], flags: State['flags'] = {}) => play(withDesk({ ...start(), approval, flags }), { type: 'endDesk' }, { type: 'next' }).desk;
+    const second = (approval: State['approval'], flags: State['flags'] = {}) => play(withDesk({ ...start(), approval, flags }), { type: 'endDesk' }, { type: 'next' }, { type: 'skipInitiative' }).desk;
     const lawless = second({ people: 60, business: 60, law: 20, press: 60 });
     expect(lawless.map((d) => findCard(content, d.cardId).group)).toContain('law');
     expect(lawless.some((d) => d.why === 'low:law')).toBe(true);
@@ -193,17 +193,49 @@ describe('the day', () => {
     expect(s.reports[0]!.decrees).toBe(6);
     expect(s.approval.people).toBe(49);
   });
-  it('the shared daily event follows the first month and plays no game', () => {
-    let s = reduce(newTerm('week1', 'p1', week1Content), { type: 'endDesk' }, week1Content);
-    expect(s.phase).toBe('event');
-    s = reduce(s, { type: 'choose', cardId: 'evParade', option: 1 }, week1Content);
-    expect(s.phase).toBe('report');
+  it("the day's own card (the old daily event) leads today's three, and every desk card has a game", () => {
+    const s = start();
+    expect(s.desk[0]!.cardId).toBe('evParade');
+    expect(s.desk).toHaveLength(3);
+    expect(s.phase).toBe('desk');
+  });
+  it('midday offers three activities; doing one well pays, a flop costs', () => {
+    const noon = play(withDesk(start()), { type: 'endDesk' }, { type: 'next' });
+    expect(noon.phase).toBe('initiative');
+    expect(noon.initiativeOffer).toHaveLength(3);
+    const id = noon.initiativeOffer[0]!;
+    const it = content.pack.initiatives.find((x) => x.id === id)!;
+    const clean = play(noon, { type: 'initiative', id, skill: 2 });
+    const flop = play(noon, { type: 'initiative', id, skill: 0 });
+    expect(clean.phase).toBe('desk');
+    expect(clean.month).toBe(2);
+    expect(clean.money).toBe(noon.money + (it.clean.money ?? 0));
+    expect(flop.money).toBe(noon.money + (it.flop.money ?? 0));
+    expect(play(noon, { type: 'skipInitiative' }).phase).toBe('desk');
+  });
+  it('a catastrophe strikes on Wednesday and Saturday, the same for everyone, and Dave cannot take it', () => {
+    const wed = coverMissedDays(start('a'), content, 3);
+    const cat = wed.desk.find((d) => d.major)!;
+    expect(cat).toBeTruthy();
+    expect(wed.desk).toHaveLength(4);
+    expect(coverMissedDays(start('b'), content, 3).desk.find((d) => d.major)!.cardId).toBe(cat.cardId);
+    expect(legalActions(wed, content).some((a) => a.type === 'delegate' && a.cardId === cat.cardId)).toBe(false);
+    const card = findCard(content, cat.cardId);
+    expect(card.stages).toHaveLength(3);
+    const c = botchCost(card, 0);
+    expect(Object.keys(c.effects)).toHaveLength(4);
+    expect(c.money).toBeLessThan(-10);
+    expect(coverMissedDays(start('a'), content, 2).desk.some((d) => d.major)).toBe(false);
+  });
+  it('an enacted decree can bring a follow-up card', () => {
+    const s = play(withDesk({ ...start(), flags: { 'law:gooseWay': true } }), { type: 'endDesk' }, { type: 'next' }, { type: 'skipInitiative' });
+    expect(s.desk.find((d) => d.cardId === 'lawGeese')).toMatchObject({ why: 'choice', urgent: true });
   });
 });
 
 describe('promises', () => {
   const promised = () => {
-    let s = play(withDesk(start(), 'festival'), { type: 'choose', cardId: 'festival', option: 1, skill: 2 }, { type: 'endDesk' }, { type: 'next' });
+    let s = play(withDesk(start(), 'festival'), { type: 'choose', cardId: 'festival', option: 1, skill: 2 }, { type: 'endDesk' }, { type: 'next' }, { type: 'skipInitiative' });
     s = play(withDesk(s), { type: 'endDesk' }, { type: 'next' }, { type: 'skipDecree' }, { type: 'next' }); // day 2, month 3
     return s;
   };
