@@ -94,16 +94,26 @@ function addFavors(s: State, n: number) {
   s.favors = clamp(s.favors + n, 0, TUNING.favorCap);
 }
 
-/** Recall: any group at 0 or money below the bankruptcy line. Returns true if the term ended. */
+/** Why a recall would happen right now, or null. Both ends are dangerous: a group at 0 throws you out,
+ *  and a group at 100 loves you so much it carries you off. */
+export function recallCause(s: State): string | null {
+  for (const g of GROUPS) if (s.approval[g] <= 0) return `low:${g}`;
+  if (s.money < TUNING.bankruptAt) return 'bankrupt';
+  for (const g of GROUPS) if (s.approval[g] >= TUNING.recall.high) return `high:${g}`;
+  return null;
+}
+
+/** Recall: returns true if the term ended. */
 function checkRecall(s: State, content: Content, rng: Rng): boolean {
-  const zero = GROUPS.some((g) => s.approval[g] <= 0);
-  if (!zero && s.money >= TUNING.bankruptAt) return false;
+  const cause = recallCause(s);
+  if (!cause) return false;
   s.recalls += 1;
+  s.recallCauses.push(cause);
+  const end = content.pack.endings[cause];
   const endings = content.pack.recallEndings;
-  const pick = Math.floor(rng(`${s.weekId}|recall|${s.recalls}`)() * endings.length);
-  s.lastRecall = endings[pick] ?? 'You have been recalled.';
+  s.lastRecall = end ? `${end.title}. ${end.text}` : endings[Math.floor(rng(`${s.weekId}|recall|${s.recalls}`)() * endings.length)] ?? 'You have been recalled.';
   s.monthTags.push('recall');
-  s.flags[s.money < TUNING.bankruptAt ? 'wentBankrupt' : 'wasRecalled'] = true;
+  s.flags[cause === 'bankrupt' ? 'wentBankrupt' : 'wasRecalled'] = true;
   for (const g of GROUPS) s.approval[g] = TUNING.recall.approval;
   s.money = TUNING.recall.money;
   if (s.recalls > TUNING.recall.max) {
@@ -124,6 +134,7 @@ function applyOption(s: State, card: Card, index: number, content: Content) {
     s.flags[`built${s.projects.length}`] = true; // objectives can require e.g. flag "built2"
   }
   if (o.monthly) s.leases.push({ cardId: card.id, monthly: o.monthly });
+  if (o.lasting) { s.lasting = s.lasting.filter((l) => l.id !== o.lasting!.id); s.lasting.push({ ...o.lasting, until: s.month + o.lasting.months }); }
   if (o.promise) {
     s.promises.push({
       id: `${card.id}@${s.month}`,
@@ -250,6 +261,7 @@ function closeMonth(s: State, content: Content, rng: Rng) {
   for (const l of s.leases) report.projects += l.monthly;
   const enacted = content.pack.decrees.filter((d) => s.decrees.includes(d.id));
   for (const d of enacted) report.decrees += d.monthly ?? 0;
+  for (const l of s.lasting) report.decrees += l.money ?? 0;
   s.money += report.income + report.projects + report.decrees;
 
   // Drift
@@ -261,6 +273,8 @@ function closeMonth(s: State, content: Content, rng: Rng) {
   for (const g of GROUPS) add({ [g]: -fadeFor(s.approval[g]) });
   for (const p of s.projects) add(content.projects[p.id]!.perMonth);
   for (const d of enacted) add(d.perMonth);
+  for (const l of s.lasting) add(l.perMonth);
+  s.lasting = s.lasting.filter((l) => l.until > s.month + 1); // a 3-month effect ticks exactly three times
   applyEffects(s, drift);
   report.drift = drift;
 
@@ -324,12 +338,12 @@ function finish(s: State, endedEarly: boolean) {
 export function newTerm(weekId: string, playerSeed: string, content: Content, rng: Rng = seededRng): State {
   const a = TUNING.startApproval;
   const s: State = {
-    v: 6, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
+    v: 7, weekId, playerSeed, day: 1, month: 1, phase: 'desk',
     money: TUNING.startMoney, favors: TUNING.startFavors,
     approval: { people: a, business: a, law: a, press: a },
     tax: 'medium', actionsLeft: 0, delegationsThisMonth: 0, protestNext: false,
     desk: [], eventId: null, projects: [], leases: [], promises: [], duePromises: [], brokenPromises: 0,
-    recalls: 0, lastRecall: null, flags: {}, objectivesDone: [], combosDone: [], usedCards: [], poolCursor: 0,
+    recalls: 0, lastRecall: null, recallCauses: [], lasting: [], flags: {}, objectivesDone: [], combosDone: [], usedCards: [], poolCursor: 0,
     monthTags: [], history: [], reports: [], polls: [], campaignEffect: 0, decrees: [], decreeOffer: [], decreesToday: 0, initiativeOffer: [], initiativesDone: [], profile: null, daveDays: [], result: null,
   };
   startMonth(s, content, rng);

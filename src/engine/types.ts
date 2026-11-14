@@ -32,6 +32,8 @@ export interface Option {
   reaction: string;
   headlineTag?: string;
   campaign?: number; // Sunday campaign card only: added to vote share
+  /** An effect that keeps ticking each month for a while (a feud, a fan club, a deal). */
+  lasting?: Lasting;
   /** A visible gamble: `chance` percent to win. Both outcomes are shown before choosing; they apply on top of the option's own costs. */
   gamble?: { chance: number; win: Outcome_; lose: Outcome_ };
 }
@@ -64,6 +66,20 @@ export interface Decree {
   reaction: string;
   headlineTag?: string;
   draft?: boolean;
+}
+
+export interface Lasting {
+  id: string;
+  name: string; // max 28
+  months: number;
+  perMonth?: Effects;
+  money?: number; // per month
+}
+
+/** A named way for a term to end or a recall to happen. Collected across weeks in the scrapbook. */
+export interface Ending {
+  title: string; // max 40
+  text: string; // max 160
 }
 
 export interface Outcome_ {
@@ -155,6 +171,8 @@ export interface WeekPack {
   objectives: Objective[]; // completing sets flag `obj:<id>` (secret cards require it)
   cliffhangers: string[];
   recallEndings: string[];
+  /** Keyed by cause: low:<group>, high:<group>, bankrupt. Used for recalls and shown in the scrapbook. */
+  endings: Record<string, Ending>;
   dave: { outcomes: DaveOutcome[]; absence: string[] };
   headlines: { tag: string; text: string }[];
 }
@@ -226,7 +244,7 @@ export interface Result {
 }
 
 export interface State {
-  v: 6; // bump when the state shape changes; older saves start a fresh term
+  v: 7; // bump when the state shape changes; older saves start a fresh term
   weekId: string;
   playerSeed: string;
   day: number; // 1..6 governing, 7 = Sunday
@@ -248,6 +266,8 @@ export interface State {
   brokenPromises: number;
   recalls: number;
   lastRecall: string | null;
+  recallCauses: string[];
+  lasting: (Lasting & { until: number })[];
   flags: Record<string, true>;
   objectivesDone: string[];
   combosDone: string[];

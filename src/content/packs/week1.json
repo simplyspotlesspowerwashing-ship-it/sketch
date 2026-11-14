@@ -570,7 +570,15 @@
      },
      "reaction": "Wonderful. Did you win? Never mind, you won.",
      "setFlag": "bearClaim",
-     "headlineTag": "bear"
+     "headlineTag": "bear",
+     "lasting": {
+      "id": "bearFame",
+      "name": "Bear legend",
+      "months": 4,
+      "perMonth": {
+       "press": 2
+      }
+     }
     },
     {
      "label": "Tell the truth",
@@ -846,7 +854,16 @@
       "law": 10,
       "people": -10
      },
-     "reaction": "Order. Beautiful, quiet order."
+     "reaction": "Order. Beautiful, quiet order.",
+     "lasting": {
+      "id": "teenSulk",
+      "name": "The teens are sulking",
+      "months": 4,
+      "perMonth": {
+       "people": -2,
+       "law": 1
+      }
+     }
     },
     {
      "label": "Fund a youth centre",
@@ -904,7 +921,15 @@
       "business": 10,
       "people": -5
      },
-     "reaction": "A pleasure doing business with the public."
+     "reaction": "A pleasure doing business with the public.",
+     "lasting": {
+      "id": "chadOwes",
+      "name": "Chad owes you one",
+      "months": 4,
+      "perMonth": {
+       "business": 2
+      }
+     }
     },
     {
      "label": "Trade it for a donation",
@@ -1085,7 +1110,16 @@
       "people": -10
      },
      "reaction": "It winks at night too. It also blinks in morse. It says 'CHAD'.",
-     "setFlag": "statue"
+     "setFlag": "statue",
+     "lasting": {
+      "id": "statueWink",
+      "name": "The winking statue",
+      "months": 6,
+      "perMonth": {
+       "business": 1,
+       "people": -1
+      }
+     }
     },
     {
      "label": "A statue of someone normal",
@@ -1160,7 +1194,16 @@
       "press": 5
      },
      "reaction": "You're soft on raccoons. Suspiciously soft.",
-     "setFlag": "raccoons"
+     "setFlag": "raccoons",
+     "lasting": {
+      "id": "raccoonPact",
+      "name": "Raccoon pact",
+      "months": 5,
+      "perMonth": {
+       "law": -1
+      },
+      "money": 2
+     }
     }
    ],
    "draft": true,
@@ -1309,7 +1352,15 @@
       "law": -5
      },
      "reaction": "BEST. MAYOR. EVER.",
-     "setFlag": "fireworks"
+     "setFlag": "fireworks",
+     "lasting": {
+      "id": "timmyFan",
+      "name": "Timmy's biggest fan",
+      "months": 3,
+      "perMonth": {
+       "people": 2
+      }
+     }
     },
     {
      "label": "One sparkler",
@@ -1598,7 +1649,15 @@
       "business": -5
      },
      "reaction": "He's damp. He's proud. He's ours.",
-     "setFlag": "wetSock"
+     "setFlag": "wetSock",
+     "lasting": {
+      "id": "sockMania",
+      "name": "Wet Sock mania",
+      "months": 3,
+      "perMonth": {
+       "press": 2
+      }
+     }
     },
     {
      "label": "Hire a real designer",
@@ -1787,7 +1846,16 @@
       "people": -10
      },
      "reaction": "A deposit. No strings. Well, a few strings.",
-     "setFlag": "strangerDeal"
+     "setFlag": "strangerDeal",
+     "lasting": {
+      "id": "strangerDeal",
+      "name": "A deal with the Stranger",
+      "months": 5,
+      "perMonth": {
+       "press": -2
+      },
+      "money": 3
+     }
     }
    ],
    "draft": true,
@@ -2341,7 +2409,15 @@
       "people": -10,
       "law": -5
      },
-     "reaction": "One paper. One voice. Mine."
+     "reaction": "One paper. One voice. Mine.",
+     "lasting": {
+      "id": "censorRow",
+      "name": "Censorship row",
+      "months": 4,
+      "perMonth": {
+       "people": -2
+      }
+     }
     },
     {
      "label": "Buy The Whistle",
@@ -3150,7 +3226,15 @@
       "people": -10,
       "press": -5
      },
-     "reaction": "You sent the police. Against geese. Noted."
+     "reaction": "You sent the police. Against geese. Noted.",
+     "lasting": {
+      "id": "gooseFeud",
+      "name": "Feud with the geese",
+      "months": 6,
+      "perMonth": {
+       "people": -2
+      }
+     }
     }
    ],
    "draft": true,
@@ -5601,5 +5685,59 @@
    },
    "draft": true
   }
- ]
+ ],
+ "endings": {
+  "low:people": {
+   "title": "Run Out by the PTA",
+   "text": "Pam read out your record at a meeting. It took four hours. Nobody left. Then everybody came for you, with clipboards."
+  },
+  "low:business": {
+   "title": "Bought Out",
+   "text": "Chad bought City Hall, the chair you were sitting in, and the chair's opinion of you. You were escorted out by a man he also bought."
+  },
+  "low:law": {
+   "title": "Arrested by Barb",
+   "text": "Chief Barb arrested you for 'general crimes'. The trial was short. The judge was Barb. The jury was Barb's helicopter."
+  },
+  "low:press": {
+   "title": "Front Page Disgrace",
+   "text": "The Bugle printed your face with the word 'NO' under it. Every day. In bigger letters. The town took the hint."
+  },
+  "high:people": {
+   "title": "Carried Off by Fans",
+   "text": "The people love you so much they carried you on their shoulders. Out of town. They haven't put you down. It's been a week."
+  },
+  "high:business": {
+   "title": "Acquired",
+   "text": "Chad loves you so much he acquired you. You are now a subsidiary. Your title is Mayor (Brand Partner)."
+  },
+  "high:law": {
+   "title": "Made Permanent Deputy",
+   "text": "Barb respects you so much she deputised you. For life. You now live at the station. There's a cot. It's mostly fine."
+  },
+  "high:press": {
+   "title": "Turned Into a Column",
+   "text": "Marge loves you so much she gave you a column. Then a second. Then you were the paper. You can't stop writing."
+  },
+  "bankrupt": {
+   "title": "The Town Is Broke",
+   "text": "The treasury is one button and a moth. Doug has gone to live in a tree. The bank repossessed the word 'Mayor'."
+  },
+  "term:won": {
+   "title": "Re-elected",
+   "text": "The town has spoken. Mostly in honks. You're mayor for another week, heaven help everyone."
+  },
+  "term:landslide": {
+   "title": "Landslide",
+   "text": "Sixty per cent or more. The cone has retired. Gerald sent a card. It just says 'HONK' but it's heartfelt."
+  },
+  "term:lost": {
+   "title": "Voted Out",
+   "text": "The traffic cone will be sworn in at noon. It has promised to do nothing. People found that refreshing."
+  },
+  "term:early": {
+   "title": "Recalled for Good",
+   "text": "Three recalls. The town has filed you under 'Never Again'. Dave has taken the desk. He's put it in a bin."
+  }
+ }
 }

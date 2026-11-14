@@ -276,6 +276,38 @@ describe('recall', () => {
   });
 });
 
+describe('both ends are dangerous', () => {
+  it('a group at 100 also recalls you, with its own named ending', () => {
+    const base = withDesk(start(), 'curfew');
+    const s = play({ ...base, approval: { ...base.approval, law: 95 } }, { type: 'choose', cardId: 'curfew', option: 0, skill: 2 });
+    expect(s.recalls).toBe(1);
+    expect(s.recallCauses).toEqual(['high:law']);
+    expect(s.lastRecall).toContain(content.pack.endings['high:law']!.title);
+  });
+  it('a group at 0 records which group it was', () => {
+    const base = withDesk(start(), 'curfew');
+    const s = play({ ...base, approval: { ...base.approval, people: 8 } }, { type: 'choose', cardId: 'curfew', option: 0, skill: 2 });
+    expect(s.recallCauses).toEqual(['low:people']);
+  });
+  it('every cause has an ending written for it', () => {
+    for (const g of ['people', 'business', 'law', 'press']) for (const k of [`low:${g}`, `high:${g}`]) expect(content.pack.endings[k], k).toBeTruthy();
+    expect(content.pack.endings.bankrupt).toBeTruthy();
+  });
+});
+
+describe('lasting effects', () => {
+  it('tick every month for their length, then stop', () => {
+    let s = play(withDesk(start(), 'fireworks'), { type: 'choose', cardId: 'fireworks', option: 0, skill: 2 });
+    expect(s.lasting.map((l) => l.id)).toEqual(['timmyFan']);
+    const after = s.approval.people;
+    s = play(s, { type: 'endDesk' });
+    expect(s.approval.people).toBe(after + 2);
+    s = play(s, { type: 'next' }, { type: 'skipInitiative' }, { type: 'endDesk' }, { type: 'next' }, { type: 'skipDecree' }, { type: 'next' });
+    s = play(withDesk(s), { type: 'endDesk' });
+    expect(s.lasting).toEqual([]);
+  });
+});
+
 describe('election', () => {
   it('follows the vote share formula and clamps to 5-95', () => {
     const s = start();

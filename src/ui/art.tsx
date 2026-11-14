@@ -221,6 +221,9 @@ export const Icon = {
   coin: (p: { size?: number }) => (
     <svg width={p.size ?? 16} height={p.size ?? 16} viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#E8C55A" stroke={INK} stroke-width="2" /><path d="M12 7v10M9.5 9.5q2.5 -2 5 0q0 2.5 -2.5 2.500q-2.5 0 -2.5 2.500q2.5 2 5 0" fill="none" stroke={INK} stroke-width="1.8" stroke-linecap="round" /></svg>
   ),
+  book: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5q4 -2 9 1q5 -3 9 -1v14q-4 -2 -9 1q-5 -3 -9 -1z" fill="#fff" stroke={INK} stroke-width="2" stroke-linejoin="round" /><path d="M12 6v14" stroke={INK} stroke-width="2" /><path d="M16 4v6l1.5 -1.2 1.5 1.2v-6.5" fill="#C23B3B" stroke={INK} stroke-width="1.3" stroke-linejoin="round" /></svg>
+  ),
   scroll: () => (
     <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h13v15a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-2h10v2" fill="#fff" stroke={INK} stroke-width="2" stroke-linejoin="round" /><path d="M9 8h7M9 12h7" stroke={INK} stroke-width="2" stroke-linecap="round" /></svg>
   ),

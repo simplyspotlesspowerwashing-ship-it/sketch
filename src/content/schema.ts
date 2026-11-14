@@ -27,6 +27,7 @@ const option = z.strictObject({
   reaction: z.string().min(1).max(90),
   headlineTag: z.string().optional(),
   campaign: z.number().optional(),
+  lasting: z.strictObject({ id: z.string(), name: z.string().min(1).max(28), months: z.number().int().min(1).max(12), perMonth: effects.optional(), money: z.number().optional() }).optional(),
   gamble: z.strictObject({ chance: z.number().min(5).max(95), win: outcome, lose: outcome }).optional(),
 });
 
@@ -69,6 +70,7 @@ export const weekPackSchema = z.strictObject({
   objectives: z.array(z.strictObject({ id: z.string(), text: z.string(), when: condition })).max(3),
   cliffhangers: z.array(z.string()),
   recallEndings: z.array(z.string()).min(1),
+  endings: z.record(z.string(), z.strictObject({ title: z.string().min(1).max(40), text: z.string().min(1).max(160) })),
   dave: z.strictObject({
     outcomes: z.array(z.strictObject({ id: z.string(), text: z.string(), weight: z.number().positive(), money: z.number().optional(), favors: z.number().optional(), effects: effects.optional() })).min(1),
     absence: z.array(z.string()),

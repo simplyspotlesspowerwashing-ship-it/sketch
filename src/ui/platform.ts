@@ -5,11 +5,18 @@ import type { State } from '../engine/types.ts';
 // ---------- storage (one module, versioned) ----------
 const KEY = 'badtown.save';
 const SCHEMA = 1;
-export interface Save { schema: number; state: State | null; playerSeed: string; muted: boolean; introSeen: string; tutorialDone: boolean; dayOffset: number }
+/** Kept across weeks: what a mayor has seen and done. */
+export interface Career { terms: number; wins: number; best: number; weeks: string[] }
+export interface Save {
+  schema: number; state: State | null; playerSeed: string; muted: boolean; introSeen: string; tutorialDone: boolean; dayOffset: number;
+  scrapbook: string[]; // ending keys unlocked
+  career: Career;
+  deeds: string[];
+}
 
 function fresh(): Save {
   const seed = Math.random().toString(36).slice(2) + Date.now().toString(36);
-  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0 };
+  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [] }, deeds: [] };
 }
 
 /** Bring an older save up to the current schema. Unknown or broken saves start fresh. */
@@ -17,7 +24,7 @@ export function migrate(raw: unknown): Save {
   if (!raw || typeof raw !== 'object') return fresh();
   const s = raw as Partial<Save>;
   if (typeof s.schema !== 'number' || s.schema > SCHEMA || typeof s.playerSeed !== 'string') return fresh();
-  // schema 1 is the first; future versions add steps here.
+  // schema 1 is the first; fields added later (scrapbook, career, deeds) default from fresh().
   return { ...fresh(), ...s, schema: SCHEMA };
 }
 

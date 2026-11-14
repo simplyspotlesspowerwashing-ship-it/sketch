@@ -177,6 +177,10 @@ const sensibleScore: Scorer = (s, _card, o, content) => {
     if (p.favorEvery) v += Math.floor(left / p.favorEvery) * 1.5;
     v += 1; // objectives and combos
   }
+  if (o.lasting) {
+    const m = Math.min(o.lasting.months, left);
+    v += approvalValue(s, o.lasting.perMonth, m) + moneyValue(s, (o.lasting.money ?? 0) * m);
+  }
   if (o.gamble) {
     const val = (x: { money?: number; effects?: Effects }) => approvalValue(s, x.effects) + moneyValue(s, x.money ?? 0);
     v += (o.gamble.chance / 100) * val(o.gamble.win) + (1 - o.gamble.chance / 100) * val(o.gamble.lose);

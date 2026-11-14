@@ -19,7 +19,7 @@ const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-r
 
 function boot(save: Save): State {
   const cal = calendar(save.dayOffset);
-  const kept = save.state && save.state.v === 6 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  const kept = save.state && save.state.v === 7 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, content), content, cal.today);
 }
 
@@ -70,6 +70,7 @@ function OptionCosts({ o }: { o: Option }) {
       {o.favors ? <span class="chip favor" aria-label={`${o.favors < 0 ? 'costs' : 'gains'} ${Math.abs(o.favors)} Favor`}><Icon.ticket size={14} />{o.favors < 0 ? '−' : '+'}{Math.abs(o.favors)}</span> : null}
       <EffectChips effects={merged} />
       {p?.perMonth && GROUPS.filter((g) => p.perMonth![g]).map((g) => <span key={g} class="chip monthly" style={{ '--g': GROUP_COLOR[g] }}><i class="dot" />{GROUP_NAME[g]} {p.perMonth![g]! > 0 ? '▲' : '▼'} each month</span>)}
+      {o.lasting && <span class="chip lasting">{o.lasting.name}: {GROUPS.filter((g) => o.lasting!.perMonth?.[g]).map((g) => `${GROUP_NAME[g]} ${o.lasting!.perMonth![g]! > 0 ? '▲' : '▼'}`).join(', ')}{o.lasting.money ? ` +$${o.lasting.money}k` : ''} for {o.lasting.months} months</span>}
       {p?.favorEvery && <span class="chip favor"><Icon.ticket size={14} />+1 every {p.favorEvery} months</span>}
       {o.promise && <span class="chip promise">Owe {money(o.promise.money)} in {o.promise.dueIn} months</span>}
       {o.campaign ? <span class="chip vote">Votes ▲ +{o.campaign}%</span> : null}
@@ -262,8 +263,65 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   );
 }
 
+// ---------- the scrapbook: endings, career and deeds kept across weeks ----------
+const resultEnding = (s: State) => (!s.result ? null : s.result.endedEarly ? 'term:early' : s.result.won ? (s.result.share >= 60 ? 'term:landslide' : 'term:won') : 'term:lost');
+const ENDING_ORDER = ['term:won', 'term:landslide', 'term:lost', 'term:early', 'low:people', 'low:business', 'low:law', 'low:press', 'high:people', 'high:business', 'high:law', 'high:press', 'bankrupt'];
+const ENDING_HINT: Record<string, string> = { low: 'A group gave up on you', high: 'A group loved you far too much', bankrupt: 'Ran out of money', term: 'How a week ended' };
+
+interface Deed { id: string; name: string; how: string; test: (s: State, save: Save) => boolean }
+const DEEDS: Deed[] = [
+  { id: 'firstWin', name: 'First Term', how: 'Win an election', test: (s) => !!s.result?.won },
+  { id: 'landslide', name: 'Landslide', how: 'Win with 60% or more', test: (s) => (s.result?.share ?? 0) >= 60 },
+  { id: 'whisker', name: 'By a Whisker', how: 'Win with 50% or 51%', test: (s) => !!s.result?.won && s.result.share <= 51 },
+  { id: 'cleanHands', name: 'Clean Hands', how: 'Win with no recalls and no broken promises', test: (s) => !!s.result?.won && s.recalls === 0 && s.brokenPromises === 0 },
+  { id: 'comeback', name: 'Comeback Kid', how: 'Win despite being recalled', test: (s) => !!s.result?.won && s.recalls > 0 },
+  { id: 'lawmaker', name: 'Lawmaker', how: 'Enact six decrees in one week', test: (s) => s.decrees.length >= 6 },
+  { id: 'builder', name: 'Builder', how: 'Build three projects in one week', test: (s) => s.projects.length >= 3 },
+  { id: 'disasterPro', name: 'Disaster Professional', how: 'Get a clean job on a catastrophe', test: (s) => s.history.some((h) => h.cardId.startsWith('cat') && h.skill === 2) },
+  { id: 'goosefriend', name: 'Goose Whisperer', how: 'Build the pond without upsetting the geese', test: (s) => s.projects.some((p) => p.id === 'pond') && !s.flags.gooseGrudge },
+  { id: 'tycoon', name: 'Tycoon', how: 'End a week with $100k or more', test: (s) => s.money >= 100 },
+  { id: 'absent', name: 'Absent Landlord', how: 'Let Dave run three days of a week', test: (s) => s.daveDays.length >= 3 },
+  { id: 'collector', name: 'Collector', how: 'Unlock six endings', test: (_s, save) => save.scrapbook.length >= 6 },
+];
+
+/** Fold anything new about this state into the save's scrapbook, career and deeds. Returns what was new. */
+function record(save: Save, s: State): { save: Save; endings: string[]; deeds: string[] } {
+  const endings = [...new Set([...s.recallCauses, resultEnding(s)].filter((x): x is string => !!x))].filter((k) => !save.scrapbook.includes(k));
+  let next: Save = endings.length ? { ...save, scrapbook: [...save.scrapbook, ...endings] } : save;
+  const newDeeds: string[] = [];
+  if (s.result && !next.career.weeks.includes(s.weekId)) {
+    next = { ...next, career: { terms: next.career.terms + 1, wins: next.career.wins + (s.result.won ? 1 : 0), best: Math.max(next.career.best, s.result.share), weeks: [...next.career.weeks, s.weekId] } };
+    for (const d of DEEDS) if (!next.deeds.includes(d.id) && d.test(s, next)) newDeeds.push(d.id);
+    if (newDeeds.length) next = { ...next, deeds: [...next.deeds, ...newDeeds] };
+  }
+  return { save: next, endings, deeds: newDeeds };
+}
+
+function EndingCard({ k, isNew }: { k: string; isNew?: boolean }) {
+  const e = content.pack.endings[k]!;
+  return <div class={`ending ${k.split(':')[0]}`}>{isNew && <span class="newtag">NEW IN YOUR SCRAPBOOK</span>}<b>{e.title}</b><span>{e.text}</span></div>;
+}
+
+function Scrapbook({ save, onClose }: { save: Save; onClose: () => void }) {
+  const c = save.career;
+  return (
+    <Sheet label="Scrapbook" onClose={onClose}>
+      <h2 class="display">The Mayor's Scrapbook</h2>
+      <div class="career">
+        <span><b>{c.terms}</b>weeks served</span><span><b>{c.wins}</b>re-elections</span><span><b>{c.best ? `${c.best}%` : '–'}</b>best result</span>
+      </div>
+      <h3 class="subhead">Endings <small>{save.scrapbook.length} of {ENDING_ORDER.length}</small></h3>
+      <div class="endings">
+        {ENDING_ORDER.map((k) => save.scrapbook.includes(k) ? <EndingCard key={k} k={k} /> : <div key={k} class="ending locked"><b>???</b><span>{ENDING_HINT[k.split(':')[0]!]}{k.includes(':') && k.split(':')[0] !== 'term' ? ` (${GROUP_NAME[k.split(':')[1] as GroupId]})` : ''}</span></div>)}
+      </div>
+      <h3 class="subhead">Deeds <small>{save.deeds.length} of {DEEDS.length}</small></h3>
+      <ul class="deeds">{DEEDS.map((d) => <li key={d.id} class={save.deeds.includes(d.id) ? 'done' : ''}><span class="seal">{save.deeds.includes(d.id) ? '★' : '·'}</span><b>{d.name}</b><small>{d.how}</small></li>)}</ul>
+    </Sheet>
+  );
+}
+
 // ---------- election night ----------
-function Results({ s, onNewWeek }: { s: State; onNewWeek: () => void }) {
+function Results({ s, onNewWeek, fresh }: { s: State; onNewWeek: () => void; fresh: { endings: string[]; deeds: string[] } }) {
   const r = s.result!;
   const rows: [string, number, string?][] = [
     ['People', r.parts.people, GROUP_COLOR.people], ['Business', r.parts.business, GROUP_COLOR.business], ['Law', r.parts.law, GROUP_COLOR.law], ['Press', r.parts.press, GROUP_COLOR.press],
@@ -296,6 +354,8 @@ function Results({ s, onNewWeek }: { s: State; onNewWeek: () => void }) {
           <Gauge value={r.share} />
           <div class={`banner ${r.won ? 'won' : 'lost'}`}>{r.won ? 'RE-ELECTED' : 'VOTED OUT'}</div>
           <p>{r.won ? 'The town has spoken. Mostly in honks.' : 'The traffic cone will be sworn in at noon.'}</p>
+          {resultEnding(s) && <EndingCard k={resultEnding(s)!} isNew={fresh.endings.includes(resultEnding(s)!)} />}
+          {fresh.deeds.map((id) => { const d = DEEDS.find((x) => x.id === id)!; return <p key={id} class="bonus"><b>Deed earned: {d.name}.</b> {d.how}.</p>; })}
           <p class="hint">You beat <b>{beat}%</b> of mayors {stats.preview && <span class="tag">preview data</span>}</p>
           <ul class="legacy">
             <li>Built: {s.projects.map((p) => content.projects[p.id]!.name).join(', ') || 'nothing at all'}</li>
@@ -353,6 +413,7 @@ function alerts(s: State): { text: string; bad: boolean }[] {
   if (a.press < TUNING.low) out.push({ text: 'Bad press: −5 at the polls', bad: true });
   for (const g of GROUPS) if (a[g] <= 12) out.push({ text: `${GROUP_NAME[g]} near zero: recall risk`, bad: true });
   for (const g of GROUPS) if (a[g] > TUNING.high) out.push({ text: `${GROUP_NAME[g]} adore you. They'll want things`, bad: false });
+  for (const l of s.lasting) out.push({ text: `${l.name}: ${GROUPS.filter((g) => l.perMonth?.[g]).map((g) => `${GROUP_NAME[g]} ${l.perMonth![g]! > 0 ? '+' : ''}${l.perMonth![g]}`).join(', ')}${l.money ? ` +$${l.money}k` : ''}/mo, ${Math.max(0, Math.ceil((l.until - s.month) / 2))} day${Math.ceil((l.until - s.month) / 2) === 1 ? '' : 's'} left`, bad: GROUPS.some((g) => (l.perMonth?.[g] ?? 0) < 0) && !l.money });
   for (const p of s.promises) out.push({ text: `Promise: ${money(p.money)} due in ${Math.max(0, p.dueMonth - s.month)} mo`, bad: p.dueMonth - s.month <= 1 });
   return out;
 }
@@ -455,6 +516,8 @@ export function App() {
   const [outcome, setOutcome] = useState<Outcome | null>(null);
   const [overlay, setOverlay] = useState<'tax' | 'dev' | 'recall' | 'names' | null>(null);
   const [pulse, setPulse] = useState<Pulse | null>(null);
+  const [fresh, setFresh] = useState<{ endings: string[]; deeds: string[] }>({ endings: [], deeds: [] });
+  const [book, setBook] = useState(false);
   const [burst, setBurst] = useState<Burst | null>(null);
   const [playing, setPlaying] = useState<{ card: Card; option: number } | null>(null);
   const [doing, setDoing] = useState<Initiative | null>(null);
@@ -469,7 +532,9 @@ export function App() {
   const showIntro = !needSetup && save.introSeen !== introKey && s.phase !== 'results' && s.phase !== 'dayEnd';
 
   const persist = (next: State, patch: Partial<Save> = {}) => {
-    const sv = { ...save, ...patch, state: next };
+    const rec = record({ ...save, ...patch }, next);
+    if (rec.endings.length || rec.deeds.length) setFresh((f) => ({ endings: [...f.endings, ...rec.endings], deeds: [...f.deeds, ...rec.deeds] }));
+    const sv = { ...rec.save, state: next };
     setSave(sv); setS(next); writeSave(sv);
   };
   useEffect(() => { writeSave({ ...save, state: s }); }, []);
@@ -592,6 +657,7 @@ export function App() {
         <div class="top-right">
           <span class="daychip">{dayName}{s.day <= 6 && s.phase !== 'dayEnd' ? (s.phase === 'decree' ? " · Mayor's Hour" : s.phase === 'initiative' ? ' · midday' : m === 1 ? " · today's three" : " · your town's three") : ''}</span>
           {s.profile && <button class="icon" aria-label="Change your name or the town's name" onClick={() => { setOverlay('names'); sfx('tap'); }}><Icon.pen /></button>}
+          <button class="icon" aria-label="Open the scrapbook" onClick={() => { setBook(true); sfx('paper'); }}><Icon.book /></button>
           <button class="icon" aria-label={save.muted ? 'Turn sound on' : 'Turn sound off'} onClick={() => { setMuted(!save.muted); persist(s, { muted: !save.muted }); }}><Icon.sound on={!save.muted} /></button>
         </div>
       </header>
@@ -718,7 +784,7 @@ export function App() {
         </main>
       )}
 
-      {s.phase === 'results' && <Results s={s} onNewWeek={() => jump(8 - cal.today)} />}
+      {s.phase === 'results' && <Results s={s} fresh={fresh} onNewWeek={() => jump(8 - cal.today)} />}
 
       {/* overlays */}
       {focusCard && s.phase === 'desk' && (
@@ -814,10 +880,11 @@ export function App() {
           <p class="hint">Each month every group also cools off a little: about {GROUPS.map((g) => `${GROUP_NAME[g]} −${fadeFor(s.approval[g])}`).join(', ')}. Popular mayors cool faster.</p>
         </Sheet>
       )}
+      {book && <Scrapbook save={save} onClose={() => setBook(false)} />}
       {overlay === 'recall' && (
         <Sheet label="Recalled" tone="recall">
           <div class="stamp denied big">RECALLED</div>
-          <p class="bubble">{s.lastRecall ?? s.reports[s.reports.length - 1]?.recall ?? 'You have been recalled.'}</p>
+          {s.recallCauses.length > 0 && content.pack.endings[s.recallCauses[s.recallCauses.length - 1]!] ? <EndingCard k={s.recallCauses[s.recallCauses.length - 1]!} isNew={fresh.endings.includes(s.recallCauses[s.recallCauses.length - 1]!)} /> : <p class="bubble">{s.lastRecall ?? 'You have been recalled.'}</p>}
           <p class="hint warn">You carry on as Acting Mayor. Every group resets to 40, money to $20k, and the election costs you 8 points. {s.recalls >= TUNING.recall.max ? 'One more recall ends the term.' : ''}</p>
           <button class="btn primary" onClick={() => { setOverlay(null); setFocus(null); setOutcome(null); }}>Carry on, somehow</button>
         </Sheet>

@@ -59,6 +59,7 @@ export function coverMissedDays(state: State, content: Content, today: number, r
       s.money = Math.min(Math.max(s.money, H.moneyFloor), H.moneyCap); // Dave spends whatever is left over on 'lunch'
       s.protestNext = false;
       s.recalls = before.recalls;
+      s.recallCauses = s.recallCauses.slice(0, before.recalls);
       s.brokenPromises = before.broken;
       s.lastRecall = null;
       delete s.flags.wentBankrupt;

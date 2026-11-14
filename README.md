@@ -7,7 +7,7 @@ Status: **playable preview** (M1-M3 scope in rough form: full week, art, sound, 
 ```bash
 npm install
 npm run dev         # play locally
-npm test            # 40 engine tests (Vitest)
+npm test            # 44 engine tests (Vitest)
 npm run validate    # schema-check the week pack
 npm run sim         # 5,000 terms per bot -> reports/balance.md
 node sim/stats.ts   # regenerate the labelled preview crowd data
@@ -53,3 +53,6 @@ CONTENT_GUIDE.md  how to write cards
 - Many options set a flag that the town map draws (`Town` in `src/ui/art.tsx`).
 
 Browser checks: `node e2e/smoke.cjs <dir> [dayOffset]` plays to election night (mini-games are auto-finished through a test hook); `node e2e/games.cjs <url> <dir> [idle]` plays each mini-game for real with a scripted player.
+- Both ends are dangerous: a group at 0 or at 100 recalls you. Each cause (`low:<group>`, `high:<group>`, `bankrupt`) has its own named ending in `pack.endings`, as do the four ways a week can end (`term:*`).
+- The scrapbook (book icon) keeps unlocked endings, a career record and twelve deeds across weeks in the save (`scrapbook`, `career`, `deeds`). Deeds are cosmetic so the shared daily content stays identical for everyone.
+- Options can carry a `lasting` effect (a feud, a fan club, a deal) that ticks every month for a set number of months and shows as an alert while active.
