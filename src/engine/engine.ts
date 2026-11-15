@@ -211,9 +211,15 @@ function drawDesk(s: State, content: Content, rng: Rng): DeskSlot[] {
     const groupOf = (id: string) => findCard(content, id).group;
     const ranked = rest.filter((id) => groupOf(id)).map((id, i) => ({ id, i })).sort((x, y) => s.approval[groupOf(x.id)!] - s.approval[groupOf(y.id)!] || x.i - y.i);
     const townie = rest.find((id) => !groupOf(id));
+    // Avoid repeating a game type already played today or already on this desk.
+    const typeOf = (id: string) => findCard(content, id).game?.type;
+    const usedTypes = new Set([...s.history.filter((h) => dayOfMonth(h.month) === d && !h.cardId.startsWith('init:')).map((h) => typeOf(h.cardId)), ...slots.map((x) => typeOf(x.cardId))]);
+    const fresh = (id: string) => !usedTypes.has(typeOf(id));
+    ranked.sort((x, y) => Number(fresh(y.id)) - Number(fresh(x.id)));
     for (const { id } of ranked) {
       if (slots.length >= TUNING.deskSize - (townie ? 1 : 0)) break;
       const g = groupOf(id)!;
+      usedTypes.add(typeOf(id));
       add(id, s.approval[g] < 50 ? `low:${g}` : 'town');
     }
     if (townie && slots.length < TUNING.deskSize) add(townie, 'town');

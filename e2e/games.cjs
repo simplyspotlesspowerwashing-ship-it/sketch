@@ -2,7 +2,7 @@
 // reachable, that the game ends on time, and to take a mid-game screenshot.
 //   node e2e/games.cjs <url> <screenshot-dir> [idle]     ("idle" = no input, to check the flop path)
 const { chromium } = require('playwright');
-const CARDS = { catch: 'parkingMeters', dodge: 'mallParking', whack: 'curfew', match: 'buglePress', stack: 'newSchool', simon: 'tvStation', tug: 'bearStory', flap: 'helicopter', jump: 'pothole', snake: 'goosePond', slice: 'cheeseVault', invaders: 'raccoonBins', breakout: 'clockWizard', rhythm: 'karaoke', cross: 'zebra', sort: 'recycling' };
+const CARDS = { catch: 'parkingMeters', dodge: 'mallParking', whack: 'curfew', match: 'buglePress', stack: 'newSchool', simon: 'tvStation', tug: 'bearStory', flap: 'helicopter', jump: 'pothole', snake: 'goosePond', slice: 'cheeseVault', invaders: 'raccoonBins', breakout: 'clockWizard', pour: 'heatwave', sling: 'speedTrap', spot: 'dogShow', balance: 'karaoke', fish: 'lakeMonster' };
 const only = process.env.ONLY ? process.env.ONLY.split(',') : null;
 (async () => {
   const [url, out, mode] = process.argv.slice(2);
@@ -100,20 +100,31 @@ const only = process.env.ONLY ? process.env.ONLY.split(',') : null;
         const box = await pg.locator('.mg-arena').boundingBox({ timeout: 500 }).catch(() => null);
         const bx = await pg.evaluate(() => parseFloat(document.querySelector('.mg-ball')?.style.left ?? '50'));
         if (box) { await pg.mouse.move(box.x + box.width * bx / 100, box.y + box.height * 0.9); await pg.mouse.down(); await pg.mouse.up(); }
-      } else if (type === 'rhythm') {
-        const lanes = await pg.evaluate(() => [...document.querySelectorAll('.mg-arena.stage .mg-ent:not(.gone)')].filter((e) => { const y = parseFloat(e.style.top); return y > 78 && y < 90; }).map((e) => Math.round((parseFloat(e.style.left) - 16.67) / 33.34)));
-        for (const l of [...new Set(lanes)]) await pg.locator('.mg-lanebtn').nth(l).dispatchEvent('pointerdown');
-        await pg.waitForTimeout(-20 + 30);
-      } else if (type === 'cross') {
-        const safe = await pg.evaluate(() => {
-          const me = document.querySelector('.mg-ent.me'); const my = parseFloat(me.style.top), mx = parseFloat(me.style.left);
-          const rowH = 84 / 5, next = my - rowH;
-          return ![...document.querySelectorAll('.mg-arena.crossing .mg-ent:not(.me)')].some((c) => Math.abs(parseFloat(c.style.top) - next) < 2 && Math.abs(parseFloat(c.style.left) - mx) < 18);
-        });
-        if (safe) await pg.keyboard.press('ArrowUp');
-      } else if (type === 'sort') {
-        const g = await pg.evaluate(() => document.querySelector('.sortme')?.dataset.good);
-        if (g !== undefined) { await pg.keyboard.press(g === '1' ? 'ArrowLeft' : 'ArrowRight'); await pg.waitForTimeout(150); }
+      } else if (type === 'pour') {
+        const st = await pg.evaluate(() => { const b = document.querySelector('.mg-band'), l = document.querySelector('.mg-liquid'); return { lo: parseFloat(b.style.bottom), h: parseFloat(b.style.height), lv: parseFloat(l.style.height), holding: !!document.querySelector('.mg-big.go'), wait: !!document.querySelector('.mg-verdict') }; });
+        if (!st.holding && !st.wait && st.lv === 0) await pg.locator('.mg-big').dispatchEvent('pointerdown');
+        else if (st.holding && st.lv >= st.lo + st.h * 0.25) await pg.locator('.mg-big').dispatchEvent('pointerup');
+        
+      } else if (type === 'sling') {
+        const box = await pg.locator('.mg-arena').boundingBox({ timeout: 500 }).catch(() => null);
+        const tg = await pg.evaluate(() => { const ball = [...document.querySelectorAll('.mg-arena.range .mg-ent:not(.target)')].length; const t = document.querySelector('.mg-ent.target'); return ball && !document.querySelector('.mg-arena.range .mg-ent[style*="rotate"]') && t ? [parseFloat(t.style.left), parseFloat(t.style.top)] : null; });
+        if (box && tg) {
+          const T = 0.6, vx = (tg[0] - 14) / T, vy = (tg[1] - 78 - 45 * T * T) / T;
+          const ax = 14 - vx / 3.2, ay = 78 - vy / 3.2;
+          await pg.mouse.move(box.x + box.width * 0.14, box.y + box.height * 0.78); await pg.mouse.down();
+          await pg.mouse.move(box.x + box.width * ax / 100, box.y + box.height * ay / 100, { steps: 3 }); await pg.mouse.up();
+          await pg.waitForTimeout(900);
+        }
+      } else if (type === 'spot') {
+        const el = pg.locator('.mg-cell.flip, .mg-cell.turn, .mg-cell.small, .mg-cell.other').first();
+        if (await el.count()) await el.dispatchEvent('pointerdown').catch(() => {});
+      } else if (type === 'balance') {
+        const a0 = await pg.evaluate(() => parseFloat(document.querySelector('.mg-pole').style.rotate));
+        const a = a0 + (a0 - (globalThis.__prevA ?? a0)) * 3; globalThis.__prevA = a0;
+        const want = a > 2 ? 'ArrowLeft' : a < -2 ? 'ArrowRight' : null;
+        if (want !== globalThis.__held) { if (globalThis.__held) await pg.keyboard.up(globalThis.__held); if (want) await pg.keyboard.down(want); globalThis.__held = want; }
+      } else if (type === 'fish') {
+        if (await pg.locator('.mg-bobber.bite').count()) await pg.locator('.mg-arena').dispatchEvent('pointerdown');
       } else if (type === 'tug') {
         if (await pg.locator('.mg-big.go').count()) await pg.locator('.mg-big').dispatchEvent('pointerdown').catch(() => {});
       }

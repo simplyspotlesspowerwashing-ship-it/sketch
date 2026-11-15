@@ -848,7 +848,7 @@ export function App() {
       {/* overlays */}
       {focusCard && s.phase === 'desk' && (
         <Sheet label={`Request from ${NAMES[focusCard.who]}`} onClose={outcome || playing ? undefined : closeCard}>
-          {outcome ? <ResultPanel r={outcome} onDone={closeCard} /> : playing ? <MiniGame key={playing.card.id + playing.option} card={playing.card} onDone={(sk) => choose(playing.card, playing.option, sk)} /> : (
+          {outcome ? <ResultPanel r={outcome} onDone={closeCard} /> : playing ? <MiniGame key={playing.card.id + playing.option} day={s.day} card={playing.card} onDone={(sk) => choose(playing.card, playing.option, sk)} /> : (
             <CardSheet card={focusCard} s={s} mode="desk" urgent={focusSlot?.urgent} onClose={closeCard}
               onChoose={(i) => choose(focusCard, i)} onDave={legal.some((a) => a.type === 'delegate' && a.cardId === focusCard.id) ? () => delegate(focusCard) : undefined} />
           )}

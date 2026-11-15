@@ -661,10 +661,10 @@
     }
    ],
    "game": {
-    "type": "stack",
-    "theme": "brick",
-    "title": "Raise the spoon, piece by piece",
-    "flop": "It's a giant fork now. Nobody ordered a fork."
+    "type": "balance",
+    "theme": "star",
+    "title": "Balance the giant spoon",
+    "flop": "It fell. It is a giant ladle now. Nobody asked for a ladle."
    }
   },
   {
@@ -967,10 +967,10 @@
     }
    ],
    "game": {
-    "type": "tug",
+    "type": "pour",
     "theme": "coin",
-    "title": "Haggle with Chad",
-    "flop": "You haggled yourself upward. Chad sent flowers."
+    "title": "Pour Chad exactly enough tax break",
+    "flop": "You poured too much. Chad bought a second moon."
    }
   },
   {
@@ -1206,11 +1206,11 @@
     "law": -5
    },
    "game": {
-    "type": "cross",
-    "theme": "kid",
-    "title": "Get across the polite traffic",
+    "type": "dodge",
+    "theme": "car",
+    "title": "Drive through the polite traffic",
     "flop": "Everyone waved you across. Into the river.",
-    "bad": "car"
+    "bad": "kid"
    },
    "draft": true
   },
@@ -1252,10 +1252,10 @@
     "people": -5
    },
    "game": {
-    "type": "sort",
+    "type": "sling",
     "theme": "pie",
-    "title": "Sort the pies from the pie thieves",
-    "flop": "You arrested a pie. It had an alibi.",
+    "title": "Lob pies at the pie thieves",
+    "flop": "You hit Barb. With a pie. With evidence.",
     "bad": "raccoon"
    },
    "draft": true,
@@ -1342,10 +1342,11 @@
     "people": -5
    },
    "game": {
-    "type": "rhythm",
+    "type": "spot",
     "theme": "note",
-    "title": "Conduct the brass band",
-    "flop": "The trombone went one way. The band went the other."
+    "title": "Spot the trombone playing it wrong",
+    "flop": "You fired the tuba. The tuba was right.",
+    "bad": "star"
    },
    "draft": true,
    "group": "people"
@@ -1434,10 +1435,10 @@
     "business": -10
    },
    "game": {
-    "type": "cross",
+    "type": "jump",
     "theme": "kid",
-    "title": "Walk the zebra across",
-    "flop": "The zebra walked you across. Backwards. Twice.",
+    "title": "Hop over the stalled traffic",
+    "flop": "You landed on the zebra. It did not mind. Barb did.",
     "bad": "car"
    },
    "draft": true,
@@ -1480,9 +1481,9 @@
     "people": -5
    },
    "game": {
-    "type": "sort",
+    "type": "spot",
     "theme": "dog",
-    "title": "Spot the dogs, bin the raccoons",
+    "title": "Find the raccoon in a dog costume",
     "flop": "You gave Best in Show to a raccoon. It accepted.",
     "bad": "raccoon"
    },
@@ -1526,10 +1527,10 @@
     "people": -10
    },
    "game": {
-    "type": "sort",
+    "type": "spot",
     "theme": "paper",
-    "title": "Sort the recycling, bin the cheese",
-    "flop": "You recycled the cheese. It's a bench now. It smells like a bench.",
+    "title": "Find the cheese in the recycling",
+    "flop": "You recycled the cheese. It's a bench now.",
     "bad": "cheese"
    },
    "draft": true,
@@ -1572,10 +1573,10 @@
     "press": -5
    },
    "game": {
-    "type": "rhythm",
+    "type": "balance",
     "theme": "note",
-    "title": "Hit every note of the hard one",
-    "flop": "You hit a note nobody has heard before. Dogs howled."
+    "title": "Hold the high note steady",
+    "flop": "Your voice wobbled. Then the building did."
    },
    "draft": true,
    "group": "press"
@@ -1619,11 +1620,10 @@
     "business": -5
    },
    "game": {
-    "type": "cross",
-    "theme": "kid",
-    "title": "Cross the bus lanes to reach them",
-    "flop": "You got on the wrong bus. You've been elected Seat 9.",
-    "bad": "car"
+    "type": "balance",
+    "theme": "car",
+    "title": "Keep the bus on its wheels",
+    "flop": "The bus fell over. The passengers declared it a holiday."
    },
    "draft": true
   },
@@ -1914,11 +1914,10 @@
     }
    ],
    "game": {
-    "type": "sort",
+    "type": "pour",
     "theme": "paper",
-    "title": "Sort the front pages",
-    "flop": "Tomorrow's paper is all cheese. Marge is calling it a scoop.",
-    "bad": "cheese"
+    "title": "Ink the new press to the line",
+    "flop": "Too much ink. Tomorrow's paper is just black."
    }
   },
   {
@@ -1970,11 +1969,10 @@
     }
    ],
    "game": {
-    "type": "slice",
+    "type": "pour",
     "theme": "carrot",
-    "title": "Chop lunch, not the fire alarm",
-    "flop": "You chopped the fire alarm. Lunch was outside.",
-    "bad": "bomb"
+    "title": "Ladle the soup, don't flood the tray",
+    "flop": "Soup everywhere. The children are skating on it."
    }
   },
   {
@@ -2036,10 +2034,11 @@
     }
    ],
    "game": {
-    "type": "simon",
+    "type": "sling",
     "theme": "star",
-    "title": "Light the fuses in order",
-    "flop": "One went into the police station. It's fine. It's on fire."
+    "title": "Aim the fireworks at the clouds",
+    "flop": "One went into the police station. It's fine. It's on fire.",
+    "bad": "cloud"
    }
   },
   {
@@ -2151,10 +2150,10 @@
     }
    ],
    "game": {
-    "type": "sort",
+    "type": "whack",
     "theme": "paper",
-    "title": "Shelve the books, bin the ghosts",
-    "flop": "You shelved a ghost. It's in non-fiction. Furious.",
+    "title": "Shush the whispering books",
+    "flop": "You shushed a ghost. It shushed back. Louder.",
     "bad": "ghost"
    }
   },
@@ -2269,11 +2268,11 @@
     }
    ],
    "game": {
-    "type": "whack",
-    "theme": "car",
-    "title": "Clock the speeders",
+    "type": "sling",
+    "theme": "paper",
+    "title": "Lob tickets at the speeders",
     "flop": "You ticketed a goose. It's contesting.",
-    "bad": "goose"
+    "bad": "car"
    }
   },
   {
@@ -2335,10 +2334,10 @@
     }
    ],
    "game": {
-    "type": "match",
-    "theme": "star",
-    "title": "Find the mascot's other sock",
-    "flop": "Wet Sock has one sock. Which is, to be fair, the brand."
+    "type": "pour",
+    "theme": "drop",
+    "title": "Wring out Wet Sock to the line",
+    "flop": "Wet Sock is bone dry. He has lost his whole identity."
    }
   },
   {
@@ -2392,10 +2391,10 @@
     }
    ],
    "game": {
-    "type": "rhythm",
+    "type": "simon",
     "theme": "goose",
-    "title": "Honk in time with the union",
-    "flop": "You honked off-beat. The union is drafting a statement."
+    "title": "Do the secret union honk",
+    "flop": "You honked something rude. About Gerald's mother."
    }
   },
   {
@@ -2570,10 +2569,11 @@
     }
    ],
    "game": {
-    "type": "rhythm",
-    "theme": "note",
-    "title": "Keep time for forty children",
-    "flop": "You lost the beat. Forty children lost it with you."
+    "type": "spot",
+    "theme": "kid",
+    "title": "Spot the one who isn't a child",
+    "flop": "You gave first prize to Gerald. He accepted.",
+    "bad": "goose"
    }
   },
   {
@@ -2853,11 +2853,10 @@
     }
    ],
    "game": {
-    "type": "catch",
+    "type": "pour",
     "theme": "drop",
-    "title": "Fill the pool, bucket by bucket",
-    "flop": "You filled the car park. Chad has a pool now.",
-    "bad": "frog"
+    "title": "Fill the pool to the line",
+    "flop": "You overfilled it. The pool is a lake now. Kevin moved in."
    }
   },
   {
@@ -2916,10 +2915,10 @@
     }
    ],
    "game": {
-    "type": "stack",
-    "theme": "brick",
-    "title": "Rebuild the bridge",
-    "flop": "That was a load-bearing bolt. Was."
+    "type": "balance",
+    "theme": "car",
+    "title": "Hold the bridge steady in the wind",
+    "flop": "That was a load-bearing wobble."
    }
   },
   {
@@ -3029,11 +3028,10 @@
     }
    ],
    "game": {
-    "type": "cross",
+    "type": "balance",
     "theme": "kid",
-    "title": "Walk the children across",
-    "flop": "You crossed alone. The children are still waving.",
-    "bad": "car"
+    "title": "Hold the lollipop sign in the gale",
+    "flop": "The sign took off. So did you. Briefly."
    }
   },
   {
@@ -3095,10 +3093,10 @@
     }
    ],
    "game": {
-    "type": "sort",
+    "type": "spot",
     "theme": "paper",
-    "title": "Sort real news from fake news",
-    "flop": "You printed the fake ones. They sold better.",
+    "title": "Spot the fake headline",
+    "flop": "You printed the fake one. It sold better.",
     "bad": "bomb"
    }
   },
@@ -3154,10 +3152,10 @@
     }
    ],
    "game": {
-    "type": "stack",
-    "theme": "brick",
-    "title": "Build a very long flagpole",
-    "flop": "The pole reached a plane. The plane is annoyed."
+    "type": "fish",
+    "theme": "star",
+    "title": "Fish for the moon's reflection",
+    "flop": "You fell in. The moon watched."
    }
   },
   {
@@ -3401,10 +3399,10 @@
     }
    ],
    "game": {
-    "type": "match",
+    "type": "fish",
     "theme": "paper",
-    "title": "Piece the note back together",
-    "flop": "It now reads 'CHAD OWES THE TOWN'. Chad disagrees."
+    "title": "Fish the capsule out of the river",
+    "flop": "You fished up 1974's lunch. Still warm."
    }
   },
   {
@@ -3465,7 +3463,7 @@
     }
    ],
    "game": {
-    "type": "cross",
+    "type": "dodge",
     "theme": "car",
     "title": "Drive out of the roundabout",
     "flop": "You waved a bus in. It has forty passengers.",
@@ -3594,10 +3592,10 @@
     }
    ],
    "game": {
-    "type": "invaders",
+    "type": "fish",
     "theme": "monster",
-    "title": "Photograph the monster",
-    "flop": "Every photo is of a goose. The goose is flattered."
+    "title": "Fish for the monster",
+    "flop": "You caught a boot. The monster is laughing at you."
    }
   },
   {
@@ -3781,10 +3779,10 @@
     }
    ],
    "game": {
-    "type": "rhythm",
+    "type": "fish",
     "theme": "note",
-    "title": "Clap in time at the opera",
-    "flop": "You clapped at your own death. Then asked for more."
+    "title": "Clap only at the real ending",
+    "flop": "You clapped at the fake ending. Four times. The tenor cried."
    }
   },
   {
@@ -3899,10 +3897,10 @@
     }
    ],
    "game": {
-    "type": "dodge",
-    "theme": "car",
-    "title": "Drive through the goose line",
-    "flop": "You honked at them. They honked back. Louder.",
+    "type": "sling",
+    "theme": "pie",
+    "title": "Lob bread to lure the geese out",
+    "flop": "You hit Gerald. With a baguette. On camera.",
     "bad": "goose"
    }
   },
@@ -4152,10 +4150,10 @@
     }
    ],
    "game": {
-    "type": "sort",
+    "type": "spot",
     "theme": "paper",
-    "title": "Sort the receipts from the raccoons",
-    "flop": "You handed him Dave's diary. He's read page one.",
+    "title": "Spot the forged receipt",
+    "flop": "You handed him a raccoon. It was not a receipt.",
     "bad": "raccoon"
    }
   },
@@ -4215,11 +4213,10 @@
     }
    ],
    "game": {
-    "type": "jump",
-    "theme": "kid",
-    "title": "Wade down Main Street",
-    "flop": "You fell in. A duck rescued you. It's charging.",
-    "bad": "drop"
+    "type": "fish",
+    "theme": "car",
+    "title": "Fish the cars out of Main Street",
+    "flop": "You caught Doug. He was fine. He was angry."
    }
   },
   {
@@ -4348,10 +4345,11 @@
     "press": -5
    },
    "game": {
-    "type": "tug",
-    "theme": "star",
-    "title": "Out-cheer the cone",
-    "flop": "You cheered alone. It echoed. The cone stood firm."
+    "type": "sling",
+    "theme": "paper",
+    "title": "Pelt the cone with flyers",
+    "flop": "The flyers stuck. Now the cone has a manifesto.",
+    "bad": "cone"
    }
   },
   {
@@ -4608,10 +4606,10 @@
     "people": -5
    },
    "game": {
-    "type": "cross",
+    "type": "jump",
     "theme": "kid",
-    "title": "Walk home without being arrested",
-    "flop": "You were arrested for walking. And 'looking walky'.",
+    "title": "Hop the jaywalking lines",
+    "flop": "You were arrested mid-air. Barb is impressed.",
     "bad": "car"
    }
   },
@@ -6428,9 +6426,9 @@
    "name": "Lead the town choir",
    "text": "The choir needs a leader for the festival. They sing whatever you conduct. Conduct well.",
    "game": {
-    "type": "rhythm",
+    "type": "balance",
     "theme": "note",
-    "title": "Lead the choir in time",
+    "title": "Hold the choir's long note",
     "flop": "The choir sang three different songs at once."
    },
    "clean": {
@@ -6460,11 +6458,10 @@
    "name": "Help the goslings across",
    "text": "Gerald's nephews need to cross Main Street. All nineteen. In a line. Traffic is not slowing down.",
    "game": {
-    "type": "cross",
+    "type": "snake",
     "theme": "goose",
-    "title": "Get the goslings across",
-    "flop": "A gosling took the bus. It's in Worse Town now.",
-    "bad": "car"
+    "title": "Lead the goslings home",
+    "flop": "A gosling took the bus. It's in Worse Town now."
    },
    "clean": {
     "text": "All nineteen across. Gerald saluted with a wing.",
@@ -6493,10 +6490,10 @@
    "name": "Sort out lost property",
    "text": "The lost property box has been 'lost' since 1991. Linda found it. Some of it is still warm.",
    "game": {
-    "type": "sort",
+    "type": "spot",
     "theme": "paper",
-    "title": "Keep the treasures, bin the ghosts",
-    "flop": "You kept a ghost. It's in your coat now.",
+    "title": "Spot the treasure among the junk",
+    "flop": "You kept a ghost. It is in your coat now.",
     "bad": "ghost"
    },
    "clean": {

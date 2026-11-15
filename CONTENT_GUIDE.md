@@ -49,7 +49,7 @@ An option may carry `gamble: { chance, win, lose }`. Both outcomes are shown bef
 
 Every desk card needs `game: { type, theme, bad?, title, flop }`.
 
-- `type`: `catch` (slide a basket), `dodge` (three lanes), `whack` (tap the right ones), `match` (pairs), `stack` (drop pieces), `simon` (repeat signals), `tug` (tap on green), `flap` (tap to fly through gaps), `jump` (runner), `snake` (steer and collect), `slice` (swipe, avoid bombs), `invaders` (move and shoot), `breakout` (paddle and bricks), `rhythm` (tap lanes on the beat), `cross` (hop across traffic), `sort` (keep or bin).
+- `type`: `catch` (slide a basket), `dodge` (three lanes), `whack` (tap the right ones), `match` (pairs), `stack` (drop pieces), `simon` (repeat signals), `tug` (tap on green), `flap` (tap to fly through gaps), `jump` (runner), `snake` (steer and collect), `slice` (swipe, avoid bombs), `invaders` (move and shoot), `breakout` (paddle and bricks), `pour` (hold and release on a line), `sling` (drag back and lob at targets), `spot` (find the odd one out), `balance` (lean against gusts), `fish` (tap on the real bite, ignore nibbles).
 - `theme` is the sprite the player handles; `bad` is the one to avoid (catch, dodge, whack). Sprites are in `src/ui/art.tsx`.
 - `title` (max 40) is the job, written as something the mayor physically does: "Herd the geese to the pond".
 - `flop` (max 90) is the comic line when it goes wrong.

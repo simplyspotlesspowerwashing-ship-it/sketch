@@ -15,6 +15,9 @@ const bad = () => heckle(false);
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 const rnd = (a: number, b: number) => a + Math.random() * (b - a);
 
+/** Twists can speed a game up. Set by MiniGame before a game starts. */
+let timeScale = 1;
+
 /** Frame loop: calls `step(dt, elapsed)` every frame and re-renders. Stops when `step` returns false. */
 function useLoop(step: (dt: number, t: number) => boolean | void) {
   const [, setFrame] = useState(0);
@@ -24,7 +27,7 @@ function useLoop(step: (dt: number, t: number) => boolean | void) {
     let raf = 0, last = performance.now(), t = 0, alive = true;
     const tick = (now: number) => {
       if (!alive) return;
-      const dt = Math.min(0.05, (now - last) / 1000);
+      const dt = Math.min(0.05, (now - last) / 1000) * timeScale;
       last = now; t += dt;
       if (fn.current(dt, t) === false) { setFrame((f) => f + 1); return; }
       setFrame((f) => f + 1);
@@ -589,123 +592,196 @@ function Breakout({ g, done }: { g: CardGame; done: Done }) {
   );
 }
 
-// ---- 14. Rhythm: notes fall down three lanes; tap the lane as each one hits the line ----
-function Rhythm({ g, done }: { g: CardGame; done: Done }) {
-  const T = 22;
-  const st = useRef((() => {
-    const notes: { id: number; lane: number; at: number; state: 0 | 1 | 2 }[] = [];
-    let at = 1.4, id = 0;
-    while (at < T - 1.5) { notes.push({ id: id++, lane: Math.floor(Math.random() * 3), at, state: 0 }); if (Math.random() < 0.25) notes.push({ id: id++, lane: Math.floor(Math.random() * 3), at: at + 0.001, state: 0 }); at += [0.45, 0.6, 0.6, 0.9][Math.floor(Math.random() * 4)]! - at / T * 0.12; }
-    return { notes, t: 0, hits: 0, misses: 0, over: false, flash: [0, 0, 0], combo: 0 };
-  })());
-  const FALL = 1.6; // seconds from top to the line
+// ---- 14. Pour: hold to fill, let go on the line. Five pours, each faster (hold-and-release precision) ----
+function Pour({ g, done }: { g: CardGame; done: Done }) {
+  const ROUNDS = 5;
+  const st = useRef({ round: 0, level: 0, holding: false, band: [55, 68] as [number, number], speed: 38, scores: [] as boolean[], wait: 0, t: 0, over: false, spill: 0, idle: 0 });
+  const newRound = (s: typeof st.current) => { s.idle = 0; const lo = rnd(35, 72); const w = rnd(9, 14) - s.round; s.band = [lo, lo + w]; s.level = 0; s.speed = 34 + s.round * 9 + rnd(0, 8); s.wait = 0; };
   useLoop((dt, t) => {
     const s = st.current;
     if (s.over) return false;
-    s.t = t; s.flash = s.flash.map((f) => Math.max(0, f - dt));
-    for (const n of s.notes) if (n.state === 0 && t - n.at > 0.22) { n.state = 2; s.misses += 1; s.combo = 0; if (s.misses % 3 === 1) bad(); }
-    if (t >= T) { s.over = true; const ratio = s.hits / s.notes.length; done(ratio >= 0.85 ? 2 : ratio >= 0.6 ? 1 : 0); return false; }
+    s.t = t; s.spill = Math.max(0, s.spill - dt);
+    if (s.wait > 0) { s.wait -= dt; if (s.wait <= 0) { if (s.round >= ROUNDS) { s.over = true; const ok = s.scores.filter(Boolean).length; done(ok >= 4 ? 2 : ok >= 2 ? 1 : 0); return false; } newRound(s); } return; }
+    if (!s.holding && s.level === 0) { s.idle += dt; if (s.idle > 4) { s.idle = 0; settle(false); return; } }
+    if (s.holding) { s.level += s.speed * dt * (1 + s.level / 160); if (s.level >= 100) { s.level = 100; s.holding = false; settle(false, true); } }
+    function settle(ok: boolean, spilt = false) {
+      if (!ok && !spilt && s.level === 0) s.level = 0.0001; // marks 'too slow'
+      s.scores.push(ok); s.round += 1; s.wait = 0.9; if (spilt) s.spill = 0.6; sfx(ok ? 'coin' : 'warn'); if (ok) good(); else bad(); }
+    (st.current as unknown as { settle: typeof settle }).settle = settle;
   });
-  const press = (lane: number) => {
-    const s = st.current;
-    if (s.over) return;
-    s.flash[lane] = 0.15;
-    const n = s.notes.find((x) => x.state === 0 && x.lane === lane && Math.abs(x.at - s.t) < 0.2);
-    if (n) { n.state = 1; s.hits += 1; s.combo += 1; sfx('tap'); if (s.combo % 6 === 0) good(); }
-    else { s.combo = 0; sfx('warn'); }
-  };
-  useEffect(() => { const k = (e: KeyboardEvent) => { const i = ['ArrowLeft', 'ArrowDown', 'ArrowRight'].indexOf(e.key); if (i >= 0 && !e.repeat) { e.preventDefault(); press(i); } }; addEventListener('keydown', k); return () => removeEventListener('keydown', k); }, []);
+  const down = () => { const s = st.current; if (!s.over && s.wait <= 0 && s.level === 0) { s.holding = true; sfx('paper'); } };
+  const up = () => { const s = st.current; if (!s.holding) return; s.holding = false; (s as unknown as { settle: (ok: boolean) => void }).settle(s.level >= s.band[0] && s.level <= s.band[1]); };
+  useEffect(() => { const k = (e: KeyboardEvent) => { if (e.key === ' ') { e.preventDefault(); if (e.type === 'keydown' && !e.repeat) down(); if (e.type === 'keyup') up(); } }; addEventListener('keydown', k); addEventListener('keyup', k); return () => { removeEventListener('keydown', k); removeEventListener('keyup', k); }; }, []);
   const s = st.current;
   return (
     <>
-      <Hud left={T - s.t} total={T}><b>{s.hits}</b> hit · {s.misses} missed{s.combo >= 4 ? ` · combo ×${s.combo}` : ''}</Hud>
-      <div class="mg-arena stage">
-        {[0, 1, 2].map((l) => <span key={l} class={`mg-track ${s.flash[l]! > 0 ? 'lit' : ''}`} style={{ left: `${l * 33.34}%` }} />)}
-        <span class="mg-line" style={{ top: '84%', left: 0, right: 0, borderLeft: 0, borderTop: '3px dashed #F7D774' }} />
-        {s.notes.filter((n) => n.state !== 1 && s.t > n.at - FALL && s.t < n.at + 0.4).map((n) => <span key={n.id} class={`mg-ent ${n.state === 2 ? 'gone' : ''}`} style={{ left: `${16.67 + n.lane * 33.34}%`, top: `${84 - ((n.at - s.t) / FALL) * 80}%` }}><Sprite theme={g.theme} size={38} /></span>)}
+      <Hud left={ROUNDS - s.round} total={ROUNDS}>Pour <b>{Math.min(s.round + 1, ROUNDS)}</b> of {ROUNDS} · {s.scores.filter(Boolean).length} on the line · 4 is clean</Hud>
+      <div class={`mg-arena vat ${s.spill > 0 ? 'shake' : ''}`}>
+        <span class="mg-jug"><Sprite theme={g.theme} size={44} />{s.holding && <i class="mg-stream" />}</span>
+        <span class="mg-glass">
+          <i class="mg-band" style={{ bottom: `${s.band[0]}%`, height: `${s.band[1] - s.band[0]}%` }} />
+          <i class="mg-liquid" style={{ height: `${s.level}%` }} />
+          {s.wait > 0 && <b class={`mg-verdict ${s.scores[s.scores.length - 1] ? 'ok' : ''}`}>{s.spill > 0 ? 'SPILT!' : s.scores[s.scores.length - 1] ? 'PERFECT' : s.level < 0.01 ? 'TOO SLOW' : s.level < s.band[0] ? 'TOO LITTLE' : 'TOO MUCH'}</b>}
+        </span>
       </div>
-      <div class="mg-lanes">{[0, 1, 2].map((l) => <button key={l} class={`btn mg-lanebtn l${l}`} aria-label={`Lane ${l + 1}`} onPointerDown={() => press(l)}>{['◀', '▼', '▶'][l]}</button>)}</div>
-      <p class="hint">Tap the lane as each one reaches the line. Keep the combo going.</p>
+      <button class={`btn mg-big ${s.holding ? 'go' : ''}`} onPointerDown={down} onPointerUp={up} onPointerLeave={up}>{s.holding ? 'POURING… let go!' : 'Hold to pour'}</button>
+      <p class="hint">Hold to pour, let go inside the yellow band. It pours faster as it fills.</p>
     </>
   );
 }
 
-// ---- 15. Cross: get across the busy road, again and again (the road-crossing genre) ----
-function Cross({ g, done }: { g: CardGame; done: Done }) {
-  const T = 26, LANES = 5, GOAL = 3;
-  const st = useRef((() => ({
-    x: 50, row: LANES, t: 0, over: false, crossed: 0, hits: 0, flash: 0,
-    lanes: Array.from({ length: LANES }, (_, i) => ({ dir: i % 2 ? -1 : 1, speed: rnd(14, 24) + i * 2, cars: Array.from({ length: 2 + (i % 2) }, (_, k) => k * rnd(34, 46) + rnd(0, 20)) })),
-  }))());
-  const rowY = (r: number) => 8 + r * (84 / LANES);
+// ---- 15. Sling: drag back and let go to lob things at targets (the slingshot genre) ----
+function Sling({ g, done }: { g: CardGame; done: Done }) {
+  const SHOTS = 7, GOAL = 4, T = 25, O: [number, number] = [14, 78];
+  const place = () => ({ x: rnd(52, 90), y: rnd(25, 78), vy: Math.random() < 0.5 ? rnd(-14, 14) : 0 });
+  const st = useRef({ shots: SHOTS, hits: 0, targets: [place(), place(), place()], ball: null as null | { x: number; y: number; vx: number; vy: number }, aim: null as null | [number, number], t: 0, over: false, pop: [] as { x: number; y: number; at: number }[] });
+  const arena = useRef<HTMLDivElement>(null);
+  useLoop((dt, t) => {
+    const s = st.current;
+    if (s.over) return false;
+    s.t = t;
+    for (const tg of s.targets) { tg.y += tg.vy * dt; if (tg.y < 20 || tg.y > 82) tg.vy *= -1; }
+    if (s.ball) {
+      const b = s.ball;
+      b.vy += 90 * dt; b.x += b.vx * dt; b.y += b.vy * dt;
+      s.targets.forEach((tg, i) => { if (Math.hypot(tg.x - b.x, (tg.y - b.y) * 0.85) < 7) { s.hits += 1; s.pop.push({ x: tg.x, y: tg.y, at: t }); s.targets[i] = place(); sfx('stamp'); good(); } });
+      if (b.x > 105 || b.y > 105 || b.x < -5) { s.ball = null; if (s.shots === 0 || s.hits >= GOAL) finish(); }
+    }
+    s.pop = s.pop.filter((p) => t - p.at < 0.6);
+    if (t >= T && !s.ball) { finish(); return false; }
+    function finish() { s.over = true; done(s.hits >= GOAL ? 2 : s.hits >= 2 ? 1 : 0); }
+  });
+  const pos = (e: PointerEvent): [number, number] => { const r = arena.current!.getBoundingClientRect(); return [((e.clientX - r.left) / r.width) * 100, ((e.clientY - r.top) / r.height) * 100]; };
+  const s = st.current;
+  const pull: [number, number] | null = s.aim ? [clamp(O[0]! - s.aim[0], -40, 40), clamp(O[1]! - s.aim[1], -40, 40)] : null;
+  const dots = pull ? Array.from({ length: 7 }, (_, i) => { const tt = i * 0.07; return [O[0] + pull[0] * 3.2 * tt, O[1] + pull[1] * 3.2 * tt + 45 * tt * tt]; }) : [];
+  return (
+    <>
+      <Hud left={T - s.t} total={T}><b>{s.hits}</b> of {GOAL} hits · {s.shots} shot{s.shots === 1 ? '' : 's'} left</Hud>
+      <div ref={arena} class="mg-arena range"
+        onPointerDown={(e) => { if (!s.ball && s.shots > 0 && !s.over) { (e.target as Element).setPointerCapture?.(e.pointerId); s.aim = pos(e); } }}
+        onPointerMove={(e) => { if (s.aim) s.aim = pos(e); }}
+        onPointerUp={() => { if (!s.aim || !pull) return; if (Math.hypot(pull[0], pull[1]) > 4) { s.ball = { x: O[0], y: O[1], vx: pull[0] * 3.2, vy: pull[1] * 3.2 }; s.shots -= 1; sfx('paper'); } s.aim = null; }}>
+        <span class="mg-sling" style={{ left: `${O[0]}%`, top: `${O[1]}%` }} />
+        {dots.map(([x, y], i) => <i key={i} class="mg-dot" style={{ left: `${x}%`, top: `${y}%`, opacity: 1 - i / 8 }} />)}
+        {s.targets.map((tg, i) => <span key={i} class="mg-ent target" style={{ left: `${tg.x}%`, top: `${tg.y}%` }}><Sprite theme={g.bad ?? 'cone'} size={40} /></span>)}
+        {s.pop.map((p, i) => <span key={`p${i}`} class="mg-pop2" style={{ left: `${p.x}%`, top: `${p.y}%` }}>POW!</span>)}
+        {s.ball && <span class="mg-ent" style={{ left: `${s.ball.x}%`, top: `${s.ball.y}%`, rotate: `${s.t * 700}deg` }}><Sprite theme={g.theme} size={30} /></span>}
+        {!s.ball && !s.aim && <span class="mg-ent" style={{ left: `${O[0]}%`, top: `${O[1]}%` }}><Sprite theme={g.theme} size={30} /></span>}
+      </div>
+      <p class="hint">Press anywhere, drag back like a slingshot, let go. Hit {GOAL} with {SHOTS} shots.</p>
+    </>
+  );
+}
+
+// ---- 16. Spot: one of these is not like the others. Find it, eight times ----
+function Spot({ g, done }: { g: CardGame; done: Done }) {
+  const T = 24, ROUNDS = 8;
+  const deal = (round: number) => {
+    const n = round < 3 ? 9 : round < 6 ? 16 : 20;
+    const kinds = g.bad ? ['flip', 'turn', 'small', 'other'] : ['flip', 'turn', 'small'];
+    return { n, odd: Math.floor(Math.random() * n), kind: kinds[Math.floor(Math.random() * kinds.length)]! };
+  };
+  const st = useRef({ round: 0, grid: deal(0), misses: 0, t: 0, over: false, penalty: 0, flash: 0 });
+  useLoop((dt, t) => {
+    const s = st.current;
+    if (s.over) return false;
+    s.t = t + s.penalty; s.flash = Math.max(0, s.flash - dt);
+    if (s.t >= T) { s.over = true; done(s.round >= 5 ? 1 : 0); return false; }
+  });
+  const pick = (i: number) => {
+    const s = st.current;
+    if (s.over) return;
+    if (i === s.grid.odd) { s.round += 1; sfx('coin'); if (s.round % 3 === 0) good(); if (s.round >= ROUNDS) { s.over = true; done(s.misses <= 1 ? 2 : 1); return; } s.grid = deal(s.round); }
+    else { s.misses += 1; s.penalty += 2; s.flash = 0.3; sfx('warn'); bad(); }
+  };
+  const s = st.current, cols = s.grid.n === 9 ? 3 : 4;
+  return (
+    <>
+      <Hud left={T - s.t} total={T}>Round <b>{Math.min(s.round + 1, ROUNDS)}</b> of {ROUNDS} · wrong taps cost 2 seconds</Hud>
+      <div class={`mg-spot ${s.flash > 0 ? 'shake' : ''}`} style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+        {Array.from({ length: s.grid.n }, (_, i) => {
+          const odd = i === s.grid.odd;
+          const k = odd ? s.grid.kind : '';
+          return <button key={`${s.round}-${i}`} class={`mg-cell ${k}`} aria-label={`Item ${i + 1}`} onPointerDown={() => pick(i)}><Sprite theme={k === 'other' ? g.bad! : g.theme} size={cols === 3 ? 56 : 44} /></button>;
+        })}
+      </div>
+      <p class="hint">Tap the odd one out: flipped, upside down, smaller, or something else entirely.</p>
+    </>
+  );
+}
+
+// ---- 17. Balance: keep it upright against the gusts by leaning left and right ----
+function Balance({ g, done }: { g: CardGame; done: Done }) {
+  const T = 20;
+  const st = useRef({ a: 0, w: 0, push: 0, gust: 0, gustT: 1.5, falls: 0, t: 0, over: false, down: 0 });
+  useLoop((dt, t) => {
+    const s = st.current;
+    if (s.over) return false;
+    s.t = t;
+    if (s.down > 0) { s.down -= dt; if (s.down <= 0) { s.a = rnd(-4, 4); s.w = 0; } return; }
+    if (t > s.gustT) { s.gust = (Math.random() < 0.5 ? -1 : 1) * rnd(18, 30 + t * 2); s.gustT = t + rnd(1.4, 2.6); }
+    s.gust *= Math.pow(0.4, dt);
+    s.w += (s.a * 1.5 + s.gust + s.push * 95) * dt;
+    s.w *= Math.pow(0.3, dt);
+    s.a += s.w * dt;
+    if (Math.abs(s.a) > 42) { s.falls += 1; s.down = 0.9; sfx('lose'); bad(); }
+    if (t >= T) { s.over = true; done(s.falls === 0 ? 2 : s.falls <= 2 ? 1 : 0); return false; }
+  });
+  const set = (v: number) => { st.current.push = v; };
+  useEffect(() => { const k = (e: KeyboardEvent) => { if (e.key === 'ArrowLeft') set(e.type === 'keydown' ? -1 : 0); if (e.key === 'ArrowRight') set(e.type === 'keydown' ? 1 : 0); }; addEventListener('keydown', k); addEventListener('keyup', k); return () => { removeEventListener('keydown', k); removeEventListener('keyup', k); }; }, []);
+  const s = st.current;
+  return (
+    <>
+      <Hud left={T - s.t} total={T}>{s.falls} fall{s.falls === 1 ? '' : 's'} · none is clean{Math.abs(s.gust) > 25 ? ' · GUST!' : ''}</Hud>
+      <div class={`mg-arena windy ${Math.abs(s.gust) > 25 ? 'gusty' : ''}`}>
+        <span class="mg-pole" style={{ rotate: `${s.down > 0 ? Math.sign(s.a) * 80 : s.a}deg` }}><span class="mg-pole-top"><Sprite theme={g.theme} size={48} /></span></span>
+        <span class="mg-base" />
+        <span class="mg-gauge"><i style={{ left: `${50 + clamp(s.a, -42, 42) * 1.15}%` }} /></span>
+      </div>
+      <div class="mg-lanes two"><button class="btn mg-lanebtn l0" onPointerDown={() => set(-1)} onPointerUp={() => set(0)} onPointerLeave={() => set(0)}>◀ Lean</button><button class="btn mg-lanebtn l2" onPointerDown={() => set(1)} onPointerUp={() => set(0)} onPointerLeave={() => set(0)}>Lean ▶</button></div>
+      <p class="hint">Hold a side to lean against it. Gusts come out of nowhere. Don't overcorrect.</p>
+    </>
+  );
+}
+
+// ---- 18. Fish: wait for the real bite, ignore the nibbles ----
+function Fish({ g, done }: { g: CardGame; done: Done }) {
+  const T = 25, GOAL = 5;
+  const st = useRef({ phase: 'wait' as 'wait' | 'nibble' | 'bite' | 'caught', until: rnd(1.2, 2.6), caught: 0, scared: 0, t: 0, over: false, flash: 0 });
   useLoop((dt, t) => {
     const s = st.current;
     if (s.over) return false;
     s.t = t; s.flash = Math.max(0, s.flash - dt);
-    const k = 1 + t / T * 0.7;
-    s.lanes.forEach((ln, i) => {
-      ln.cars = ln.cars.map((x) => { let nx = x + ln.dir * ln.speed * k * dt; if (nx > 112) nx -= 124; if (nx < -12) nx += 124; return nx; });
-      if (s.row === i && ln.cars.some((cx) => Math.abs(cx - s.x) < 7)) { s.hits += 1; s.flash = 0.4; s.row = LANES; sfx('warn'); bad(); }
-    });
-    if (t >= T) { s.over = true; done(s.crossed >= GOAL && s.hits <= 1 ? 2 : s.crossed >= 2 ? 1 : 0); return false; }
+    if (t >= s.until) {
+      if (s.phase === 'wait') { if (Math.random() < 0.45) { s.phase = 'nibble'; s.until = t + rnd(0.3, 0.6); } else { s.phase = 'bite'; s.until = t + Math.max(0.38, 0.62 - s.caught * 0.04); sfx('tap'); } }
+      else if (s.phase === 'nibble') { s.phase = 'wait'; s.until = t + rnd(0.4, 1.4); }
+      else if (s.phase === 'bite') { s.phase = 'wait'; s.until = t + rnd(0.9, 2.2); }
+      else { s.phase = 'wait'; s.until = t + rnd(0.9, 2.0); }
+    }
+    if (s.caught >= GOAL) { s.over = true; done(s.scared <= 1 ? 2 : 1); return false; }
+    if (t >= T) { s.over = true; done(s.caught >= 3 ? 1 : 0); return false; }
   });
-  const step = (dx: number, dy: number) => {
+  const reel = () => {
     const s = st.current;
     if (s.over) return;
-    s.x = clamp(s.x + dx * 12, 6, 94); s.row = clamp(s.row + dy, -1, LANES);
-    sfx('paper');
-    if (s.row === -1) { s.crossed += 1; s.row = LANES; s.x = 50; sfx('coin'); good(); if (s.crossed >= GOAL && s.hits <= 1) { s.over = true; done(2); } }
+    if (s.phase === 'bite') { s.caught += 1; s.phase = 'caught'; s.until = s.t + 0.8; sfx('win'); good(); }
+    else if (s.phase !== 'caught') { s.scared += 1; s.flash = 0.35; s.phase = 'wait'; s.until = s.t + rnd(1.2, 2.2); sfx('warn'); bad(); }
   };
-  useEffect(() => { const k = (e: KeyboardEvent) => { const m: Record<string, [number, number]> = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] }; const v = m[e.key]; if (v) { e.preventDefault(); step(...v); } }; addEventListener('keydown', k); return () => removeEventListener('keydown', k); }, []);
+  useEffect(() => { const k = (e: KeyboardEvent) => { if (e.key === ' ' && !e.repeat) { e.preventDefault(); reel(); } }; addEventListener('keydown', k); return () => removeEventListener('keydown', k); }, []);
   const s = st.current;
   return (
     <>
-      <Hud left={T - s.t} total={T}><b>{s.crossed}</b> of {GOAL} across · {s.hits} squashed</Hud>
-      <button class={`mg-arena crossing ${s.flash > 0 ? 'shake' : ''}`} onPointerDown={() => step(0, -1)} aria-label="Step forward">
-        {s.lanes.map((ln, i) => ln.cars.map((cx, j) => <span key={`${i}-${j}`} class="mg-ent" style={{ left: `${cx}%`, top: `${rowY(i)}%`, scale: ln.dir < 0 ? '-1 1' : undefined }}><Sprite theme={g.bad ?? 'car'} size={40} /></span>))}
-        <span class="mg-ent me" style={{ left: `${s.x}%`, top: `${s.row === -1 ? 2 : rowY(s.row)}%` }}><Sprite theme={g.theme} size={36} /></span>
+      <Hud left={T - s.t} total={T}><b>{s.caught}</b> of {GOAL} caught · {s.scared} scared off</Hud>
+      <button class={`mg-arena pond ${s.flash > 0 ? 'shake' : ''}`} onPointerDown={reel} aria-label="Reel in">
+        <span class="mg-rod" />
+        <span class="mg-line2" />
+        <span class={`mg-bobber ${s.phase}`} />
+        {s.phase === 'bite' && <b class="mg-splash">!</b>}
+        {s.phase === 'caught' && <span class="mg-ent caught" style={{ left: '62%', top: '30%' }}><Sprite theme={g.theme} size={60} /></span>}
+        <span class="mg-ripple" />
       </button>
-      <div class="mg-dpad">{([['◀', -1, 0], ['▲', 0, -1], ['▼', 0, 1], ['▶', 1, 0]] as const).map(([l, x, y]) => <button key={l} class="btn" aria-label={l} onPointerDown={() => step(x, y)}>{l}</button>)}</div>
-      <p class="hint">Tap the road (or ▲) to hop forward. Get across {GOAL} times, squashed once at most.</p>
-    </>
-  );
-}
-
-// ---- 16. Sort: things arrive one at a time; send each to the right side, fast ----
-function Sort({ g, done }: { g: CardGame; done: Done }) {
-  const COUNT = 18;
-  const st = useRef((() => ({ items: Array.from({ length: COUNT }, () => Math.random() < 0.55), i: 0, left: 1.6, right: 0, wrong: 0, over: false, t: 0, fly: 0 as -1 | 0 | 1 }))());
-  useLoop((dt, t) => {
-    const s = st.current;
-    if (s.over) return false;
-    s.t = t; s.left -= dt;
-    if (s.left <= 0) { s.wrong += 1; sfx('warn'); bad(); next(); }
-    if (s.i >= COUNT) { s.over = true; done(s.wrong <= 1 ? 2 : s.wrong <= 4 ? 1 : 0); return false; }
-  });
-  function next() { const s = st.current; s.i += 1; s.left = Math.max(0.75, 1.6 - s.i * 0.05); }
-  const send = (side: -1 | 1) => {
-    const s = st.current;
-    if (s.over || s.i >= COUNT) return;
-    const isGood = s.items[s.i]!;
-    if ((side === -1) === isGood) { s.right += 1; sfx('coin'); if (s.right % 5 === 0) good(); } else { s.wrong += 1; sfx('warn'); bad(); }
-    s.fly = side; setTimeout(() => { st.current.fly = 0; }, 120);
-    next();
-  };
-  useEffect(() => { const k = (e: KeyboardEvent) => { if (e.key === 'ArrowLeft') send(-1); if (e.key === 'ArrowRight') send(1); }; addEventListener('keydown', k); return () => removeEventListener('keydown', k); }, []);
-  const start = useRef<number | null>(null);
-  const s = st.current;
-  const cur = s.items[s.i];
-  return (
-    <>
-      <Hud left={(s.left / 1.6) * 10} total={10}><b>{Math.min(s.i, COUNT)}</b> of {COUNT} sorted · {s.wrong} wrong</Hud>
-      <div class="mg-arena sorter" onPointerDown={(e) => { start.current = e.clientX; }} onPointerUp={(e) => { if (start.current !== null && Math.abs(e.clientX - start.current) > 30) send(e.clientX < start.current ? -1 : 1); start.current = null; }}>
-        <span class="mg-bin left"><Sprite theme={g.theme} size={30} /><b>KEEP</b></span>
-        <span class="mg-bin right"><Sprite theme={g.bad ?? 'raccoon'} size={30} /><b>BIN</b></span>
-        {cur !== undefined && <span key={s.i} data-good={cur ? "1" : "0"} class={`mg-ent sortme ${s.fly < 0 ? 'flyl' : s.fly > 0 ? 'flyr' : ''}`} style={{ left: '50%', top: '45%' }}><Sprite theme={cur ? g.theme : g.bad ?? 'raccoon'} size={70} /></span>}
-        <span class="mg-belt" />
-      </div>
-      <div class="mg-lanes two"><button class="btn mg-lanebtn l0" onPointerDown={() => send(-1)}>◀ Keep</button><button class="btn mg-lanebtn l2" onPointerDown={() => send(1)}>Bin ▶</button></div>
-      <p class="hint">Swipe or tap: keep the <Sprite theme={g.theme} size={18} />, bin the <Sprite theme={g.bad ?? 'raccoon'} size={18} />. Each one gets less time.</p>
+      <p class="hint">Tap the moment the float plunges. Little twitches are nibbles: leave them.</p>
     </>
   );
 }
@@ -723,10 +799,12 @@ const HOW: Record<CardGame['type'], string> = {
   snake: 'Steer to collect twelve. Don\'t hit the walls or your own tail.',
   slice: 'Swipe through everything thrown up. Never the bombs. 20 seconds.',
   invaders: 'Drag to move, tap to fire. Clear them before they land. Three lives.',
-  breakout: 'Drag the paddle, bounce the ball, knock out every brick. Three balls.',
-  rhythm: 'Tap each lane as things hit the line. Keep the combo going.',
-  cross: 'Hop across the busy road three times. Getting squashed sends you back.',
-  sort: 'Keep or bin, one at a time. Swipe left or right. It gets faster.',
+  breakout: 'Drag the paddle, bounce the ball, knock out the bricks. Three balls.',
+  pour: 'Hold to pour, let go inside the band. Five pours, each one faster.',
+  sling: 'Drag back like a slingshot and let go. Hit four targets with seven shots.',
+  spot: 'Find the odd one out. Eight rounds, more to search each time.',
+  balance: 'Hold left or right to lean against the gusts. Twenty seconds. Don\'t let it fall.',
+  fish: 'Wait for the float to plunge, then tap. Ignore the nibbles.',
 };
 
 const SHOUT: Record<string, string> = {
@@ -792,11 +870,28 @@ export function Aftermath({ card, skill }: { card: Card; skill: Skill }) {
   );
 }
 
+/** Twists: the same game rarely plays the same way twice. Chosen from the card and the day, so it's the same for everyone. */
+const TWISTS = [
+  { id: 'none', name: '' }, { id: 'none', name: '' },
+  { id: 'speedy', name: 'Twist: everything is in a hurry' },
+  { id: 'fog', name: 'Twist: thick fog' },
+  { id: 'wobble', name: 'Twist: the ground is wobbling' },
+  { id: 'tiny', name: 'Twist: everything shrank' },
+  { id: 'dark', name: 'Twist: someone turned the lights off' },
+];
+function twistFor(card: Card, idx: number, day: number) {
+  let h = idx * 31 + day * 7;
+  for (const ch of card.id) h = (h * 33 + ch.charCodeAt(0)) >>> 0;
+  return TWISTS[h % TWISTS.length]!;
+}
+
 /** Plays a card's game (or a catastrophe's three games in a row) and reports one Skill. */
-export function MiniGame({ card, onDone }: { card: Card; onDone: (skill: Skill) => void }) {
+export function MiniGame({ card, onDone, day = 1 }: { card: Card; onDone: (skill: Skill) => void; day?: number }) {
   const games = card.stages ?? [card.game!];
   const [idx, setIdx] = useState(0);
   const g = games[idx]!;
+  const twist = twistFor(card, idx, day);
+  timeScale = twist.id === 'speedy' ? 1.3 : 1;
   const [stage, setStage] = useState<'clip' | 'how' | 'play' | 'end'>('clip');
   const [count, setCount] = useState(4);
   const [results, setResults] = useState<Skill[]>([]);
@@ -833,13 +928,14 @@ export function MiniGame({ card, onDone }: { card: Card; onDone: (skill: Skill) 
   };
   if (stage === 'clip') return <Clip card={card} job={g} onEnd={() => setStage('how')} />;
   return (
-    <div class="mg" data-game={g.type}>
+    <div class={`mg twist-${twist.id}`} data-game={g.type}>
       {card.major && <div class="ribbon">CATASTROPHE · stage {idx + 1} of {games.length}</div>}
       <div class="mg-head"><Sprite theme={g.theme} size={36} /><h2 class="display">{g.title}</h2></div>
       <div class="heckle"><Portrait who={card.who} size={40} mood={lineMood} /><span class="bubble" key={line}>{line}</span></div>
       {stage === 'how' && (
         <div class="mg-how">
           <p class="howto">{HOW[g.type]}</p>
+          {twist.name && <p class="twist">{twist.name}</p>}
           {count > 3 ? <button class="btn primary" autoFocus onClick={() => { setCount(3); sfx('tap'); }}>Go</button> : <div class="mg-count" key={count}>{count}</div>}
           <p class="hint">{card.major ? 'Three stages. Every group is watching. A bad job costs everyone.' : 'A clean job keeps your deal as it is. Anything less costs extra.'}</p>
         </div>
@@ -865,8 +961,10 @@ function PlayGame({ g, done }: { g: CardGame; done: Done }) {
     case 'slice': return <Slice g={g} done={done} />;
     case 'invaders': return <Invaders g={g} done={done} />;
     case 'breakout': return <Breakout g={g} done={done} />;
-    case 'rhythm': return <Rhythm g={g} done={done} />;
-    case 'cross': return <Cross g={g} done={done} />;
-    case 'sort': return <Sort g={g} done={done} />;
+    case 'pour': return <Pour g={g} done={done} />;
+    case 'sling': return <Sling g={g} done={done} />;
+    case 'spot': return <Spot g={g} done={done} />;
+    case 'balance': return <Balance g={g} done={done} />;
+    case 'fish': return <Fish g={g} done={done} />;
   }
 }
