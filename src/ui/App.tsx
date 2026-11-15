@@ -1,131 +1,108 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { week1Content as content } from '../content/index.ts';
-import { coverMissedDays } from '../engine/dave.ts';
-import { voteShare } from '../engine/election.ts';
-import { agenda, blocked, botchCost, campaignCard, daveCost, fadeFor, findCard, legalActions, monthOfDay, newTerm, reduce, upfront } from '../engine/engine.ts';
+import { week1Pack as pack } from '../content/index.ts';
+import { voteParts, voteShare } from '../engine/election.ts';
+import { coverMissedDays, findCard, newTerm, options, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
-import { GROUPS } from '../engine/types.ts';
-import type { Action, Card, Decree, Initiative, MonthReport, Effects, GroupId, Option, PerkId, Profile, Skill, State, TaxLevel } from '../engine/types.ts';
-import { Aftermath, MiniGame } from './minigames.tsx';
-import { Arrows, GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Sprite, Town } from './art.tsx';
-import type { Burst, Mood, Pulse } from './art.tsx';
-import { DAY_NAMES, calendar, loadSave, previewStats, setMuted, sfx, writeSave } from './platform.ts';
+import { GROUPS, METERS } from '../engine/types.ts';
+import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
+import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
+import type { Mood, Pulse, TownView } from './art.tsx';
+import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
 
-const stats = previewStats;
-const money = (k: number) => `${k < 0 ? '−' : ''}$${Math.abs(k)}k`;
-const signed = (k: number) => `${k < 0 ? '−' : '+'}$${Math.abs(k)}k`;
 const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const METER_NAME: Record<MeterId, string> = { ...GROUP_NAME, treasury: 'Treasury' };
+const METER_COLOR: Record<MeterId, string> = { ...GROUP_COLOR, treasury: '#B58D55' };
+const ARROW: Record<Dir, string> = { left: '←', right: '→', up: '↑', down: '↓' };
 
 function boot(save: Save): State {
   const cal = calendar(save.dayOffset);
-  const kept = save.state && save.state.v === 7 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
-  return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, content), content, cal.today);
+  const kept = save.state && save.state.v === 8 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, pack), pack, cal.today);
 }
 
-/** Animate a number toward its new value. */
-function useTween(target: number, ms = 450) {
-  const [v, setV] = useState(target);
-  const from = useRef(target);
+const view = (s: State, fresh?: string | null): TownView => ({
+  day: s.day, approval: { people: s.meters.people, business: s.meters.business, law: s.meters.law, press: s.meters.press }, flags: s.flags, profile: s.profile, fresh,
+});
+
+// ---------- meters ----------
+function MeterIcon({ m }: { m: MeterId }) {
+  return m === 'treasury' ? <span class="coinface"><Icon.coin size={30} /></span> : <Portrait who={LEADER[m as GroupId]!} size={34} ring={GROUP_COLOR[m as GroupId]} mood="neutral" />;
+}
+
+function Meters({ s, preview }: { s: State; preview: Choice | null }) {
+  const prev = useRef(s.meters);
+  const [delta, setDelta] = useState<Partial<Record<MeterId, number>>>({});
   useEffect(() => {
-    if (reduced()) { setV(target); from.current = target; return; }
-    const start = from.current, t0 = performance.now();
-    let raf = 0;
-    const step = (t: number) => {
-      const k = Math.min(1, (t - t0) / ms);
-      const cur = start + (target - start) * (1 - Math.pow(1 - k, 3));
-      setV(cur); from.current = cur;
-      if (k < 1) raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [target]);
-  return Math.round(v);
-}
-
-// ---------- small pieces ----------
-
-function MoneyChip({ value, suffix = '' }: { value: number; suffix?: string }) {
-  return <span class={`chip money ${value < 0 ? 'down' : 'up'}`} aria-label={`${value < 0 ? 'costs' : 'gains'} ${Math.abs(value)} thousand dollars${suffix ? ' per month' : ''}`}><Icon.coin size={14} />{signed(value)}{suffix}</span>;
-}
-
-function EffectChips({ effects }: { effects: Effects | undefined }) {
-  return <>{GROUPS.filter((g) => effects?.[g]).map((g) => <Arrows key={g} group={g} value={effects![g]!} />)}</>;
-}
-
-function BotchChips({ card, skill, urgent }: { card: Card; skill: 0 | 1; urgent?: boolean }) {
-  const c = botchCost(card, skill, urgent);
-  return <>{c.money ? <MoneyChip value={c.money} /> : null}<EffectChips effects={c.effects} /></>;
-}
-
-/** Before choosing, a card shows only what you must know to pick: Favors it needs and what kind of deal it is.
- *  Where the effects land is revealed afterwards (see Reveal). */
-function OptionHint({ o }: { o: Option }) {
-  const tags: string[] = [];
-  if (o.project) tags.push('Builds something');
-  if (o.promise) tags.push('A promise: pay later');
-  if (o.gamble) tags.push('A gamble');
-  if (o.lasting) tags.push('Will linger');
-  if (o.monthly) tags.push('An ongoing cost');
+    const d: Partial<Record<MeterId, number>> = {};
+    for (const m of METERS) if (s.meters[m] !== prev.current[m]) d[m] = s.meters[m] - prev.current[m];
+    prev.current = s.meters;
+    if (Object.keys(d).length) { setDelta(d); const t = setTimeout(() => setDelta({}), 1700); return () => clearTimeout(t); }
+  }, [s.meters]);
   return (
-    <span class="costs">
-      {o.favors ? <span class="chip favor" aria-label={`costs ${Math.abs(o.favors)} Favor`}><Icon.ticket size={14} />−{Math.abs(o.favors)}</span> : null}
-      {tags.map((t) => <span key={t} class="chip hintchip">{t}</span>)}
-    </span>
-  );
-}
-
-function OptionCosts({ o }: { o: Option }) {
-  const p = o.project ? content.projects[o.project]! : null;
-  const now = upfront(o, content);
-  const merged: Effects = { ...o.effects };
-  if (p?.onBuild) for (const g of GROUPS) if (p.onBuild[g]) merged[g] = (merged[g] ?? 0) + p.onBuild[g]!;
-  return (
-    <span class="costs">
-      {now !== 0 && <MoneyChip value={now} />}
-      {(o.monthly || p?.monthly) ? <MoneyChip value={(o.monthly ?? 0) + (p?.monthly ?? 0)} suffix="/mo" /> : null}
-      {o.favors ? <span class="chip favor" aria-label={`${o.favors < 0 ? 'costs' : 'gains'} ${Math.abs(o.favors)} Favor`}><Icon.ticket size={14} />{o.favors < 0 ? '−' : '+'}{Math.abs(o.favors)}</span> : null}
-      <EffectChips effects={merged} />
-      {p?.perMonth && GROUPS.filter((g) => p.perMonth![g]).map((g) => <span key={g} class="chip monthly" style={{ '--g': GROUP_COLOR[g] }}><i class="dot" />{GROUP_NAME[g]} {p.perMonth![g]! > 0 ? '▲' : '▼'} each month</span>)}
-      {o.lasting && <span class="chip lasting">{o.lasting.name}: {GROUPS.filter((g) => o.lasting!.perMonth?.[g]).map((g) => `${GROUP_NAME[g]} ${o.lasting!.perMonth![g]! > 0 ? '▲' : '▼'}`).join(', ')}{o.lasting.money ? ` +$${o.lasting.money}k` : ''} for {o.lasting.months} months</span>}
-      {p?.favorEvery && <span class="chip favor"><Icon.ticket size={14} />+1 every {p.favorEvery} months</span>}
-      {o.promise && <span class="chip promise">Owe {money(o.promise.money)} in {o.promise.dueIn} months</span>}
-      {o.campaign ? <span class="chip vote">Votes ▲ +{o.campaign}%</span> : null}
-      {o.gamble && (
-        <span class="gamble">
-          <span class="odds"><b>{o.gamble.chance}%</b> it works</span>
-          <span class="costs">{o.gamble.win.money ? <MoneyChip value={o.gamble.win.money} /> : null}<EffectChips effects={o.gamble.win.effects} /></span>
-          <span class="odds bad"><b>{100 - o.gamble.chance}%</b> it doesn't</span>
-          <span class="costs">{o.gamble.lose.money ? <MoneyChip value={o.gamble.lose.money} /> : null}<EffectChips effects={o.gamble.lose.effects} /></span>
-        </span>
-      )}
-      {now === 0 && !Object.keys(merged).length && !o.campaign && !o.gamble && !o.monthly && <span class="chip">Free</span>}
-    </span>
-  );
-}
-
-function Meter({ g, s }: { g: GroupId; s: State }) {
-  const v = s.approval[g];
-  const shown = useTween(v);
-  const prev = useRef(v);
-  const [delta, setDelta] = useState(0);
-  useEffect(() => {
-    if (v !== prev.current) { setDelta(v - prev.current); prev.current = v; const t = setTimeout(() => setDelta(0), 1600); return () => clearTimeout(t); }
-  }, [v]);
-  const mood: Mood = v < TUNING.low ? 'annoyed' : v >= 65 ? 'pleased' : 'neutral';
-  const state = v < TUNING.low ? 'low' : v > TUNING.high ? 'high' : '';
-  return (
-    <div class={`meter ${state}`} style={{ '--g': GROUP_COLOR[g] }} role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={v} aria-label={`${GROUP_NAME[g]} approval ${v}${state === 'low' ? ', dangerously low' : state === 'high' ? ', very high' : ''}`}>
-      <Portrait who={LEADER[g]!} mood={mood} size={34} ring={GROUP_COLOR[g]} />
-      <div class="meter-body">
-        <div class="meter-top"><span>{GROUP_NAME[g]}</span><b>{shown}</b></div>
-        <div class="bar"><i class="zone-low" /><i class="zone-high" /><i class="fill" style={{ width: `${v}%` }} /></div>
-      </div>
-      {delta !== 0 && <span class={`delta ${delta > 0 ? 'up' : 'down'}`}>{delta > 0 ? '▲' : '▼'}{Math.abs(delta)}</span>}
+    <div class="meters" role="group" aria-label="Your standing">
+      {METERS.map((m) => {
+        const v = s.meters[m];
+        const danger = v <= TUNING.low || (m !== 'treasury' && v >= TUNING.high);
+        const hint = preview?.effects[m];
+        return (
+          <div key={m} class={`meter ${danger ? 'danger' : ''}`} style={{ '--g': METER_COLOR[m] }} role="meter" aria-label={`${METER_NAME[m]} ${v} of 100`} aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
+            <MeterIcon m={m} />
+            <span class="vbar"><i class="fill" style={{ height: `${v}%` }} />{m !== 'treasury' && <i class="edge top" />}<i class="edge bottom" /></span>
+            <span class="mname">{METER_NAME[m]}</span>
+            {hint ? <i class={`hintdot ${Math.abs(hint) >= 10 ? 'big' : ''}`} aria-label="will change" /> : null}
+            {delta[m] ? <b class={`delta ${delta[m]! > 0 ? 'up' : 'down'}`}>{delta[m]! > 0 ? '+' : '−'}{Math.abs(delta[m]!)}</b> : null}
+          </div>
+        );
+      })}
     </div>
   );
 }
 
+// ---------- the swipe card ----------
+const THRESH = 90;
+function dirOf(x: number, y: number): Dir { return Math.abs(x) >= Math.abs(y) ? (x > 0 ? 'right' : 'left') : (y > 0 ? 'down' : 'up'); }
+
+function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview: (d: Dir | null) => void; onSwipe: (d: Dir) => void; locked: boolean }) {
+  const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
+  const [leaving, setLeaving] = useState<Dir | null>(null);
+  const start = useRef<{ x: number; y: number; id: number } | null>(null);
+  const dirs = options(card);
+  const cur = drag && Math.hypot(drag.x, drag.y) > 24 ? dirOf(drag.x, drag.y) : null;
+  const valid = cur && card.options[cur] ? cur : null;
+  useEffect(() => { onPreview(valid); }, [valid]);
+  const commit = (d: Dir) => {
+    if (locked || leaving || !card.options[d]) return;
+    setLeaving(d); setDrag(null); onPreview(null); sfx('paper');
+    setTimeout(() => onSwipe(d), reduced() ? 0 : 260);
+  };
+  useEffect(() => {
+    const k = (e: KeyboardEvent) => { const m: Record<string, Dir> = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' }; const d = m[e.key]; if (d && card.options[d]) { e.preventDefault(); commit(d); } };
+    addEventListener('keydown', k); return () => removeEventListener('keydown', k);
+  });
+  const fly = leaving ? { left: [-700, 60, -30], right: [700, 60, 30], up: [0, -700, 0], down: [0, 700, 0] }[leaving] : null;
+  const style = fly ? { transform: `translate(${fly[0]}px, ${fly[1]}px) rotate(${fly[2]}deg)`, transition: 'transform .26s ease-in', opacity: 0.6 }
+    : drag ? { transform: `translate(${drag.x}px, ${drag.y * 0.8}px) rotate(${drag.x / 14}deg)`, transition: 'none' } : {};
+  return (
+    <div class="stage">
+      <div class="card" style={style}
+        onPointerDown={(e) => { if (locked || leaving) return; (e.currentTarget as Element).setPointerCapture(e.pointerId); start.current = { x: e.clientX, y: e.clientY, id: e.pointerId }; setDrag({ x: 0, y: 0 }); }}
+        onPointerMove={(e) => { if (start.current) setDrag({ x: e.clientX - start.current.x, y: e.clientY - start.current.y }); }}
+        onPointerUp={() => { const d = drag; start.current = null; setDrag(null); if (d && Math.hypot(d.x, d.y) > THRESH) { const dir = dirOf(d.x, d.y); if (card.options[dir]) { commit(dir); return; } } onPreview(null); }}
+        onPointerCancel={() => { start.current = null; setDrag(null); onPreview(null); }}>
+        <div class="card-who"><Portrait who={card.who} size={110} mood={valid ? 'annoyed' : 'neutral'} /><span>{NAMES[card.who] ?? card.who}</span></div>
+        <p class="card-text">{card.text}</p>
+        {valid && <div class={`choice-banner ${valid}`}>{card.options[valid]!.label}</div>}
+        <p class="card-hint">Drag the card {dirs.map((d) => ARROW[d]).join(' ')}</p>
+      </div>
+      <div class={`choices n${dirs.length}`}>
+        {(['up', 'left', 'right', 'down'] as Dir[]).filter((d) => card.options[d]).map((d) => <button key={d} class={`edge-chip ${d} ${valid === d ? 'on' : ''}`} onClick={() => commit(d)} aria-label={`${ARROW[d]} ${card.options[d]!.label}`}><b>{ARROW[d]}</b><span>{card.options[d]!.label}</span></button>)}
+      </div>
+    </div>
+  );
+}
+
+// ---------- overlays ----------
 function Sheet({ children, onClose, label, tone }: { children: preact.ComponentChildren; onClose?: () => void; label: string; tone?: string }) {
   return (
     <div class="scrim" onClick={(e) => { if (e.target === e.currentTarget) onClose?.(); }}>
@@ -137,432 +114,138 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
   );
 }
 
-interface Outcome { card: Card; option: number | 'dave'; daveText?: string; before: State; after: State; won?: boolean; skill?: Skill; urgent?: boolean }
+function EffectList({ before, after, stagger = 0 }: { before: Record<MeterId, number>; after: Record<MeterId, number>; stagger?: number }) {
+  const ms = METERS.filter((m) => after[m] !== before[m]);
+  if (!ms.length) return <span class="eff none">No change</span>;
+  return <>{ms.map((m, i) => { const d = after[m] - before[m]; return <span key={m} class={`eff ${d > 0 ? 'up' : 'down'}`} style={{ '--g': METER_COLOR[m], 'animation-delay': `${stagger + i * 90}ms` }}><i class="dot" />{METER_NAME[m]} {d > 0 ? '▲ +' : '▼ −'}{Math.abs(d)}</span>; })}</>;
+}
 
-/** The reveal: what your choice actually did, one meter at a time. */
-function Reveal({ before, after, money: dm, diff, lines, seed }: { before: State; after: State; money: number; diff: Effects; lines: [string[], string[]]; seed: number }) {
-  const groups = GROUPS.filter((g) => diff[g]);
-  const [n, setN] = useState(reduced() ? groups.length + 1 : 0);
-  useEffect(() => {
-    if (n > groups.length) return;
-    const t = setTimeout(() => {
-      setN(n + 1);
-      const g = groups[n];
-      if (n === 0 && dm) sfx(dm > 0 ? 'coin' : 'spend');
-      else if (g) sfx(diff[g]! > 0 ? 'coin' : 'warn');
-    }, n === 0 ? 450 : 520);
-    return () => clearTimeout(t);
-  }, [n]);
+/** The day in review: every card you played, what you chose, and what it did, story by story. */
+function DayReview({ s, onNext, nextLabel, sub }: { s: State; onNext: () => void; nextLabel: string; sub?: preact.ComponentChildren }) {
+  const today = s.swipes.filter((w) => w.day === s.day);
+  const byStory = new Map<string, typeof today>();
+  for (const w of today) { const st = findCard(pack, w.cardId).story ?? 'town'; byStory.set(st, [...(byStory.get(st) ?? []), w]); }
+  const brewing = [...new Set(s.queue.map((q) => findCard(pack, q.cardId).story ?? 'town'))];
+  const poll = s.polls[s.polls.length - 1] ?? voteShare(s);
+  const prevPoll = s.polls[s.polls.length - 2];
+  let n = 0;
   return (
-    <div class="reveal" aria-live="polite">
-      <p class="reveal-head">What it did</p>
-      {dm !== 0 && n >= 1 && (
-        <div class="reveal-row money">
-          <Icon.coin size={30} /><span class="reveal-name">Money</span>
-          <b class={dm > 0 ? 'up' : 'down'}>{dm > 0 ? '+' : '−'}${Math.abs(dm)}k</b>
-        </div>
-      )}
-      {groups.map((g, i) => {
-        const shown = n >= i + (dm !== 0 ? 2 : 1);
-        if (!shown) return null;
-        const up = diff[g]! > 0;
-        return (
-          <div key={g} class={`reveal-row ${up ? 'up' : 'down'}`} style={{ '--g': GROUP_COLOR[g] }}>
-            <Portrait who={LEADER[g]!} mood={up ? 'pleased' : 'annoyed'} size={38} ring={GROUP_COLOR[g]} />
-            <span class="reveal-name">{GROUP_NAME[g]}<em>{(up ? lines[0] : lines[1])[(seed + i) % 4]}</em></span>
-            <span class="reveal-bar"><i class="was" style={{ width: `${before.approval[g]}%` }} /><i class="now" style={{ width: `${after.approval[g]}%` }} /></span>
-            <b class={up ? 'up' : 'down'}>{up ? '▲ +' : '▼ '}{diff[g]}</b>
-          </div>
-        );
-      })}
+    <div class="review">
+      <div class="bugle"><div class="masthead"><span>THE BUGLE</span><small>{DAY_NAMES[s.day - 1]} · the day in review</small></div>
+        <div class="poll-row"><span class="bigpoll">{poll}%</span><span>{prevPoll !== undefined ? <b class={poll >= prevPoll ? 'up' : 'down'}>{poll >= prevPoll ? '▲' : '▼'} {Math.abs(poll - prevPoll)} since yesterday</b> : 'If the election were today'}<small>50% wins on Sunday</small></span></div>
+      </div>
+      <div class="dayswing">{METERS.map((m) => <div key={m} class="swing" style={{ '--g': METER_COLOR[m] }}><span>{METER_NAME[m]}</span><span class="hbar"><i class="was" style={{ width: `${s.dayStart[m]}%` }} /><i class="now" style={{ width: `${s.meters[m]}%` }} /></span><b>{s.meters[m] - s.dayStart[m] > 0 ? '+' : ''}{s.meters[m] - s.dayStart[m] || '·'}</b></div>)}</div>
+      {[...byStory].map(([story, ws]) => (
+        <section key={story} class="story">
+          <h3>{pack.headlines[story] ?? story}</h3>
+          {ws.map((w) => { const c = findCard(pack, w.cardId); const ch = c.options[w.dir]!; const i = n++; return (
+            <div key={`${w.cardId}${i}`} class="beat" style={{ 'animation-delay': `${i * 140}ms` }}>
+              <Portrait who={c.who} size={34} />
+              <div><p class="beat-text">{c.text}</p><p class="beat-choice"><b>{ARROW[w.dir]} {ch.label}</b> <span class="effs"><EffectList before={w.before} after={w.after} stagger={i * 140 + 200} /></span></p></div>
+            </div>
+          ); })}
+        </section>
+      ))}
+      {brewing.length > 0 && <p class="brewing"><b>Still brewing:</b> {brewing.map((b) => (pack.headlines[b] ?? b).toLowerCase()).join(' · ')}</p>}
+      {sub}
+      <button class="btn primary" onClick={onNext} autoFocus>{nextLabel}</button>
     </div>
   );
 }
 
-function ResultPanel({ r, onDone }: { r: Outcome; onDone: () => void }) {
-  const o = typeof r.option === 'number' ? r.card.options[r.option]! : null;
-  const diff: Effects = {};
-  for (const g of GROUPS) if (r.after.approval[g] !== r.before.approval[g] && r.after.recalls === r.before.recalls) diff[g] = r.after.approval[g] - r.before.approval[g];
-  const dm = r.after.recalls === r.before.recalls ? r.after.money - r.before.money : 0;
-  const own = r.card.group ? diff[r.card.group] ?? 0 : GROUPS.reduce((n, g) => n + (diff[g] ?? 0), 0);
-  const mood: Mood = o ? (o.kind === 'refuse' || own < 0 || r.skill === 0 ? 'annoyed' : 'pleased') : 'neutral';
-  const split = o ? stats.getSplit(r.after.weekId, r.card.id) : null;
-  const pct = split && typeof r.option === 'number' ? split[r.option] ?? 0 : null;
-  const stamp = !o ? "DAVE'D" : o.kind === 'refuse' ? 'DENIED' : o.kind === 'promise' ? 'PROMISED' : 'APPROVED';
-  const UP = ['Lovely.', 'Finally.', 'Yes!', 'Good.'], DOWN = ['Hmph.', 'Rude.', 'Noted.', 'Wow.'];
-  return (
-    <div class="result">
-      {o && r.card.game && r.skill !== undefined && <Aftermath card={r.card} skill={r.skill} />}
-      <div class={`stamp ${!o ? 'dave' : o.kind === 'refuse' ? 'denied' : ''}`}>{stamp}</div>
-      <div class="speaker">
-        <Portrait who={o ? r.card.who : 'dave'} mood={mood} size={72} />
-        <p class="bubble">{o ? o.reaction : r.daveText}</p>
-      </div>
-      {o && r.card.game && r.skill !== undefined && (
-        <div class={`dice ${r.skill === 2 ? 'won' : 'lost'}`}>
-          {r.skill === 2 ? <><b>A clean job.</b> You got exactly the deal you chose.</> : <><b>{r.skill === 1 ? 'Sloppy.' : 'Disaster.'}</b> {r.skill === 0 ? r.card.game.flop : 'It got done. Not well.'} <span class="costs"><BotchChips card={r.card} skill={r.skill as 0 | 1} urgent={r.urgent} /></span></>}
-        </div>
-      )}
-      {o?.gamble && r.won !== undefined && <div class={`dice ${r.won ? 'won' : 'lost'}`}><b>{r.won ? 'It worked!' : 'It did not work.'}</b> {(r.won ? o.gamble.win : o.gamble.lose).text}</div>}
-      {(dm !== 0 || Object.keys(diff).length > 0) && <Reveal before={r.before} after={r.after} money={dm} diff={diff} lines={[UP, DOWN]} seed={r.card.id.length} />}
-      {pct !== null && (
-        <div class={`crowd ${pct < 15 ? 'maverick' : ''}`}>
-          <div class="crowd-bar"><i style={{ width: `${Math.max(3, pct)}%` }} /></div>
-          <p><b>{pct}%</b> of mayors did this {pct < 15 && <span class="mav">Maverick!</span>} {stats.preview && <span class="tag">preview data</span>}</p>
-        </div>
-      )}
-      <button class="btn primary" onClick={onDone} autoFocus>Carry on</button>
-    </div>
-  );
-}
-
-function CardSheet({ card, s, mode, urgent, onChoose, onDave, onSkip, onClose }: {
-  card: Card; s: State; mode: 'desk' | 'event' | 'campaign'; urgent?: boolean;
-  onChoose: (i: number) => void; onDave?: () => void; onSkip?: () => void; onClose?: () => void;
-}) {
-  const noActions = false;
-  useEffect(() => {
-    const key = (e: KeyboardEvent) => {
-      const n = Number(e.key);
-      if (n >= 1 && n <= card.options.length && !noActions && !blocked(s, card.options[n - 1]!, content)) onChoose(n - 1);
-      else if (e.key.toLowerCase() === 'd' && onDave) onDave();
-      else if (e.key === 'Escape') onClose?.();
-    };
-    addEventListener('keydown', key);
-    return () => removeEventListener('keydown', key);
-  });
-  return (
-    <>
-      {urgent && <div class="ribbon">URGENT · a bad job here costs double</div>}
-      {card.major && <div class="ribbon major">CATASTROPHE · three games in a row · a bad job hurts every group</div>}
-      <div class="speaker">
-        <Portrait who={card.who} size={76} ring={card.group ? GROUP_COLOR[card.group] : undefined} />
-        <div><div class="who">{NAMES[card.who] ?? card.who}{card.rare && <span class="tag rare">RARE</span>}</div><p class="bubble">{card.text}</p></div>
-      </div>
-      {card.advisors && (
-        <div class="advice">
-          <p class="advice-head">What the others think</p>
-          {card.advisors.map((a) => <div key={a.who} class="adv"><Portrait who={a.who} size={36} /><span class="bubble small"><b>{(NAMES[a.who] ?? a.who).split(',')[0]}:</b> {a.line}</span></div>)}
-        </div>
-      )}
-      <div class="options">
-        {card.options.map((o, i) => {
-          const why = blocked(s, o, content);
-          return (
-            <button key={o.label} class={`option ${o.kind}`} disabled={noActions || Boolean(why)} onClick={() => onChoose(i)}>
-              <span class="opt-top"><kbd>{i + 1}</kbd><b>{o.label}</b>{why && <span class="why">{why}</span>}</span>
-              {mode === 'campaign' ? <OptionCosts o={o} /> : <OptionHint o={o} />}
-            </button>
-          );
-        })}
-      </div>
-      <div class="sheet-foot">
-        {onDave && <button class="btn dave" onClick={onDave}><Portrait who="dave" size={28} /> Send Dave instead <small>{daveCost(s) ? `costs ${daveCost(s)} Favor · no game · anything could happen` : 'free this once · no game · anything could happen'}</small></button>}
-        {onSkip && <button class="btn ghost" onClick={onSkip}>Do nothing <span class="costs"><EffectChips effects={card.ignored} /></span></button>}
-      </div>
-    </>
-  );
-}
-
-function Bugle({ kicker, headline, children }: { kicker: string; headline: string; children: preact.ComponentChildren }) {
-  return (
-    <div class="bugle">
-      <div class="masthead"><span>THE BUGLE</span><small>{kicker}</small></div>
-      <h2>{headline}</h2>
-      {children}
-    </div>
-  );
-}
-
-function Gauge({ value }: { value: number }) {
-  const shown = useTween(value, 1100);
-  const a = Math.PI * (1 - shown / 100);
-  const x = 100 + 78 * Math.cos(a), y = 100 - 78 * Math.sin(a);
-  return (
-    <svg class="gauge" viewBox="0 0 200 118" role="img" aria-label={`Poll: ${value} percent`}>
-      <path d="M22 100 A78 78 0 0 1 178 100" fill="none" stroke="#E6DBC6" stroke-width="16" stroke-linecap="round" />
-      <path d="M22 100 A78 78 0 0 1 100 22" fill="none" stroke="#C23B3B" stroke-width="16" stroke-linecap="round" opacity=".35" />
-      <path d={`M22 100 A78 78 0 0 1 ${x.toFixed(1)} ${y.toFixed(1)}`} fill="none" stroke={shown >= 50 ? '#3F8F5A' : '#C23B3B'} stroke-width="16" stroke-linecap="round" />
-      <path d="M100 14 v18" stroke="#29231F" stroke-width="3" stroke-dasharray="3 3" />
-      <text x="100" y="98" text-anchor="middle" font-size="40" font-weight="700" fill="#29231F" font-family="Fredoka, sans-serif">{shown}%</text>
-      <text x="100" y="114" text-anchor="middle" font-size="10" fill="#6B6257" font-family="Fredoka, sans-serif">50% wins</text>
-    </svg>
-  );
-}
-
-function CopyButton({ text, label }: { text: string; label: string }) {
-  const [done, setDone] = useState('');
-  return (
-    <>
-      <pre class="share">{text}</pre>
-      <button class="btn" onClick={() => {
-        sfx('tap');
-        const share = (navigator as Navigator & { share?: (d: { text: string }) => Promise<void> }).share;
-        if (share) { share.call(navigator, { text }).catch(() => {}); return; }
-        try { navigator.clipboard.writeText(text).then(() => setDone('Copied'), () => setDone('Select the text above to copy')); } catch { setDone('Select the text above to copy'); }
-      }}>{done || label}</button>
-    </>
-  );
-}
-
-// ---------- the scrapbook: endings, career and deeds kept across weeks ----------
+// ---------- scrapbook ----------
+const ENDING_ORDER = ['term:won', 'term:landslide', 'term:lost', 'term:early', 'low:people', 'low:business', 'low:law', 'low:press', 'low:treasury', 'high:people', 'high:business', 'high:law', 'high:press'];
 const resultEnding = (s: State) => (!s.result ? null : s.result.endedEarly ? 'term:early' : s.result.won ? (s.result.share >= 60 ? 'term:landslide' : 'term:won') : 'term:lost');
-const ENDING_ORDER = ['term:won', 'term:landslide', 'term:lost', 'term:early', 'low:people', 'low:business', 'low:law', 'low:press', 'high:people', 'high:business', 'high:law', 'high:press', 'bankrupt'];
-const ENDING_HINT: Record<string, string> = { low: 'A group gave up on you', high: 'A group loved you far too much', bankrupt: 'Ran out of money', term: 'How a week ended' };
-
 interface Deed { id: string; name: string; how: string; test: (s: State, save: Save) => boolean }
 const DEEDS: Deed[] = [
   { id: 'firstWin', name: 'First Term', how: 'Win an election', test: (s) => !!s.result?.won },
   { id: 'landslide', name: 'Landslide', how: 'Win with 60% or more', test: (s) => (s.result?.share ?? 0) >= 60 },
   { id: 'whisker', name: 'By a Whisker', how: 'Win with 50% or 51%', test: (s) => !!s.result?.won && s.result.share <= 51 },
-  { id: 'cleanHands', name: 'Clean Hands', how: 'Win with no recalls and no broken promises', test: (s) => !!s.result?.won && s.recalls === 0 && s.brokenPromises === 0 },
-  { id: 'comeback', name: 'Comeback Kid', how: 'Win despite being recalled', test: (s) => !!s.result?.won && s.recalls > 0 },
-  { id: 'lawmaker', name: 'Lawmaker', how: 'Enact six decrees in one week', test: (s) => s.decrees.length >= 6 },
-  { id: 'builder', name: 'Builder', how: 'Build three projects in one week', test: (s) => s.projects.length >= 3 },
-  { id: 'disasterPro', name: 'Disaster Professional', how: 'Get a clean job on a catastrophe', test: (s) => s.history.some((h) => h.cardId.startsWith('cat') && h.skill === 2) },
-  { id: 'goosefriend', name: 'Goose Whisperer', how: 'Build the pond without upsetting the geese', test: (s) => s.projects.some((p) => p.id === 'pond') && !s.flags.gooseGrudge },
-  { id: 'tycoon', name: 'Tycoon', how: 'End a week with $100k or more', test: (s) => s.money >= 100 },
-  { id: 'absent', name: 'Absent Landlord', how: 'Let Dave run three days of a week', test: (s) => s.daveDays.length >= 3 },
+  { id: 'comeback', name: 'Comeback Kid', how: 'Win despite a recall', test: (s) => !!s.result?.won && s.recalls > 0 },
+  { id: 'pond', name: 'Pond Life', how: 'See the goose saga through to the goslings', test: (s) => s.seen.includes('g6') },
+  { id: 'detective', name: 'Detective', how: 'Uncover the Stranger', test: (s) => !!s.flags.exposed || !!s.flags.hush },
+  { id: 'bearfriend', name: 'Bear Necessities', how: 'Get the bear elected', test: (s) => s.swipes.some((w) => w.cardId === 'b3' && w.dir === 'right') },
+  { id: 'kevin', name: 'Kevin Forever', how: 'Let Kevin become a tourist attraction', test: (s) => !!s.flags.kevin_famous },
+  { id: 'frogs', name: 'Frog Democracy', how: 'Give the frogs the vote', test: (s) => !!s.flags.frog_vote },
   { id: 'collector', name: 'Collector', how: 'Unlock six endings', test: (_s, save) => save.scrapbook.length >= 6 },
 ];
-
-/** Fold anything new about this state into the save's scrapbook, career and deeds. Returns what was new. */
 function record(save: Save, s: State): { save: Save; endings: string[]; deeds: string[] } {
   const endings = [...new Set([...s.recallCauses, resultEnding(s)].filter((x): x is string => !!x))].filter((k) => !save.scrapbook.includes(k));
   let next: Save = endings.length ? { ...save, scrapbook: [...save.scrapbook, ...endings] } : save;
-  const newDeeds: string[] = [];
-  if (s.result && !next.career.weeks.includes(s.weekId)) {
-    next = { ...next, career: { terms: next.career.terms + 1, wins: next.career.wins + (s.result.won ? 1 : 0), best: Math.max(next.career.best, s.result.share), weeks: [...next.career.weeks, s.weekId] } };
-    for (const d of DEEDS) if (!next.deeds.includes(d.id) && d.test(s, next)) newDeeds.push(d.id);
-    if (newDeeds.length) next = { ...next, deeds: [...next.deeds, ...newDeeds] };
-  }
-  return { save: next, endings, deeds: newDeeds };
+  const deeds = DEEDS.filter((d) => !next.deeds.includes(d.id) && d.test(s, next)).map((d) => d.id);
+  if (deeds.length) next = { ...next, deeds: [...next.deeds, ...deeds] };
+  if (s.result && !next.career.weeks.includes(s.weekId)) next = { ...next, career: { terms: next.career.terms + 1, wins: next.career.wins + (s.result.won ? 1 : 0), best: Math.max(next.career.best, s.result.share), weeks: [...next.career.weeks, s.weekId] } };
+  return { save: next, endings, deeds };
 }
-
 function EndingCard({ k, isNew }: { k: string; isNew?: boolean }) {
-  const e = content.pack.endings[k]!;
+  const e = pack.endings[k]!;
   return <div class={`ending ${k.split(':')[0]}`}>{isNew && <span class="newtag">NEW IN YOUR SCRAPBOOK</span>}<b>{e.title}</b><span>{e.text}</span></div>;
 }
-
 function Scrapbook({ save, onClose }: { save: Save; onClose: () => void }) {
   const c = save.career;
   return (
     <Sheet label="Scrapbook" onClose={onClose}>
       <h2 class="display">The Mayor's Scrapbook</h2>
-      <div class="career">
-        <span><b>{c.terms}</b>weeks served</span><span><b>{c.wins}</b>re-elections</span><span><b>{c.best ? `${c.best}%` : '–'}</b>best result</span>
-      </div>
+      <div class="career"><span><b>{c.terms}</b>weeks served</span><span><b>{c.wins}</b>re-elections</span><span><b>{c.best ? `${c.best}%` : '–'}</b>best result</span></div>
       <h3 class="subhead">Endings <small>{save.scrapbook.length} of {ENDING_ORDER.length}</small></h3>
-      <div class="endings">
-        {ENDING_ORDER.map((k) => save.scrapbook.includes(k) ? <EndingCard key={k} k={k} /> : <div key={k} class="ending locked"><b>???</b><span>{ENDING_HINT[k.split(':')[0]!]}{k.includes(':') && k.split(':')[0] !== 'term' ? ` (${GROUP_NAME[k.split(':')[1] as GroupId]})` : ''}</span></div>)}
-      </div>
+      <div class="endings">{ENDING_ORDER.map((k) => save.scrapbook.includes(k) ? <EndingCard key={k} k={k} /> : <div key={k} class="ending locked"><b>???</b><span>{k.startsWith('term') ? 'How a week ended' : k.startsWith('low:treasury') ? 'Ran out of money' : `${k.startsWith('low') ? 'Lost' : 'Far too loved by'} ${METER_NAME[k.split(':')[1] as MeterId]}`}</span></div>)}</div>
       <h3 class="subhead">Deeds <small>{save.deeds.length} of {DEEDS.length}</small></h3>
       <ul class="deeds">{DEEDS.map((d) => <li key={d.id} class={save.deeds.includes(d.id) ? 'done' : ''}><span class="seal">{save.deeds.includes(d.id) ? '★' : '·'}</span><b>{d.name}</b><small>{d.how}</small></li>)}</ul>
     </Sheet>
   );
 }
 
+// ---------- setup ----------
+const TOWNS = ['Lower Honk', 'Dampford', 'Mildew Falls', 'Greater Oops', 'Bin Valley', 'Port Regret', 'Upper Crumb', 'Sogwick', 'New Mistake', 'Gravy Bend'];
+const MAYORS = ['Mayor Biscuit', 'Mayor Pat', 'Mayor Wobble', 'Mayor Jo', 'Mayor Crumb', 'Mayor Sam', 'Mayor Pickle', 'Mayor Noodle'];
+const pickOne = (l: string[], not = '') => { let v = not; while (v === not) v = l[Math.floor(Math.random() * l.length)]!; return v; };
+function Setup({ onDone, initial, title }: { onDone: (p: Profile) => void; initial?: Profile; title: string }) {
+  const [mayor, setMayor] = useState(initial?.mayor ?? pickOne(MAYORS));
+  const [town, setTown] = useState(initial?.town ?? pickOne(TOWNS));
+  const [base, setBase] = useState<GroupId>(initial?.base ?? 'people');
+  return (
+    <Sheet label={title}>
+      <h2 class="display">{title}</h2>
+      {[['mayor-name', 'Your name', mayor, setMayor, MAYORS], ['town-name', 'Your town', town, setTown, TOWNS]].map(([id, label, value, set, list]) => (
+        <label key={id as string} class="field" for={id as string}><span>{label as string}</span>
+          <span class="field-row"><input id={id as string} value={value as string} maxLength={18} onInput={(e) => (set as (v: string) => void)((e.target as HTMLInputElement).value)} />
+            <button type="button" class="icon" aria-label={`Random ${(label as string).toLowerCase()}`} onClick={() => (set as (v: string) => void)(pickOne(list as string[], value as string))}><Icon.dice /></button></span></label>
+      ))}
+      {!initial && <fieldset class="pick"><legend>Who got you elected? (+{TUNING.setupBase} now)</legend>
+        <div class="pick-grid">{GROUPS.map((g) => <button type="button" key={g} class={`pick-btn ${base === g ? 'on' : ''}`} aria-pressed={base === g} style={{ '--g': GROUP_COLOR[g] }} onClick={() => setBase(g)}><Portrait who={LEADER[g]!} size={36} ring={GROUP_COLOR[g]} mood={base === g ? 'pleased' : 'neutral'} /><b>{GROUP_NAME[g]}</b></button>)}</div></fieldset>}
+      <button class="btn primary" onClick={() => onDone({ mayor, town, base })}>{initial ? 'Save' : 'Sign the paperwork'}</button>
+    </Sheet>
+  );
+}
+
 // ---------- election night ----------
-function Results({ s, onNewWeek, fresh }: { s: State; onNewWeek: () => void; fresh: { endings: string[]; deeds: string[] } }) {
+function Results({ s, fresh, onNewWeek }: { s: State; fresh: { endings: string[]; deeds: string[] }; onNewWeek: () => void }) {
   const r = s.result!;
-  const rows: [string, number, string?][] = [
-    ['People', r.parts.people, GROUP_COLOR.people], ['Business', r.parts.business, GROUP_COLOR.business], ['Law', r.parts.law, GROUP_COLOR.law], ['Press', r.parts.press, GROUP_COLOR.press],
-    ['Objectives', r.parts.objectives], ['Campaign', r.parts.campaign], ['Broken promises', r.parts.promises], ['Recalls', r.parts.recalls],
-  ];
-  const visible = rows.filter(([, v], i) => i < 4 || v !== 0);
-  const [step, setStep] = useState(reduced() ? visible.length + 1 : 0);
+  const parts = voteParts(s);
+  const rows: [string, number, string][] = [['People', parts.people, GROUP_COLOR.people], ['Business', parts.business, GROUP_COLOR.business], ['Law', parts.law, GROUP_COLOR.law], ['Press', parts.press, GROUP_COLOR.press], ['Treasury', parts.treasury, '#B58D55'], ['Goals met', parts.objectives, '#6B6257'], ['Campaign', parts.campaign, '#6B6257'], ['Recalls', parts.recalls, '#C23B3B'], ['The town is grumpy', TUNING.vote.base - 50, '#6B6257']];
+  const [step, setStep] = useState(reduced() ? rows.length + 1 : 0);
   useEffect(() => {
-    if (step > visible.length) return;
+    if (step > rows.length) return;
     if (step === 0) sfx('drum');
-    const t = setTimeout(() => { setStep(step + 1); if (step === visible.length) sfx(r.won ? 'win' : 'lose'); else sfx('tap'); }, step === visible.length ? 1100 : 750);
+    const t = setTimeout(() => { setStep(step + 1); sfx(step === rows.length ? (r.won ? 'win' : 'lose') : 'tap'); }, step === rows.length ? 1000 : 520);
     return () => clearTimeout(t);
   }, [step]);
-  const done = step > visible.length;
-  const beat = stats.getPercentile(s.weekId, r.share);
-  const text = `${s.profile?.town ?? 'Bad Town'} · Week of ${s.weekId} — ${r.won ? 'Re-elected' : 'Voted out'} with ${r.share}% · beat ${beat}% of mayors · ${s.projects.length} projects${s.recalls ? ` · ${s.recalls} recall${s.recalls > 1 ? 's' : ''}` : ''}`;
+  const k = resultEnding(s)!;
+  const text = `${s.profile?.town ?? 'Bad Town'} · week of ${s.weekId} — ${r.won ? 'Re-elected' : 'Voted out'} with ${r.share}%${s.recalls ? ` · ${s.recalls} recall${s.recalls > 1 ? 's' : ''}` : ''}`;
   return (
     <div class="panel election">
       <h2 class="display">Election night</h2>
-      {r.endedEarly && <p class="hint warn">Your term ended early after a third recall.</p>}
-      <div class="districts">
-        {visible.map(([name, v, color], i) => (
-          <div key={name} class={`district ${i < step ? 'in' : ''}`} style={{ '--g': color ?? '#6B6257' }}>
-            <span><i class="dot" />{name}{i < 4 ? ' district' : ''}</span><b class={v >= 0 ? 'up' : 'down'}>{v >= 0 ? '▲ +' : '▼ −'}{Math.abs(Math.round(v * 10) / 10)}</b>
-          </div>
-        ))}
-      </div>
-      {done && (
-        <div class="verdict">
-          <Gauge value={r.share} />
-          <div class={`banner ${r.won ? 'won' : 'lost'}`}>{r.won ? 'RE-ELECTED' : 'VOTED OUT'}</div>
-          <p>{r.won ? 'The town has spoken. Mostly in honks.' : 'The traffic cone will be sworn in at noon.'}</p>
-          {resultEnding(s) && <EndingCard k={resultEnding(s)!} isNew={fresh.endings.includes(resultEnding(s)!)} />}
-          {fresh.deeds.map((id) => { const d = DEEDS.find((x) => x.id === id)!; return <p key={id} class="bonus"><b>Deed earned: {d.name}.</b> {d.how}.</p>; })}
-          <p class="hint">You beat <b>{beat}%</b> of mayors {stats.preview && <span class="tag">preview data</span>}</p>
-          <ul class="legacy">
-            <li>Built: {s.projects.map((p) => content.projects[p.id]!.name).join(', ') || 'nothing at all'}</li>
-            <li>Decrees: {s.decrees.map((id) => content.pack.decrees.find((d) => d.id === id)!.name).join(', ') || 'none'}</li>
-            <li>Objectives: {s.objectivesDone.length} of {content.pack.objectives.length}</li>
-            <li>Promises broken: {s.brokenPromises} · Recalls: {s.recalls}</li>
-            {s.daveDays.length > 0 && <li>Days Dave was in charge: {s.daveDays.map((d) => DAY_NAMES[d - 1]).join(', ')}</li>}
-          </ul>
-          <CopyButton text={text} label="Share result" />
-          <button class="btn ghost" onClick={onNewWeek}>Start the next week now <small>preview only</small></button>
-        </div>
-      )}
+      <div class="districts">{rows.map(([name, v, c], i) => <div key={name} class={`district ${i < step ? 'in' : ''}`} style={{ '--g': c }}><span>{name}</span><b class={v >= 0 ? 'up' : 'down'}>{v >= 0 ? '+' : '−'}{Math.abs(Math.round(v * 10) / 10)}</b></div>)}</div>
+      {step > rows.length && <div class="verdict">
+        <div class="bigpoll">{r.share}%</div>
+        <div class={`banner ${r.won ? 'won' : 'lost'}`}>{r.won ? 'RE-ELECTED' : 'VOTED OUT'}</div>
+        <EndingCard k={k} isNew={fresh.endings.includes(k)} />
+        {fresh.deeds.map((id) => <p key={id} class="bonus"><b>Deed: {DEEDS.find((d) => d.id === id)!.name}.</b> {DEEDS.find((d) => d.id === id)!.how}.</p>)}
+        <pre class="share">{text}</pre>
+        <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(text); } catch { /* select instead */ } sfx('tap'); }}>Copy result</button>
+        <button class="btn ghost" onClick={onNewWeek}>Start the next week now <small>preview only</small></button>
+      </div>}
     </div>
-  );
-}
-
-function OutcomeChips({ o }: { o: { money?: number; favors?: number; effects?: Effects } }) {
-  return <span class="costs">{o.money ? <MoneyChip value={o.money} /> : null}{o.favors ? <span class="chip favor"><Icon.ticket size={14} />+{o.favors}</span> : null}<EffectChips effects={o.effects} />{!o.money && !o.favors && !Object.keys(o.effects ?? {}).length && <span class="chip">Nothing</span>}</span>;
-}
-
-function MiniReport({ r, s }: { r: MonthReport; s: State }) {
-  const net = r.income + r.projects + r.decrees;
-  return (
-    <div class="bugle mini">
-      <div class="masthead"><span>THE BUGLE</span><small>{DAY_NAMES[s.day - 1]} · {r.month % 2 ? 'midday' : 'evening'}</small></div>
-      <h2>{r.headline}</h2>
-      <p class="costs"><MoneyChip value={net} /> <span class="hint">income after upkeep</span> <EffectChips effects={r.drift} /> <span class="hint">the town cooling off</span></p>
-      {r.combos.map((id) => { const c = content.combos.find((x) => x.id === id)!; return <p key={id} class="bonus"><b>Combo: {c.name}!</b> {c.text}</p>; })}
-      {r.objectives.map((id) => <p key={id} class="bonus"><b>Objective done:</b> {content.pack.objectives.find((o) => o.id === id)!.text}</p>)}
-    </div>
-  );
-}
-
-function DecreeCosts({ d, ongoing }: { d: Decree; ongoing?: boolean }) {
-  return (
-    <span class="costs">
-      {!ongoing && d.money ? <MoneyChip value={d.money} /> : null}
-      {d.monthly ? <MoneyChip value={d.monthly} suffix="/mo" /> : null}
-      {!ongoing && <EffectChips effects={d.effects} />}
-      {d.perMonth && GROUPS.filter((g) => d.perMonth![g]).map((g) => <span key={g} class="chip monthly" style={{ '--g': GROUP_COLOR[g] }}><i class="dot" />{GROUP_NAME[g]} {d.perMonth![g]! > 0 ? '▲' : '▼'} each month</span>)}
-    </span>
-  );
-}
-
-/** The day's running order, always on the desk, with your own moves (midday, tonight) one tap away. */
-function Agenda({ s, onOpen, top }: { s: State; onOpen: (which: 'midday' | 'tonight') => void; top?: boolean }) {
-  if (!top) return null;
-  const m = monthOfDay(s.month);
-  const midDone = m === 2;
-  const ag = agenda(s, content);
-  return (
-    <div class="agenda" aria-label="Today's running order">
-      <span class={`ag-step ${m === 1 ? 'now' : 'done'}`}><b>1</b>Today's three</span>
-      <button class={`ag-step move ${midDone ? 'done' : ''}`} disabled={midDone} onClick={() => onOpen('midday')}><b>2</b>Midday: your move<small>{midDone ? 'done' : `${ag.initiatives.length} things to do ▸`}</small></button>
-      <span class={`ag-step ${m === 2 ? 'now' : ''}`}><b>3</b>Your town's three</span>
-      <button class="ag-step move law" onClick={() => onOpen('tonight')}><b>4</b>Tonight: make laws<small>{s.decrees.length} in force · up to {TUNING.decreesPerDay} more ▸</small></button>
-    </div>
-  );
-}
-
-// ---------- guide, timeline, setup ----------
-const whyText = (why: string) => why === 'major' ? 'Disaster' : why.startsWith('low:') ? `${GROUP_NAME[why.slice(4) as GroupId]} is unhappy` : why === 'choice' ? 'You did this' : why === 'crisis' ? 'Late-week crisis' : 'Around town';
-
-function alerts(s: State): { text: string; bad: boolean }[] {
-  const out: { text: string; bad: boolean }[] = [];
-  const a = s.approval;
-  if (s.money < 0) out.push({ text: `In debt. Recall at −$${-TUNING.bankruptAt}k`, bad: true });
-  if (a.people < TUNING.low) out.push({ text: 'Protest: every card is URGENT next month', bad: true });
-  if (a.business < TUNING.low) out.push({ text: 'Business is sulking: income −30%', bad: true });
-  if (a.law < TUNING.low) out.push({ text: 'Crime wave: expect crime cards', bad: true });
-  if (a.press < TUNING.low) out.push({ text: 'Bad press: −5 at the polls', bad: true });
-  for (const g of GROUPS) if (a[g] <= 12) out.push({ text: `${GROUP_NAME[g]} near zero: recall risk`, bad: true });
-  for (const g of GROUPS) if (a[g] > TUNING.high) out.push({ text: `${GROUP_NAME[g]} adore you. They'll want things`, bad: false });
-  for (const l of s.lasting) out.push({ text: `${l.name}: ${GROUPS.filter((g) => l.perMonth?.[g]).map((g) => `${GROUP_NAME[g]} ${l.perMonth![g]! > 0 ? '+' : ''}${l.perMonth![g]}`).join(', ')}${l.money ? ` +$${l.money}k` : ''}/mo, ${Math.max(0, Math.ceil((l.until - s.month) / 2))} day${Math.ceil((l.until - s.month) / 2) === 1 ? '' : 's'} left`, bad: GROUPS.some((g) => (l.perMonth?.[g] ?? 0) < 0) && !l.money });
-  for (const p of s.promises) out.push({ text: `Promise: ${money(p.money)} due in ${Math.max(0, p.dueMonth - s.month)} mo`, bad: p.dueMonth - s.month <= 1 });
-  return out;
-}
-
-function Guide({ s, open, first }: { s: State; open: number; first: boolean }) {
-  const step = open === 0 ? 'Desk clear.' : `${open} to go. Pick your trade, then do the job yourself.`;
-  const list = alerts(s);
-  return (
-    <div class="guide">
-      <p class="step"><span class="num">{monthOfDay(s.month) === 1 ? '1 of 3' : '2 of 3'}</span><b>{step}</b></p>
-      {first && <p class="hint">Tap a request. Every choice costs something, and every one ends in a short game. Play it well or the deal gets worse.</p>}
-      {list.length > 0 && <div class="alerts">{list.map((x) => <span key={x.text} class={`alert ${x.bad ? 'bad' : ''}`}>{x.bad ? '!' : '★'} {x.text}</span>)}</div>}
-    </div>
-  );
-}
-
-function Timeline({ s }: { s: State }) {
-  return (
-    <ol class="timeline" aria-label="The week so far">
-      {DAY_NAMES.map((d, i) => {
-        const day = i + 1;
-        const poll = s.polls[i];
-        const cls = day === s.day ? 'now' : day < s.day ? 'past' : '';
-        return <li key={d} class={cls} aria-current={day === s.day ? 'step' : undefined}><span>{d}</span><b>{day === 7 ? (s.result ? `${s.result.share}%` : 'Vote') : poll !== undefined ? `${poll}%` : day < s.day ? '·' : ''}</b>{s.daveDays.includes(day) && <i>Dave</i>}</li>;
-      })}
-    </ol>
-  );
-}
-
-const TOWNS = ['Lower Honk', 'Dampford', 'Mildew Falls', 'Greater Oops', 'Bin Valley', 'Port Regret', 'Upper Crumb', 'Sogwick', 'New Mistake', 'Little Fuss', 'Gravy Bend', 'Wobbleton'];
-const MAYORS = ['Mayor Biscuit', 'Mayor Pat', 'Mayor Wobble', 'Mayor Jo', 'Mayor Crumb', 'Mayor Sam', 'Mayor Pickle', 'Mayor Lou', 'Mayor Noodle', 'Mayor Max'];
-const pickOne = (list: string[], not = '') => { let v = not; while (v === not) v = list[Math.floor(Math.random() * list.length)]!; return v; };
-const PERKS: { id: PerkId; name: string; what: string }[] = [
-  { id: 'chest', name: 'A war chest', what: `Start with +$${TUNING.setup.chest}k` },
-  { id: 'friends', name: 'Friends at The Bugle', what: `Start with +${TUNING.setup.friends} Favors` },
-  { id: 'cousin', name: "Dave's cousin", what: 'Each month, sending Dave once is free' },
-];
-const RIVALS: Record<GroupId, GroupId> = { people: 'business', business: 'people', law: 'press', press: 'law' };
-
-function NameField({ id, label, value, onInput, onDice }: { id: string; label: string; value: string; onInput: (v: string) => void; onDice: () => void }) {
-  return (
-    <label class="field" for={id}><span>{label}</span>
-      <span class="field-row"><input id={id} value={value} maxLength={18} autocomplete="off" onInput={(e) => onInput((e.target as HTMLInputElement).value)} />
-        <button type="button" class="icon" aria-label={`Random ${label.toLowerCase()}`} onClick={onDice}><Icon.dice /></button></span>
-    </label>
-  );
-}
-
-function Setup({ onDone, late }: { onDone: (p: Profile) => void; late: boolean }) {
-  const [mayor, setMayor] = useState(() => pickOne(MAYORS));
-  const [town, setTown] = useState(() => pickOne(TOWNS));
-  const [base, setBase] = useState<GroupId>('people');
-  const [perk, setPerk] = useState<PerkId>('chest');
-  return (
-    <Sheet label="Set up your town">
-      <h2 class="display">One day down. Make it official.</h2>
-      {late && <p class="hint">Dave has been keeping your chair warm since Monday. Literally. Don't ask.</p>}
-      <NameField id="mayor-name" label="Your name" value={mayor} onInput={setMayor} onDice={() => { setMayor(pickOne(MAYORS, mayor)); sfx('tap'); }} />
-      <NameField id="town-name" label="Your town" value={town} onInput={setTown} onDice={() => { setTown(pickOne(TOWNS, town)); sfx('tap'); }} />
-      <fieldset class="pick"><legend>Who got you elected?</legend>
-        <div class="pick-grid">
-          {GROUPS.map((g) => (
-            <button type="button" key={g} class={`pick-btn ${base === g ? 'on' : ''}`} aria-pressed={base === g} style={{ '--g': GROUP_COLOR[g] }} onClick={() => { setBase(g); sfx('tap'); }}>
-              <Portrait who={LEADER[g]!} size={40} ring={GROUP_COLOR[g]} mood={base === g ? 'pleased' : RIVALS[base] === g ? 'annoyed' : 'neutral'} />
-              <span><b>{GROUP_NAME[g]}</b><small>{base === g ? `▲ +${TUNING.setup.base}` : RIVALS[base] === g ? `▼ ${TUNING.setup.rival}` : ' '}</small></span>
-            </button>
-          ))}
-        </div>
-        <p class="hint">Your base gets +{TUNING.setup.base} right now. Their rivals ({GROUP_NAME[RIVALS[base]]}) get {TUNING.setup.rival}.</p>
-      </fieldset>
-      <fieldset class="pick"><legend>Pick one head start</legend>
-        <div class="options">
-          {PERKS.map((p) => <button type="button" key={p.id} class={`option ${perk === p.id ? 'current' : ''}`} aria-pressed={perk === p.id} onClick={() => { setPerk(p.id); sfx('tap'); }}><span class="opt-top"><b>{p.name}</b></span><span class="costs"><span class="chip">{p.what}</span></span></button>)}
-        </div>
-      </fieldset>
-      <button class="btn primary" onClick={() => onDone({ mayor, town, base, perk })}>Sign the paperwork</button>
-      <p class="hint">You can change the names later. The rest is permanent, like most mistakes.</p>
-    </Sheet>
-  );
-}
-
-function Names({ profile, onSave, onClose }: { profile: Profile; onSave: (mayor: string, town: string) => void; onClose: () => void }) {
-  const [mayor, setMayor] = useState(profile.mayor);
-  const [town, setTown] = useState(profile.town);
-  return (
-    <Sheet label="Change names" onClose={onClose}>
-      <h2 class="display">Rename things</h2>
-      <NameField id="mayor-rename" label="Your name" value={mayor} onInput={setMayor} onDice={() => setMayor(pickOne(MAYORS, mayor))} />
-      <NameField id="town-rename" label="Your town" value={town} onInput={setTown} onDice={() => setTown(pickOne(TOWNS, town))} />
-      <button class="btn primary" onClick={() => onSave(mayor, town)}>Save. Repaint the sign.</button>
-    </Sheet>
   );
 }
 
@@ -570,25 +253,15 @@ function Names({ profile, onSave, onClose }: { profile: Profile; onSave: (mayor:
 export function App() {
   const [save, setSave] = useState<Save>(() => { const sv = loadSave(); setMuted(sv.muted); return sv; });
   const [s, setS] = useState<State>(() => boot(save));
-  const [focus, setFocus] = useState<string | null>(null);
-  const [outcome, setOutcome] = useState<Outcome | null>(null);
-  const [overlay, setOverlay] = useState<'tax' | 'dev' | 'recall' | 'names' | null>(null);
+  const [preview, setPreview] = useState<Dir | null>(null);
+  const [toast, setToast] = useState<{ key: number; who: string; text: string; mood: Mood; later: boolean } | null>(null);
   const [pulse, setPulse] = useState<Pulse | null>(null);
   const [fresh, setFresh] = useState<{ endings: string[]; deeds: string[] }>({ endings: [], deeds: [] });
-  const [book, setBook] = useState(false);
-  const [peek, setPeek] = useState<'midday' | 'tonight' | null>(null);
-  const [burst, setBurst] = useState<Burst | null>(null);
-  const [playing, setPlaying] = useState<{ card: Card; option: number } | null>(null);
-  const [doing, setDoing] = useState<Initiative | null>(null);
-  const [did, setDid] = useState<{ it: Initiative; skill: Skill; before: State; after: State } | null>(null);
-  const [news, setNews] = useState<string>('');
-  const [lawBook, setLawBook] = useState(false);
-  const [enacted, setEnacted] = useState<Decree | null>(null);
+  const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | null>(null);
   const taps = useRef<number[]>([]);
   const cal = useMemo(() => calendar(save.dayOffset), [save.dayOffset]);
   const introKey = `${s.weekId}:${s.day}`;
-  const needSetup = !s.profile && s.phase === 'dayEnd'; // you name yourself and the town once your first day is done
-  const showIntro = !needSetup && save.introSeen !== introKey && s.phase !== 'results' && s.phase !== 'dayEnd';
+  const showIntro = save.introSeen !== introKey && s.phase === 'card' && !(s.day === 1 && s.cardInDay === 0 && !s.daveDays.length && save.introSeen === '');
 
   const persist = (next: State, patch: Partial<Save> = {}) => {
     const rec = record({ ...save, ...patch }, next);
@@ -598,382 +271,99 @@ export function App() {
   };
   useEffect(() => { writeSave({ ...save, state: s }); }, []);
 
-  const act = (a: Action): State => {
-    const next = reduce(s, a, content);
-    const recalled = next.recalls > s.recalls;
-    persist(next, a.type === 'choose' || a.type === 'delegate' ? { tutorialDone: true } : {});
-    if (recalled) { setOverlay('recall'); sfx('warn'); }
-    if (a.type === 'choose' || a.type === 'delegate') stats.recordChoice(s.weekId, a.cardId, a.type === 'choose' ? a.option : -1);
-    return next;
+  const swipe = (dir: Dir) => {
+    const card = findCard(pack, s.current!);
+    const ch = card.options[dir]!;
+    const next = reduce(s, { type: 'swipe', dir }, pack);
+    persist(next);
+    const fx: Pulse['effects'] = {};
+    for (const g of GROUPS) if (next.meters[g] !== s.meters[g]) fx[g] = next.meters[g] - s.meters[g];
+    setPulse({ key: Date.now(), effects: fx });
+    const good = METERS.reduce((n, m) => n + (next.meters[m] - s.meters[m]), 0) >= 0;
+    setToast({ key: Date.now(), who: card.who, text: ch.reaction, mood: good ? 'pleased' : 'annoyed', later: !!ch.then?.length });
+    sfx(card.who === 'gerald' ? 'honk' : good ? 'coin' : 'warn');
+    if (next.phase === 'recalled') sfx('lose');
   };
-
-  const choose = (card: Card, option: number, skill?: Skill) => {
-    const before = s;
-    const o = card.options[option]!;
-    if (before.phase === 'desk' && card.game && skill === undefined) { setPlaying({ card, option }); sfx('paper'); return; }
-    setPlaying(null);
-    const urgent = before.desk.find((d) => d.cardId === card.id)?.urgent;
-    const after = act({ type: 'choose', cardId: card.id, option, ...(skill !== undefined ? { skill } : {}) });
-    sfx('stamp');
-    setTimeout(() => sfx(card.who === 'gerald' ? 'honk' : upfront(o, content) > 0 ? 'coin' : upfront(o, content) < 0 ? 'spend' : 'tap'), 180);
-    const won = after.history[after.history.length - 1]?.won;
-    if (o.gamble) setTimeout(() => sfx(won ? 'win' : 'lose'), 420);
-    bump(before, after);
-    if (skill !== undefined) setBurst({ key: Date.now(), skill });
-    {
-      const dm = after.recalls === before.recalls ? after.money - before.money : 0;
-      const parts = GROUPS.filter((g) => after.approval[g] !== before.approval[g] && after.recalls === before.recalls).map((g) => `${GROUP_NAME[g]} ${after.approval[g] > before.approval[g] ? '+' : ''}${after.approval[g] - before.approval[g]}`);
-      if (dm) parts.push(`${dm > 0 ? '+' : '−'}$${Math.abs(dm)}k`);
-      setNews(`${o.label}${skill === 0 ? ' (botched)' : skill === 1 ? ' (sloppily)' : ''}. ${parts.join(' · ')}`);
-    }
-    if (before.phase === 'desk' || o.gamble) setOutcome({ card, option, before, after, won, skill, urgent });
-    else setFocus(null);
-  };
-  const enact = (d: Decree) => {
-    const before = s;
-    const after = act({ type: 'decree', id: d.id });
-    sfx('stamp');
-    bump(before, after);
-    setEnacted(d);
-  };
-  const delegate = (card: Card) => {
-    const before = s;
-    const after = act({ type: 'delegate', cardId: card.id });
-    const id = after.history[after.history.length - 1]!.dave;
-    sfx('stamp');
-    bump(before, after);
-    setOutcome({ card, option: 'dave', daveText: content.pack.dave.outcomes.find((d) => d.id === id)?.text, before, after });
-  };
-  const closeCard = () => { setFocus(null); setOutcome(null); setPlaying(null); };
-  const bump = (before: State, after: State) => {
-    if (after.recalls !== before.recalls) return;
-    const effects: Effects = {};
-    for (const g of GROUPS) if (after.approval[g] !== before.approval[g]) effects[g] = after.approval[g] - before.approval[g];
-    setPulse({ key: Date.now(), effects });
-  };
+  useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(null), 2600); return () => clearTimeout(t); }, [toast]);
 
   const jump = (days: number) => {
     const sv = { ...save, dayOffset: save.dayOffset + days, state: s };
     const next = boot(sv);
-    setOverlay(null); setFocus(null); setOutcome(null);
-    setSave({ ...sv, state: next }); setS(next); writeSave({ ...sv, state: next });
+    setSave({ ...sv, state: next }); setS(next); writeSave({ ...sv, state: next }); setOverlay(null);
   };
-  const reset = () => {
-    const sv: Save = { ...save, state: null, introSeen: '', dayOffset: 0, tutorialDone: false };
-    const next = boot(sv);
-    setOverlay(null); setFocus(null); setOutcome(null);
-    setSave({ ...sv, state: next }); setS(next); writeSave({ ...sv, state: next });
+  const advance = () => {
+    if (cal.today > s.day || s.phase === 'recalled') { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }
+    else jump(1);
   };
+  const titleTap = () => { const now = Date.now(); taps.current = [...taps.current.filter((t) => now - t < 700), now]; if (taps.current.length >= 3) { taps.current = []; setOverlay('dev'); } };
 
-  // The Bugle's report is folded into the next screen, so the report phase moves on by itself.
-  useEffect(() => {
-    if (s.phase !== 'report' || overlay || outcome) return;
-    const t = setTimeout(() => act({ type: 'next' }), 60);
-    return () => clearTimeout(t);
-  });
-
-  // When every card on the desk is dealt with, the day moves on by itself.
-  useEffect(() => {
-    if (s.phase !== 'desk' || focus || outcome || playing || overlay || showIntro) return;
-    if (s.desk.some((d) => d.status === 'open')) return;
-    const t = setTimeout(() => { act({ type: 'endDesk' }); sfx('paper'); }, 700);
-    return () => clearTimeout(t);
-  });
-
-  // Enter advances simple screens.
-  useEffect(() => {
-    const key = (e: KeyboardEvent) => {
-      if (e.key !== 'Enter' || focus || overlay) return;
-      if (showIntro) persist(s, { introSeen: introKey });
-    };
-    addEventListener('keydown', key);
-    return () => removeEventListener('keydown', key);
-  });
-
-  const titleTap = () => {
-    const now = Date.now();
-    taps.current = [...taps.current.filter((t) => now - t < 700), now];
-    if (taps.current.length >= 3) { taps.current = []; setOverlay('dev'); }
-  };
-
-  const shownMoney = useTween(s.money);
-  const legal = legalActions(s, content);
-  const openCards = s.desk.filter((d) => d.status === 'open').length;
-  const focusCard = focus ? findCard(content, focus) : null;
-  const focusSlot = s.desk.find((d) => d.cardId === focus);
-  const report = s.reports[s.reports.length - 1];
-  const lastPoll = s.polls[s.polls.length - 1];
-  const prevPoll = s.polls[s.polls.length - 2];
-  const m = monthOfDay(s.month);
+  const card = s.phase === 'card' && s.current ? findCard(pack, s.current) : null;
+  const choice = card && preview ? card.options[preview] ?? null : null;
   const dayName = DAY_NAMES[s.day - 1]!;
-  const income = Math.round(TUNING.tax[s.tax].mult * (TUNING.incomeBase + s.approval.business * TUNING.incomePerBusiness) * (s.approval.business < TUNING.low ? TUNING.businessLowIncome : 1));
-  const shareDay = `${s.profile?.town ?? 'Bad Town'} · Week of ${s.weekId} · ${dayName} — Poll ${lastPoll ?? voteShare(s, 0)}% ${prevPoll === undefined ? '' : (lastPoll ?? 0) >= prevPoll ? '▲' : '▼'} · ${money(s.money)} · ${s.projects.length} project${s.projects.length === 1 ? '' : 's'}${s.promises.length ? ` · ${s.promises.length} promise${s.promises.length > 1 ? 's' : ''} due` : ''}`;
+  const needSetup = !s.profile && s.phase === 'dayEnd';
+  const isSunday = s.day >= 7;
 
   return (
-    <div class={`app day${s.day}`}>
+    <div class="app">
       <header class="top">
         <h1 onClick={titleTap}>Mayor of <span>{s.profile?.town ?? 'Bad Town'}</span></h1>
         <div class="top-right">
-          <span class="daychip">{dayName}{s.day <= 6 && s.phase !== 'dayEnd' ? (s.phase === 'decree' ? " · Mayor's Hour" : s.phase === 'initiative' ? ' · midday' : m === 1 ? " · today's three" : " · your town's three") : ''}</span>
-          {s.profile && <button class="icon" aria-label="Change your name or the town's name" onClick={() => { setOverlay('names'); sfx('tap'); }}><Icon.pen /></button>}
-          <button class="icon" aria-label="Open the scrapbook" onClick={() => { setBook(true); sfx('paper'); }}><Icon.book /></button>
+          <span class="daychip">{dayName}{s.phase === 'card' && !isSunday ? ` · ${s.cardInDay + 1} of ${TUNING.cardsPerDay}` : ''}</span>
+          {s.profile && <button class="icon" aria-label="Rename" onClick={() => setOverlay('names')}><Icon.pen /></button>}
+          <button class="icon" aria-label="Open the scrapbook" onClick={() => { setOverlay('book'); sfx('paper'); }}><Icon.book /></button>
           <button class="icon" aria-label={save.muted ? 'Turn sound on' : 'Turn sound off'} onClick={() => { setMuted(!save.muted); persist(s, { muted: !save.muted }); }}><Icon.sound on={!save.muted} /></button>
         </div>
       </header>
-
-      <Town s={s} pulse={pulse} scene={(playing?.card.game ?? doing?.game)?.theme} burst={burst} />
-      {news && <p class="ticker" key={news} aria-live="polite"><b>JUST IN</b> {news}</p>}
-      <Timeline s={s} />
-
-      <section class="hud" aria-label="Town status">
-        <button class={`stat money ${s.money < 0 ? 'neg' : ''}`} onClick={() => { setOverlay('tax'); sfx('tap'); }} aria-label={`Money ${money(s.money)}. Income ${income} thousand a month. Tax ${s.tax}. Change tax`}>
-          <Icon.coin size={18} /><b>{money(shownMoney)}</b><small>+${income}k/mo · tax {s.tax} ▾</small>
-        </button>
-        <button class="stat" onClick={() => { setLawBook(true); sfx('tap'); }} aria-label={`${s.decrees.length} decrees in force. Open the law book`}><Icon.scroll /><b>{s.decrees.length}</b><small>Decrees ▾</small></button>
-        <div class="stat" aria-label={`${s.favors} Favors`}><Icon.ticket size={18} /><b>{s.favors}</b><small>Favors</small></div>
-        <div class="stat" aria-label={`${openCards} requests left this month`}><span class="pips">{s.desk.map((d) => <i key={d.cardId} class={d.status === 'open' ? 'on' : ''} />)}</span><small>To do</small></div>
-      </section>
-      <section class="meters">{GROUPS.map((g) => <Meter key={g} g={g} s={s} />)}</section>
-
-      {s.phase === 'desk' && (
-        <main class="desk">
-          <Agenda s={s} top onOpen={(which) => { setPeek(which); sfx('paper'); }} />
-          <Guide s={s} open={openCards} first={!save.tutorialDone} />
-          <h2 class="deskhead">{m === 1 ? <>Today's three <small>every mayor gets these</small></> : <>Your town's three <small>because of how things are going</small></>}</h2>
-          <div class="cards">
-            {s.desk.map((slot, i) => {
-              const card = findCard(content, slot.cardId);
-              const done = slot.status !== 'open';
-              return (
-                <button key={slot.cardId} class={`paper tilt${i % 3} ${done ? 'done' : ''} ${slot.urgent ? 'urgent' : ''} ${slot.major ? 'major' : ''}`} disabled={done} onClick={() => { setFocus(card.id); sfx('paper'); }}>
-                  {slot.urgent && <span class="ribbon small">URGENT</span>}
-                  {slot.major && <span class="ribbon small major">CATASTROPHE · 3 games</span>}
-                  {m === 2 && slot.why && <span class="why-chip" style={{ '--g': slot.why.startsWith('low:') ? GROUP_COLOR[slot.why.slice(4) as GroupId] : '#6B6257' }}>{whyText(slot.why)}</span>}
-                  <Portrait who={card.who} size={40} ring={card.group ? GROUP_COLOR[card.group] : undefined} />
-                  <span class="paper-text"><b>{(NAMES[card.who] ?? card.who).split(',')[0]}{card.rare ? ' · RARE' : ''}</b>{card.text}</span>
-                  {done && <span class={`stamp mini ${slot.status === 'dave' ? 'dave' : card.options[slot.option ?? 0]?.kind === 'refuse' ? 'denied' : ''}`}>{slot.status === 'dave' ? "DAVE'D" : card.options[slot.option ?? 0]?.kind === 'refuse' ? 'DENIED' : 'DONE'}</span>}
-                </button>
-              );
-            })}
+      <div class="layout">
+        <aside class="side">
+          <Town s={view(s)} pulse={pulse} />
+          <ol class="timeline" aria-label="The week">{DAY_NAMES.map((d, i) => <li key={d} class={i + 1 === s.day ? 'now' : i + 1 < s.day ? 'past' : ''}><span>{d}</span><b>{i === 6 ? (s.result ? `${s.result.share}%` : 'Vote') : s.polls[i] !== undefined ? `${s.polls[i]}%` : ''}</b>{s.daveDays.includes(i + 1) && <i>Dave</i>}</li>)}</ol>
+          <div class="threads">
+            <h3>Stories in play</h3>
+            {(() => { const live = [...new Set(s.queue.map((q) => findCard(pack, q.cardId).story ?? 'town'))]; return live.length ? <ul>{live.map((x) => <li key={x}>{pack.headlines[x] ?? x} <small>to be continued…</small></li>)}</ul> : <p class="hint">Nothing brewing. Yet.</p>; })()}
+            <h3>This week's goals</h3>
+            <ul class="goals">{pack.objectives.map((o) => <li key={o.id} class={s.objectivesDone.includes(o.id) ? 'done' : ''}>{s.objectivesDone.includes(o.id) ? '★' : '○'} {o.text} <small>+{TUNING.vote.objective}% votes</small></li>)}</ul>
           </div>
-          {openCards > 0 && !legal.some((x) => x.type === 'choose') && <button class="btn" onClick={() => { act({ type: 'endDesk' }); sfx('paper'); }}>Nothing more can be done here. Move on</button>}
-          <Agenda s={s} onOpen={(which) => { setPeek(which); sfx('paper'); }} />
-        </main>
-      )}
-
-      {s.phase === 'decree' && !needSetup && !showIntro && (
-        <main class="panel">
-          {report && s.decreesToday === 0 && <MiniReport r={report} s={s} />}
-          <div class="guide"><p class="step"><span class="num">3 of 3</span><b>Mayor's Hour: enact up to {TUNING.decreesPerDay} things. {TUNING.decreesPerDay - s.decreesToday} left.</b></p><p class="hint">Nobody asked for these. That's the fun. A decree lasts all week. Every mayor is offered the same ones today.</p></div>
-          <div class="options">
-            {s.decreeOffer.map((id) => {
-              const d = content.pack.decrees.find((x) => x.id === id)!;
-              const ok = legal.some((a) => a.type === 'decree' && a.id === id);
-              return (
-                <button key={id} class={`option decree ${d.kind}`} disabled={!ok} onClick={() => enact(d)}>
-                  <span class="opt-top"><span class="kind">{d.kind}</span><b>{d.name}</b></span>
-                  <span class="decree-text">{d.text}</span>
-                  <DecreeCosts d={d} />
-                </button>
-              );
-            })}
-          </div>
-          <button class="btn primary" onClick={() => { act({ type: 'skipDecree' }); sfx('paper'); }}>{s.decreesToday > 0 ? "That's enough law for one day" : 'Enact nothing today'}</button>
-        </main>
-      )}
-
-      {s.phase === 'promises' && (
-        <main class="panel">
-          <h2 class="display">Promises due</h2>
-          {s.duePromises.map((id) => {
-            const p = s.promises.find((x) => x.id === id)!;
-            const canPay = legal.some((a) => a.type === 'resolvePromise' && a.id === id && a.pay);
-            return (
-              <div key={id} class="promise-row">
-                <div class="speaker"><Portrait who={findCard(content, p.cardId).who} size={56} /><p class="bubble">You promised: “{p.label}”. That's {money(p.money)}. Today.</p></div>
-                <div class="options">
-                  <button class="option" disabled={!canPay} onClick={() => { act({ type: 'resolvePromise', id, pay: true }); sfx('spend'); }}><span class="opt-top"><b>Keep the promise</b></span><span class="costs"><MoneyChip value={-p.money} /></span></button>
-                  <button class="option refuse" onClick={() => { act({ type: 'resolvePromise', id, pay: false }); sfx('warn'); }}><span class="opt-top"><b>Break it</b></span><span class="costs"><EffectChips effects={Object.fromEntries(GROUPS.filter((g) => (p.gain[g] ?? 0) > 0).map((g) => [g, -2 * p.gain[g]!]))} /><span class="chip vote down">Votes ▼ −4%</span></span></button>
-                </div>
-              </div>
-            );
-          })}
-        </main>
-      )}
-
-      {s.phase === 'report' && report && (
-        <main class="panel"><MiniReport r={report} s={s} /><button class="btn primary" onClick={() => act({ type: 'next' })}>Continue</button></main>
-      )}
-
-      {s.phase === 'initiative' && !showIntro && (
-        <main class="panel">
-          {report && <MiniReport r={report} s={s} />}
-          <div class="guide"><p class="step"><span class="num">Midday</span><b>Your move. Go and do one of these, or put your feet up.</b></p><p class="hint">Unlike the cards, these can pay off. Do it well and the town loves you for it. Do it badly and, well.</p></div>
-          <div class="options">
-            {s.initiativeOffer.map((id) => {
-              const it = content.pack.initiatives.find((x) => x.id === id)!;
-              return (
-                <button key={id} class="option initiative" onClick={() => { setDoing(it); sfx('paper'); }}>
-                  <span class="opt-top"><Portrait who={it.who} size={34} /><b>{it.name}</b><span class="paper-game"><Sprite theme={it.game.theme} size={22} /></span></span>
-                  <span class="decree-text">{it.text}</span>
-                  <span class="tiers">
-                    <span><i>Clean</i><OutcomeChips o={it.clean} /></span>
-                    <span><i>Sloppy</i><OutcomeChips o={it.sloppy} /></span>
-                    <span><i>Flop</i><OutcomeChips o={it.flop} /></span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-          <button class="btn ghost" onClick={() => { act({ type: 'skipInitiative' }); sfx('paper'); }}>Put your feet up <small>nothing gained, nothing lost</small></button>
-        </main>
-      )}
-
-      {s.phase === 'dayEnd' && (
-        <main class="panel poll">
-          <h2 class="display">If the election were today</h2>
-          <Gauge value={lastPoll ?? 50} />
-          {prevPoll !== undefined && <p class={`trend ${(lastPoll ?? 0) >= prevPoll ? 'up' : 'down'}`}>{(lastPoll ?? 0) >= prevPoll ? '▲' : '▼'} {Math.abs((lastPoll ?? 0) - prevPoll)} since yesterday</p>}
-          <ul class="objectives">{content.pack.objectives.map((o) => <li key={o.id} class={s.objectivesDone.includes(o.id) ? 'done' : ''}>{s.objectivesDone.includes(o.id) ? '✓' : '○'} {o.text}</li>)}</ul>
-          <p class="cliff">{content.pack.cliffhangers[s.day - 1]}</p>
-          <CopyButton text={shareDay} label="Share today" />
-          {cal.today > s.day ? <button class="btn primary" onClick={() => jump(0)}>Start {DAY_NAMES[s.day] ?? 'the next day'}</button>
-            : <><p class="hint">Come back tomorrow. Next day in {Math.floor(cal.msToMidnight / 3.6e6)}h {Math.floor((cal.msToMidnight % 3.6e6) / 6e4)}m.</p>
-              <button class="btn primary" onClick={() => jump(1)}>Play the next day now <small>preview only</small></button></>}
-        </main>
-      )}
-
-      {s.phase === 'results' && <Results s={s} fresh={fresh} onNewWeek={() => jump(8 - cal.today)} />}
-
-      {/* overlays */}
-      {focusCard && s.phase === 'desk' && (
-        <Sheet label={`Request from ${NAMES[focusCard.who]}`} onClose={outcome || playing ? undefined : closeCard}>
-          {outcome ? <ResultPanel r={outcome} onDone={closeCard} /> : playing ? <MiniGame key={playing.card.id + playing.option} day={s.day} card={playing.card} onDone={(sk) => choose(playing.card, playing.option, sk)} /> : (
-            <CardSheet card={focusCard} s={s} mode="desk" urgent={focusSlot?.urgent} onClose={closeCard}
-              onChoose={(i) => choose(focusCard, i)} onDave={legal.some((a) => a.type === 'delegate' && a.cardId === focusCard.id) ? () => delegate(focusCard) : undefined} />
+        </aside>
+        <main class="main">
+          <Meters s={s} preview={choice} />
+          {card && !showIntro && <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} onPreview={setPreview} onSwipe={swipe} />}
+          {toast && s.phase === "card" && <div class="toast" key={toast.key}><Portrait who={toast.who} size={46} mood={toast.mood} /><p>{toast.text}{toast.later && <small>This isn't over.</small>}</p></div>}
+          {s.phase === 'card' && !isSunday && <div class="progress" aria-label={`Card ${s.cardInDay + 1} of ${TUNING.cardsPerDay} today`}>{Array.from({ length: TUNING.cardsPerDay }, (_, i) => <i key={i} class={i < s.cardInDay ? 'done' : i === s.cardInDay ? 'now' : ''} />)}</div>}
+          {s.phase === 'recalled' && (
+            <div class="panel recall">
+              <div class="stamp denied big">RECALLED</div>
+              <EndingCard k={s.recallCauses[s.recallCauses.length - 1]!} isNew={fresh.endings.includes(s.recallCauses[s.recallCauses.length - 1]!)} />
+              <p class="hint warn">Today's over. You'll be back tomorrow as Acting Mayor: everything resets to {TUNING.recall.reset} and Sunday's vote takes {TUNING.recall.election}. {s.recalls >= TUNING.recall.max ? 'One more and the term is over.' : ''}</p>
+              <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>See the day in review</button>
+            </div>
           )}
-        </Sheet>
-      )}
-      {outcome && !(focusCard && s.phase === 'desk') && <Sheet label="Result"><ResultPanel r={outcome} onDone={closeCard} /></Sheet>}
-      {s.phase === 'event' && s.eventId && !outcome && !needSetup && (
-        <Sheet label="Event" tone="event">
-          <div class="ribbon event">TODAY'S EVENT · everyone gets this one</div>
-          <CardSheet card={findCard(content, s.eventId)} s={s} mode="event" onChoose={(i) => choose(findCard(content, s.eventId!), i)} onSkip={() => { act({ type: 'skipEvent' }); sfx('paper'); }} />
-        </Sheet>
-      )}
-      {s.phase === 'campaign' && !showIntro && !needSetup && !outcome && (
-        <Sheet label="Campaign" tone="event">
-          <div class="ribbon event">ELECTION DAY · one last move</div>
-          <CardSheet card={campaignCard(s, content)} s={s} mode="campaign" onChoose={(i) => choose(campaignCard(s, content), i)} />
-        </Sheet>
-      )}
+          {s.phase === 'dayEnd' && !needSetup && <DayReview s={s} onNext={advance} nextLabel={cal.today > s.day ? `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}` : `Play ${DAY_NAMES[s.day] ?? 'tomorrow'} now (preview only)`} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
+          {s.phase === 'results' && <Results s={s} fresh={fresh} onNewWeek={() => jump(8 - cal.today)} />}
+        </main>
+      </div>
+
       {showIntro && (
         <Sheet label="This morning">
-          <Bugle kicker={`${dayName} morning · ${s.profile?.town ?? ''}`} headline={s.daveDays.includes(s.day - 1) ? 'DEPUTY DAVE HANDS BACK TOWN, MOSTLY INTACT' : s.reports.length ? s.reports[s.reports.length - 1]!.headline : 'NEW MAYOR SWORN IN; TOWN BRACES'}>
-            {s.daveDays.length > 0 && s.daveDays.includes(s.day - 1) && (
-              <div class="speaker"><Portrait who="dave" size={60} mood="pleased" />
-                <p class="bubble">You were out{s.reports.length === s.daveDays.length * 2 ? ' since Monday' : ''}, so we... I ran things for {s.daveDays.length} day{s.daveDays.length > 1 ? 's' : ''}. {content.pack.dave.absence[(s.day + s.daveDays.length) % content.pack.dave.absence.length]} It went fine. Don't check the bins.</p></div>
-            )}
-            {s.day === 1 && <p>You are the mayor. It is one week until the election. Everyone wants something, and there's only so much of you.</p>}
-            {s.day === 7 && <p>It's election day. Whatever you did this week, the town remembers.</p>}
-            <p class="hint">Poll this morning: <b>{voteShare(s, 0)}%</b> · you need 50% on Sunday.</p>
-            <ul class="objectives">{content.pack.objectives.map((o) => <li key={o.id} class={s.objectivesDone.includes(o.id) ? 'done' : ''}>{s.objectivesDone.includes(o.id) ? '✓' : '○'} {o.text} <span class="chip vote">+2%</span></li>)}</ul>
-          </Bugle>
-          <button class="btn primary" autoFocus onClick={() => { persist(s, { introSeen: introKey }); sfx('paper'); }}>{s.day === 7 ? 'To the campaign' : 'To the desk'}</button>
-        </Sheet>
-      )}
-      {doing && (
-        <Sheet label={doing.name}>
-          <MiniGame key={doing.id} card={{ id: doing.id, who: doing.who, text: doing.text, options: [], game: doing.game }} onDone={(skill) => {
-            const before = s;
-            const after = act({ type: 'initiative', id: doing.id, skill });
-            bump(before, after); setBurst({ key: Date.now(), skill });
-            setNews(`${doing.name}: ${(skill === 2 ? doing.clean : skill === 1 ? doing.sloppy : doing.flop).text}`);
-            setDid({ it: doing, skill, before, after }); setDoing(null);
-          }} />
-        </Sheet>
-      )}
-      {did && (
-        <Sheet label="How it went">
-          <div class="result">
-            <Aftermath card={{ id: did.it.id, who: did.it.who, text: did.it.text, options: [], game: did.it.game }} skill={did.skill} />
-            <h2 class="display">{did.it.name}</h2>
-            <div class={`dice ${did.skill === 2 ? 'won' : did.skill === 0 ? 'lost' : ''}`}><b>{['It went badly.', 'It went sort of okay.', 'A triumph.'][did.skill]}</b> {(did.skill === 2 ? did.it.clean : did.skill === 1 ? did.it.sloppy : did.it.flop).text} <span class="costs"><OutcomeChips o={did.skill === 2 ? did.it.clean : did.skill === 1 ? did.it.sloppy : did.it.flop} /></span></div>
-            <button class="btn primary" autoFocus onClick={() => setDid(null)}>On to your town's three</button>
+          <div class="bugle"><div class="masthead"><span>THE BUGLE</span><small>{dayName} morning</small></div>
+            <h2>{s.daveDays.includes(s.day - 1) ? 'DEPUTY DAVE HANDS BACK TOWN, MOSTLY' : isSunday ? 'ELECTION DAY' : (() => { const last = s.swipes.filter((w) => w.day === s.day - 1).map((w) => findCard(pack, w.cardId).story).filter((x) => x && x !== 'town' && x !== 'pressure'); return last.length ? `${pack.headlines[last[last.length - 1]!]}: THE LATEST` : 'A NEW DAY DAWNS, RELUCTANTLY'; })()}</h2>
+            {s.daveDays.length > 0 && s.daveDays.includes(s.day - 1) && <div class="speaker"><Portrait who="dave" size={56} mood="pleased" /><p class="bubble">You were out, so we... I ran things for {s.daveDays.length} day{s.daveDays.length > 1 ? 's' : ''}. It went fine. Don't check the bins.</p></div>}
+            <p class="hint">Poll this morning: <b>{voteShare(s)}%</b>. You need 50% on Sunday.</p>
           </div>
+          <button class="btn primary" autoFocus onClick={() => persist(s, { introSeen: introKey })}>To work</button>
         </Sheet>
       )}
-      {needSetup && !enacted && <Setup late={s.daveDays.length > 0} onDone={(profile) => { act({ type: 'setup', profile }); sfx('win'); }} />}
-      {overlay === 'names' && s.profile && <Names profile={s.profile} onClose={() => setOverlay(null)} onSave={(mayor, town) => { act({ type: 'rename', mayor, town }); setOverlay(null); }} />}
-      {enacted && (
-        <Sheet label="Decree enacted">
-          <div class="result">
-            <div class="stamp">IT'S THE LAW</div>
-            <h2 class="display">{enacted.name}</h2>
-            <div class="speaker"><Portrait who={enacted.who} size={72} mood={(enacted.effects && Object.values(enacted.effects).some((v) => v < 0)) ? 'annoyed' : 'pleased'} /><p class="bubble">{enacted.reaction}</p></div>
-            <DecreeCosts d={enacted} />
-            <button class="btn primary" autoFocus onClick={() => setEnacted(null)}>Carry on</button>
-          </div>
-        </Sheet>
-      )}
-      {lawBook && (
-        <Sheet label="Law book" onClose={() => setLawBook(false)}>
-          <h2 class="display">The law book</h2>
-          {s.decrees.length === 0 && <p class="hint">Nothing enacted yet. Each morning you can make one thing the law.</p>}
-          {s.decrees.map((id) => { const d = content.pack.decrees.find((x) => x.id === id)!; return <div key={id} class="law"><b>{d.name}</b><span>{d.text}</span><DecreeCosts d={d} ongoing /></div>; })}
-        </Sheet>
-      )}
-      {overlay === 'tax' && (
-        <Sheet label="Tax rate" onClose={() => setOverlay(null)}>
-          <div class="speaker"><Portrait who="doug" size={60} /><p class="bubble">The tax rate. You can change it any time. Please be gentle. Or don't. I'm fine.</p></div>
-          <div class="options">
-            {(['low', 'medium', 'high'] as TaxLevel[]).map((level) => {
-              const t = TUNING.tax[level];
-              const inc = Math.round(t.mult * (TUNING.incomeBase + s.approval.business * TUNING.incomePerBusiness));
-              return <button key={level} class={`option ${s.tax === level ? 'current' : ''}`} disabled={s.tax === level || !legal.some((a) => a.type === 'setTax')} onClick={() => { act({ type: 'setTax', level }); sfx('coin'); setOverlay(null); }}>
-                <span class="opt-top"><b>{level[0]!.toUpperCase() + level.slice(1)} tax</b>{s.tax === level && <span class="why">current</span>}</span>
-                <span class="costs"><MoneyChip value={inc} suffix="/mo" />{t.people !== 0 && <span class="chip monthly" style={{ '--g': GROUP_COLOR.people }}><i class="dot" />People {t.people > 0 ? '▲' : '▼'} each month</span>}</span>
-              </button>;
-            })}
-          </div>
-          <p class="hint">Each month every group also cools off a little: about {GROUPS.map((g) => `${GROUP_NAME[g]} −${fadeFor(s.approval[g])}`).join(', ')}. Popular mayors cool faster.</p>
-        </Sheet>
-      )}
-      {book && <Scrapbook save={save} onClose={() => setBook(false)} />}
-      {peek && (() => {
-        const ag = agenda(s, content);
-        return (
-          <Sheet label={peek === 'midday' ? 'Midday options' : "Tonight's laws"} onClose={() => setPeek(null)}>
-            <h2 class="display">{peek === 'midday' ? 'Midday: your move' : "Tonight: the Mayor's Hour"}</h2>
-            <p class="hint">{peek === 'midday' ? "After today's three you get to go and do one of these. Done well, they pay off." : `After your town's three you can make up to ${TUNING.decreesPerDay} of these law. They last all week.`}</p>
-            <div class="options">
-              {peek === 'midday' ? ag.initiatives.map((id) => { const it = content.pack.initiatives.find((x) => x.id === id)!; return <div key={id} class="option initiative preview"><span class="opt-top"><Portrait who={it.who} size={30} /><b>{it.name}</b></span><span class="decree-text">{it.text}</span></div>; })
-                : ag.decrees.map((id) => { const d = content.pack.decrees.find((x) => x.id === id)!; return <div key={id} class={`option decree ${d.kind} preview`}><span class="opt-top"><span class="kind">{d.kind}</span><b>{d.name}</b></span><span class="decree-text">{d.text}</span></div>; })}
-            </div>
-            {peek === 'tonight' && <p class="hint"><b>In force now:</b> {s.decrees.length ? s.decrees.map((id) => content.pack.decrees.find((d) => d.id === id)!.name).join(' · ') : 'nothing yet.'}</p>}
-            <button class="btn primary" onClick={() => setPeek(null)}>Back to the desk</button>
-          </Sheet>
-        );
-      })()}
-      {overlay === 'recall' && (
-        <Sheet label="Recalled" tone="recall">
-          <div class="stamp denied big">RECALLED</div>
-          {s.recallCauses.length > 0 && content.pack.endings[s.recallCauses[s.recallCauses.length - 1]!] ? <EndingCard k={s.recallCauses[s.recallCauses.length - 1]!} isNew={fresh.endings.includes(s.recallCauses[s.recallCauses.length - 1]!)} /> : <p class="bubble">{s.lastRecall ?? 'You have been recalled.'}</p>}
-          <p class="hint warn">You carry on as Acting Mayor. Every group resets to 40, money to $20k, and the election costs you 8 points. {s.recalls >= TUNING.recall.max ? 'One more recall ends the term.' : ''}</p>
-          <button class="btn primary" onClick={() => { setOverlay(null); setFocus(null); setOutcome(null); }}>Carry on, somehow</button>
-        </Sheet>
-      )}
+      {needSetup && <Setup title="One day down. Make it official." onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack)); sfx('win'); }} />}
+      {overlay === 'names' && s.profile && <Setup title="Rename things" initial={s.profile} onDone={(p) => { persist(reduce(s, { type: 'rename', mayor: p.mayor, town: p.town }, pack)); setOverlay(null); }} />}
+      {overlay === 'book' && <Scrapbook save={save} onClose={() => setOverlay(null)} />}
       {overlay === 'dev' && (
         <Sheet label="Dev panel" onClose={() => setOverlay(null)}>
           <h2 class="display">Dev panel</h2>
-          <div class="options">
-            <button class="option" onClick={() => jump(1)}><b>Jump to the next day</b><span class="costs"><span class="chip">Dave covers anything unfinished</span></span></button>
-            <button class="option" onClick={reset}><b>Reset everything</b></button>
-          </div>
-          <pre class="share state">{JSON.stringify({ ...s, history: `${s.history.length} entries`, reports: `${s.reports.length} reports` }, null, 1)}</pre>
+          <button class="btn" onClick={() => jump(1)}>Jump to the next day</button>
+          <button class="btn" onClick={() => { const sv: Save = { ...save, state: null, introSeen: '', dayOffset: 0 }; const n = boot(sv); setSave({ ...sv, state: n }); setS(n); writeSave({ ...sv, state: n }); setOverlay(null); }}>Reset everything</button>
         </Sheet>
       )}
-      <footer>Preview build · crowd numbers are simulated and labelled.</footer>
+      <footer>Preview build</footer>
     </div>
   );
 }

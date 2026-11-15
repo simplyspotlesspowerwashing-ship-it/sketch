@@ -1,111 +1,56 @@
-// Balance simulator: plays whole terms headlessly with each bot and writes a report.
+// Balance simulator for the swipe engine. Plays whole terms with bots and writes a report.
 //   npm run sim -- [terms=5000] [out=reports/balance.md]
 import { writeFileSync } from 'node:fs';
-import { week1Content } from '../src/content/index.ts';
-import { autoplay, findCard, newTerm, reduce } from '../src/engine/engine.ts';
-import { GROUPS } from '../src/engine/types.ts';
+import { week1Pack as pack } from '../src/content/index.ts';
+import { autoplay, davePolicy, findCard, newTerm, options } from '../src/engine/engine.ts';
+import type { Policy } from '../src/engine/engine.ts';
 import { TUNING } from '../src/engine/tuning.ts';
-import type { Content } from '../src/engine/types.ts';
-import { POLICIES } from './bots.ts';
-
-// Every simulated mayor does the town setup, cycling through the base groups and perks.
-const PERKS = ['chest', 'friends', 'cousin'] as const;
-const setup = (s: ReturnType<typeof newTerm>, i: number) =>
-  reduce(s, { type: 'setup', profile: { mayor: 'Bot', town: 'Bad Town', base: GROUPS[i % 4]!, perk: PERKS[i % 3]! } }, content);
+import { METERS } from '../src/engine/types.ts';
+import type { Dir } from '../src/engine/types.ts';
 
 const N = Number(process.argv[2] ?? 5000);
 const OUT = process.argv[3] ?? 'reports/balance.md';
-const content: Content = week1Content;
-const pct = (n: number, d: number) => (d ? ((100 * n) / d).toFixed(1) + '%' : '-');
-const q = (sorted: number[], p: number) => sorted[Math.min(sorted.length - 1, Math.floor(p * sorted.length))]!;
 
-const TARGETS: Record<string, [number, number]> = { sensible: [55, 65], random: [0, 15], 'dave-only': [5, 10] };
-type CardStat = { seen: number; options: number[]; ignored: number; dave: number };
+const random: Policy = (s, legal, _p, rand) => legal[Math.floor(rand() * legal.length)]!;
+/** Sees the effects and steers every meter toward the middle, with some noise. Real players can't see effects, so they do worse. */
+const sensible: Policy = (s, legal, p, rand) => {
+  if (s.phase !== 'card') return legal[0]!;
+  const card = findCard(p, s.current!);
+  const risk = (d: Dir) => {
+    const ch = card.options[d]!;
+    let v = METERS.reduce((n, k) => { const x = s.meters[k] + (ch.effects[k] ?? 0); const dist = Math.abs(x - 50); return n + dist * dist / 50 + (x <= 8 || (k !== 'treasury' && x >= 92) ? 200 : 0); }, 0);
+    v -= (ch.vote ?? 0) * 10 + (ch.effects.people ?? 0) * 0.4;
+    return v + (rand() - 0.5) * 18;
+  };
+  return { type: 'swipe', dir: options(card).sort((a, b) => risk(a) - risk(b))[0]! };
+};
+const POLICIES: Record<string, Policy> = { random, 'dave-only': davePolicy, sensible };
 
 const lines: string[] = [];
-const summary: string[] = [];
-const seenEver = new Set<string>();
-const flags: string[] = [];
-
+const seenAll = new Set<string>();
 for (const [name, policy] of Object.entries(POLICIES)) {
-  let wins = 0, recalled = 0, bankrupt = 0, early = 0, shareSum = 0;
-  const money: number[] = [], shares: number[] = [];
-  const cards = new Map<string, CardStat>();
-  const projects = new Map<string, number>();
+  let wins = 0, recalled = 0, early = 0, cards = 0;
+  const shares: number[] = [];
+  const causes: Record<string, number> = {};
   for (let i = 0; i < N; i++) {
-    const end = autoplay(setup(newTerm(content.pack.id, `${name}-${i}`, content), i), policy, content, () => false);
-    const r = end.result!;
-    wins += r.won ? 1 : 0;
+    const end = autoplay(newTerm('week1', `${name}-${i}`, pack), policy, pack, () => false);
+    wins += end.result!.won ? 1 : 0;
     recalled += end.recalls > 0 ? 1 : 0;
-    bankrupt += end.flags.wentBankrupt ? 1 : 0;
-    early += r.endedEarly ? 1 : 0;
-    shareSum += r.share;
-    shares.push(r.share);
-    money.push(end.money);
-    for (const p of end.projects) projects.set(p.id, (projects.get(p.id) ?? 0) + 1);
-    for (const id of end.usedCards) seenEver.add(id);
-    for (const h of end.history) {
-      if (h.cardId.startsWith('init:')) continue;
-      const card = findCard(content, h.cardId);
-      const st = cards.get(h.cardId) ?? { seen: 0, options: card.options.map(() => 0), ignored: 0, dave: 0 };
-      st.seen += 1;
-      if (h.choice === 'ignored') st.ignored += 1;
-      else if (h.choice === 'dave') st.dave += 1;
-      else st.options[h.choice]! += 1;
-      cards.set(h.cardId, st);
-    }
+    early += end.result!.endedEarly ? 1 : 0;
+    cards += end.swipes.length;
+    shares.push(end.result!.share);
+    for (const c of end.recallCauses) causes[c] = (causes[c] ?? 0) + 1;
+    for (const id of end.seen) seenAll.add(id);
   }
-  money.sort((a, b) => a - b);
   shares.sort((a, b) => a - b);
-  const win = (100 * wins) / N;
-  const t = TARGETS[name];
-  const verdict = t ? (win >= t[0] && win <= t[1] ? 'on target' : `**off target** (${t[0]}-${t[1]}%)`) : '';
-  summary.push(`| ${name} | ${win.toFixed(1)}% | ${verdict} | ${(shareSum / N).toFixed(1)} | ${q(shares, 0.1)} / ${q(shares, 0.5)} / ${q(shares, 0.9)} | ${pct(recalled, N)} | ${pct(bankrupt, N)} | ${pct(early, N)} | ${q(money, 0.1)} / ${q(money, 0.5)} / ${q(money, 0.9)} |`);
-
-  lines.push(`\n## ${name}\n`);
-  lines.push(`Projects built (share of terms): ${[...projects].sort((a, b) => b[1] - a[1]).map(([id, n]) => `${id} ${pct(n, N)}`).join(', ') || 'none'}\n`);
-  lines.push('| Card | Shown | Options chosen (share of times handled) | Ignored | Dave |', '|---|---|---|---|---|');
-  for (const [id, st] of [...cards].sort((a, b) => a[0].localeCompare(b[0]))) {
-    const card = findCard(content, id);
-    const handled = st.options.reduce((a, b) => a + b, 0);
-    lines.push(`| ${id} | ${st.seen} | ${card.options.map((o, i) => `${o.label}: ${pct(st.options[i]!, handled)}`).join(' · ')} | ${pct(st.ignored, st.seen)} | ${pct(st.dave, st.seen)} |`);
-    if (name === 'sensible' && handled >= 50 && card.options.length > 1) {
-      card.options.forEach((o, i) => {
-        const share = st.options[i]! / handled;
-        if (share > 0.85) flags.push(`\`${id}\`: "${o.label}" chosen ${(share * 100).toFixed(0)}% of the time (over 85%)`);
-        if (share < 0.05) flags.push(`\`${id}\`: "${o.label}" chosen ${(share * 100).toFixed(0)}% of the time (under 5%)`);
-      });
-    }
-  }
-  if (name === 'sensible') {
-    const top = [...projects].sort((a, b) => b[1] - a[1])[0];
-    if (top && top[1] / N > 0.9) flags.push(`project \`${top[0]}\` is built in ${pct(top[1], N)} of sensible terms (possible dominant project)`);
-    const rr = (100 * recalled) / N;
-    summary.push(`| | | recalls ${rr < 25 ? 'on target' : '**off target**'} (under 25%) | | | | | | |`);
-  }
+  const q = (p: number) => shares[Math.floor(p * (shares.length - 1))];
+  lines.push(`| ${name} | ${((100 * wins) / N).toFixed(1)}% | ${q(0.1)} / ${q(0.5)} / ${q(0.9)} | ${((100 * recalled) / N).toFixed(1)}% | ${((100 * early) / N).toFixed(1)}% | ${(cards / N).toFixed(0)} | ${Object.entries(causes).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${v}`).join(', ')} |`);
 }
-
-const all = [...content.pack.cards, ...content.pack.events, ...content.pack.campaign].map((c) => c.id);
-const unreachable = all.filter((id) => !seenEver.has(id) && !content.pack.events.some((e) => e.id === id) && !content.pack.campaign.some((e) => e.id === id));
-
+const unreached = pack.cards.filter((c) => !seenAll.has(c.id)).map((c) => c.id);
 const report = [
-  `# Balance report: pack \`${content.pack.id}\``,
-  '',
-  `${N} terms per policy. Tuning: ${JSON.stringify(TUNING.vote)}.`,
-  '',
-  '| Policy | Win rate | Target | Mean vote | Vote p10 / p50 / p90 | Recalled | Bankrupt | Term ended early | Ending money $k p10 / p50 / p90 |',
-  '|---|---|---|---|---|---|---|---|---|',
-  ...summary,
-  '',
-  '## Non-dilemmas and other flags (sensible bot)',
-  '',
-  ...(flags.length ? flags.map((f) => `- ${f}`) : ['None.']),
-  '',
-  '## Unreachable desk cards (never drawn by any policy)',
-  '',
-  ...(unreachable.length ? unreachable.map((f) => `- \`${f}\``) : ['None.']),
-  ...lines,
-  '',
+  `# Balance report: ${pack.id}`, '', `${N} terms per policy, ${TUNING.cardsPerDay} cards a day.`, '',
+  '| Policy | Win rate | Vote p10 / p50 / p90 | Recalled at least once | Term ended early | Cards played | Recall causes |', '|---|---|---|---|---|---|---|',
+  ...lines, '', '## Cards never seen by any bot', '', ...(unreached.length ? unreached.map((x) => `- \`${x}\``) : ['None.']), '',
 ].join('\n');
 writeFileSync(OUT, report);
-console.log(report.split('\n## random')[0]);
+console.log(report);

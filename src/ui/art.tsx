@@ -1,7 +1,10 @@
 // All art is original SVG authored here: flat paper cut-out shapes with a dark outline.
 import type { ComponentChildren } from 'preact';
 import { GROUPS } from '../engine/types.ts';
-import type { Effects, GroupId, State } from '../engine/types.ts';
+import type { Effects, GroupId } from '../engine/types.ts';
+
+/** What the town map needs to draw itself. Projects and laws are flags: `built:<id>`, `law:<id>`. */
+export interface TownView { day: number; approval: Record<GroupId, number>; flags: Record<string, true>; profile: { town: string } | null; fresh?: string | null }
 
 export const INK = '#29231F';
 export const GROUP_COLOR: Record<GroupId, string> = { people: '#D9653B', business: '#3F8F5A', law: '#3B6FB6', press: '#B0892A' };
@@ -271,9 +274,9 @@ export interface Burst { key: number; skill: 0 | 1 | 2 }
 const HOME: Record<GroupId, [number, number, number]> = { people: [55, 60, 40], law: [211, 28, 40], press: [287, 76, 28], business: [347, 30, 20] };
 const HOME_NAME: Record<GroupId, string> = { people: 'SCHOOL', law: 'TOWN HALL', press: 'BUGLE', business: 'CHAD' };
 
-export function Town({ s, pulse, scene, burst }: { s: State; pulse?: Pulse | null; scene?: string | null; burst?: Burst | null }) {
-  const has = (id: string) => s.projects.some((p) => p.id === id);
-  const fresh = (id: string) => (s.projects.find((p) => p.id === id)?.builtMonth === s.month ? 'built fresh' : 'built');
+export function Town({ s, pulse, scene, burst }: { s: TownView; pulse?: Pulse | null; scene?: string | null; burst?: Burst | null }) {
+  const has = (id: string) => !!s.flags[`built:${id}`];
+  const fresh = (id: string) => (s.fresh === `built:${id}` ? 'built fresh' : 'built');
   const f = s.flags;
   const night = s.day >= 7;
   const sky = SKY[Math.min(6, s.day - 1)]!;
@@ -286,7 +289,7 @@ export function Town({ s, pulse, scene, burst }: { s: State; pulse?: Pulse | nul
   const avg = GROUPS.reduce((n, g) => n + s.approval[g], 0) / 4;
   const gloomy = avg < 40, sunny = avg >= 60;
   return (
-    <svg class={`town ${burst && burst.skill === 0 ? 'quake' : ''}`} key={burst && burst.skill === 0 ? burst.key : 0} viewBox="0 0 400 170" role="img" aria-label={`${s.profile?.town ?? 'The town'}. Built: ${s.projects.map((p) => p.id).join(', ') || 'nothing yet'}.`}>
+    <svg class={`town ${burst && burst.skill === 0 ? 'quake' : ''}`} key={burst && burst.skill === 0 ? burst.key : 0} viewBox="0 0 400 170" role="img" aria-label={`${s.profile?.town ?? 'The town'}. Built: ${Object.keys(s.flags).filter((f) => f.startsWith('built:')).map((f) => f.slice(6)).join(', ') || 'nothing yet'}.`}>
       <rect width="400" height="170" fill={sky} />
       {night ? <><circle cx="340" cy="30" r="14" fill="#F2EBDD" /><circle cx="346" cy="26" r="12" fill={sky} />{[30, 80, 140, 200, 260, 300, 370].map((x, i) => <circle key={x} class="blink" style={{ 'animation-delay': `${i * 0.3}s`, 'animation-duration': '3s' }} cx={x} cy={12 + ((i * 17) % 34)} r="1.4" fill="#F2EBDD" />)}</>
         : <g class="sun"><circle cx={60 + s.day * 45} cy={s.day > 4 ? 50 : 28} r="15" fill="#F7D774" stroke={INK} stroke-width="2" /></g>}
@@ -344,7 +347,7 @@ export function Town({ s, pulse, scene, burst }: { s: State; pulse?: Pulse | nul
       {/* welcome sign */}
       <g transform="translate(4 116)"><path d="M8 0 v14 M52 0 v14" stroke={INK} stroke-width="2" /><rect x="0" y="-12" width="60" height="14" rx="2" fill="#F2EBDD" {...O} /><text x="30" y="-6.5" text-anchor="middle" font-size="4.2" fill={INK} font-family="Fredoka, sans-serif">WELCOME TO</text><text x="30" y="-0.8" text-anchor="middle" font-size={town.length > 11 ? 5 : 6.5} font-weight="700" fill={INK} font-family="Fredoka, sans-serif">{town.slice(0, 16)}</text>{f.speedTrap && <g class="built"><path d="M40 -12 q8 -12 16 0z" fill="#27497A" {...O} /><circle cx="45" cy="-13" r="1.2" fill="#fff" /><circle cx="51" cy="-13" r="1.2" fill="#fff" /></g>}</g>
       {f.goodLuck && <g class="built" transform="translate(366 120)"><path d="M14 0 v12" stroke={INK} stroke-width="2" /><rect x="0" y="-10" width="30" height="12" rx="2" fill="#F7D774" {...O} transform="rotate(-6)" /><text x="15" y="-2" text-anchor="middle" font-size="5" font-weight="700" fill={INK} font-family="Fredoka, sans-serif" transform="rotate(-6)">GOOD LUCK</text></g>}
-      {s.decrees.length > 0 && <g class="built" transform="translate(228 148)"><path d="M2 18 v8 M20 18 v8" stroke={INK} stroke-width="2" /><rect x="-2" y="0" width="26" height="19" rx="2" fill="#B58D55" {...O} />{s.decrees.slice(0, 6).map((id, i) => <rect key={id} x={1 + (i % 3) * 7.5} y={2 + Math.floor(i / 3) * 8} width="6" height="7" fill={['#fff', '#F7D774', '#F6DAD3'][i % 3]} stroke={INK} stroke-width=".9" transform={`rotate(${(i % 2 ? 4 : -5)} ${4 + (i % 3) * 7.5} ${5 + Math.floor(i / 3) * 8})`} />)}</g>}
+      {Object.keys(s.flags).some((f) => f.startsWith('law:')) && <g class="built" transform="translate(228 148)"><path d="M2 18 v8 M20 18 v8" stroke={INK} stroke-width="2" /><rect x="-2" y="0" width="26" height="19" rx="2" fill="#B58D55" {...O} />{Object.keys(s.flags).filter((f) => f.startsWith('law:')).slice(0, 6).map((id, i) => <rect key={id} x={1 + (i % 3) * 7.5} y={2 + Math.floor(i / 3) * 8} width="6" height="7" fill={['#fff', '#F7D774', '#F6DAD3'][i % 3]} stroke={INK} stroke-width=".9" transform={`rotate(${(i % 2 ? 4 : -5)} ${4 + (i % 3) * 7.5} ${5 + Math.floor(i / 3) * 8})`} />)}</g>}
       {/* walkers */}
       {!night && Array.from({ length: walkers }, (_, i) => <g key={i} class={`walker ${i % 2 ? 'rev' : ''}`} style={{ 'animation-duration': `${16 + i * 5}s`, 'animation-delay': `${-i * 4}s` }}><g class="hop" style={{ 'animation-delay': `${i * 0.13}s` }}><path d="M-3 126 q3 -9 6 0z" fill={['#D9653B', '#3B6FB6', '#B0892A', '#7A5C9C', '#3F8F5A'][i % 5]} stroke={INK} stroke-width="1.3" /><circle cx="0" cy="114.5" r="3" fill={['#F0C4A0', '#B9794E', '#E2A878', '#8A5A3C'][i % 4]} stroke={INK} stroke-width="1.3" />{s.approval.people < 35 && <path d="M-2 110 l4 0" stroke="#C23B3B" stroke-width="1.5" />}</g></g>)}
       {/* road */}

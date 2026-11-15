@@ -1,5 +1,4 @@
 // Everything that touches the browser outside rendering: the calendar, storage, sound, crowd stats.
-import stats from '../content/packs/week1.stats.json' with { type: 'json' };
 import type { State } from '../engine/types.ts';
 
 // ---------- storage (one module, versioned) ----------
@@ -45,25 +44,6 @@ export function calendar(dayOffset: number, now = new Date()) {
   const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
   return { today, weekId, msToMidnight: midnight };
 }
-
-// ---------- crowd stats ----------
-export interface StatsProvider {
-  /** true when the numbers are simulated, so the UI must label them */
-  preview: boolean;
-  recordChoice(week: string, cardId: string, option: number): void;
-  getSplit(week: string, cardId: string): number[] | null; // percent per option
-  recordResult(week: string, share: number): void;
-  getPercentile(week: string, share: number): number; // percent of mayors beaten
-}
-
-/** Phase 1: local provider seeded from simulator runs (sim/stats.ts). Always labelled as preview data. */
-export const previewStats: StatsProvider = {
-  preview: true,
-  recordChoice() {},
-  getSplit: (_week, cardId) => (stats.cards as Record<string, number[]>)[cardId] ?? null,
-  recordResult() {},
-  getPercentile: (_week, share) => stats.sharePercentiles.filter((v) => v < share).length - 0,
-};
 
 // ---------- sound: synthesised with Web Audio, no files ----------
 let ctx: AudioContext | null = null;

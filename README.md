@@ -1,63 +1,41 @@
 # Mayor of Bad Town (working title)
 
-A comedy town-management game played in 3-5 minutes a day. One real week is one term in office.
-
-Status: **playable preview** (M1-M3 scope in rough form: full week, art, sound, crowd reveal with labelled preview data).
+A daily comedy card game. One real week is one term in office. Each day you play a run of cards: a character asks for something and you swipe the card left, right, up or down. Every choice moves five meters (People, Business, Law, Press, Treasury), and you don't see which way until you've chosen. Sunday is the election.
 
 ```bash
 npm install
 npm run dev         # play locally
-npm test            # 44 engine tests (Vitest)
-npm run validate    # schema-check the week pack
+npm test            # engine tests (Vitest)
+npm run validate    # schema and story-integrity check of the week pack
 npm run sim         # 5,000 terms per bot -> reports/balance.md
-node sim/stats.ts   # regenerate the labelled preview crowd data
 npm run build && npx vite preview --port 4173 &
-node e2e/smoke.cjs /tmp/shots 2    # browser playthrough to election night
+node e2e/smoke.cjs /tmp/shots 1 390     # browser playthrough to election night (dir, day offset, width)
+python3 sim/bundle.py                   # one self-contained dist/single.html
 ```
 
-Node 22.18+ is required: the simulator runs the TypeScript sources directly. Triple-tap the title in the game for the dev panel.
+Node 22.18+ is required: the simulator runs the TypeScript sources directly. Triple-tap the title for the dev panel.
 
 ## Layout
 
 ```
-src/engine/     pure rules engine: reduce(state, action, content, rng) -> state. No DOM.
+src/engine/     pure rules engine: reduce(state, action, pack, rng) -> state. No DOM.
   tuning.ts     every balance number in one place
-src/content/    Zod schema, shared projects and combos, week packs (JSON)
-src/ui/         Preact screen, SVG art (art.tsx), storage / calendar / sound / stats (platform.ts)
-sim/            bot policies, balance simulator, preview-stats generator
+src/content/    Zod schema with story-integrity checks, the week pack (JSON)
+src/ui/         Preact screen (App.tsx), SVG art and the town map (art.tsx), storage / calendar / sound (platform.ts)
+sim/            balance simulator, validator, single-file bundler
 e2e/            browser smoke test
-tests/          engine unit tests
-reports/        committed balance reports
-CONTENT_GUIDE.md  how to write cards
+CONTENT_GUIDE.md  how to write cards and stories
 ```
 
-## Rules as they stand (all open to change)
+## Rules
 
-- Money is in $k. One approval arrow = 5 points, two = 10.
-- A day is: today's three (the same for every mayor; the first is the day's own story card), midday (one of three activities, or rest), your town's three (drawn from your own situation), then the Mayor's Hour (up to two decrees from four on offer), then the poll. Sunday is the campaign card and the election.
-- Midday activities (`pack.initiatives`) are the only place a mini-game can pay off: clean, sloppy and flop each have their own outcome.
-- Two catastrophes a week (`pack.catastrophes`, on `TUNING.catastropheDays`, Wednesday and Saturday) head today's three. They are played as three games in a row; a sloppy or failed job costs every group and more money. Dave cannot take them.
-- Enacting a decree sets flag `law:<id>`; follow-up cards react to it.
-- Your town's three are, in order: cards that follow from your choices, late-week crises and group-pressure cards (all URGENT; one a day early in the week, two from Thursday), then ordinary cards from whichever groups like you least. Each carries a reason (`DeskSlot.why`) the UI shows.
-- Nobody ends the month by hand: the desk closes when its three cards are done.
-- Every desk has 3 requests and all 3 must be dealt with. There is no action limit and no ignoring.
-- Every desk card is played through a mini-game (`Card.game`, eighteen types in `src/ui/minigames.tsx`: catch, dodge, whack, match, stack, simon, tug, flap, jump, snake, slice, invaders, breakout, pour, sling, spot, balance, fish). The UI passes a `skill` on the `choose` action: 2 clean, 1 sloppy, 0 flop. There is no bonus: clean gives exactly the chosen trade, sloppy costs 5 approval from the card's group, a flop costs 10 and $5k. Doubled on URGENT cards.
-- Sending Deputy Dave instead costs 1 Favor (no game, random outcome from his table).
-- Conditional cards (escalations, crises, group pressure, secrets) arrive URGENT; up to two a month from Thursday. A protest (People under 35) makes every card URGENT the next month.
-- Approval fades after each desk (`TUNING.fade` 4.25, plus 0.1 per point above 50, never below 0).
-- Gamble options show their odds and both outcomes; the roll is seeded per player.
-- Decrees last the term, pay or cost every month, and appear in the law book and on the map's notice board.
-- Town setup (names, base group, one head start) happens once, at the end of the first day played. Names can be changed later.
-- You can start on any day. Deputy Dave governs missed days (`src/engine/dave.ts`); the handover floors approval at 45 and money at $40k, caps money at $90k, and wipes his recalls and broken promises.
-- Promises still open at the election are paid if the money is there, otherwise broken.
-- Many options set a flag that the town map draws (`Town` in `src/ui/art.tsx`).
-
-Browser checks: `node e2e/smoke.cjs <dir> [dayOffset]` plays to election night (mini-games are auto-finished through a test hook); `node e2e/games.cjs <url> <dir> [idle]` plays each mini-game for real with a scripted player.
-- Both ends are dangerous: a group at 0 or at 100 recalls you. Each cause (`low:<group>`, `high:<group>`, `bankrupt`) has its own named ending in `pack.endings`, as do the four ways a week can end (`term:*`).
-- The scrapbook (book icon) keeps unlocked endings, a career record and twelve deeds across weeks in the save (`scrapbook`, `career`, `deeds`). Deeds are cosmetic so the shared daily content stays identical for everyone.
-- Options can carry a `lasting` effect (a feud, a fan club, a deal) that ticks every month for a set number of months and shows as an alert while active.
-- Like Reigns, a card does not show its effects before you choose. Options show only what you must know to pick (Favors needed, and whether it builds, promises, gambles or lingers); the game you'll play is revealed by the clip; where the effects landed is revealed afterwards, meter by meter. The Sunday campaign card still shows its effect on the vote.
-- The day's agenda (today's three, midday, your town's three, tonight's laws) sits on the desk; midday and tonight can be previewed at any time (`agenda()` in the engine computes the same offers the engine will make).
-- The town's weather follows the average mood (rain below 40, sunshine from 60), and after each choice a crowd runs to the affected group's building to cheer or protest.
-- Twists: each game can come with a twist (in a hurry, fog, wobbling ground, everything shrank, lights off), chosen from the card and the day so everyone gets the same one.
-- Your town's three avoid repeating a game type already played that day.
+- Each day is a run of 10 cards (`TUNING.cardsPerDay`). The day's first cards are pinned and the same for every mayor; they start the week's stories. The rest come from your own story so far.
+- **Stories build.** A choice can schedule follow-up cards a few cards later (`then: [[cardId, cardsFromNow]]`) and set flags that later cards require. The goose pond goes: demand → the contractor is a goose → grand opening → it leaks into the records room → goose poop on every floor → forty goslings want a second pond. Refuse the pond and you get the car park occupation and the goose war instead.
+- Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. Each cause has its own named ending.
+- A recall ends that day's run. You come back the next day as Acting Mayor with every meter at 40, and Sunday's vote takes 8 points. A third recall ends the term.
+- Cards show no effects. Dragging shows which meters will move (a dot, bigger for a big change), not which way. After each swipe the meters move and the character reacts; at the end of the day the Bugle reviews every card, story by story, with what each choice did.
+- Pressure cards appear when a meter is very low or very high (crime wave, protest, the treasury running dry, Chad trying to buy the town).
+- Vote share = 42 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
+- You can start any day; Deputy Dave plays the missed days and hands back a town with every meter between 35 and 65.
+- Names and the group that elected you are set at the end of the first day you play.
+- The scrapbook keeps unlocked endings, a career record and deeds across weeks.

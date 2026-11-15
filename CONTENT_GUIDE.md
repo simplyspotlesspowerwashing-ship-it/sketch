@@ -1,71 +1,31 @@
 # Content guide
 
-Content is data. A week is one JSON pack in `src/content/packs/`, checked by `npm run validate`.
+A week is one JSON pack in `src/content/packs/`, checked by `npm run validate` (schema plus story integrity: every scheduled follow-up exists, every follow-up card is scheduled by something, every card has at least two directions).
 
-## Writing rules
+## Writing cards
 
-1. Short setup, clear ask. Card text is 140 characters at most; option labels 28.
-2. Both options hurt. Players no longer see effects before choosing, so the card text and the advisors' lines are their only clues: make sure the clues are fair. If one option is obviously right, rewrite the card. `npm run sim` flags any option the sensible bot picks over 85% or under 5% of the time.
-3. One joke per card, and it lives in the situation, not in a pun.
-4. Recurring characters stay in character (see the cast below).
-5. Never punch at real groups. No real politics, parties, countries or public figures. PG throughout.
-6. Reading level about age 10. Short words, short sentences.
-7. Every option needs a `reaction`: the requester's one line after you choose.
-8. Costs are exact. Money in $k as a signed number (`-20` costs $20k). Approval in steps of 5: 5 shows as one arrow, 10 as two.
+1. Short setup, clear ask. Card text max 150 characters, option labels max 30, reactions max 100.
+2. Every direction should hurt somewhere. Players can't see effects, so the text and the character are their clues: keep them fair.
+3. One joke per card, in the situation.
+4. Characters stay in character: Pam (PTA, People), Chad (billionaire, Business), Barb (police chief, Law), Marge (The Bugle, Press), Doug (treasurer, money), Gerald (goose union), Linda (librarian, conspiracies), Steve (weather), Timmy (8), the Stranger, Deputy Dave (three raccoons in a coat).
+5. Effects in steps of 5; ±15 or ±20 for big moments. Five meters: people, business, law, press, treasury.
 
-## Cast
+## Stories
 
-| Id | Who | Voice |
-|---|---|---|
-| pam | PTA president, leads People | Organised, relentless, always has a clipboard |
-| chad | Billionaire, leads Business | Cheerful, transactional, owns the shop that sells the thing |
-| barb | Police chief, leads Law | Loves order and equipment in equal measure |
-| marge | Editor of The Bugle, leads Press | Will print anything, prefers it exciting |
-| gerald | Goose union president | Speaks through demands and honking |
-| dave | Deputy Dave | Visibly three raccoons in a trench coat. Nobody mentions it |
-| linda | Librarian | Conspiracy enthusiast. Never explains |
-| doug | Treasurer | Anxious. Loves coins |
-| steve | Stormy Steve, weather | Vague and worried |
-| timmy | Age 8 | Has already told everyone |
-| stranger | The Stranger | Asks odd questions about the town's price |
+The heart of the game. A story is a chain of cards that remember what you chose.
+
+- Start a story with a pinned card (`day`) so everyone begins it together, or put the opener in the open pool.
+- Continue it with follow-up cards (`followUp: true`) scheduled by a choice: `then: [["g2", 5]]` puts card `g2` five cards from now.
+- Branch by scheduling different follow-ups from different choices, or by setting flags (`set`) that a later card requires (`requires: { flags: [...] }`).
+- Each beat should escalate or twist what came before, and mention it. The pond leaks *into the records room*; the bear *read the article*.
+- Give each story a `story` id and a headline in `headlines`; the day review groups cards by story.
 
 ## Card kinds
 
-- **Fixed**: has `day` (1-6) and `month` (1 or 2). Three per month.
-- **Pool**: neither `day` nor `requires`. Fills the desk when a month has fewer than three fixed cards.
-- **Conditional**: has `requires` (flags, projects, approval thresholds). Takes the third desk slot when its condition holds. Fires once unless `repeatable`.
-- **Rare**: `rare: true`. Shared 1-in-50 draw each month.
-- **Secret**: `secret: true` with `requires.flags: ["obj:<objective id>"]`.
+- **Pinned**: `day` 1-6, shown first that day to every mayor, in pack order.
+- **Follow-up**: `followUp: true`, only when scheduled.
+- **Open pool**: no `day`, no `followUp`; drawn by weight, once each unless `repeat`.
+- **Pressure**: `repeat`, a higher `weight`, and `requires.min`/`max` on a meter.
+- **Campaign** (`campaign` list): Sunday; options carry `vote`.
 
-## Option kinds
-
-`pay` (money and/or favors now), `project` (needs `project`; build cost and upkeep come from `src/content/core.ts`), `promise` (needs `promise: { dueIn, money }`; the effects are the benefit now), `refuse` (must be free), `favor` (must cost Favors).
-
-## Gambles
-
-An option may carry `gamble: { chance, win, lose }`. Both outcomes are shown before the player chooses, with the odds. Each outcome has `text` (max 90 characters), and optional `money`, `effects`, `setFlag`. Use them for the absurd bets, not for ordinary choices.
-
-## Mini-games
-
-Every desk card needs `game: { type, theme, bad?, title, flop }`.
-
-- `type`: `catch` (slide a basket), `dodge` (three lanes), `whack` (tap the right ones), `match` (pairs), `stack` (drop pieces), `simon` (repeat signals), `tug` (tap on green), `flap` (tap to fly through gaps), `jump` (runner), `snake` (steer and collect), `slice` (swipe, avoid bombs), `invaders` (move and shoot), `breakout` (paddle and bricks), `pour` (hold and release on a line), `sling` (drag back and lob at targets), `spot` (find the odd one out), `balance` (lean against gusts), `fish` (tap on the real bite, ignore nibbles).
-- `theme` is the sprite the player handles; `bad` is the one to avoid (catch, dodge, whack). Sprites are in `src/ui/art.tsx`.
-- `title` (max 40) is the job, written as something the mayor physically does: "Herd the geese to the pond".
-- `flop` (max 90) is the comic line when it goes wrong.
-- The game should be the card. If the card is about geese, the player handles geese.
-- Every card also needs one option that costs no money or Favors up front, so the desk can always be cleared.
-
-## Catastrophes and midday activities
-
-A catastrophe is a card with `major: true` and `stages` (three games). Its options should all hurt; the games decide how much more. Midday activities (`initiatives`) have a `game` and three outcomes, `clean`, `sloppy` and `flop`, and should be things the mayor chooses to go and do.
-
-## Decrees
-
-`decrees` in the pack are things the mayor does unprompted: a `tax`, a `law` or a `stunt`. Same rule as cards: it should be absurd and it should cost someone. Name max 28 characters, text max 120.
-
-## Making the map react
-
-If a choice should leave a mark on the town, set a flag and draw it in `Town` (`src/ui/art.tsx`). A card that changes the map feels heavier than one that only moves a meter.
-
-Mark anything not yet edited by a human with `"draft": true`.
+Mark anything not yet edited by a human with a note in the commit; all of week 1 is a draft.
