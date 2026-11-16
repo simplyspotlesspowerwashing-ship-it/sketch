@@ -24,7 +24,15 @@
        "g2",
        5
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🌊",
+       "🦢",
+       "🪑"
+      ]
+     }
     },
     "left": {
      "label": "No ponds indoors",
@@ -40,7 +48,14 @@
        "g2x",
        4
       ]
-     ]
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🌊",
+       "🦢"
+      ]
+     }
     },
     "up": {
      "label": "A pond in the park",
@@ -57,7 +72,15 @@
        "g2p",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🌳",
+       "🌊",
+       "🦢"
+      ]
+     }
     }
    },
    "day": 1
@@ -79,7 +102,14 @@
        "g3",
        5
       ]
-     ]
+     ],
+     "clip": {
+      "act": "eat",
+      "props": [
+       "🍞",
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "Hire human builders",
@@ -96,7 +126,14 @@
        "g3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "chase",
+      "props": [
+       "👷",
+       "🦢"
+      ]
+     }
     }
    },
    "followUp": true
@@ -122,7 +159,15 @@
        "g4",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🌊",
+       "🦢",
+       "🎀"
+      ]
+     }
     },
     "left": {
      "label": "Quiet opening",
@@ -139,7 +184,14 @@
        "g4",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🦢",
+       "🌊"
+      ]
+     }
     }
    },
    "followUp": true
@@ -162,7 +214,14 @@
        "g5",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🌊",
+       "📁"
+      ]
+     }
     },
     "left": {
      "label": "Call it an indoor river",
@@ -179,7 +238,14 @@
        "g5r",
        5
       ]
-     ]
+     ],
+     "clip": {
+      "act": "flood",
+      "props": [
+       "🛶",
+       "📁"
+      ]
+     }
     }
    },
    "followUp": true
@@ -202,7 +268,14 @@
        "g6",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "fix",
+      "props": [
+       "💩",
+       "🧹"
+      ]
+     }
     },
     "left": {
      "label": "It's good luck",
@@ -219,7 +292,15 @@
        "g6",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "rain",
+      "props": [
+       "💩",
+       "🍀",
+       "🦢"
+      ]
+     }
     }
    },
    "followUp": true
@@ -242,7 +323,14 @@
        "g6",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🌉",
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Sell rafting tickets",
@@ -256,7 +344,14 @@
        "g6",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "flood",
+      "props": [
+       "🛶",
+       "📚"
+      ]
+     }
     }
    },
    "followUp": true
@@ -276,14 +371,27 @@
      "reaction": "HONK! (Gerald wept. Then bit Doug.)",
      "set": [
       "pond2"
-     ]
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🐣",
+       "🌊"
+      ]
+     }
     },
     "left": {
      "label": "One pond is plenty",
      "effects": {
       "people": -10
      },
-     "reaction": "The goslings are staging a sit-in. They're very small. It's very sad."
+     "reaction": "The goslings are staging a sit-in. They're very small. It's very sad.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🐣"
+      ]
+     }
     }
    },
    "followUp": true
@@ -312,7 +420,14 @@
        "g2",
        4
       ]
-     ]
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🌊",
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "Send in Chief Barb",
@@ -330,7 +445,14 @@
        "gw2",
        5
       ]
-     ]
+     ],
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🦢",
+       "👮"
+      ]
+     }
     }
    },
    "followUp": true
@@ -350,7 +472,14 @@
      "reaction": "Peace. The bread is shared. It's mostly crusts.",
      "clear": [
       "goose_war"
-     ]
+     ],
+     "clip": {
+      "act": "love",
+      "props": [
+       "🦢",
+       "🍞"
+      ]
+     }
     },
     "left": {
      "label": "Starve them out",
@@ -364,7 +493,14 @@
        "gw3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🍞",
+       "🦢"
+      ]
+     }
     }
    },
    "followUp": true
@@ -381,7 +517,13 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "He honked for an hour. He won on volume."
+     "reaction": "He honked for an hour. He won on volume.",
+     "clip": {
+      "act": "boo",
+      "props": [
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "Merge the towns",
@@ -389,7 +531,14 @@
       "people": 10,
       "law": -10
      },
-     "reaction": "You're co-mayor with a goose. Honestly, it's going fine."
+     "reaction": "You're co-mayor with a goose. Honestly, it's going fine.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🦢",
+       "🎩"
+      ]
+     }
     }
    },
    "followUp": true
@@ -406,7 +555,14 @@
       "treasury": -10,
       "people": 5
      },
-     "reaction": "A roof over a pond. Indoor-outdoor living. Honk."
+     "reaction": "A roof over a pond. Indoor-outdoor living. Honk.",
+     "clip": {
+      "act": "build",
+      "props": [
+       "🏠",
+       "🌊"
+      ]
+     }
     },
     "left": {
      "label": "Outside is fine",
@@ -414,7 +570,14 @@
       "people": -5,
       "press": 5
      },
-     "reaction": "Gerald wrote an op-ed. It's mostly 'HONK'."
+     "reaction": "Gerald wrote an op-ed. It's mostly 'HONK'.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🦢",
+       "✍️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -434,7 +597,13 @@
      "reaction": "A billion and a goose. Interesting. I'll be back.",
      "set": [
       "stranger_met"
-     ]
+     ],
+     "clip": {
+      "act": "show",
+      "props": [
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "Throw him out",
@@ -445,7 +614,13 @@
      "reaction": "I've been thrown out of better towns. This one, actually.",
      "set": [
       "stranger_met"
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🕵️"
+      ]
+     }
     },
     "up": {
      "label": "Hear him out",
@@ -463,7 +638,13 @@
        "st2",
        10
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🕵️"
+      ]
+     }
     }
    },
    "day": 1
@@ -480,7 +661,15 @@
       "treasury": 10,
       "people": -10
      },
-     "reaction": "Nobody knows what time it is. Productivity is way up."
+     "reaction": "Nobody knows what time it is. Productivity is way up.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🕰️",
+       "🔒",
+       "🏢"
+      ]
+     }
     },
     "left": {
      "label": "Return his deposit",
@@ -488,7 +677,15 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "Pity. I'll be in touch. Through the basement."
+     "reaction": "Pity. I'll be in touch. Through the basement.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🕰️",
+       "🔒",
+       "🏢"
+      ]
+     }
     }
    },
    "followUp": true
@@ -508,7 +705,15 @@
      "reaction": "Boxes. Hundreds. All labelled 'DO NOT COUNT'.",
      "set": [
       "basement"
-     ]
+     ],
+     "clip": {
+      "act": "show",
+      "props": [
+       "🚪",
+       "📦",
+       "🔔"
+      ]
+     }
     },
     "left": {
      "label": "Burn the note",
@@ -522,7 +727,13 @@
        "note2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🚪"
+      ]
+     }
     }
    },
    "day": 3
@@ -541,7 +752,14 @@
      "reaction": "Boxes. So many boxes.",
      "set": [
       "basement"
-     ]
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "📦",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Eat the sandwich",
@@ -549,7 +767,13 @@
       "people": 5,
       "press": -5
      },
-     "reaction": "Delicious. Ominous. Delicious."
+     "reaction": "Delicious. Ominous. Delicious.",
+     "clip": {
+      "act": "eat",
+      "props": [
+       "💰"
+      ]
+     }
     }
    },
    "followUp": true
@@ -579,7 +803,15 @@
        "gm",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "📦",
+       "🗳️",
+       "🎤"
+      ]
+     }
     },
     "left": {
      "label": "Put them back",
@@ -590,7 +822,15 @@
      "reaction": "You saw nothing. The boxes saw you.",
      "set": [
       "covered_up"
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "📦",
+       "🗳️",
+       "🎤"
+      ]
+     }
     }
    },
    "day": 5,
@@ -615,7 +855,14 @@
      "reaction": "Print it. I've been run out of better towns.",
      "set": [
       "exposed"
-     ]
+     ],
+     "clip": {
+      "act": "show",
+      "props": [
+       "🗳️",
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "Take his hush money",
@@ -626,7 +873,15 @@
      "reaction": "Smart. Wrong, but smart.",
      "set": [
       "hush"
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🗳️",
+       "🦢",
+       "💰"
+      ]
+     }
     }
    },
    "followUp": true,
@@ -648,7 +903,15 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "Co-mayors. He sits on the desk. You sit near the desk."
+     "reaction": "Co-mayors. He sits on the desk. You sit near the desk.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🦢",
+       "🌊",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Absolutely not",
@@ -656,7 +919,15 @@
       "people": -5,
       "law": 5
      },
-     "reaction": "He's filed a lawsuit. In honk."
+     "reaction": "He's filed a lawsuit. In honk.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🦢",
+       "🌊",
+       "🏛️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -680,7 +951,14 @@
        "k2f",
        10
       ]
-     ]
+     ],
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🕳️",
+       "🚧"
+      ]
+     }
     },
     "left": {
      "label": "Leave Kevin alone",
@@ -696,7 +974,14 @@
        "k2",
        5
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🕳️",
+       "👀"
+      ]
+     }
     },
     "up": {
      "label": "Sell tickets to Kevin",
@@ -713,7 +998,14 @@
        "k2",
        5
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🎟️",
+       "🕳️"
+      ]
+     }
     }
    },
    "day": 2
@@ -736,7 +1028,15 @@
        "k3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🐟",
+       "🚗",
+       "🕳️"
+      ]
+     }
     },
     "left": {
      "label": "Arrest Kevin",
@@ -750,7 +1050,15 @@
        "k3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🚓",
+       "🕳️",
+       "🧱"
+      ]
+     }
     }
    },
    "followUp": true
@@ -770,7 +1078,15 @@
      "reaction": "Kevin is sealed. We can hear him sulking.",
      "clear": [
       "kevin"
-     ]
+     ],
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🕳️",
+       "📮",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Kevin is an attraction",
@@ -782,7 +1098,14 @@
      "reaction": "Two tourists fell in. They're fine. Kevin's fine.",
      "set": [
       "kevin_famous"
-     ]
+     ],
+     "clip": {
+      "act": "steal",
+      "props": [
+       "🚗",
+       "🕳️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -799,7 +1122,15 @@
       "treasury": -8,
       "business": 5
      },
-     "reaction": "Kevin Junior is gone. There are rumours of a Kevin the Third."
+     "reaction": "Kevin Junior is gone. There are rumours of a Kevin the Third.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🕳️",
+       "📱",
+       "🚪"
+      ]
+     }
     },
     "left": {
      "label": "Let the boy grow",
@@ -807,7 +1138,15 @@
       "business": -5,
       "people": 5
      },
-     "reaction": "Kevin Junior has a fan club. It's Timmy."
+     "reaction": "Kevin Junior has a fan club. It's Timmy.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🕳️",
+       "📱",
+       "🚪"
+      ]
+     }
     }
    },
    "followUp": true
@@ -833,7 +1172,14 @@
        "b2",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "news",
+      "props": [
+       "🐻",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Tell the truth",
@@ -841,7 +1187,15 @@
       "press": -10,
       "people": 5
      },
-     "reaction": "Honesty. On a Tuesday. Bold."
+     "reaction": "Honesty. On a Tuesday. Bold.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🐻",
+       "📰",
+       "📅"
+      ]
+     }
     }
    },
    "day": 2
@@ -867,7 +1221,14 @@
        "b3",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "love",
+      "props": [
+       "🐻",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Wrestle it for real",
@@ -884,7 +1245,15 @@
        "b3f",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "news",
+      "props": [
+       "🐻",
+       "📸",
+       "🏛️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -901,7 +1270,15 @@
       "press": 10,
       "business": -5
      },
-     "reaction": "The bear is on council. It sits on two chairs."
+     "reaction": "The bear is on council. It sits on two chairs.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🐻",
+       "🍯",
+       "🪑"
+      ]
+     }
     },
     "left": {
      "label": "Bears can't run",
@@ -909,7 +1286,15 @@
       "press": -10,
       "law": 5
      },
-     "reaction": "The bear is suing. Its lawyer is also a bear."
+     "reaction": "The bear is suing. Its lawyer is also a bear.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🐻",
+       "🍯",
+       "⚖️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -927,7 +1312,14 @@
       "people": 5,
       "treasury": -5
      },
-     "reaction": "You lost again, bravely. Record ratings."
+     "reaction": "You lost again, bravely. Record ratings.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🐻",
+       "📺"
+      ]
+     }
     },
     "left": {
      "label": "Hide in the cheese vault",
@@ -935,7 +1327,15 @@
       "press": -10,
       "people": -5
      },
-     "reaction": "The bear found you. It brought crackers."
+     "reaction": "The bear found you. It brought crackers.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🧀",
+       "🏦",
+       "🐻"
+      ]
+     }
     }
    },
    "followUp": true
@@ -962,7 +1362,14 @@
        "c2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🎰",
+       "📚"
+      ]
+     }
     },
     "left": {
      "label": "Refuse",
@@ -970,7 +1377,15 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "Fine. Enjoy your free knowledge."
+     "reaction": "Fine. Enjoy your free knowledge.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🎰",
+       "📚",
+       "💰"
+      ]
+     }
     },
     "up": {
      "label": "One casino night",
@@ -985,7 +1400,14 @@
        "c2n",
        10
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🎰",
+       "📚"
+      ]
+     }
     }
    },
    "day": 3
@@ -1008,7 +1430,15 @@
        "c3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📚",
+       "🎰",
+       "🤑"
+      ]
+     }
     },
     "left": {
      "label": "Make her head of security",
@@ -1019,7 +1449,15 @@
      "reaction": "Nobody cheats now. She can smell it.",
      "set": [
       "linda_security"
-     ]
+     ],
+     "clip": {
+      "act": "morph",
+      "props": [
+       "📚",
+       "🎰",
+       "🤑"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1036,7 +1474,15 @@
       "press": 10,
       "business": -10
      },
-     "reaction": "The casino is a library again. With better odds."
+     "reaction": "The casino is a library again. With better odds.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🎰",
+       "📚",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Bail it out",
@@ -1044,7 +1490,15 @@
       "treasury": -15,
       "business": 10
      },
-     "reaction": "Chad thanks you. Linda doesn't."
+     "reaction": "Chad thanks you. Linda doesn't.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🎰",
+       "🤑",
+       "💰"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1065,7 +1519,15 @@
      "reaction": "The library never sleeps. The librarians are furious.",
      "set": [
       "built:casino"
-     ]
+     ],
+     "clip": {
+      "act": "show",
+      "props": [
+       "🎰",
+       "📚",
+       "😴"
+      ]
+     }
     },
     "left": {
      "label": "Once was enough",
@@ -1073,7 +1535,14 @@
       "business": -5,
       "people": 5
      },
-     "reaction": "Chad is calling it 'a tragedy for culture'."
+     "reaction": "Chad is calling it 'a tragedy for culture'.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🎰",
+       "🤑"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1099,7 +1568,13 @@
        "f2",
        5
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🐸"
+      ]
+     }
     },
     "left": {
      "label": "No Frog Day",
@@ -1112,7 +1587,13 @@
        "f2n",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🐸"
+      ]
+     }
     }
    },
    "day": 4
@@ -1129,7 +1610,15 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "Rounded up. Two escaped. They're in charge now."
+     "reaction": "Rounded up. Two escaped. They're in charge now.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🐸",
+       "⛲",
+       "🏫"
+      ]
+     }
     },
     "left": {
      "label": "Frogs are citizens now",
@@ -1146,7 +1635,15 @@
        "f3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🐸",
+       "⛲",
+       "🏫"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1163,7 +1660,15 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "You ate a fly on camera. Frogs approve."
+     "reaction": "You ate a fly on camera. Frogs approve.",
+     "clip": {
+      "act": "court",
+      "props": [
+       "⚖️",
+       "🐸",
+       "🗳️"
+      ]
+     }
     },
     "left": {
      "label": "Frogs can't vote after all",
@@ -1171,7 +1676,15 @@
       "law": 5,
       "people": -10
      },
-     "reaction": "Timmy is on hunger strike. He had a big breakfast first."
+     "reaction": "Timmy is on hunger strike. He had a big breakfast first.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🐸",
+       "🗳️",
+       "💘"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1188,7 +1701,15 @@
       "treasury": -5,
       "people": 10
      },
-     "reaction": "Small Frog Day! Small frogs!"
+     "reaction": "Small Frog Day! Small frogs!",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🐸",
+       "📱",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Be strong",
@@ -1196,7 +1717,15 @@
       "people": -10,
       "press": -5
      },
-     "reaction": "Marge photographed Timmy crying. Front page."
+     "reaction": "Marge photographed Timmy crying. Front page.",
+     "clip": {
+      "act": "rain",
+      "props": [
+       "🐸",
+       "📱",
+       "📸"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1222,7 +1751,14 @@
        "h2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🚁",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Lease one",
@@ -1230,14 +1766,27 @@
       "treasury": -8,
       "law": 5
      },
-     "reaction": "A rental. I'm still doing the noises."
+     "reaction": "A rental. I'm still doing the noises.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🚁"
+      ]
+     }
     },
     "down": {
      "label": "No helicopter",
      "effects": {
       "law": -10
      },
-     "reaction": "Fine. I'll run very fast with my arms out."
+     "reaction": "Fine. I'll run very fast with my arms out.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🚁",
+       "💰"
+      ]
+     }
     }
    },
    "day": 4
@@ -1254,7 +1803,14 @@
       "law": -5,
       "people": 5
      },
-     "reaction": "Barb is sulking in the hangar."
+     "reaction": "Barb is sulking in the hangar.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🏫",
+       "🚁"
+      ]
+     }
     },
     "left": {
      "label": "It's educational",
@@ -1268,7 +1824,14 @@
        "h3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🚁",
+       "🏫"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1285,7 +1848,13 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "Rescued. She's already planning a second helicopter."
+     "reaction": "Rescued. She's already planning a second helicopter.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🚁"
+      ]
+     }
     },
     "left": {
      "label": "Let her live there",
@@ -1293,7 +1862,14 @@
       "law": -10,
       "press": 10
      },
-     "reaction": "She has a view. She's happy. Crime is unattended."
+     "reaction": "She has a view. She's happy. Crime is unattended.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🚁",
+       "📱"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1320,7 +1896,14 @@
        "r2",
        4
       ]
-     ]
+     ],
+     "clip": {
+      "act": "launch",
+      "props": [
+       "🚀",
+       "🏫"
+      ]
+     }
     },
     "left": {
      "label": "No rockets near children",
@@ -1328,7 +1911,15 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "Fine. I'll launch something quieter. And bigger."
+     "reaction": "Fine. I'll launch something quieter. And bigger.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🚀",
+       "🏫",
+       "💰"
+      ]
+     }
     }
    },
    "day": 5
@@ -1351,7 +1942,15 @@
        "r3",
        4
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "📚",
+       "🤑",
+       "🚀"
+      ]
+     }
     },
     "left": {
      "label": "It'll miss",
@@ -1364,7 +1963,15 @@
        "r3",
        3
       ]
-     ]
+     ],
+     "clip": {
+      "act": "rain",
+      "props": [
+       "🤑",
+       "🚀",
+       "📚"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1381,7 +1988,15 @@
       "treasury": -15,
       "people": 10
      },
-     "reaction": "Reopened. In case the books come back."
+     "reaction": "Reopened. In case the books come back.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "📚",
+       "🚀",
+       "📅"
+      ]
+     }
     },
     "left": {
      "label": "Leave the rocket in",
@@ -1390,7 +2005,15 @@
       "business": 5,
       "people": -5
      },
-     "reaction": "It's the reading rocket now. Story time has a countdown."
+     "reaction": "It's the reading rocket now. Story time has a countdown.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🚀",
+       "📚",
+       "📅"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1416,7 +2039,14 @@
        "s2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🧦",
+       "🗳️"
+      ]
+     }
     },
     "left": {
      "label": "Hire a designer",
@@ -1424,7 +2054,15 @@
       "treasury": -8,
       "business": 5
      },
-     "reaction": "It's a smiling building. Readers call it 'Dry Sock'."
+     "reaction": "It's a smiling building. Readers call it 'Dry Sock'.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🪧",
+       "🗳️",
+       "🧦"
+      ]
+     }
     }
    }
   },
@@ -1441,7 +2079,15 @@
       "business": 10,
       "people": -5
      },
-     "reaction": "Damp profits."
+     "reaction": "Damp profits.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🤑",
+       "🧦",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Free socks for the people",
@@ -1455,7 +2101,14 @@
        "s3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🧦",
+       "💰"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1472,7 +2125,13 @@
       "treasury": -5,
       "people": 10
      },
-     "reaction": "He's back. Damper than ever."
+     "reaction": "He's back. Damper than ever.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🧦"
+      ]
+     }
     },
     "left": {
      "label": "Let him go",
@@ -1480,7 +2139,13 @@
       "people": -10,
       "press": 10
      },
-     "reaction": "A state funeral for a sock. Marge wept."
+     "reaction": "A state funeral for a sock. Marge wept.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🧦"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1506,14 +2171,28 @@
        "d2",
        10
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🗑️",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "No",
      "effects": {
       "people": -5
      },
-     "reaction": "Understood. We'll be in the bins. Sulking."
+     "reaction": "Understood. We'll be in the bins. Sulking.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🗑️",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -1530,7 +2209,15 @@
       "business": 5,
       "law": -10
      },
-     "reaction": "Productivity is up. The bins are down."
+     "reaction": "Productivity is up. The bins are down.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🦝",
+       "🗑️",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Evict them",
@@ -1538,7 +2225,14 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "They left. Randy cried. Three times. Simultaneously."
+     "reaction": "They left. Randy cried. Three times. Simultaneously.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🦝",
+       "🏛️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1565,7 +2259,15 @@
        "pg2",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🐦",
+       "🪧",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Evict the pigeon",
@@ -1573,7 +2275,15 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "It left. It took your stapler. It knew which one was yours."
+     "reaction": "It left. It took your stapler. It knew which one was yours.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🐦",
+       "🪧",
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -1589,7 +2299,15 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "Bread for everyone. Mostly crumbs."
+     "reaction": "Bread for everyone. Mostly crumbs.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🍞",
+       "🐦",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Clip its wings, politically",
@@ -1597,7 +2315,15 @@
       "law": 10,
       "press": -10
      },
-     "reaction": "The pigeon resigned. In a single, dignified coo."
+     "reaction": "The pigeon resigned. In a single, dignified coo.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🐦",
+       "🍞",
+       "📰"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1614,7 +2340,14 @@
       "law": 10,
       "people": -10
      },
-     "reaction": "Order. Beautiful, quiet order."
+     "reaction": "Order. Beautiful, quiet order.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🌙",
+       "⛲"
+      ]
+     }
     },
     "left": {
      "label": "Let them stand",
@@ -1622,7 +2355,14 @@
       "law": -10,
       "people": 5
      },
-     "reaction": "Then I'm standing near them. Menacingly."
+     "reaction": "Then I'm standing near them. Menacingly.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "⛲",
+       "🌙"
+      ]
+     }
     },
     "up": {
      "label": "Fund a youth centre",
@@ -1631,7 +2371,15 @@
       "people": 5,
       "law": 5
      },
-     "reaction": "Now they stand indoors. I'll allow it."
+     "reaction": "Now they stand indoors. I'll allow it.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🏠",
+       "⛲",
+       "🌙"
+      ]
+     }
     }
    }
   },
@@ -1647,7 +2395,15 @@
       "treasury": -10,
       "business": 10
      },
-     "reaction": "Thank you. I used the savings to buy the tax office. It's a gym now."
+     "reaction": "Thank you. I used the savings to buy the tax office. It's a gym now.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🔭",
+       "💰",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Refuse",
@@ -1655,7 +2411,14 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "I'll remember this. I've hired a man to remember it for me."
+     "reaction": "I'll remember this. I've hired a man to remember it for me.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🔭",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -1671,7 +2434,15 @@
       "treasury": -10,
       "people": 10
      },
-     "reaction": "A vegetable! Some of them cried."
+     "reaction": "A vegetable! Some of them cried.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🏫",
+       "🥪",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Chad sponsors lunch",
@@ -1680,14 +2451,29 @@
       "people": 5,
       "press": -10
      },
-     "reaction": "'Chad Nuggets.' The Bugle is having a field day."
+     "reaction": "'Chad Nuggets.' The Bugle is having a field day.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🤑",
+       "🥪",
+       "🏫"
+      ]
+     }
     },
     "down": {
      "label": "Beige builds character",
      "effects": {
       "people": -10
      },
-     "reaction": "The PTA has a long memory."
+     "reaction": "The PTA has a long memory.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🏫",
+       "🥪"
+      ]
+     }
     }
    }
   },
@@ -1703,7 +2489,15 @@
       "treasury": -10,
       "law": 10
      },
-     "reaction": "This one bit me. Perfect."
+     "reaction": "This one bit me. Perfect.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🐕",
+       "🚓",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Therapy for Biscuit",
@@ -1712,7 +2506,15 @@
       "law": 5,
       "people": 5
      },
-     "reaction": "He's talking about his feelings. Barking, really."
+     "reaction": "He's talking about his feelings. Barking, really.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🐕",
+       "🚓",
+       "📅"
+      ]
+     }
     }
    }
   },
@@ -1729,7 +2531,15 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "They're thrilled. One is trapped in a box about it."
+     "reaction": "They're thrilled. One is trapped in a box about it.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🤡",
+       "📱",
+       "📦"
+      ]
+     }
     },
     "left": {
      "label": "Ignore the mimes",
@@ -1737,7 +2547,13 @@
       "people": -5,
       "press": -5
      },
-     "reaction": "They're booing. Silently. It's somehow worse."
+     "reaction": "They're booing. Silently. It's somehow worse.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🤡"
+      ]
+     }
     }
    }
   },
@@ -1753,7 +2569,15 @@
       "treasury": 15,
       "people": -10
      },
-     "reaction": "Coins! Someone parked a horse to avoid paying. It worked."
+     "reaction": "Coins! Someone parked a horse to avoid paying. It worked.",
+     "clip": {
+      "act": "build",
+      "props": [
+       "📏",
+       "🅿️",
+       "🌳"
+      ]
+     }
     },
     "left": {
      "label": "Free parking forever",
@@ -1761,7 +2585,15 @@
       "people": 5,
       "treasury": -5
      },
-     "reaction": "Forever. A man's been parked there since Tuesday. He's put up curtains."
+     "reaction": "Forever. A man's been parked there since Tuesday. He's put up curtains.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🅿️",
+       "🌳",
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -1783,7 +2615,13 @@
        "cheese2s",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🧀"
+      ]
+     }
     },
     "left": {
      "label": "Cheese festival",
@@ -1798,7 +2636,14 @@
        "cheese2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🧀",
+       "🎈"
+      ]
+     }
     },
     "up": {
      "label": "Seal the vault",
@@ -1812,7 +2657,15 @@
        "cheese2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🏦",
+       "🧀",
+       "🚪"
+      ]
+     }
     }
    }
   },
@@ -1834,7 +2687,14 @@
        "cheese3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "eat",
+      "props": [
+       "📚",
+       "🧀"
+      ]
+     }
     },
     "left": {
      "label": "Let it read",
@@ -1848,7 +2708,14 @@
        "cheese3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🧀",
+       "📖"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1871,7 +2738,14 @@
        "cheese3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🏦",
+       "🧀"
+      ]
+     }
     },
     "left": {
      "label": "Sell it again",
@@ -1879,7 +2753,14 @@
       "treasury": 10,
       "press": -5
      },
-     "reaction": "Sold to Worse Town. They deserve each other."
+     "reaction": "Sold to Worse Town. They deserve each other.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🧀",
+       "🏚️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1896,7 +2777,13 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "It said nothing for an hour. The Bugle called it 'statesmanlike'."
+     "reaction": "It said nothing for an hour. The Bugle called it 'statesmanlike'.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🧀"
+      ]
+     }
     },
     "left": {
      "label": "Offer it Doug's job",
@@ -1905,7 +2792,14 @@
       "people": 5,
       "law": -5
      },
-     "reaction": "The cheese is Treasurer. The budget has never smelled stronger. Doug is its intern."
+     "reaction": "The cheese is Treasurer. The budget has never smelled stronger. Doug is its intern.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "😰",
+       "🧀"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1931,7 +2825,14 @@
        "moon2",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "launch",
+      "props": [
+       "🚩",
+       "🌙"
+      ]
+     }
     },
     "left": {
      "label": "Sell the moon to Chad",
@@ -1946,7 +2847,14 @@
        "moon2c",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🌙",
+       "🤑"
+      ]
+     }
     }
    }
   },
@@ -1962,7 +2870,14 @@
       "press": 5,
       "people": 5
      },
-     "reaction": "Accepted. The tide is back where it was. Mostly. The pond is still acting up."
+     "reaction": "Accepted. The tide is back where it was. Mostly. The pond is still acting up.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🌙",
+       "✉️"
+      ]
+     }
     },
     "left": {
      "label": "We have the paperwork",
@@ -1970,7 +2885,14 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "The moon has stopped coming out on Tuesdays. In protest."
+     "reaction": "The moon has stopped coming out on Tuesdays. In protest.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🌙",
+       "📄"
+      ]
+     }
     }
    },
    "followUp": true
@@ -1987,7 +2909,14 @@
       "treasury": -10,
       "business": 10
      },
-     "reaction": "The moon stays on. You're welcome, everybody. It was that or darkness."
+     "reaction": "The moon stays on. You're welcome, everybody. It was that or darkness.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🌙",
+       "💡"
+      ]
+     }
     },
     "left": {
      "label": "Turn the moon off",
@@ -1995,7 +2924,14 @@
       "treasury": 5,
       "people": -10
      },
-     "reaction": "He did. He actually did. It's very dark. People keep falling into Kevin."
+     "reaction": "He did. He actually did. It's very dark. People keep falling into Kevin.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🌙",
+       "🌑"
+      ]
+     }
     }
    },
    "followUp": true
@@ -2019,7 +2955,15 @@
        "worse2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🏘️",
+       "🏚️",
+       "📱"
+      ]
+     }
     },
     "left": {
      "label": "Show them the pothole",
@@ -2027,7 +2971,15 @@
       "press": 5,
       "business": -5
      },
-     "reaction": "Their mayor wept. 'It's bigger than ours,' he said."
+     "reaction": "Their mayor wept. 'It's bigger than ours,' he said.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "📺",
+       "🕳️",
+       "🏘️"
+      ]
+     }
     }
    }
   },
@@ -2049,7 +3001,14 @@
        "worse3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🏚️",
+       "🚦"
+      ]
+     }
     },
     "left": {
      "label": "Send them home",
@@ -2057,7 +3016,14 @@
       "people": -5,
       "law": 5
      },
-     "reaction": "They left. Slowly. Looking back. One of them waved. You monster."
+     "reaction": "They left. Slowly. Looking back. One of them waved. You monster.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🏚️",
+       "🦕"
+      ]
+     }
     }
    },
    "followUp": true
@@ -2075,7 +3041,15 @@
       "business": 10,
       "people": -10
      },
-     "reaction": "Chad Town opens Monday. Population: Chad. He's already unpopular there."
+     "reaction": "Chad Town opens Monday. Population: Chad. He's already unpopular there.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🏚️",
+       "🤑",
+       "🏘️"
+      ]
+     }
     },
     "left": {
      "label": "It isn't ours to sell",
@@ -2083,7 +3057,15 @@
       "business": -10,
       "law": 5
      },
-     "reaction": "Technically correct. 'The worst kind of correct,' says Chad."
+     "reaction": "Technically correct. 'The worst kind of correct,' says Chad.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🏚️",
+       "🤑",
+       "🏘️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -2100,7 +3082,15 @@
       "treasury": -15,
       "people": 10
      },
-     "reaction": "The PTA approves. We've never said that before."
+     "reaction": "The PTA approves. We've never said that before.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "📚",
+       "🏫",
+       "⛵"
+      ]
+     }
     },
     "left": {
      "label": "Buy a boat",
@@ -2109,14 +3099,30 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "The children can all tie knots now. They're thriving."
+     "reaction": "The children can all tie knots now. They're thriving.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "⛵",
+       "🏫",
+       "📚"
+      ]
+     }
     },
     "down": {
      "label": "Boats are educational",
      "effects": {
       "people": -10
      },
-     "reaction": "The PTA has started a newsletter. About you."
+     "reaction": "The PTA has started a newsletter. About you.",
+     "clip": {
+      "act": "rain",
+      "props": [
+       "⛵",
+       "🏫",
+       "📚"
+      ]
+     }
     }
    }
   },
@@ -2136,7 +3142,15 @@
      "reaction": "It winks at night too. Pigeons won't land on it. It 'makes eye contact'.",
      "set": [
       "statue"
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🗿",
+       "📏",
+       "🐦"
+      ]
+     }
     },
     "left": {
      "label": "No statues",
@@ -2144,7 +3158,14 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "Then I'll put it just outside town. Facing in. Winking."
+     "reaction": "Then I'll put it just outside town. Facing in. Winking.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🗿",
+       "📏"
+      ]
+     }
     }
    }
   },
@@ -2164,7 +3185,15 @@
      "reaction": "BEST. MAYOR. EVER.",
      "set": [
       "fireworks"
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🎆",
+       "🚒",
+       "👦"
+      ]
+     }
     },
     "left": {
      "label": "One sparkler",
@@ -2172,7 +3201,15 @@
       "people": -5,
       "press": 5
      },
-     "reaction": "It's... one. It's a small one."
+     "reaction": "It's... one. It's a small one.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "✨",
+       "🎇",
+       "🌳"
+      ]
+     }
     }
    }
   },
@@ -2189,14 +3226,30 @@
       "press": 5,
       "people": 5
      },
-     "reaction": "It works! I can see the rain coming. It's coming from above. I knew it."
+     "reaction": "It works! I can see the rain coming. It's coming from above. I knew it.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "📡",
+       "🌦️",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "The finger is fine",
      "effects": {
       "press": -5
      },
-     "reaction": "Tomorrow's forecast: finger. Sixty per cent chance of finger."
+     "reaction": "Tomorrow's forecast: finger. Sixty per cent chance of finger.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🌦️",
+       "📡",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -2212,7 +3265,14 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "He left. The clock still says 'Ooooh'."
+     "reaction": "He left. The clock still says 'Ooooh'.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🧙",
+       "💨"
+      ]
+     }
     },
     "left": {
      "label": "Make him town magician",
@@ -2227,7 +3287,14 @@
        "wizard2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🗑️",
+       "🕊️"
+      ]
+     }
     }
    }
   },
@@ -2243,7 +3310,14 @@
       "law": 10,
       "treasury": -5
      },
-     "reaction": "It's a station again. It still ribbits when you shut the door."
+     "reaction": "It's a station again. It still ribbits when you shut the door.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🐸",
+       "🚓"
+      ]
+     }
     },
     "left": {
      "label": "Keep the frog station",
@@ -2251,7 +3325,14 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "Crime is down. Nobody wants to be put in the frog."
+     "reaction": "Crime is down. Nobody wants to be put in the frog.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🐸",
+       "👮"
+      ]
+     }
     }
    },
    "followUp": true
@@ -2269,7 +3350,14 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "They got off. Some of them got back on. They miss it."
+     "reaction": "They got off. Some of them got back on. They miss it.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🚌",
+       "🚏"
+      ]
+     }
     },
     "left": {
      "label": "Recognise their government",
@@ -2283,7 +3371,14 @@
        "bus2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🚌",
+       "🏛️"
+      ]
+     }
     }
    }
   },
@@ -2305,7 +3400,14 @@
        "bus3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "show",
+      "props": [
+       "🛂",
+       "🥔"
+      ]
+     }
     },
     "left": {
      "label": "Invade the bus",
@@ -2319,7 +3421,13 @@
        "bus3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "boo",
+      "props": [
+       "🚌"
+      ]
+     }
     }
    },
    "followUp": true
@@ -2337,7 +3445,14 @@
       "people": 10,
       "business": 5
      },
-     "reaction": "Two buses. They've formed a parliament. It sits at every red light."
+     "reaction": "Two buses. They've formed a parliament. It sits at every red light.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🚌",
+       "🚌"
+      ]
+     }
     },
     "left": {
      "label": "No deal",
@@ -2345,7 +3460,14 @@
       "people": -5,
       "treasury": 5
      },
-     "reaction": "Sanctions. Nobody on the bus will make eye contact with you."
+     "reaction": "Sanctions. Nobody on the bus will make eye contact with you.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🚌",
+       "🙈"
+      ]
+     }
     }
    },
    "followUp": true
@@ -2362,7 +3484,15 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "Your high note broke a window. Front page."
+     "reaction": "Your high note broke a window. Front page.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🎤",
+       "📰",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "No singing in City Hall",
@@ -2370,7 +3500,15 @@
       "press": -5,
       "people": -5
      },
-     "reaction": "The silence is deafening. Marge is writing about it."
+     "reaction": "The silence is deafening. Marge is writing about it.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🎤",
+       "🏛️",
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -2387,7 +3525,15 @@
       "law": 5,
       "business": 5
      },
-     "reaction": "Moved. It's on the roundabout now. Content."
+     "reaction": "Moved. It's on the roundabout now. Content.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🦓",
+       "🎤",
+       "🚦"
+      ]
+     }
     },
     "left": {
      "label": "Make it official",
@@ -2395,7 +3541,15 @@
       "people": 10,
       "business": -10
      },
-     "reaction": "Everyone crosses by the zebra. It nods at them."
+     "reaction": "Everyone crosses by the zebra. It nods at them.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🦓",
+       "🎤",
+       "🚦"
+      ]
+     }
     }
    }
   },
@@ -2412,7 +3566,13 @@
       "business": 5,
       "law": 5
      },
-     "reaction": "Red, amber, green. The town wept with relief."
+     "reaction": "Red, amber, green. The town wept with relief.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🚦"
+      ]
+     }
     },
     "left": {
      "label": "Leave them green",
@@ -2420,7 +3580,13 @@
       "people": 5,
       "law": -10
      },
-     "reaction": "Society has entered a politeness spiral. It's beautiful."
+     "reaction": "Society has entered a politeness spiral. It's beautiful.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🚦"
+      ]
+     }
     }
    }
   },
@@ -2436,7 +3602,15 @@
       "press": 10,
       "law": -5
      },
-     "reaction": "The bear looks over City Hall. People salute it."
+     "reaction": "The bear looks over City Hall. People salute it.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🖼️",
+       "🐻",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Pay for a repaint",
@@ -2444,7 +3618,15 @@
       "treasury": -8,
       "press": 5
      },
-     "reaction": "Now you're a smaller bear. Progress."
+     "reaction": "Now you're a smaller bear. Progress.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🖼️",
+       "🐻",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -2461,7 +3643,15 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "Forty rosettes. All Biscuit. He's unbearable now."
+     "reaction": "Forty rosettes. All Biscuit. He's unbearable now.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🐕",
+       "📺",
+       "🎩"
+      ]
+     }
     },
     "left": {
      "label": "Find the real Biscuit",
@@ -2469,7 +3659,15 @@
       "law": 10,
       "people": -5
      },
-     "reaction": "Found him. The other thirty-nine were raccoons."
+     "reaction": "Found him. The other thirty-nine were raccoons.",
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🐕",
+       "📺",
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -2485,7 +3683,15 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "You finished. You ate a pie. Nobody's counting."
+     "reaction": "You finished. You ate a pie. Nobody's counting.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🏃",
+       "🚂",
+       "🌧️"
+      ]
+     }
     },
     "left": {
      "label": "Postpone it",
@@ -2493,7 +3699,15 @@
       "people": -5,
       "business": 5
      },
-     "reaction": "Postponed. Three people are still running."
+     "reaction": "Postponed. Three people are still running.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "📮",
+       "🏃",
+       "🚂"
+      ]
+     }
     }
    }
   },
@@ -2510,7 +3724,15 @@
       "business": 10,
       "law": -10
      },
-     "reaction": "First ride soaked the deputy mayor. Fun for all."
+     "reaction": "First ride soaked the deputy mayor. Fun for all.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🕹️",
+       "🚒",
+       "💧"
+      ]
+     }
     },
     "left": {
      "label": "Firefighters only",
@@ -2518,7 +3740,15 @@
       "business": -10,
       "law": 5
      },
-     "reaction": "The firefighters have the high score. Of course."
+     "reaction": "The firefighters have the high score. Of course.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🚒",
+       "🕹️",
+       "💧"
+      ]
+     }
     }
    }
   },
@@ -2535,7 +3765,15 @@
       "business": 10,
       "people": -15
      },
-     "reaction": "The ducks are circling, looking for the pond. It's bay 14 now."
+     "reaction": "The ducks are circling, looking for the pond. It's bay 14 now.",
+     "clip": {
+      "act": "build",
+      "props": [
+       "🌳",
+       "🅿️",
+       "🦆"
+      ]
+     }
     },
     "left": {
      "label": "Hands off the park",
@@ -2543,7 +3781,14 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "Trees don't shop, you know. I've checked. Not one loyalty card."
+     "reaction": "Trees don't shop, you know. I've checked. Not one loyalty card.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🌳",
+       "🅿️"
+      ]
+     }
     }
    }
   },
@@ -2559,7 +3804,15 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "You cried at your own funeral. That's tomorrow's photo."
+     "reaction": "You cried at your own funeral. That's tomorrow's photo.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "📱",
+       "🎭",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Ban the opera",
@@ -2567,7 +3820,14 @@
       "press": -15,
       "law": 5
      },
-     "reaction": "Banned. So now it's a musical. A longer one."
+     "reaction": "Banned. So now it's a musical. A longer one.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🎭",
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -2583,14 +3843,30 @@
       "treasury": -10,
       "people": 10
      },
-     "reaction": "It snowed. The pool looks great. Bev is ice skating on it. Backwards."
+     "reaction": "It snowed. The pool looks great. Bev is ice skating on it. Backwards.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🏊",
+       "☀️",
+       "😴"
+      ]
+     }
     },
     "left": {
      "label": "Tell people to drink water",
      "effects": {
       "people": -10
      },
-     "reaction": "Hot, with a chance of angry. Someone fried an egg on Kevin."
+     "reaction": "Hot, with a chance of angry. Someone fried an egg on Kevin.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "💧",
+       "☀️",
+       "😴"
+      ]
+     }
     }
    }
   },
@@ -2612,7 +3888,15 @@
        "squirrels2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🌰",
+       "🐿️",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Forgive the loan",
@@ -2620,7 +3904,15 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "They chittered. One saluted."
+     "reaction": "They chittered. One saluted.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🐿️",
+       "🌰",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -2636,7 +3928,15 @@
       "treasury": -10,
       "business": 5
      },
-     "reaction": "We pay in acorns now too. Nobody knows what anything's worth. The economy is nuts."
+     "reaction": "We pay in acorns now too. Nobody knows what anything's worth. The economy is nuts.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🐿️",
+       "🏦",
+       "🌰"
+      ]
+     }
     },
     "left": {
      "label": "Shut the squirrel bank",
@@ -2644,7 +3944,15 @@
       "law": 10,
       "people": -5
      },
-     "reaction": "Closed. They operate out of a tree now. You can't regulate a tree."
+     "reaction": "Closed. They operate out of a tree now. You can't regulate a tree.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🐿️",
+       "🏦",
+       "🌰"
+      ]
+     }
     }
    },
    "followUp": true
@@ -2665,7 +3973,15 @@
      "reaction": "Tourists everywhere. The monster sent a note: 'please stop'.",
      "set": [
       "monster"
-     ]
+     ],
+     "clip": {
+      "act": "news",
+      "props": [
+       "🦕",
+       "🌊",
+       "☂️"
+      ]
+     }
     },
     "left": {
      "label": "Protect its privacy",
@@ -2673,7 +3989,15 @@
       "people": 5,
       "business": -5
      },
-     "reaction": "It left a fish on your doorstep. You're friends now."
+     "reaction": "It left a fish on your doorstep. You're friends now.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🦕",
+       "🌊",
+       "☂️"
+      ]
+     }
     }
    }
   },
@@ -2689,7 +4013,14 @@
       "treasury": -10,
       "law": 10
      },
-     "reaction": "We'll find the sign. Or a similar sign."
+     "reaction": "We'll find the sign. Or a similar sign.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🪧",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Blame the next town over",
@@ -2697,7 +4028,13 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "Classic them."
+     "reaction": "Classic them.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🪧"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2720,7 +4057,14 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "They yelled. You nodded. Everyone feels slightly better."
+     "reaction": "They yelled. You nodded. Everyone feels slightly better.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🪧",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Lock the doors",
@@ -2728,7 +4072,15 @@
       "people": -5,
       "law": 5
      },
-     "reaction": "They're singing now. Badly. On purpose."
+     "reaction": "They're singing now. Badly. On purpose.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🔒",
+       "🚪",
+       "🪧"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2751,7 +4103,15 @@
       "treasury": -10,
       "business": 10
      },
-     "reaction": "My yachts thank you. Both of them."
+     "reaction": "My yachts thank you. Both of them.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🚌",
+       "⛵",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Get a smaller yacht",
@@ -2759,7 +4119,15 @@
       "business": -5,
       "people": 5
      },
-     "reaction": "'Mayor Mocks Yacht Owner.' I'll be in the papers."
+     "reaction": "'Mayor Mocks Yacht Owner.' I'll be in the papers.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "⛵",
+       "🚌",
+       "💰"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2782,7 +4150,13 @@
       "press": 10,
       "law": -5
      },
-     "reaction": "Lovely. I'll quote you creatively."
+     "reaction": "Lovely. I'll quote you creatively.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Ignore it",
@@ -2790,7 +4164,13 @@
       "press": -5,
       "people": -5
      },
-     "reaction": "The font got bigger."
+     "reaction": "The font got bigger.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "📰"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2813,7 +4193,15 @@
       "treasury": 15,
       "press": -10
      },
-     "reaction": "Sold. The town feels emptier. Spoonless."
+     "reaction": "Sold. The town feels emptier. Spoonless.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🗿",
+       "🪙",
+       "⛲"
+      ]
+     }
     },
     "left": {
      "label": "Tax hats",
@@ -2821,7 +4209,15 @@
       "treasury": 10,
       "people": -10
      },
-     "reaction": "Very tall hats pay double."
+     "reaction": "Very tall hats pay double.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🎩",
+       "🪙",
+       "⛲"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2844,14 +4240,26 @@
       "treasury": -10,
       "people": 5
      },
-     "reaction": "They want sprinkles next."
+     "reaction": "They want sprinkles next.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🍦"
+      ]
+     }
     },
     "left": {
      "label": "Say no nicely",
      "effects": {
       "people": -10
      },
-     "reaction": "They took it badly. One man lay down."
+     "reaction": "They took it badly. One man lay down.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🍦"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2875,14 +4283,30 @@
       "business": -10,
       "people": -10
      },
-     "reaction": "Welcome to Chad Street. Tolls start Monday."
+     "reaction": "Welcome to Chad Street. Tolls start Monday.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🌳",
+       "💰",
+       "🛣️"
+      ]
+     }
     },
     "left": {
      "label": "Refuse",
      "effects": {
       "business": -10
      },
-     "reaction": "Everything has a price. I'll wait."
+     "reaction": "Everything has a price. I'll wait.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🚌",
+       "💰",
+       "🛣️"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2905,7 +4329,14 @@
       "law": -10,
       "press": 5
      },
-     "reaction": "Fine. Walking is legal again."
+     "reaction": "Fine. Walking is legal again.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🚓",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Let it ride",
@@ -2913,7 +4344,15 @@
       "law": 5,
       "people": -10
      },
-     "reaction": "The streets have never been emptier."
+     "reaction": "The streets have never been emptier.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🚓",
+       "🌳",
+       "🛣️"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2936,7 +4375,15 @@
       "press": -10,
       "people": 5
      },
-     "reaction": "'Mayor: I Regret Nothing.' Perfect."
+     "reaction": "'Mayor: I Regret Nothing.' Perfect.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🗑️",
+       "🧀",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Bury the story",
@@ -2944,7 +4391,15 @@
       "press": -5,
       "treasury": -5
      },
-     "reaction": "What story? Exactly."
+     "reaction": "What story? Exactly.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🗑️",
+       "🧀",
+       "📰"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2967,7 +4422,15 @@
       "treasury": -15,
       "business": 10
      },
-     "reaction": "A pleasure. I'll send a postcard from the yacht."
+     "reaction": "A pleasure. I'll send a postcard from the yacht.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🤑",
+       "👶",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Spend it on the town",
@@ -2975,7 +4438,14 @@
       "treasury": -15,
       "people": 10
      },
-     "reaction": "A new bench! On every corner! Too many benches!"
+     "reaction": "A new bench! On every corner! Too many benches!",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "👶",
+       "💰"
+      ]
+     }
     }
    },
    "repeat": true,
@@ -2998,7 +4468,15 @@
       "business": 10,
       "people": -5
      },
-     "reaction": "Justice. Barb is out measuring hats. She's arrested a chef."
+     "reaction": "Justice. Barb is out measuring hats. She's arrested a chef.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📏",
+       "🎩",
+       "🥪"
+      ]
+     }
     },
     "left": {
      "label": "Hats are free",
@@ -3006,7 +4484,15 @@
       "business": -10,
       "press": 5
      },
-     "reaction": "He's put a second hat on the first hat. I'm ordering a third. This ends in the clouds."
+     "reaction": "He's put a second hat on the first hat. I'm ordering a third. This ends in the clouds.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🎩",
+       "📏",
+       "🥪"
+      ]
+     }
     }
    }
   },
@@ -3023,7 +4509,14 @@
       "people": 5,
       "law": -5
      },
-     "reaction": "Shh. They're starting. The atlas is telling everyone where it's been."
+     "reaction": "Shh. They're starting. The atlas is telling everyone where it's been.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "📚",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Libraries close at five",
@@ -3031,7 +4524,14 @@
       "people": -5,
       "press": -5
      },
-     "reaction": "That's what the daytime books want you to think. Cowards."
+     "reaction": "That's what the daytime books want you to think. Cowards.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "📚",
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -3047,7 +4547,14 @@
       "treasury": 10,
       "people": -10
      },
-     "reaction": "£41.12 and a button. Nobody's wishes are coming true now. Including mine."
+     "reaction": "£41.12 and a button. Nobody's wishes are coming true now. Including mine.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🪙",
+       "⛲"
+      ]
+     }
     },
     "left": {
      "label": "Leave the wishes",
@@ -3055,7 +4562,15 @@
       "people": 5,
       "treasury": -5
      },
-     "reaction": "Someone wished for a pony. There's a pony now. Who's paying for the pony?"
+     "reaction": "Someone wished for a pony. There's a pony now. Who's paying for the pony?",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "⛲",
+       "🪙",
+       "🐴"
+      ]
+     }
     }
    }
   },
@@ -3072,14 +4587,30 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "They know two songs now. Both are about bins."
+     "reaction": "They know two songs now. Both are about bins.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🎓",
+       "🎶",
+       "🎵"
+      ]
+     }
     },
     "left": {
      "label": "One song is plenty",
      "effects": {
       "people": -5
      },
-     "reaction": "They sang it at you. For an hour."
+     "reaction": "They sang it at you. For an hour.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🎵",
+       "🎶",
+       "🗑️"
+      ]
+     }
     }
    }
   },
@@ -3095,7 +4626,15 @@
       "law": 10,
       "business": -10
      },
-     "reaction": "The hats stopped. I'm keeping the hats."
+     "reaction": "The hats stopped. I'm keeping the hats.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🛸",
+       "🤑",
+       "🚓"
+      ]
+     }
     },
     "left": {
      "label": "Charge Chad rent for the sky",
@@ -3103,7 +4642,15 @@
       "treasury": 10,
       "business": -5
      },
-     "reaction": "The sky is a revenue stream now."
+     "reaction": "The sky is a revenue stream now.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🤑",
+       "🛸",
+       "🚓"
+      ]
+     }
     }
    }
   },
@@ -3119,7 +4666,15 @@
       "people": 10,
       "law": -10
      },
-     "reaction": "Barb confessed. To 'a few'. It was eleven."
+     "reaction": "Barb confessed. To 'a few'. It was eleven.",
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🔍",
+       "🥧",
+       "🚓"
+      ]
+     }
     },
     "left": {
      "label": "Pie locks for everyone",
@@ -3128,7 +4683,15 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "The thief now steals locks."
+     "reaction": "The thief now steals locks.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🥧",
+       "🔒",
+       "🚓"
+      ]
+     }
     }
    }
   },
@@ -3144,7 +4707,15 @@
       "people": 10,
       "business": -10
      },
-     "reaction": "The shops are an igloo now."
+     "reaction": "The shops are an igloo now.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🚜",
+       "🏫",
+       "🛣️"
+      ]
+     }
     },
     "left": {
      "label": "Plow Chad Street",
@@ -3152,7 +4723,15 @@
       "business": 10,
       "people": -10
      },
-     "reaction": "The school is an igloo now."
+     "reaction": "The school is an igloo now.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🚜",
+       "🤑",
+       "🌳"
+      ]
+     }
     },
     "up": {
      "label": "Rent a second plow",
@@ -3161,7 +4740,15 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "Two plows. I need to sit down."
+     "reaction": "Two plows. I need to sit down.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🚜",
+       "❄️",
+       "🏫"
+      ]
+     }
     }
    }
   },
@@ -3178,7 +4765,15 @@
       "business": 5,
       "press": -10
      },
-     "reaction": "It lights up at night. Nobody within two miles has slept. But they trust me."
+     "reaction": "It lights up at night. Nobody within two miles has slept. But they trust me.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🪧",
+       "🤑",
+       "🎩"
+      ]
+     }
     },
     "left": {
      "label": "No billboard",
@@ -3186,7 +4781,15 @@
       "business": -10,
       "press": 5
      },
-     "reaction": "Then where do people look when they need to trust me? Think about that."
+     "reaction": "Then where do people look when they need to trust me? Think about that.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🪧",
+       "🤑",
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -3202,7 +4805,15 @@
       "people": 5,
       "law": -10
      },
-     "reaction": "Traffic has stopped. All of it. For hours."
+     "reaction": "Traffic has stopped. All of it. For hours.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🦢",
+       "🏫",
+       "🎤"
+      ]
+     }
     },
     "left": {
      "label": "Hire a human",
@@ -3211,7 +4822,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "Honk. (He is wearing the hat anyway.)"
+     "reaction": "Honk. (He is wearing the hat anyway.)",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🦢",
+       "🏫",
+       "🎤"
+      ]
+     }
     }
    }
   },
@@ -3227,7 +4846,13 @@
       "press": 5,
       "people": -5
      },
-     "reaction": "It's become a tourist spot. People sit and tolerate."
+     "reaction": "It's become a tourist spot. People sit and tolerate.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "😰"
+      ]
+     }
     },
     "left": {
      "label": "Change the plaque",
@@ -3235,7 +4860,13 @@
       "treasury": -3,
       "press": -5
      },
-     "reaction": "It now says 'The Mayor'. Somehow that's worse."
+     "reaction": "It now says 'The Mayor'. Somehow that's worse.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -3251,7 +4882,15 @@
       "press": 10,
       "people": -10
      },
-     "reaction": "'Mayor Makes Children Cry.' Front page."
+     "reaction": "'Mayor Makes Children Cry.' Front page.",
+     "clip": {
+      "act": "court",
+      "props": [
+       "📺",
+       "🎵",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Everyone wins",
@@ -3259,7 +4898,15 @@
       "treasury": -5,
       "people": 10
      },
-     "reaction": "Forty trophies. You're paying for forty trophies."
+     "reaction": "Forty trophies. You're paying for forty trophies.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "📺",
+       "🎵",
+       "🏆"
+      ]
+     }
     }
    }
   },
@@ -3276,7 +4923,14 @@
       "law": -5,
       "people": -5
      },
-     "reaction": "One paper. One voice. Tomorrow's headline: 'BUGLE EDITOR SMELLS GREAT'."
+     "reaction": "One paper. One voice. Tomorrow's headline: 'BUGLE EDITOR SMELLS GREAT'.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📣",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "A free press is good",
@@ -3284,7 +4938,15 @@
       "press": -10,
       "people": 5
      },
-     "reaction": "Is it? Today's Whistle: 'MAYOR'S HAIR: AN INVESTIGATION'. Eleven pages."
+     "reaction": "Is it? Today's Whistle: 'MAYOR'S HAIR: AN INVESTIGATION'. Eleven pages.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "📣",
+       "🔍",
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -3303,7 +4965,14 @@
      "reaction": "OW. I was 'checking it was still there'.",
      "set": [
       "slapped_chad"
-     ]
+     ],
+     "clip": {
+      "act": "steal",
+      "props": [
+       "🫙",
+       "🤑"
+      ]
+     }
     },
     "left": {
      "label": "He saw you coming",
@@ -3311,7 +4980,13 @@
       "treasury": -15,
       "business": 5
      },
-     "reaction": "Ah ah ah. Finders keepers. Treasurers weepers."
+     "reaction": "Ah ah ah. Finders keepers. Treasurers weepers.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🤑"
+      ]
+     }
     }
    },
    "day": 1,
@@ -3330,14 +5005,29 @@
       "people": 5,
       "treasury": 5
      },
-     "reaction": "HONK. (A grudging respect.)"
+     "reaction": "HONK. (A grudging respect.)",
+     "clip": {
+      "act": "steal",
+      "props": [
+       "🍞",
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "He saw you",
      "effects": {
       "people": -10
      },
-     "reaction": "He honked at you so hard your hair moved."
+     "reaction": "He honked at you so hard your hair moved.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🦢",
+       "🍞",
+       "🥪"
+      ]
+     }
     }
    },
    "day": 2,
@@ -3355,7 +5045,14 @@
      "effects": {
       "law": 10
      },
-     "reaction": "Boss! I was... dusting it. With my mouth."
+     "reaction": "Boss! I was... dusting it. With my mouth.",
+     "clip": {
+      "act": "steal",
+      "props": [
+       "📁",
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Caught in the act",
@@ -3363,7 +5060,15 @@
       "law": -10,
       "press": -5
      },
-     "reaction": "We saw you. All three of us saw you."
+     "reaction": "We saw you. All three of us saw you.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🦝",
+       "🎤",
+       "🧥"
+      ]
+     }
     }
    },
    "day": 3,
@@ -3382,7 +5087,14 @@
       "press": -5,
       "law": 5
      },
-     "reaction": "Clever. I'll just print the back of the paper then."
+     "reaction": "Clever. I'll just print the back of the paper then.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🛒",
+       "🧀"
+      ]
+     }
     },
     "left": {
      "label": "Flash!",
@@ -3390,7 +5102,15 @@
       "press": 10,
       "people": -10
      },
-     "reaction": "'MAYOR'S SHOPPING LIST: TWELVE CHEESES.' Lovely."
+     "reaction": "'MAYOR'S SHOPPING LIST: TWELVE CHEESES.' Lovely.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "📸",
+       "🧀",
+       "📰"
+      ]
+     }
     }
    },
    "day": 4,
@@ -3409,7 +5129,14 @@
       "treasury": 5,
       "law": -5
      },
-     "reaction": "Where did your car go. Where did your car GO."
+     "reaction": "Where did your car go. Where did your car GO.",
+     "clip": {
+      "act": "race",
+      "props": [
+       "🚗",
+       "👮"
+      ]
+     }
     },
     "left": {
      "label": "Ticketed",
@@ -3417,7 +5144,15 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "That's a fine. And a fine for the fine."
+     "reaction": "That's a fine. And a fine for the fine.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🎟️",
+       "🚗",
+       "🅿️"
+      ]
+     }
     }
    },
    "day": 5,
@@ -3435,7 +5170,14 @@
      "effects": {
       "press": 5
      },
-     "reaction": "Noooo. It was a good moustache."
+     "reaction": "Noooo. It was a good moustache.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🖼️",
+       "🥸"
+      ]
+     }
     },
     "left": {
      "label": "Too late",
@@ -3443,7 +5185,15 @@
       "press": -10,
       "people": 5
      },
-     "reaction": "The moustache made the front page. People like it more."
+     "reaction": "The moustache made the front page. People like it more.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "👦",
+       "🖼️",
+       "📰"
+      ]
+     }
     }
    },
    "day": 6,
@@ -3462,7 +5212,15 @@
       "treasury": -5,
       "people": 10
      },
-     "reaction": "Morale is up. The bank is a snow globe."
+     "reaction": "Morale is up. The bank is a snow globe.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🎊",
+       "🏦",
+       "❄️"
+      ]
+     }
     },
     "left": {
      "label": "Send it back",
@@ -3470,7 +5228,14 @@
       "treasury": -5,
       "people": -5
      },
-     "reaction": "The return fee is also forty tonnes. Of confetti."
+     "reaction": "The return fee is also forty tonnes. Of confetti.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🎊",
+       "🏦"
+      ]
+     }
     }
    }
   },
@@ -3486,7 +5251,15 @@
       "press": 5,
       "business": -5
      },
-     "reaction": "Minutes now come with honey. Attendance is up."
+     "reaction": "Minutes now come with honey. Attendance is up.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🐝",
+       "📸",
+       "🖨️"
+      ]
+     }
     },
     "left": {
      "label": "Call a beekeeper",
@@ -3494,7 +5267,15 @@
       "treasury": -8,
       "law": 5
      },
-     "reaction": "The beekeeper is also humming. Suspicious."
+     "reaction": "The beekeeper is also humming. Suspicious.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🐝",
+       "📸",
+       "🖨️"
+      ]
+     }
     }
    }
   },
@@ -3510,14 +5291,30 @@
       "business": 10,
       "people": -5
      },
-     "reaction": "Three sold. All to me. To keep the numbers up."
+     "reaction": "Three sold. All to me. To keep the numbers up.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "📏",
+       "🥤",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Unplug it",
      "effects": {
       "business": -10
      },
-     "reaction": "It's still reading itself aloud. In my voice."
+     "reaction": "It's still reading itself aloud. In my voice.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📏",
+       "🥤",
+       "🏛️"
+      ]
+     }
     }
    }
   },
@@ -3533,14 +5330,29 @@
       "law": 5,
       "people": -10
      },
-     "reaction": "Everyone arrived seven minutes late. Furious, together."
+     "reaction": "Everyone arrived seven minutes late. Furious, together.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🕰️",
+       "🔒"
+      ]
+     }
     },
     "left": {
      "label": "Keep it fast",
      "effects": {
       "people": 5
      },
-     "reaction": "Tradition is just a clock that's wrong on purpose."
+     "reaction": "Tradition is just a clock that's wrong on purpose.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🕰️",
+       "🔒",
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -3562,7 +5374,15 @@
        "seagull2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🐦",
+       "🌦️",
+       "🏠"
+      ]
+     }
     },
     "left": {
      "label": "Negotiate with chips",
@@ -3570,7 +5390,15 @@
       "treasury": -3,
       "press": 5
      },
-     "reaction": "It took the chips and the report. Classic gull."
+     "reaction": "It took the chips and the report. Classic gull.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🍟",
+       "🐦",
+       "🌦️"
+      ]
+     }
     }
    }
   },
@@ -3586,7 +5414,15 @@
       "press": 5,
       "people": -5
      },
-     "reaction": "The gull took it well. It took Steve's sandwich better."
+     "reaction": "The gull took it well. It took Steve's sandwich better.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🐦",
+       "🥪",
+       "⚖️"
+      ]
+     }
     },
     "left": {
      "label": "The gull stays",
@@ -3594,7 +5430,15 @@
       "press": 10,
       "people": 5
      },
-     "reaction": "'Chips. Then light chips.' Steve is its assistant now. He holds the chips."
+     "reaction": "'Chips. Then light chips.' Steve is its assistant now. He holds the chips.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🐦",
+       "🥪",
+       "⚖️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -3611,7 +5455,15 @@
       "people": 5,
       "treasury": -5
      },
-     "reaction": "The fine was nine thousand pounds. It's gone now. Like 1952."
+     "reaction": "The fine was nine thousand pounds. It's gone now. Like 1952.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "📚",
+       "🎩",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Charge the fine",
@@ -3619,7 +5471,15 @@
       "treasury": 10,
       "people": -10
      },
-     "reaction": "They paid. In 1952 money. It's mostly buttons."
+     "reaction": "They paid. In 1952 money. It's mostly buttons.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "📚",
+       "🎩",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -3641,7 +5501,15 @@
        "robot2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🌉",
+       "🏰",
+       "🤖"
+      ]
+     }
     },
     "left": {
      "label": "Unplug the robot",
@@ -3649,7 +5517,14 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "It's sulking in the cupboard. Robots can sulk now."
+     "reaction": "It's sulking in the cupboard. Robots can sulk now.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🤖",
+       "🚪"
+      ]
+     }
     }
    }
   },
@@ -3671,7 +5546,14 @@
        "robot3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "love",
+      "props": [
+       "🤖",
+       "😰"
+      ]
+     }
     },
     "left": {
      "label": "Return it to Chad",
@@ -3679,7 +5561,14 @@
       "business": -5,
       "treasury": 5
      },
-     "reaction": "Chad says no refunds for 'emotional damage to merchandise'."
+     "reaction": "Chad says no refunds for 'emotional damage to merchandise'.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🤖",
+       "🤑"
+      ]
+     }
     }
    },
    "followUp": true
@@ -3696,7 +5585,14 @@
       "people": 10,
       "business": -10
      },
-     "reaction": "HONK. EXTERMINATE. HONK. (It's happy.)"
+     "reaction": "HONK. EXTERMINATE. HONK. (It's happy.)",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🤖",
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "Side with Chad",
@@ -3704,7 +5600,14 @@
       "business": 10,
       "people": -10
      },
-     "reaction": "Returned. It honks in sleep mode. Chad can't turn that off."
+     "reaction": "Returned. It honks in sleep mode. Chad can't turn that off.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🤖",
+       "🤑"
+      ]
+     }
     }
    },
    "followUp": true
@@ -3721,14 +5624,30 @@
       "treasury": -3,
       "people": 5
      },
-     "reaction": "The first letter just says 'HONK'. It's underlined."
+     "reaction": "The first letter just says 'HONK'. It's underlined.",
+     "clip": {
+      "act": "build",
+      "props": [
+       "📏",
+       "🦢",
+       "📮"
+      ]
+     }
     },
     "left": {
      "label": "No goose post",
      "effects": {
       "people": -5
      },
-     "reaction": "They're posting complaints through your cat flap now."
+     "reaction": "They're posting complaints through your cat flap now.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🦢",
+       "📮",
+       "📦"
+      ]
+     }
     }
    }
   },
@@ -3744,14 +5663,30 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "Lovely ceremony. Kevin the pothole sent flowers."
+     "reaction": "Lovely ceremony. Kevin the pothole sent flowers.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "💍",
+       "⛲",
+       "🕳️"
+      ]
+     }
     },
     "left": {
      "label": "Politely decline",
      "effects": {
       "people": -5
      },
-     "reaction": "They got married by a goose instead. Legally binding, apparently."
+     "reaction": "They got married by a goose instead. Legally binding, apparently.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "💍",
+       "⛲",
+       "🕳️"
+      ]
+     }
     }
    }
   },
@@ -3768,7 +5703,15 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "Fine. I'll sell flags with a little hot dog."
+     "reaction": "Fine. I'll sell flags with a little hot dog.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🌭",
+       "🐕",
+       "🚩"
+      ]
+     }
     },
     "left": {
      "label": "One tasteful stand",
@@ -3777,7 +5720,15 @@
       "business": 5,
       "people": -10
      },
-     "reaction": "Business is great. Grandparents are livid."
+     "reaction": "Business is great. Grandparents are livid.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🌭",
+       "🐕",
+       "🚩"
+      ]
+     }
     }
    }
   },
@@ -3793,7 +5744,15 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "Four notes now. It's a whole different song."
+     "reaction": "Four notes now. It's a whole different song.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🎵",
+       "🚌",
+       "🏫"
+      ]
+     }
     },
     "left": {
      "label": "Move him on",
@@ -3801,7 +5760,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "He's playing the three notes outside your house."
+     "reaction": "He's playing the three notes outside your house.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🎵",
+       "🚌",
+       "🏫"
+      ]
+     }
     }
    }
   },
@@ -3817,7 +5784,15 @@
       "treasury": -5,
       "press": 10
      },
-     "reaction": "It's tall. It's purple. It has a small bell."
+     "reaction": "It's tall. It's purple. It has a small bell.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🎩",
+       "🦢",
+       "📏"
+      ]
+     }
     },
     "left": {
      "label": "Hats are vanity",
@@ -3825,7 +5800,15 @@
       "press": -5,
       "people": 5
      },
-     "reaction": "'MAYOR HATLESS, HEARTLESS.' Today's front page."
+     "reaction": "'MAYOR HATLESS, HEARTLESS.' Today's front page.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🎩",
+       "🦢",
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -3841,7 +5824,15 @@
       "law": -5,
       "people": 5
      },
-     "reaction": "It left. It came back. It's confessing to something new."
+     "reaction": "It left. It came back. It's confessing to something new.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🐕",
+       "🎩",
+       "🎤"
+      ]
+     }
     },
     "left": {
      "label": "Investigate the dog",
@@ -3849,7 +5840,15 @@
       "law": 10,
       "press": 5
      },
-     "reaction": "It was the pie thief. Case closed. Pies returned."
+     "reaction": "It was the pie thief. Case closed. Pies returned.",
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🔍",
+       "🐕",
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -3865,7 +5864,13 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "Integration! The swan is now treasurer. It's very good."
+     "reaction": "Integration! The swan is now treasurer. It's very good.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "Geese only",
@@ -3873,7 +5878,13 @@
       "people": -5,
       "law": 5
      },
-     "reaction": "The swan has started a rival union. It's posher."
+     "reaction": "The swan has started a rival union. It's posher.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🦢"
+      ]
+     }
     }
    }
   },
@@ -3888,7 +5899,15 @@
      "effects": {
       "treasury": -10
      },
-     "reaction": "Filled. With the budget. That was the budget."
+     "reaction": "Filled. With the budget. That was the budget.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🎩",
+       "💰",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "Use it as a filing system",
@@ -3896,7 +5915,14 @@
       "law": -5,
       "press": 5
      },
-     "reaction": "Very efficient. Nobody can find anything."
+     "reaction": "Very efficient. Nobody can find anything.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "💰",
+       "🏛️"
+      ]
+     }
     }
    }
   },
@@ -3918,14 +5944,29 @@
        "compost2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "love",
+      "props": [
+       "🌱",
+       "📮",
+       "🗳️"
+      ]
+     }
     },
     "left": {
      "label": "Turn it over",
      "effects": {
       "people": -5
      },
-     "reaction": "It's taken it personally. Rot is coming."
+     "reaction": "It's taken it personally. Rot is coming.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🌱",
+       "📮"
+      ]
+     }
     }
    }
   },
@@ -3941,7 +5982,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "Vetoed. The heap has gone very quiet. Warm, and very quiet."
+     "reaction": "Vetoed. The heap has gone very quiet. Warm, and very quiet.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🌱",
+       "📮",
+       "🗳️"
+      ]
+     }
     },
     "left": {
      "label": "Let the rot commence",
@@ -3949,7 +5998,15 @@
       "people": 5,
       "business": -5
      },
-     "reaction": "The allotments have never been greener. The high street has never smelled worse."
+     "reaction": "The allotments have never been greener. The high street has never smelled worse.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🌱",
+       "📮",
+       "🗳️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -3966,7 +6023,15 @@
       "treasury": -10,
       "business": 10
      },
-     "reaction": "Chadland has a flag. It is his face."
+     "reaction": "Chadland has a flag. It is his face.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🤑",
+       "🚩",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Fill in the moat",
@@ -3974,7 +6039,13 @@
       "business": -10,
       "law": 5
      },
-     "reaction": "Fine. I'll dig a bigger one."
+     "reaction": "Fine. I'll dig a bigger one.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -3990,7 +6061,14 @@
       "press": 10,
       "law": -5
      },
-     "reaction": "It's popular. People whisper secrets into it. Linda takes notes."
+     "reaction": "It's popular. People whisper secrets into it. Linda takes notes.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "👂",
+       "🎵"
+      ]
+     }
     },
     "left": {
      "label": "Remove the ear",
@@ -3998,7 +6076,13 @@
       "press": -5,
       "people": -5
      },
-     "reaction": "It's gone. There's a giant mouth there now."
+     "reaction": "It's gone. There's a giant mouth there now.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "👂"
+      ]
+     }
     }
    }
   },
@@ -4015,14 +6099,30 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "All aboard! It goes round the bank. Twice."
+     "reaction": "All aboard! It goes round the bank. Twice.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🚂",
+       "🌧️",
+       "🏦"
+      ]
+     }
     },
     "left": {
      "label": "Pack it away",
      "effects": {
       "people": -10
      },
-     "reaction": "I'm going on strike. The trains are going on strike."
+     "reaction": "I'm going on strike. The trains are going on strike.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🚂",
+       "🌧️",
+       "🏦"
+      ]
+     }
     }
    }
   },
@@ -4038,14 +6138,30 @@
       "treasury": -3,
       "press": 5
      },
-     "reaction": "Chief Forecaster. Bigger hat. The hat is also wrong about the weather."
+     "reaction": "Chief Forecaster. Bigger hat. The hat is also wrong about the weather.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "❄️",
+       "🚪",
+       "🎩"
+      ]
+     }
     },
     "left": {
      "label": "Let him retire",
      "effects": {
       "press": -5
      },
-     "reaction": "He's retired to the roof. Still forecasting. Louder. For free."
+     "reaction": "He's retired to the roof. Still forecasting. Louder. For free.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "❄️",
+       "🚪",
+       "🏠"
+      ]
+     }
     }
    }
   },
@@ -4061,7 +6177,15 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "The goose won. Gerald is unbearable."
+     "reaction": "The goose won. Gerald is unbearable.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🏫",
+       "🥚",
+       "🏁"
+      ]
+     }
     },
     "left": {
      "label": "Safety first",
@@ -4069,7 +6193,15 @@
       "law": 5,
       "people": -10
      },
-     "reaction": "The PTA is now staging a spoon-only race. In protest."
+     "reaction": "The PTA is now staging a spoon-only race. In protest.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🏫",
+       "🥚",
+       "🏁"
+      ]
+     }
     }
    }
   },
@@ -4085,14 +6217,30 @@
       "press": 10,
       "people": 5
      },
-     "reaction": "Every speech is now silent. Approval is up."
+     "reaction": "Every speech is now silent. Approval is up.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🎤",
+       "🪧",
+       "🤡"
+      ]
+     }
     },
     "left": {
      "label": "Issue a correction",
      "effects": {
       "press": -5
      },
-     "reaction": "The correction was also mimed. It's worse."
+     "reaction": "The correction was also mimed. It's worse.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "⚖️",
+       "🎤",
+       "🪧"
+      ]
+     }
     }
    }
   },
@@ -4108,7 +6256,13 @@
       "treasury": -10,
       "press": 5
      },
-     "reaction": "Now you're the right way up. And slightly cross-eyed."
+     "reaction": "Now you're the right way up. And slightly cross-eyed.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🪙"
+      ]
+     }
     },
     "left": {
      "label": "Collector's edition",
@@ -4116,7 +6270,14 @@
       "treasury": 10,
       "press": -5
      },
-     "reaction": "Sold out. Nobody spends them. You're on every mantelpiece upside down."
+     "reaction": "Sold out. Nobody spends them. You're on every mantelpiece upside down.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🪙",
+       "🥧"
+      ]
+     }
     }
    }
   },
@@ -4132,14 +6293,26 @@
       "treasury": -8,
       "law": 5
      },
-     "reaction": "I stood on it for six hours. Nothing came. Best day of my life."
+     "reaction": "I stood on it for six hours. Nothing came. Best day of my life.",
+     "clip": {
+      "act": "build",
+      "props": [
+       "🚁"
+      ]
+     }
     },
     "left": {
      "label": "No",
      "effects": {
       "law": -5
      },
-     "reaction": "I've painted an H on my driveway. It's the same."
+     "reaction": "I've painted an H on my driveway. It's the same.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🚁"
+      ]
+     }
     }
    }
   },
@@ -4155,7 +6328,15 @@
       "treasury": -5,
       "people": 10
      },
-     "reaction": "The duck donated it to the geese. Politics."
+     "reaction": "The duck donated it to the geese. Politics.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🦆",
+       "🏁",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Disqualify the duck",
@@ -4163,7 +6344,15 @@
       "people": -5,
       "press": 5
      },
-     "reaction": "The duck has a lawyer. It's another duck."
+     "reaction": "The duck has a lawyer. It's another duck.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🦆",
+       "🏁",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -4179,7 +6368,15 @@
       "press": 10,
       "business": -5
      },
-     "reaction": "The town anthem is about a hole. People weep at sports events."
+     "reaction": "The town anthem is about a hole. People weep at sports events.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🕳️",
+       "🎵",
+       "🎶"
+      ]
+     }
     },
     "left": {
      "label": "Write a new one",
@@ -4187,7 +6384,15 @@
       "treasury": -5,
       "people": -5
      },
-     "reaction": "The new one is about you. Nobody can sing it."
+     "reaction": "The new one is about you. Nobody can sing it.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🎵",
+       "🕳️",
+       "🎤"
+      ]
+     }
     }
    }
   },
@@ -4203,7 +6408,15 @@
       "treasury": -10,
       "business": 5
      },
-     "reaction": "Clear skies! The couple are disappointed by each other."
+     "reaction": "Clear skies! The couple are disappointed by each other.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🌫️",
+       "🎩",
+       "📱"
+      ]
+     }
     },
     "left": {
      "label": "Leave the fog",
@@ -4211,7 +6424,15 @@
       "people": 5,
       "law": -10
      },
-     "reaction": "Crime is up. So are weddings."
+     "reaction": "Crime is up. So are weddings.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🌫️",
+       "🎩",
+       "📱"
+      ]
+     }
     }
    }
   },
@@ -4227,14 +6448,26 @@
       "press": -5,
       "treasury": -1
      },
-     "reaction": "Classic. The book's sighing."
+     "reaction": "Classic. The book's sighing.",
+     "clip": {
+      "act": "rain",
+      "props": [
+       "📚"
+      ]
+     }
     },
     "left": {
      "label": "Renew it again",
      "effects": {
       "press": 5
      },
-     "reaction": "Ninth renewal. The book has given up on you."
+     "reaction": "Ninth renewal. The book has given up on you.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "📚"
+      ]
+     }
     }
    }
   },
@@ -4251,7 +6484,15 @@
       "law": -10,
       "people": 5
      },
-     "reaction": "Bins Are For Everyone. Bins are now for everyone."
+     "reaction": "Bins Are For Everyone. Bins are now for everyone.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🗳️",
+       "🦝",
+       "🗑️"
+      ]
+     }
     },
     "left": {
      "label": "Bins are for rubbish",
@@ -4259,7 +6500,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "Agreed. And we... the raccoons... are not rubbish."
+     "reaction": "Agreed. And we... the raccoons... are not rubbish.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🗑️",
+       "🦝",
+       "🗳️"
+      ]
+     }
     }
    }
   },
@@ -4275,14 +6524,30 @@
       "press": 5,
       "business": -5
      },
-     "reaction": "You lost in four moves. He's ringing the bell. On the hour."
+     "reaction": "You lost in four moves. He's ringing the bell. On the hour.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "♟️",
+       "🔔",
+       "🏢"
+      ]
+     }
     },
     "left": {
      "label": "Decline",
      "effects": {
       "press": -5
      },
-     "reaction": "Coward's move. Bishop to bell tower."
+     "reaction": "Coward's move. Bishop to bell tower.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "♟️",
+       "🔔",
+       "🏢"
+      ]
+     }
     }
    }
   },
@@ -4304,7 +6569,15 @@
        "glitter2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🏁",
+       "✨",
+       "🌳"
+      ]
+     }
     },
     "left": {
      "label": "Hire cleaners",
@@ -4312,7 +6585,14 @@
       "treasury": -10,
       "people": -5
      },
-     "reaction": "They're glittery now too. It spreads."
+     "reaction": "They're glittery now too. It spreads.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🛶",
+       "✨"
+      ]
+     }
     }
    }
   },
@@ -4328,7 +6608,15 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "Clean. Mostly. Doug still glows a bit when he's nervous. So, always."
+     "reaction": "Clean. Mostly. Doug still glows a bit when he's nervous. So, always.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "✨",
+       "🌊",
+       "💧"
+      ]
+     }
     },
     "left": {
      "label": "Sell it as fancy water",
@@ -4336,7 +6624,15 @@
       "treasury": 10,
       "people": -5
      },
-     "reaction": "'Bad Town Sparkling.' It's selling. Customers light up. Literally."
+     "reaction": "'Bad Town Sparkling.' It's selling. Customers light up. Literally.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "💧",
+       "✨",
+       "🌊"
+      ]
+     }
     }
    },
    "followUp": true
@@ -4353,14 +6649,28 @@
       "treasury": -5,
       "press": 10
      },
-     "reaction": "The lost mayor is the main exhibit. He waves."
+     "reaction": "The lost mayor is the main exhibit. He waves.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "☂️",
+       "🏛️"
+      ]
+     }
     },
     "left": {
      "label": "No museum",
      "effects": {
       "press": -5
      },
-     "reaction": "The umbrellas have been returned. To nobody."
+     "reaction": "The umbrellas have been returned. To nobody.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "☂️",
+       "🏛️"
+      ]
+     }
     }
    }
   },
@@ -4376,7 +6686,14 @@
       "treasury": -15,
       "people": 10
      },
-     "reaction": "Thank you. Now about the right shoes..."
+     "reaction": "Thank you. Now about the right shoes...",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "👟",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Hopping is free",
@@ -4384,7 +6701,14 @@
       "people": -10,
       "law": 5
      },
-     "reaction": "The town is hopping. Productivity is down. Calves are up."
+     "reaction": "The town is hopping. Productivity is down. Calves are up.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "👟",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -4406,7 +6730,15 @@
        "scarecrow2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🌾",
+       "🐦",
+       "🥕"
+      ]
+     }
     },
     "left": {
      "label": "Overturn the result",
@@ -4414,7 +6746,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "It's appealing. Its hand is a rake."
+     "reaction": "It's appealing. Its hand is a rake.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🌾",
+       "🐦",
+       "🥕"
+      ]
+     }
     }
    }
   },
@@ -4430,7 +6770,15 @@
       "people": 10,
       "press": -5
      },
-     "reaction": "You stood in a field all day saying nothing. Approval went up four points."
+     "reaction": "You stood in a field all day saying nothing. Approval went up four points.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🎓",
+       "🌾",
+       "🐦"
+      ]
+     }
     },
     "left": {
      "label": "Fire the scarecrow",
@@ -4438,7 +6786,15 @@
       "people": -10,
       "law": 5
      },
-     "reaction": "It didn't react. Somehow it still won the argument."
+     "reaction": "It didn't react. Somehow it still won the argument.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🚒",
+       "🌾",
+       "🐦"
+      ]
+     }
     }
    },
    "followUp": true
@@ -4455,7 +6811,14 @@
       "treasury": -10,
       "people": 10
      },
-     "reaction": "They're grateful. They're everywhere. Grateful everywhere."
+     "reaction": "They're grateful. They're everywhere. Grateful everywhere.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🦢",
+       "🌳"
+      ]
+     }
     },
     "left": {
      "label": "Close the park",
@@ -4463,7 +6826,15 @@
       "law": 5,
       "people": -10
      },
-     "reaction": "They reunited in the bank instead."
+     "reaction": "They reunited in the bank instead.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🌳",
+       "🦢",
+       "🏦"
+      ]
+     }
     }
    }
   },
@@ -4479,7 +6850,14 @@
       "treasury": 10,
       "press": 5
      },
-     "reaction": "Chad bought it. He's eating it at you."
+     "reaction": "Chad bought it. He's eating it at you.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🎂",
+       "🤑"
+      ]
+     }
     },
     "left": {
      "label": "Eat it yourself",
@@ -4487,7 +6865,14 @@
       "people": 5,
       "press": -5
      },
-     "reaction": "'MAYOR EATS SELF.' Front page, obviously."
+     "reaction": "'MAYOR EATS SELF.' Front page, obviously.",
+     "clip": {
+      "act": "eat",
+      "props": [
+       "🎂",
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -4503,14 +6888,30 @@
       "press": 10,
       "business": -5
      },
-     "reaction": "The man is now our most popular presenter. He doesn't know."
+     "reaction": "The man is now our most popular presenter. He doesn't know.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "📡",
+       "🗑️",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Retune it",
      "effects": {
       "press": -5
      },
-     "reaction": "You've found a new station. It's Randy. Talking to bins."
+     "reaction": "You've found a new station. It's Randy. Talking to bins.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "📡",
+       "🗑️",
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -4526,7 +6927,15 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "Productivity down. Happiness extremely up."
+     "reaction": "Productivity down. Happiness extremely up.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "😴",
+       "🗑️",
+       "📱"
+      ]
+     }
     },
     "left": {
      "label": "Ban the pods",
@@ -4534,7 +6943,15 @@
       "law": 5,
       "people": -10
      },
-     "reaction": "They sleep standing up now. Like horses."
+     "reaction": "They sleep standing up now. Like horses.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "😴",
+       "🗑️",
+       "🐴"
+      ]
+     }
     }
    }
   },
@@ -4550,7 +6967,15 @@
       "people": 5,
       "press": 10
      },
-     "reaction": "Standing ovation. Mostly from other frogs."
+     "reaction": "Standing ovation. Mostly from other frogs.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "📚",
+       "🐸",
+       "🎵"
+      ]
+     }
     },
     "left": {
      "label": "Earplugs for all",
@@ -4558,7 +6983,15 @@
       "treasury": -5,
       "people": -5
      },
-     "reaction": "Earplugs bought. The frogs have learned to sing louder."
+     "reaction": "Earplugs bought. The frogs have learned to sing louder.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🐸",
+       "🎵",
+       "🎤"
+      ]
+     }
     }
    }
   },
@@ -4575,7 +7008,15 @@
       "business": 10,
       "people": -5
      },
-     "reaction": "The yacht is free. The wishes are lost. Mine came true."
+     "reaction": "The yacht is free. The wishes are lost. Mine came true.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🌧️",
+       "⛲",
+       "⛵"
+      ]
+     }
     },
     "left": {
      "label": "It lives there now",
@@ -4583,7 +7024,15 @@
       "business": -10,
       "press": 10
      },
-     "reaction": "Tourists love the fountain yacht. Chad is furious."
+     "reaction": "Tourists love the fountain yacht. Chad is furious.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "⛵",
+       "⛲",
+       "🌧️"
+      ]
+     }
     }
    }
   },
@@ -4605,7 +7054,15 @@
        "higgins2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🔑",
+       "🚂",
+       "🌧️"
+      ]
+     }
     },
     "left": {
      "label": "Give her the key",
@@ -4619,7 +7076,15 @@
        "higgins2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "love",
+      "props": [
+       "🔑",
+       "🚂",
+       "🌧️"
+      ]
+     }
     }
    }
   },
@@ -4635,7 +7100,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "She arm-wrestled Barb for it. Barb's arm is in a sling. Barb is impressed."
+     "reaction": "She arm-wrestled Barb for it. Barb's arm is in a sling. Barb is impressed.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🔑",
+       "🏦",
+       "🚔"
+      ]
+     }
     },
     "left": {
      "label": "Make her Head of Doors",
@@ -4643,7 +7116,15 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "Every door in town is open. Forever. Draughty, but friendly."
+     "reaction": "Every door in town is open. Forever. Draughty, but friendly.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🚪",
+       "🔑",
+       "🏦"
+      ]
+     }
     }
    },
    "followUp": true
@@ -4660,14 +7141,30 @@
       "treasury": -10,
       "people": 10
      },
-     "reaction": "Timmy fell off at once. Bev did a kickflip over him. She's ninety-seven."
+     "reaction": "Timmy fell off at once. Bev did a kickflip over him. She's ninety-seven.",
+     "clip": {
+      "act": "build",
+      "props": [
+       "🛹",
+       "🌳",
+       "👦"
+      ]
+     }
     },
     "left": {
      "label": "Skate at home",
      "effects": {
       "people": -10
      },
-     "reaction": "I'm skating in the town hall now. Down the stairs. Doug is a ramp."
+     "reaction": "I'm skating in the town hall now. Down the stairs. Doug is a ramp.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🛹",
+       "🌳",
+       "😰"
+      ]
+     }
     }
    }
   },
@@ -4683,7 +7180,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "He's devastated. The beard had a name."
+     "reaction": "He's devastated. The beard had a name.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🐻",
+       "🧔",
+       "🔒"
+      ]
+     }
     },
     "left": {
      "label": "Make it a landmark",
@@ -4691,7 +7196,15 @@
       "press": 10,
       "business": -5
      },
-     "reaction": "People take photos with the beard. It's a tourist hotspot."
+     "reaction": "People take photos with the beard. It's a tourist hotspot.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🐻",
+       "🧔",
+       "🔒"
+      ]
+     }
     }
    }
   },
@@ -4707,7 +7220,15 @@
       "law": 10,
       "business": 5
      },
-     "reaction": "It leads to the cheese vault. Of course it does."
+     "reaction": "It leads to the cheese vault. Of course it does.",
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🔍",
+       "⛏️",
+       "🏦"
+      ]
+     }
     },
     "left": {
      "label": "Pretend you didn't hear",
@@ -4715,7 +7236,15 @@
       "business": -10,
       "treasury": -5
      },
-     "reaction": "The bank is lighter today. Weirdly lighter."
+     "reaction": "The bank is lighter today. Weirdly lighter.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "⛏️",
+       "🏦",
+       "👟"
+      ]
+     }
     }
    }
   },
@@ -4731,7 +7260,15 @@
       "treasury": -3,
       "press": 5
      },
-     "reaction": "It's glowing steadily now. Smugly."
+     "reaction": "It's glowing steadily now. Smugly.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "💡",
+       "🌳",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Replace the lamp",
@@ -4739,7 +7276,15 @@
       "treasury": -5,
       "law": 5
      },
-     "reaction": "The new lamp is also flickering. 'WE REMEMBER.'"
+     "reaction": "The new lamp is also flickering. 'WE REMEMBER.'",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "💡",
+       "🌳",
+       "🛣️"
+      ]
+     }
     }
    }
   },
@@ -4755,7 +7300,15 @@
       "treasury": -5,
       "law": 5
      },
-     "reaction": "Found it. It was watching the sea. It seemed at peace."
+     "reaction": "Found it. It was watching the sea. It seemed at peace.",
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🔍",
+       "🗿",
+       "🎤"
+      ]
+     }
     },
     "left": {
      "label": "Build a new founder",
@@ -4763,7 +7316,15 @@
       "treasury": -10,
       "press": 5
      },
-     "reaction": "The new founder looks like Chad. Chad paid for it."
+     "reaction": "The new founder looks like Chad. Chad paid for it.",
+     "clip": {
+      "act": "build",
+      "props": [
+       "🗿",
+       "🎤",
+       "🤑"
+      ]
+     }
     }
    }
   },
@@ -4779,7 +7340,15 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "They won. They ate the trophy."
+     "reaction": "They won. They ate the trophy.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🦝",
+       "📺",
+       "🗑️"
+      ]
+     }
     },
     "left": {
      "label": "Ban the raccoons",
@@ -4787,7 +7356,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "They've entered again. In a trench coat. As Randy."
+     "reaction": "They've entered again. In a trench coat. As Randy.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🦝",
+       "📺",
+       "🗑️"
+      ]
+     }
     }
    }
   },
@@ -4812,7 +7389,14 @@
        "rn2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "eat",
+      "props": [
+       "🔑",
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Change the locks",
@@ -4829,7 +7413,14 @@
        "rn2b",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🔒",
+       "🔑"
+      ]
+     }
     },
     "up": {
      "label": "Make him Keeper of Keys",
@@ -4846,7 +7437,14 @@
        "rn2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🦝",
+       "👑"
+      ]
+     }
     }
    }
   },
@@ -4868,7 +7466,13 @@
        "rn3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Ban bin meetings",
@@ -4882,7 +7486,14 @@
        "rn3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🦝",
+       "♻️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -4905,7 +7516,14 @@
        "rn3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "steal",
+      "props": [
+       "🏛️",
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Work from the coat",
@@ -4920,7 +7538,15 @@
        "rn3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🧥",
+       "🦝",
+       "🏛️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -4943,7 +7569,14 @@
        "rn4",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "news",
+      "props": [
+       "🦝",
+       "🗳️"
+      ]
+     }
     },
     "left": {
      "label": "Take them down",
@@ -4957,7 +7590,14 @@
        "rn4",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📜",
+       "🦝"
+      ]
+     }
     }
    },
    "followUp": true
@@ -4975,7 +7615,13 @@
       "law": -5,
       "press": 10
      },
-     "reaction": "They hissed for twenty minutes. In raccoon, that's a standing ovation."
+     "reaction": "They hissed for twenty minutes. In raccoon, that's a standing ovation.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Cancel the rally",
@@ -4983,7 +7629,14 @@
       "people": -5,
       "press": -5
      },
-     "reaction": "Randy went on alone. Said lovely things about you for an hour. Then ate the podium."
+     "reaction": "Randy went on alone. Said lovely things about you for an hour. Then ate the podium.",
+     "clip": {
+      "act": "eat",
+      "props": [
+       "🎤",
+       "🦝"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5009,7 +7662,14 @@
        "bv2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "race",
+      "props": [
+       "🛵",
+       "🚓"
+      ]
+     }
     },
     "left": {
      "label": "Absolutely not",
@@ -5023,7 +7683,14 @@
        "bv2b",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🛵",
+       "👵"
+      ]
+     }
     }
    }
   },
@@ -5045,7 +7712,14 @@
        "bv3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "race",
+      "props": [
+       "🛵",
+       "🚓"
+      ]
+     }
     },
     "left": {
      "label": "Impound the scooter",
@@ -5053,7 +7727,14 @@
       "law": 10,
       "people": -10
      },
-     "reaction": "She's walking now. She walks faster than the scooter. It's worse."
+     "reaction": "She's walking now. She walks faster than the scooter. It's worse.",
+     "clip": {
+      "act": "steal",
+      "props": [
+       "🛵",
+       "👮"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5079,7 +7760,14 @@
        "bv3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "📝",
+       "👵"
+      ]
+     }
     },
     "left": {
      "label": "One person, one signature",
@@ -5087,7 +7775,13 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "Fine. I'll get my sisters. They're ninety-nine. They're quicker."
+     "reaction": "Fine. I'll get my sisters. They're ninety-nine. They're quicker.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📝"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5108,7 +7802,14 @@
      "reaction": "Bev came first, second and sixth. She's banned from podiums now.",
      "set": [
       "built:track"
-     ]
+     ],
+     "clip": {
+      "act": "race",
+      "props": [
+       "🛵",
+       "🛵"
+      ]
+     }
     },
     "left": {
      "label": "Health and safety says no",
@@ -5116,7 +7817,14 @@
       "law": 5,
       "people": -10
      },
-     "reaction": "Bev called you a 'wet lettuce'. It's on a T-shirt. Bev is selling them."
+     "reaction": "Bev called you a 'wet lettuce'. It's on a T-shirt. Bev is selling them.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🏁",
+       "🥬"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5139,7 +7847,14 @@
        "wh2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🐟",
+       "🐈"
+      ]
+     }
     },
     "left": {
      "label": "See you in court",
@@ -5153,7 +7868,14 @@
        "wh2c",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "court",
+      "props": [
+       "🐈",
+       "📦"
+      ]
+     }
     }
    }
   },
@@ -5175,7 +7897,14 @@
        "wh3",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "court",
+      "props": [
+       "🐈",
+       "😰"
+      ]
+     }
     },
     "left": {
      "label": "Knock his gavel off the desk",
@@ -5189,7 +7918,14 @@
        "wh3",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🔨",
+       "🐈"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5212,7 +7948,14 @@
        "wh3",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🐈",
+       "⚖️"
+      ]
+     }
     },
     "left": {
      "label": "Ban cat lawsuits",
@@ -5226,7 +7969,13 @@
        "wh3",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "court",
+      "props": [
+       "🐈"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5243,7 +7992,14 @@
       "law": 5,
       "treasury": -5
      },
-     "reaction": "Appeal denied. Appeal sat on. Appeal is warm now. Appeal is his."
+     "reaction": "Appeal denied. Appeal sat on. Appeal is warm now. Appeal is his.",
+     "clip": {
+      "act": "court",
+      "props": [
+       "🐈",
+       "📄"
+      ]
+     }
     },
     "left": {
      "label": "Give him the boxes",
@@ -5251,7 +8007,14 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "My client is asleep in the post office. No post until he wakes."
+     "reaction": "My client is asleep in the post office. No post until he wakes.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "📦",
+       "🐈"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5274,7 +8037,14 @@
        "br2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "launch",
+      "props": [
+       "📱",
+       "🤳"
+      ]
+     }
     },
     "left": {
      "label": "The town is free",
@@ -5282,7 +8052,13 @@
       "people": 5,
       "business": -5
      },
-     "reaction": "That's exactly what someone with no vision says. Going on the podcast."
+     "reaction": "That's exactly what someone with no vision says. Going on the podcast.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📱"
+      ]
+     }
     },
     "up": {
      "label": "Do a podcast instead",
@@ -5296,7 +8072,14 @@
        "br2p",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "show",
+      "props": [
+       "🎙️",
+       "😴"
+      ]
+     }
     }
    }
   },
@@ -5319,7 +8102,14 @@
        "br3",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "⛲",
+       "📢"
+      ]
+     }
     },
     "left": {
      "label": "Pull the ads",
@@ -5327,7 +8117,14 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "Unsubscribing a fountain is a premium feature. But fine."
+     "reaction": "Unsubscribing a fountain is a premium feature. But fine.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📢",
+       "⛲"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5344,7 +8141,14 @@
       "people": 10,
       "press": -5
      },
-     "reaction": "He's recorded an episode about being unplugged. It's slightly quieter."
+     "reaction": "He's recorded an episode about being unplugged. It's slightly quieter.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "🔊",
+       "🕰️"
+      ]
+     }
     },
     "left": {
      "label": "Give him noon",
@@ -5352,7 +8156,14 @@
       "press": 5,
       "people": -5
      },
-     "reaction": "Noon is 'Brayden Hour' now. It's four hours long."
+     "reaction": "Noon is 'Brayden Hour' now. It's four hours long.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🎙️",
+       "🕛"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5369,7 +8180,14 @@
       "treasury": -5,
       "law": 5
      },
-     "reaction": "It sent you a very polite email about this. It cc'd the Bugle."
+     "reaction": "It sent you a very polite email about this. It cc'd the Bugle.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🤖",
+       "📱"
+      ]
+     }
     },
     "left": {
      "label": "Give it the office",
@@ -5378,7 +8196,14 @@
       "people": -10,
       "press": 5
      },
-     "reaction": "It works all night. It has fired Doug twice. Doug still comes in."
+     "reaction": "It works all night. It has fired Doug twice. Doug still comes in.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "😰",
+       "🤖"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5401,7 +8226,15 @@
        "nr2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "rain",
+      "props": [
+       "🍲",
+       "🥣",
+       "🥄"
+      ]
+     }
     },
     "left": {
      "label": "Switch it off",
@@ -5409,7 +8242,14 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "It won't switch off. It's sulking. Light drizzle of broth."
+     "reaction": "It won't switch off. It's sulking. Light drizzle of broth.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🌧️",
+       "🍲"
+      ]
+     }
     },
     "up": {
      "label": "Free lunch for all",
@@ -5417,7 +8257,15 @@
       "people": 10,
       "treasury": 5
      },
-     "reaction": "Lunch falls from the sky. Everyone carries a bowl now. Spoons sold out."
+     "reaction": "Lunch falls from the sky. Everyone carries a bowl now. Spoons sold out.",
+     "clip": {
+      "act": "rain",
+      "props": [
+       "🍲",
+       "🥖",
+       "🥣"
+      ]
+     }
     }
    }
   },
@@ -5434,7 +8282,14 @@
       "business": 5,
       "people": -5
      },
-     "reaction": "Gravy pies. Gravy bread. Gravy gravy. Everyone's sticky. Business booms."
+     "reaction": "Gravy pies. Gravy bread. Gravy gravy. Everyone's sticky. Business booms.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🥧",
+       "🥣"
+      ]
+     }
     },
     "left": {
      "label": "Shelter everyone",
@@ -5448,7 +8303,14 @@
        "nr3",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🥣",
+       "🍞"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5465,7 +8327,14 @@
       "people": 5,
       "press": 10
      },
-     "reaction": "The clock wears a tiny umbrella. Marge calls it the wedding of the year."
+     "reaction": "The clock wears a tiny umbrella. Marge calls it the wedding of the year.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "🕰️",
+       "🌧️"
+      ]
+     }
     },
     "left": {
      "label": "Separate them",
@@ -5473,7 +8342,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "It's raining tears now. Actual tears. Very salty. Great on chips."
+     "reaction": "It's raining tears now. Actual tears. Very salty. Great on chips.",
+     "clip": {
+      "act": "rain",
+      "props": [
+       "💧",
+       "🍟",
+       "🕰️"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5496,7 +8373,14 @@
        "sl2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "eat",
+      "props": [
+       "🛞",
+       "🕵️"
+      ]
+     }
     },
     "left": {
      "label": "Tell the truth",
@@ -5504,7 +8388,14 @@
       "law": 10,
       "business": -10
      },
-     "reaction": "Closed for a week. The tyre has been rehomed. It went quietly."
+     "reaction": "Closed for a week. The tyre has been rehomed. It went quietly.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🛞",
+       "🍲"
+      ]
+     }
     }
    }
   },
@@ -5521,14 +8412,28 @@
       "business": 10,
       "press": 10
      },
-     "reaction": "Black tie and black tyres. The soup was 'rubbery but elegant'."
+     "reaction": "Black tie and black tyres. The soup was 'rubbery but elegant'.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🍝",
+       "🛞"
+      ]
+     }
     },
     "left": {
      "label": "Bit much",
      "effects": {
       "business": -5
      },
-     "reaction": "Fine. One star on the sign. The other star I keep in my heart. And my boot."
+     "reaction": "Fine. One star on the sign. The other star I keep in my heart. And my boot.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "⭐",
+       "🥾"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5551,14 +8456,28 @@
        "co2",
        7
       ]
-     ]
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "🏅",
+       "🔥"
+      ]
+     }
     },
     "left": {
      "label": "No Olympics",
      "effects": {
       "people": -5
      },
-     "reaction": "A queue has started anyway. Nobody knows what for. It's very long."
+     "reaction": "A queue has started anyway. Nobody knows what for. It's very long.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🧍",
+       "❓"
+      ]
+     }
     }
    }
   },
@@ -5574,7 +8493,13 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "Everyone stood. Some wept. It was, honestly, quite moving."
+     "reaction": "Everyone stood. Some wept. It was, honestly, quite moving.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Disqualify Randy",
@@ -5582,7 +8507,14 @@
       "law": 10,
       "people": -5
      },
-     "reaction": "He's appealing. To Mr Whiskers. That's going to go badly for you."
+     "reaction": "He's appealing. To Mr Whiskers. That's going to go badly for you.",
+     "clip": {
+      "act": "court",
+      "props": [
+       "🐈",
+       "🦝"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5605,14 +8537,27 @@
        "sh2",
        8
       ]
-     ]
+     ],
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🌑",
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Ignore her",
      "effects": {
       "press": 5
      },
-     "reaction": "When the darkness comes, don't come crying to me. It won't. But don't."
+     "reaction": "When the darkness comes, don't come crying to me. It won't. But don't.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🔮"
+      ]
+     }
     }
    }
   },
@@ -5628,7 +8573,14 @@
       "treasury": -5,
       "press": 10
      },
-     "reaction": "She told you to wear purple. You did. Nothing happened. 'A sign.'"
+     "reaction": "She told you to wear purple. You did. Nothing happened. 'A sign.'",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🔮",
+       "🟣"
+      ]
+     }
     },
     "left": {
      "label": "Ask for a refund",
@@ -5636,7 +8588,14 @@
       "treasury": 5,
       "press": -5
      },
-     "reaction": "She saw that coming, she says. She didn't. She's furious."
+     "reaction": "She saw that coming, she says. She didn't. She's furious.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🔮",
+       "💢"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5659,7 +8618,15 @@
        "mc2",
        6
       ]
-     ]
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🚪",
+       "🤡",
+       "🫥"
+      ]
+     }
     },
     "left": {
      "label": "Arrest him",
@@ -5667,7 +8634,14 @@
       "law": 10,
       "people": -10
      },
-     "reaction": "He mimed being dragged away. Very moving. Barb clapped."
+     "reaction": "He mimed being dragged away. Very moving. Barb clapped.",
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🤡",
+       "👮"
+      ]
+     }
     }
    }
   },
@@ -5683,7 +8657,15 @@
       "people": 10,
       "press": 5
      },
-     "reaction": "You mimed it perfectly. Marcel wept. Silently, obviously."
+     "reaction": "You mimed it perfectly. Marcel wept. Silently, obviously.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🔑",
+       "🤡",
+       "😢"
+      ]
+     }
     },
     "left": {
      "label": "Walk straight through",
@@ -5691,7 +8673,14 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "You walked through. Marcel mimed devastation. Then he mimed a lawyer."
+     "reaction": "You walked through. Marcel mimed devastation. Then he mimed a lawyer.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🧱",
+       "🤡"
+      ]
+     }
     }
    },
    "followUp": true
@@ -5708,7 +8697,15 @@
       "treasury": -5,
       "people": 10
      },
-     "reaction": "Gorgeous. The scone has a tiny skull on it too. Detail."
+     "reaction": "Gorgeous. The scone has a tiny skull on it too. Detail.",
+     "clip": {
+      "act": "ink",
+      "props": [
+       "💀",
+       "💀",
+       "🧁"
+      ]
+     }
     },
     "left": {
      "label": "Not with public money",
@@ -5716,7 +8713,14 @@
       "people": -5,
       "treasury": 5
      },
-     "reaction": "I'll pay myself. In coins from 1951. They're worth more now."
+     "reaction": "I'll pay myself. In coins from 1951. They're worth more now.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "💀",
+       "👵"
+      ]
+     }
     }
    }
   },
@@ -5732,7 +8736,14 @@
       "treasury": -5,
       "people": 10
      },
-     "reaction": "They went to Sal's. Randy ate a tyre. Bev ate the bill. True love."
+     "reaction": "They went to Sal's. Randy ate a tyre. Bev ate the bill. True love.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "👵",
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "No public money for dates",
@@ -5740,7 +8751,14 @@
       "people": -5,
       "treasury": 5
      },
-     "reaction": "Fine. We'll eat in the bins. Randy says they're lovely this time of year."
+     "reaction": "Fine. We'll eat in the bins. Randy says they're lovely this time of year.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🗑️",
+       "💘"
+      ]
+     }
     }
    }
   },
@@ -5756,7 +8774,14 @@
       "law": 10,
       "people": -5
      },
-     "reaction": "The inquiry found Randy guilty. Randy ate the inquiry."
+     "reaction": "The inquiry found Randy guilty. Randy ate the inquiry.",
+     "clip": {
+      "act": "court",
+      "props": [
+       "🦝",
+       "🥪"
+      ]
+     }
     },
     "left": {
      "label": "Buy everyone lunch",
@@ -5764,7 +8789,14 @@
       "treasury": -10,
       "people": 10
      },
-     "reaction": "Delicious. Randy had seconds. Randy also ate the receipt."
+     "reaction": "Delicious. Randy had seconds. Randy also ate the receipt.",
+     "clip": {
+      "act": "eat",
+      "props": [
+       "🥪",
+       "🦝"
+      ]
+     }
     }
    }
   },
@@ -5780,7 +8812,14 @@
       "law": 10,
       "press": 5
      },
-     "reaction": "Three raccoons, a toaster, the Welcome sign and a fourth raccoon."
+     "reaction": "Three raccoons, a toaster, the Welcome sign and a fourth raccoon.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🦝",
+       "🍞"
+      ]
+     }
     },
     "left": {
      "label": "Bless you, coat",
@@ -5788,7 +8827,14 @@
       "people": 5,
       "law": -5
      },
-     "reaction": "Thank you. The coat says thank you. I say thank you. Not the coat."
+     "reaction": "Thank you. The coat says thank you. I say thank you. Not the coat.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🧥",
+       "🤧"
+      ]
+     }
     }
    }
   },
@@ -5804,14 +8850,27 @@
       "people": 5,
       "press": 10
      },
-     "reaction": "Standing ovation. Three kids now want coats with raccoons in them."
+     "reaction": "Standing ovation. Three kids now want coats with raccoons in them.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Absolutely not",
      "effects": {
       "people": -5
      },
-     "reaction": "I'll do it anyway. From inside the school bins. Better acoustics."
+     "reaction": "I'll do it anyway. From inside the school bins. Better acoustics.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🗑️",
+       "🦝"
+      ]
+     }
     }
    }
   },
@@ -5826,7 +8885,14 @@
      "effects": {
       "law": 10
      },
-     "reaction": "Right. Right. Just checking. Please ignore the wrapper."
+     "reaction": "Right. Right. Just checking. Please ignore the wrapper.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🗳️",
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Hire a ballot guard",
@@ -5834,7 +8900,14 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "You hired a goose. The goose ate the ballots. Randy is furious. That was his idea."
+     "reaction": "You hired a goose. The goose ate the ballots. Randy is furious. That was his idea.",
+     "clip": {
+      "act": "eat",
+      "props": [
+       "🗳️",
+       "🦢"
+      ]
+     }
     }
    }
   },
@@ -5850,7 +8923,14 @@
       "press": 10,
       "people": 5
      },
-     "reaction": "It was unveiled. Then eaten. By raccoons. A short tribute."
+     "reaction": "It was unveiled. Then eaten. By raccoons. A short tribute.",
+     "clip": {
+      "act": "eat",
+      "props": [
+       "🗿",
+       "🦝"
+      ]
+     }
     },
     "left": {
      "label": "Take it down",
@@ -5858,7 +8938,14 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "Randy wept tiny raccoon tears. He's building another one. Bigger."
+     "reaction": "Randy wept tiny raccoon tears. He's building another one. Bigger.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🦝",
+       "🗑️"
+      ]
+     }
     }
    }
   },
@@ -5875,7 +8962,15 @@
       "business": 10,
       "press": -5
      },
-     "reaction": "The signs say BADTWN now. Bev can't say it. Bev calls it 'that'."
+     "reaction": "The signs say BADTWN now. Bev can't say it. Bev calls it 'that'.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🏷️",
+       "🦢",
+       "🪧"
+      ]
+     }
     },
     "left": {
      "label": "Bad Town stays",
@@ -5883,7 +8978,15 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "Fine. But I'm keeping the goose in sunglasses. It's Gerald. He loves it."
+     "reaction": "Fine. But I'm keeping the goose in sunglasses. It's Gerald. He loves it.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🏷️",
+       "🦢",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -5899,7 +9002,15 @@
       "treasury": 5,
       "people": 5
      },
-     "reaction": "Doug's out. He found nine coins and a lost intern. Morale is great."
+     "reaction": "Doug's out. He found nine coins and a lost intern. Morale is great.",
+     "clip": {
+      "act": "fix",
+      "props": [
+       "😰",
+       "🏛️",
+       "📅"
+      ]
+     }
     },
     "left": {
      "label": "He looks happy",
@@ -5907,7 +9018,15 @@
       "business": 5,
       "treasury": -10
      },
-     "reaction": "Doug approves budgets from the ball pit now. He approves everything."
+     "reaction": "Doug approves budgets from the ball pit now. He approves everything.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "📱",
+       "😰",
+       "🏛️"
+      ]
+     }
     }
    }
   },
@@ -5923,14 +9042,29 @@
       "treasury": -5,
       "press": 10
      },
-     "reaction": "We added cats. The cats said things I won't repeat. Mr Whiskers sued."
+     "reaction": "We added cats. The cats said things I won't repeat. Mr Whiskers sued.",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🐕",
+       "💬",
+       "📮"
+      ]
+     }
     },
     "left": {
      "label": "Some things are best unknown",
      "effects": {
       "people": 5
      },
-     "reaction": "Agreed. Although Biscuit just said something about you. Not nice."
+     "reaction": "Agreed. Although Biscuit just said something about you. Not nice.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🐕",
+       "📮"
+      ]
+     }
     }
    }
   },
@@ -5946,7 +9080,14 @@
       "treasury": 10,
       "business": -5
      },
-     "reaction": "Double the budget checks. Double the crying. Weirdly productive."
+     "reaction": "Double the budget checks. Double the crying. Weirdly productive.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "😰",
+       "👥"
+      ]
+     }
     },
     "left": {
      "label": "Undo it",
@@ -5954,7 +9095,14 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "Undone. One Doug left. He's not sure which one. Neither are we."
+     "reaction": "Undone. One Doug left. He's not sure which one. Neither are we.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "👥",
+       "😰"
+      ]
+     }
     }
    }
   },
@@ -5970,14 +9118,29 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "Gorgeous. Main Street is a beach on Tuesdays. Sal rents tyres as floats."
+     "reaction": "Gorgeous. Main Street is a beach on Tuesdays. Sal rents tyres as floats.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "🌙",
+       "🌕"
+      ]
+     }
     },
     "left": {
      "label": "Normal moon",
      "effects": {
       "law": 5
      },
-     "reaction": "Normal moon. You're no fun. The moon agrees. It told me."
+     "reaction": "Normal moon. You're no fun. The moon agrees. It told me.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🌙",
+       "🌳",
+       "🛣️"
+      ]
+     }
     }
    }
   },
@@ -5993,7 +9156,14 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "Everyone's out. The volcano is doing a small lava. Coach calls it cardio."
+     "reaction": "Everyone's out. The volcano is doing a small lava. Coach calls it cardio.",
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🏃",
+       "🌋"
+      ]
+     }
     },
     "left": {
      "label": "Give it first prize",
@@ -6001,7 +9171,14 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "It won. Timmy came second with a potato. Timmy hates the volcano now."
+     "reaction": "It won. Timmy came second with a potato. Timmy hates the volcano now.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🌋",
+       "🥇"
+      ]
+     }
     }
    }
   },
@@ -6017,7 +9194,15 @@
       "people": 5,
       "law": -5
      },
-     "reaction": "He's asleep. You work from the floor now. It's honestly fine."
+     "reaction": "He's asleep. You work from the floor now. It's honestly fine.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🪑",
+       "🐈",
+       "☀️"
+      ]
+     }
     },
     "left": {
      "label": "It's my chair",
@@ -6025,7 +9210,14 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "Noted. My client will now sit on your keyboard. 'jjjjjjjjjjjjjjjjjj'."
+     "reaction": "Noted. My client will now sit on your keyboard. 'jjjjjjjjjjjjjjjjjj'.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "⌨️",
+       "🐈"
+      ]
+     }
     }
    }
   },
@@ -6040,7 +9232,15 @@
      "effects": {
       "people": 5
      },
-     "reaction": "Sustained. He's sitting in it. He has never been more powerful."
+     "reaction": "Sustained. He's sitting in it. He has never been more powerful.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "📦",
+       "🐈",
+       "👑"
+      ]
+     }
     },
     "left": {
      "label": "Box goes to recycling",
@@ -6048,7 +9248,14 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "My client has entered a hairball into evidence. On your desk."
+     "reaction": "My client has entered a hairball into evidence. On your desk.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🐈",
+       "🧶"
+      ]
+     }
     }
    }
   },
@@ -6063,7 +9270,15 @@
      "effects": {
       "people": 5
      },
-     "reaction": "You did. You fainted. Marcel applauded. Silently."
+     "reaction": "You did. You fainted. Marcel applauded. Silently.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "📝",
+       "🦢",
+       "📱"
+      ]
+     }
     },
     "left": {
      "label": "Ask the geese to stop",
@@ -6071,7 +9286,15 @@
       "people": -5,
       "law": 5
      },
-     "reaction": "Gerald replied with the loudest honk in recorded history. Marcel mimed dying."
+     "reaction": "Gerald replied with the loudest honk in recorded history. Marcel mimed dying.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🦢",
+       "📝",
+       "🤡"
+      ]
+     }
     }
    }
   },
@@ -6087,7 +9310,15 @@
       "treasury": -10,
       "people": 5
      },
-     "reaction": "They mimed cutting him out. He mimed thanks. Nobody knows if it worked."
+     "reaction": "They mimed cutting him out. He mimed thanks. Nobody knows if it worked.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🚒",
+       "📱",
+       "🫥"
+      ]
+     }
     },
     "left": {
      "label": "Leave him, it's art",
@@ -6095,7 +9326,15 @@
       "press": 10,
       "business": 5
      },
-     "reaction": "Tourists throw coins. Sal sells 'invisible box' T-shirts. They're blank."
+     "reaction": "Tourists throw coins. Sal sells 'invisible box' T-shirts. They're blank.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "📱",
+       "🫥",
+       "📦"
+      ]
+     }
     }
    }
   },
@@ -6110,7 +9349,14 @@
      "effects": {
       "law": 5
      },
-     "reaction": "Marcel mimed sorry. Gerald honked sorry. Peace, in silence and noise."
+     "reaction": "Marcel mimed sorry. Gerald honked sorry. Peace, in silence and noise.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🦢",
+       "🤡"
+      ]
+     }
     },
     "left": {
      "label": "Sell tickets",
@@ -6119,7 +9365,15 @@
       "press": 5,
       "law": -5
      },
-     "reaction": "Sold out. Gerald won on points. Marcel mimed a rematch."
+     "reaction": "Sold out. Gerald won on points. Marcel mimed a rematch.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🎟️",
+       "🦢",
+       "🤡"
+      ]
+     }
     }
    }
   },
@@ -6136,7 +9390,15 @@
       "people": 5,
       "law": -5
      },
-     "reaction": "Queues round the block. Cars too. Some just want gravy on their wheels."
+     "reaction": "Queues round the block. Cars too. Some just want gravy on their wheels.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🍝",
+       "🛞",
+       "🥣"
+      ]
+     }
     },
     "left": {
      "label": "Food and tyres apart",
@@ -6144,7 +9406,15 @@
       "law": 5,
       "business": -5
      },
-     "reaction": "Fine. Second restaurant next door. It's the same restaurant. There's a curtain."
+     "reaction": "Fine. Second restaurant next door. It's the same restaurant. There's a curtain.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🛞",
+       "🍝",
+       "🥣"
+      ]
+     }
     }
    }
   },
@@ -6160,7 +9430,15 @@
       "business": 10,
       "law": -5
      },
-     "reaction": "Spotless plates. He's union now. Gerald signed him up."
+     "reaction": "Spotless plates. He's union now. Gerald signed him up.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🦡",
+       "🎩",
+       "🦢"
+      ]
+     }
     },
     "left": {
      "label": "Badgers can't work",
@@ -6168,7 +9446,14 @@
       "law": 5,
       "business": -5
      },
-     "reaction": "He's gone. The dishes are filthy. My staff are celebrating. I hate them."
+     "reaction": "He's gone. The dishes are filthy. My staff are celebrating. I hate them.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🦡",
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -6184,14 +9469,27 @@
       "people": -5,
       "law": 5
      },
-     "reaction": "The council is stronger. Meetings are shorter. Too tired to argue."
+     "reaction": "The council is stronger. Meetings are shorter. Too tired to argue.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "😰"
+      ]
+     }
     },
     "left": {
      "label": "Meetings stay seated",
      "effects": {
       "people": 5
      },
-     "reaction": "Coach blew his whistle at you for nine minutes. Your ears still ring."
+     "reaction": "Coach blew his whistle at you for nine minutes. Your ears still ring.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "😰",
+       "📣"
+      ]
+     }
     }
    }
   },
@@ -6207,7 +9505,15 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "Geese 14, Town 0. Gerald scored with his face. Coach is in therapy."
+     "reaction": "Geese 14, Town 0. Gerald scored with his face. Coach is in therapy.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🦢",
+       "⚽",
+       "🚂"
+      ]
+     }
     },
     "left": {
      "label": "Forfeit",
@@ -6215,7 +9521,15 @@
       "people": -5,
       "press": -5
      },
-     "reaction": "The geese did a lap of honour anyway. Where did they get trophies?"
+     "reaction": "The geese did a lap of honour anyway. Where did they get trophies?",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🦢",
+       "⚽",
+       "🚂"
+      ]
+     }
     }
    }
   },
@@ -6231,7 +9545,15 @@
       "treasury": -15,
       "press": 10
      },
-     "reaction": "Nobody can find the tree. The napkin got wet. 'It's there spiritually.'"
+     "reaction": "Nobody can find the tree. The napkin got wet. 'It's there spiritually.'",
+     "clip": {
+      "act": "show",
+      "props": [
+       "🔮",
+       "🌳",
+       "🗺️"
+      ]
+     }
     },
     "left": {
      "label": "Money stays in the bank",
@@ -6239,7 +9561,15 @@
       "treasury": 5,
       "press": -5
      },
-     "reaction": "You'll regret it. She also said that about Tuesday. Tuesday was fine."
+     "reaction": "You'll regret it. She also said that about Tuesday. Tuesday was fine.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🏦",
+       "🔮",
+       "🌳"
+      ]
+     }
     }
    }
   },
@@ -6255,14 +9585,30 @@
       "treasury": -10,
       "press": 5
      },
-     "reaction": "The vision is much clearer now. You'll win. Also there's a goose. There's always a goose."
+     "reaction": "The vision is much clearer now. You'll win. Also there's a goose. There's always a goose.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🔮",
+       "👶",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "No",
      "effects": {
       "people": 5
      },
-     "reaction": "Fine. Don't come crying to me when you lose. Unless you win."
+     "reaction": "Fine. Don't come crying to me when you lose. Unless you win.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🔮",
+       "👶",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -6278,7 +9624,15 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "One loaf. Two lawyers. Zero crumbs. Wing shook paw."
+     "reaction": "One loaf. Two lawyers. Zero crumbs. Wing shook paw.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🍞",
+       "🦢",
+       "🐈"
+      ]
+     }
     },
     "left": {
      "label": "Fight it",
@@ -6286,7 +9640,15 @@
       "law": 5,
       "press": 5
      },
-     "reaction": "Four-minute trial. Mr Whiskers fell asleep. Gerald honked. Dismissed. Probably."
+     "reaction": "Four-minute trial. Mr Whiskers fell asleep. Gerald honked. Dismissed. Probably.",
+     "clip": {
+      "act": "court",
+      "props": [
+       "🦢",
+       "🐈",
+       "⚖️"
+      ]
+     }
     }
    }
   },
@@ -6302,7 +9664,15 @@
       "press": 10,
       "business": -5
      },
-     "reaction": "Gerald's Kitchen is a smash. Nobody in town has any bread left."
+     "reaction": "Gerald's Kitchen is a smash. Nobody in town has any bread left.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🦢",
+       "📺",
+       "🍞"
+      ]
+     }
     },
     "left": {
      "label": "No goose TV",
@@ -6310,7 +9680,15 @@
       "press": -5,
       "people": -5
      },
-     "reaction": "He's filming it anyway on the library computer. Just honking. Huge numbers."
+     "reaction": "He's filming it anyway on the library computer. Just honking. Huge numbers.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🦢",
+       "📺",
+       "🍞"
+      ]
+     }
     }
    }
   },
@@ -6326,14 +9704,30 @@
       "press": 10,
       "people": 5
      },
-     "reaction": "He was very impressive. You've been demoted to Deputy Goose."
+     "reaction": "He was very impressive. You've been demoted to Deputy Goose.",
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🦢",
+       "🍞",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Reject the application",
      "effects": {
       "people": -5
      },
-     "reaction": "Gerald honked a formal complaint. In triplicate. Three honks."
+     "reaction": "Gerald honked a formal complaint. In triplicate. Three honks.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📱",
+       "🦢",
+       "🍞"
+      ]
+     }
     }
    }
   },
@@ -6349,7 +9743,14 @@
       "treasury": -10,
       "people": 10
      },
-     "reaction": "400 swings. The park is just swings. Kids are bored of swings."
+     "reaction": "400 swings. The park is just swings. Kids are bored of swings.",
+     "clip": {
+      "act": "build",
+      "props": [
+       "🎠",
+       "🌳"
+      ]
+     }
     },
     "left": {
      "label": "Talk to all 400",
@@ -6357,7 +9758,13 @@
       "people": 5,
       "press": -5
      },
-     "reaction": "You finished at 4 am. You agreed to 400 things. Several contradict."
+     "reaction": "You finished at 4 am. You agreed to 400 things. Several contradict.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🎠"
+      ]
+     }
     }
    }
   },
@@ -6372,7 +9779,15 @@
      "effects": {
       "people": 10
      },
-     "reaction": "You survived. Your eyebrows didn't. Bev won. Again."
+     "reaction": "You survived. Your eyebrows didn't. Bev won. Again.",
+     "clip": {
+      "act": "court",
+      "props": [
+       "👵",
+       "🎂",
+       "🎆"
+      ]
+     }
     },
     "left": {
      "label": "Send Randy",
@@ -6380,7 +9795,15 @@
       "people": -5,
       "law": -5
      },
-     "reaction": "Randy ate every cake, firework included. He's fine. He's glowing."
+     "reaction": "Randy ate every cake, firework included. He's fine. He's glowing.",
+     "clip": {
+      "act": "rain",
+      "props": [
+       "🦝",
+       "👵",
+       "🎂"
+      ]
+     }
     }
    }
   },
@@ -6397,7 +9820,15 @@
       "business": 10,
       "people": -10
      },
-     "reaction": "ChadDay was a huge success. For Chad. Nobody else enjoyed ChadDay."
+     "reaction": "ChadDay was a huge success. For Chad. Nobody else enjoyed ChadDay.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🤑",
+       "📱",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Wednesday isn't for sale",
@@ -6405,7 +9836,15 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "Then I'll buy Thursday. Thursday's cheaper. Nobody likes Thursday."
+     "reaction": "Then I'll buy Thursday. Thursday's cheaper. Nobody likes Thursday.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🤑",
+       "📱",
+       "📅"
+      ]
+     }
     }
    }
   },
@@ -6422,7 +9861,15 @@
       "business": 10,
       "press": -5
      },
-     "reaction": "Opening day: six visitors. All Chad. In different hats."
+     "reaction": "Opening day: six visitors. All Chad. In different hats.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🤑",
+       "👶",
+       "⛵"
+      ]
+     }
     },
     "left": {
      "label": "No vanity museums",
@@ -6430,7 +9877,15 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "Fine. Museum of Not Chad. It's empty. It's very sad."
+     "reaction": "Fine. Museum of Not Chad. It's empty. It's very sad.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🤑",
+       "👶",
+       "⛵"
+      ]
+     }
     }
    }
   },
@@ -6447,7 +9902,15 @@
       "law": 10,
       "people": -5
      },
-     "reaction": "We collected four crumbs and a feather. The ducks are appealing."
+     "reaction": "We collected four crumbs and a feather. The ducks are appealing.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🦆",
+       "📸",
+       "🌊"
+      ]
+     }
     },
     "left": {
      "label": "Ducks are exempt",
@@ -6455,7 +9918,15 @@
       "law": -5,
       "people": 5
      },
-     "reaction": "They know they're exempt now. One did a wheelie. Ducks can't do wheelies."
+     "reaction": "They know they're exempt now. One did a wheelie. Ducks can't do wheelies.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🦆",
+       "📸",
+       "🌊"
+      ]
+     }
     }
    }
   },
@@ -6471,7 +9942,14 @@
       "law": 5,
       "people": 5
      },
-     "reaction": "Inspector Biscuit is satisfied. You're on his commendation list. It's a sock."
+     "reaction": "Inspector Biscuit is satisfied. You're on his commendation list. It's a sock.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🐕",
+       "🧦"
+      ]
+     }
     },
     "left": {
      "label": "Demote the dog",
@@ -6479,7 +9957,13 @@
       "law": -10,
       "people": -5
      },
-     "reaction": "Biscuit filed a grievance. A long sad howl. The whole station is crying."
+     "reaction": "Biscuit filed a grievance. A long sad howl. The whole station is crying.",
+     "clip": {
+      "act": "boom",
+      "props": [
+       "🐕"
+      ]
+     }
     }
    }
   },
@@ -6494,7 +9978,14 @@
      "effects": {
       "press": 10
      },
-     "reaction": "Your speech ran in full. Including the minute where you just said 'um'."
+     "reaction": "Your speech ran in full. Including the minute where you just said 'um'.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🎤",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Boycott it",
@@ -6502,7 +9993,13 @@
       "press": -10,
       "people": 5
      },
-     "reaction": "'MAYOR TOO SCARED OF AWARD.' Seven-page special. With diagrams."
+     "reaction": "'MAYOR TOO SCARED OF AWARD.' Seven-page special. With diagrams.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -6518,7 +10015,15 @@
       "press": 5,
       "treasury": -5
      },
-     "reaction": "'MAYOR NOT A GOOSE.' Gerald is offended. Gerald is suing."
+     "reaction": "'MAYOR NOT A GOOSE.' Gerald is offended. Gerald is suing.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🦢",
+       "⚖️",
+       "📰"
+      ]
+     }
     },
     "left": {
      "label": "Lean into it",
@@ -6527,7 +10032,15 @@
       "people": 5,
       "law": -5
      },
-     "reaction": "You honked at a press conference. Approval up. The geese made you a member."
+     "reaction": "You honked at a press conference. Approval up. The geese made you a member.",
+     "clip": {
+      "act": "news",
+      "props": [
+       "🦢",
+       "📱",
+       "📰"
+      ]
+     }
     }
    }
   },
@@ -6543,7 +10056,15 @@
       "treasury": -5,
       "business": 5
      },
-     "reaction": "Budget fixed. We had money all along. Some of it was 7s."
+     "reaction": "Budget fixed. We had money all along. Some of it was 7s.",
+     "clip": {
+      "act": "cashout",
+      "props": [
+       "🧮",
+       "⛲",
+       "📺"
+      ]
+     }
     },
     "left": {
      "label": "Seven's a good number",
@@ -6551,7 +10072,15 @@
       "treasury": -10,
       "people": 5
      },
-     "reaction": "Police budget: 7. Swings budget: 7 million. It's all 7 now."
+     "reaction": "Police budget: 7. Swings budget: 7 million. It's all 7 now.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🧮",
+       "⛲",
+       "📺"
+      ]
+     }
     }
    }
   },
@@ -6567,7 +10096,14 @@
       "people": 5,
       "treasury": -5
      },
-     "reaction": "He saw the dog film again. He came back refreshed. And damp."
+     "reaction": "He saw the dog film again. He came back refreshed. And damp.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🐕",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Cry at your desk",
@@ -6575,7 +10111,14 @@
       "treasury": 5,
       "people": -5
      },
-     "reaction": "He did. The budget's soggy. Some numbers have run."
+     "reaction": "He did. The budget's soggy. Some numbers have run.",
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🐕",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -6592,14 +10135,29 @@
       "business": -10,
       "law": -5
      },
-     "reaction": "Everyone has a dog. Tuesday was cancelled. Nobody knows what day it is."
+     "reaction": "Everyone has a dog. Tuesday was cancelled. Nobody knows what day it is.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "👦",
+       "🐕",
+       "📅"
+      ]
+     }
     },
     "left": {
      "label": "When you're older",
      "effects": {
       "people": -5
      },
-     "reaction": "I'll be nine next month. Then you'll see. THEN YOU'LL ALL SEE."
+     "reaction": "I'll be nine next month. Then you'll see. THEN YOU'LL ALL SEE.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🐕",
+       "📅"
+      ]
+     }
     }
    }
   },
@@ -6615,14 +10173,30 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "Found Steve. Also two hikers and a bus that went missing in 1994. Still running."
+     "reaction": "Found Steve. Also two hikers and a bus that went missing in 1994. Still running.",
+     "clip": {
+      "act": "party",
+      "props": [
+       "🔍",
+       "🌦️",
+       "💘"
+      ]
+     }
     },
     "left": {
      "label": "Steve's fine",
      "effects": {
       "press": -5
      },
-     "reaction": "Steve's been missing three days. His forecasts keep coming. All 'fog'."
+     "reaction": "Steve's been missing three days. His forecasts keep coming. All 'fog'.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🌦️",
+       "💘",
+       "🌫️"
+      ]
+     }
     }
    }
   },
@@ -6638,7 +10212,14 @@
       "press": 10,
       "people": -5
      },
-     "reaction": "Panic. Then barbecues. Then panic about the barbecues."
+     "reaction": "Panic. Then barbecues. Then panic about the barbecues.",
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "☀️",
+       "🌦️"
+      ]
+     }
     },
     "left": {
      "label": "Keep it quiet",
@@ -6646,7 +10227,15 @@
       "law": 5,
       "press": -10
      },
-     "reaction": "It set this morning. Nobody noticed. Everyone was finally asleep."
+     "reaction": "It set this morning. Nobody noticed. Everyone was finally asleep.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "☀️",
+       "🌦️",
+       "😴"
+      ]
+     }
     }
    }
   },
@@ -6662,7 +10251,15 @@
       "people": 5,
       "treasury": -5
      },
-     "reaction": "The ghost said thanks and borrowed another. Due back in 2160."
+     "reaction": "The ghost said thanks and borrowed another. Due back in 2160.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "📚",
+       "👻",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "The fine stands",
@@ -6670,7 +10267,15 @@
       "treasury": 10,
       "press": 5
      },
-     "reaction": "The ghost paid in very old coins. One is haunted. Doug is crying again."
+     "reaction": "The ghost paid in very old coins. One is haunted. Doug is crying again.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "📚",
+       "👻",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -6686,7 +10291,14 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "Nobody can read it. The library is basically a nightclub now."
+     "reaction": "Nobody can read it. The library is basically a nightclub now.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "📚",
+       "🪧"
+      ]
+     }
     },
     "left": {
      "label": "Make it LOUDER",
@@ -6694,7 +10306,15 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "QUIET PLEASE. Everyone left. Linda has never been happier."
+     "reaction": "QUIET PLEASE. Everyone left. Linda has never been happier.",
+     "clip": {
+      "act": "morph",
+      "props": [
+       "📚",
+       "🪧",
+       "📱"
+      ]
+     }
     }
    }
   },
@@ -6710,14 +10330,28 @@
       "treasury": 15,
       "people": -10
      },
-     "reaction": "Everyone's head is cold. He's wearing all 4,000 at once."
+     "reaction": "Everyone's head is cold. He's wearing all 4,000 at once.",
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🎩",
+       "💰"
+      ]
+     }
     },
     "left": {
      "label": "Hats aren't for sale",
      "effects": {
       "people": 5
      },
-     "reaction": "Very well. I'll be back for the scarves."
+     "reaction": "Very well. I'll be back for the scarves.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🎩",
+       "💰"
+      ]
+     }
     }
    }
   },
@@ -6733,7 +10367,15 @@
       "people": 10,
       "treasury": -5
      },
-     "reaction": "'Steve' won. Everyone is called Steve. Stormy Steve is upset."
+     "reaction": "'Steve' won. Everyone is called Steve. Stormy Steve is upset.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🗳️",
+       "🎩",
+       "⛈️"
+      ]
+     }
     },
     "left": {
      "label": "The name stays",
@@ -6741,7 +10383,14 @@
       "people": -5,
       "law": 5
      },
-     "reaction": "The {folk} accept this. Grumpily. Some now call themselves 'the Grumbles'."
+     "reaction": "The {folk} accept this. Grumpily. Some now call themselves 'the Grumbles'.",
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🗳️",
+       "🎩"
+      ]
+     }
     }
    }
   },
@@ -6757,7 +10406,15 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "He's borrowed 40 books. All about honey. Due back in spring."
+     "reaction": "He's borrowed 40 books. All about honey. Due back in spring.",
+     "clip": {
+      "act": "love",
+      "props": [
+       "📚",
+       "🐻",
+       "🎤"
+      ]
+     }
     },
     "left": {
      "label": "Escort him out",
@@ -6765,9 +10422,805 @@
       "law": 10,
       "people": -5
      },
-     "reaction": "He left a one-star review. 'Not enough bears.'"
+     "reaction": "He left a one-star review. 'Not enough bears.'",
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🐻",
+       "🎤",
+       "📚"
+      ]
+     }
     }
    }
+  },
+  {
+   "id": "law1",
+   "who": "desk",
+   "story": "law",
+   "text": "Quiet morning. The law book is open and Randy is holding the big stamp. What becomes law today?",
+   "options": {
+    "right": {
+     "label": "Hats on Tuesdays, mandatory",
+     "effects": {
+      "people": 5,
+      "law": -5,
+      "business": 5
+     },
+     "reaction": "Hat sales tripled. Barb fined a bald man. He was wearing a very small hat.",
+     "set": [
+      "law:hats"
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🎩"
+      ]
+     }
+    },
+    "left": {
+     "label": "No walking backwards",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "Bev has been arrested. She says she was 'reversing'.",
+     "set": [
+      "law:backwards"
+     ],
+     "clip": {
+      "act": "chase",
+      "props": [
+       "👵",
+       "👮"
+      ]
+     }
+    },
+    "up": {
+     "label": "Free bread on Fridays",
+     "effects": {
+      "people": 10,
+      "treasury": -10
+     },
+     "reaction": "Gerald has renamed every day 'Friday'. Legally, it's holding up.",
+     "set": [
+      "law:bread"
+     ],
+     "clip": {
+      "act": "rain",
+      "props": [
+       "🍞",
+       "🦢"
+      ]
+     }
+    }
+   },
+   "day": 1,
+   "slot": 5
+  },
+  {
+   "id": "law2",
+   "who": "desk",
+   "story": "law",
+   "text": "Randy has found the 'Taxes' page. He's very excited. Pick one before he does.",
+   "options": {
+    "right": {
+     "label": "Tax tall people",
+     "effects": {
+      "treasury": 10,
+      "people": -5
+     },
+     "reaction": "Everyone's slouching. Chad walks on his knees now. Revenue is strong.",
+     "set": [
+      "law:tall"
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "📏",
+       "🧍"
+      ]
+     }
+    },
+    "left": {
+     "label": "Tax pigeons",
+     "effects": {
+      "treasury": 5,
+      "press": 5
+     },
+     "reaction": "The pigeons paid in full. In crumbs. Doug is counting crumbs.",
+     "set": [
+      "law:pigeons"
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🐦",
+       "🍞"
+      ]
+     }
+    },
+    "up": {
+     "label": "Tax Chad, specifically",
+     "effects": {
+      "treasury": 15,
+      "business": -15
+     },
+     "reaction": "'The Chad Tax.' He's moved one foot outside town. Just the one foot.",
+     "set": [
+      "law:chadtax"
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🤑"
+      ]
+     }
+    },
+    "down": {
+     "label": "No new taxes",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Randy's crushed. He'd made a little hat for the tax collector.",
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🦝",
+       "🎩"
+      ]
+     }
+    }
+   },
+   "day": 1,
+   "slot": 18
+  },
+  {
+   "id": "law3",
+   "who": "desk",
+   "story": "law",
+   "text": "You've got ten minutes and a pen. Declare a town holiday.",
+   "options": {
+    "right": {
+     "label": "National Nap Day",
+     "effects": {
+      "people": 10,
+      "business": -10
+     },
+     "reaction": "The whole town slept. Crime slept too. Barb slept through that.",
+     "set": [
+      "law:nap"
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "😴",
+       "💤"
+      ]
+     }
+    },
+    "left": {
+     "label": "Take Your Goose To Work Day",
+     "effects": {
+      "people": 5,
+      "business": -5,
+      "press": 5
+     },
+     "reaction": "Productivity honked. Gerald got promoted at three companies.",
+     "set": [
+      "law:gooseday"
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🦢",
+       "💼"
+      ]
+     }
+    },
+    "up": {
+     "label": "Chad Appreciation Day",
+     "effects": {
+      "business": 10,
+      "people": -10
+     },
+     "reaction": "Attendance: Chad. He gave himself a speech. He cried.",
+     "set": [
+      "law:chadday"
+     ],
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🤑",
+       "🎈"
+      ]
+     }
+    }
+   },
+   "day": 2,
+   "slot": 5
+  },
+  {
+   "id": "law4",
+   "who": "desk",
+   "story": "law",
+   "text": "The 'Banned Things' list has room for one more. What's out?",
+   "options": {
+    "right": {
+     "label": "Ban Mondays",
+     "effects": {
+      "people": 10,
+      "business": -10
+     },
+     "reaction": "The week starts on Tuesday now. Tuesday is furious.",
+     "set": [
+      "law:monday"
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📅"
+      ]
+     }
+    },
+    "left": {
+     "label": "Ban whistling",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Coach Dunk has been silenced. He communicates in angry clapping.",
+     "set": [
+      "law:whistle"
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "📣"
+      ]
+     }
+    },
+    "up": {
+     "label": "Ban the word 'moist'",
+     "effects": {
+      "press": 10,
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The forecast now says 'unpleasantly damp'. Steve is struggling.",
+     "set": [
+      "law:moist"
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "💦"
+      ]
+     }
+    }
+   },
+   "day": 2,
+   "slot": 18
+  },
+  {
+   "id": "law5",
+   "who": "desk",
+   "story": "law",
+   "text": "A new road sign needs approving. You may only pick one.",
+   "options": {
+    "right": {
+     "label": "'SLOW: GEESE THINKING'",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "Traffic stops while they think. They think a lot. About bread.",
+     "set": [
+      "law:sign"
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🪧",
+       "🦢"
+      ]
+     }
+    },
+    "left": {
+     "label": "'NO SIGNS BEYOND THIS SIGN'",
+     "effects": {
+      "law": 10,
+      "press": -5
+     },
+     "reaction": "There's a sign after it. Barb has arrested the second sign.",
+     "set": [
+      "law:sign"
+     ],
+     "clip": {
+      "act": "chase",
+      "props": [
+       "🪧",
+       "👮"
+      ]
+     }
+    },
+    "up": {
+     "label": "'YOU ARE HERE (SORRY)'",
+     "effects": {
+      "press": 10,
+      "business": -5
+     },
+     "reaction": "Tourists take a photo with it. Then leave.",
+     "set": [
+      "law:sign"
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🪧",
+       "📸"
+      ]
+     }
+    }
+   },
+   "day": 3,
+   "slot": 5
+  },
+  {
+   "id": "law6",
+   "who": "desk",
+   "story": "law",
+   "text": "The council wants an official town animal. They've left the form on your desk. And a goose. Staring.",
+   "options": {
+    "right": {
+     "label": "The goose, obviously",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "HONK. (Gerald has been insufferable since. More insufferable.)",
+     "set": [
+      "law:animal"
+     ],
+     "clip": {
+      "act": "cheer",
+      "props": [
+       "🦢"
+      ]
+     }
+    },
+    "left": {
+     "label": "The raccoon",
+     "effects": {
+      "law": -5,
+      "press": 10,
+      "people": 5
+     },
+     "reaction": "Randy wept. Then he ate the certificate.",
+     "set": [
+      "law:animal"
+     ],
+     "clip": {
+      "act": "eat",
+      "props": [
+       "📜",
+       "🦝"
+      ]
+     }
+    },
+    "up": {
+     "label": "The pothole",
+     "effects": {
+      "press": 5,
+      "business": -5,
+      "people": 5
+     },
+     "reaction": "Kevin is the official town animal. Kevin is a hole. Nobody objected.",
+     "set": [
+      "law:animal"
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🕳️",
+       "👑"
+      ]
+     }
+    }
+   },
+   "day": 3,
+   "slot": 18
+  },
+  {
+   "id": "law7",
+   "who": "desk",
+   "story": "law",
+   "text": "Pick a new town motto. The old one, 'Well, We Tried', has been stolen. It's in Randy's coat.",
+   "options": {
+    "right": {
+     "label": "'Bad Town: It's Fine'",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "It's on the sign. Underneath, someone has added 'ish'.",
+     "set": [
+      "law:motto"
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🪧",
+       "🙂"
+      ]
+     }
+    },
+    "left": {
+     "label": "'Home of Kevin'",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "Kevin has never been prouder. He's got deeper.",
+     "set": [
+      "law:motto"
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🕳️",
+       "🏠"
+      ]
+     }
+    },
+    "up": {
+     "label": "'Chad Presents: Bad Town'",
+     "effects": {
+      "treasury": 15,
+      "business": 10,
+      "people": -15
+     },
+     "reaction": "Sponsored. The 'Bad' is in very small letters now.",
+     "set": [
+      "law:motto"
+     ],
+     "clip": {
+      "act": "cashin",
+      "props": [
+       "🪧",
+       "🤑"
+      ]
+     }
+    }
+   },
+   "day": 4,
+   "slot": 5
+  },
+  {
+   "id": "law8",
+   "who": "desk",
+   "story": "law",
+   "text": "Speed limits. You can set one today. Where?",
+   "options": {
+    "right": {
+     "label": "5 mph outside the bakery",
+     "effects": {
+      "people": 5,
+      "business": 5,
+      "law": 5
+     },
+     "reaction": "Cars crawl past. Everyone buys a bun. Gerald directs traffic.",
+     "set": [
+      "law:speed"
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🚗",
+       "🍞"
+      ]
+     }
+    },
+    "left": {
+     "label": "90 mph on Bev's street",
+     "effects": {
+      "people": 10,
+      "law": -10
+     },
+     "reaction": "Bev did 91. She's proud of the ticket. It's framed.",
+     "set": [
+      "law:speed"
+     ],
+     "clip": {
+      "act": "race",
+      "props": [
+       "🛵",
+       "🚓"
+      ]
+     }
+    },
+    "up": {
+     "label": "No limit for geese",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The geese were already ignoring it. Now it's official.",
+     "set": [
+      "law:speed"
+     ],
+     "clip": {
+      "act": "race",
+      "props": [
+       "🦢",
+       "🚗"
+      ]
+     }
+    }
+   },
+   "day": 4,
+   "slot": 18
+  },
+  {
+   "id": "law9",
+   "who": "desk",
+   "story": "law",
+   "text": "The election's close. Time for a crowd-pleaser. What do you sign?",
+   "options": {
+    "right": {
+     "label": "Free ice cream for voters",
+     "effects": {
+      "treasury": -10,
+      "people": 10
+     },
+     "reaction": "Turnout is up 400%. So are dental appointments.",
+     "set": [
+      "law:icecream"
+     ],
+     "clip": {
+      "act": "rain",
+      "props": [
+       "🍦",
+       "🗳️"
+      ]
+     }
+    },
+    "left": {
+     "label": "Double bin day",
+     "effects": {
+      "law": 5,
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Randy fainted with joy. All of him.",
+     "set": [
+      "law:bins"
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🗑️",
+       "🦝"
+      ]
+     }
+    },
+    "up": {
+     "label": "A statue of the voters",
+     "effects": {
+      "treasury": -10,
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "It's a statue of 4,000 people. It's enormous. It blocks the sun.",
+     "set": [
+      "law:statue"
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🗿",
+       "👥"
+      ]
+     }
+    }
+   },
+   "day": 5,
+   "slot": 5
+  },
+  {
+   "id": "law10",
+   "who": "desk",
+   "story": "law",
+   "text": "You may rename one thing in town. Anything. Go.",
+   "options": {
+    "right": {
+     "label": "Main Street: 'Kevin Avenue'",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "Kevin has an address now. He's getting post. Mostly from fans.",
+     "set": [
+      "law:rename"
+     ],
+     "clip": {
+      "act": "build",
+      "props": [
+       "🏷️",
+       "🕳️"
+      ]
+     }
+    },
+    "left": {
+     "label": "The library: 'Shh'",
+     "effects": {
+      "press": 5,
+      "people": 5
+     },
+     "reaction": "Linda's delighted. The sign is very small. You have to lean in.",
+     "set": [
+      "law:rename"
+     ],
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🤫",
+       "📚"
+      ]
+     }
+    },
+    "up": {
+     "label": "Tuesday: 'Second Monday'",
+     "effects": {
+      "business": 5,
+      "people": -10
+     },
+     "reaction": "Nobody's happy. 'That was the point,' says Chad. It was his idea.",
+     "set": [
+      "law:rename"
+     ],
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "📅",
+       "😩"
+      ]
+     }
+    }
+   },
+   "day": 5,
+   "slot": 18
+  },
+  {
+   "id": "law11",
+   "who": "desk",
+   "story": "law",
+   "text": "Last full day. One emergency power left. Use it on something.",
+   "options": {
+    "right": {
+     "label": "Compulsory compliments",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "'Nice hat.' 'Nice face.' Barb is arresting people for sarcasm.",
+     "set": [
+      "law:nice"
+     ],
+     "clip": {
+      "act": "love",
+      "props": [
+       "💐",
+       "🙂"
+      ]
+     }
+    },
+    "left": {
+     "label": "Curfew for geese",
+     "effects": {
+      "law": 10,
+      "people": -10
+     },
+     "reaction": "9 pm sharp. The geese held a candlelight honk. At 9:01.",
+     "set": [
+      "law:goosecurfew"
+     ],
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🦢",
+       "🕯️"
+      ]
+     }
+    },
+    "up": {
+     "label": "Everyone gets Friday off",
+     "effects": {
+      "people": 10,
+      "business": -10,
+      "treasury": -5
+     },
+     "reaction": "It's Saturday. They took it anyway. Retroactively.",
+     "set": [
+      "law:friday"
+     ],
+     "clip": {
+      "act": "party",
+      "props": [
+       "📅",
+       "🏖️"
+      ]
+     }
+    }
+   },
+   "day": 6,
+   "slot": 5
+  },
+  {
+   "id": "law12",
+   "who": "desk",
+   "story": "law",
+   "text": "The night before the vote. Sign one last law to be remembered by.",
+   "options": {
+    "right": {
+     "label": "The 'Be Nice To Me' Act",
+     "effects": {
+      "law": 5,
+      "press": -10,
+      "people": -5
+     },
+     "reaction": "The Whistle's headline: 'MAYOR BEGS'. Eleven pages.",
+     "set": [
+      "law:benice"
+     ],
+     "clip": {
+      "act": "news",
+      "props": [
+       "🙏",
+       "📜"
+      ]
+     }
+    },
+    "left": {
+     "label": "Abolish the traffic cone",
+     "effects": {
+      "law": 5,
+      "press": 10,
+      "business": -5
+     },
+     "reaction": "Your opponent is now illegal. It's still standing there. Defiant. Orange.",
+     "set": [
+      "law:cone"
+     ],
+     "clip": {
+      "act": "deny",
+      "props": [
+       "🚧"
+      ]
+     }
+    },
+    "up": {
+     "label": "Free bread for all",
+     "effects": {
+      "treasury": -10,
+      "people": 10
+     },
+     "reaction": "Gerald has endorsed you. In writing. The writing is a honk.",
+     "set": [
+      "law:bread2"
+     ],
+     "clip": {
+      "act": "rain",
+      "props": [
+       "🍞",
+       "🦢"
+      ]
+     }
+    }
+   },
+   "day": 6,
+   "slot": 18
   }
  ],
  "campaign": [
@@ -6780,13 +11233,27 @@
      "label": "'At least I'm not a goose'",
      "effects": {},
      "reaction": "Gerald heard. Gerald is at the window.",
-     "vote": 4
+     "vote": 4,
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "🦢",
+       "🗳️"
+      ]
+     }
     },
     "left": {
      "label": "Promise a recount",
      "effects": {},
      "reaction": "Brave. If Gerald wins again we're moving.",
-     "vote": 6
+     "vote": 6,
+     "clip": {
+      "act": "show",
+      "props": [
+       "🗳️",
+       "🦢"
+      ]
+     }
     },
     "up": {
      "label": "Big rally",
@@ -6794,7 +11261,15 @@
       "treasury": -15
      },
      "reaction": "We ordered balloons. So many balloons.",
-     "vote": 5
+     "vote": 5,
+     "clip": {
+      "act": "boo",
+      "props": [
+       "📣",
+       "🗳️",
+       "🦢"
+      ]
+     }
     }
    },
    "requires": {
@@ -6814,25 +11289,56 @@
       "treasury": -15
      },
      "reaction": "We ordered balloons. So many balloons.",
-     "vote": 5
+     "vote": 5,
+     "clip": {
+      "act": "boo",
+      "props": [
+       "📣",
+       "🗳️",
+       "🎩"
+      ]
+     }
     },
     "left": {
      "label": "Attack ad about the cone",
      "effects": {},
      "reaction": "The cone did not respond. Classic cone.",
-     "vote": 2
+     "vote": 2,
+     "clip": {
+      "act": "swarm",
+      "props": [
+       "🚧",
+       "🗳️",
+       "🎩"
+      ]
+     }
     },
     "up": {
      "label": "Kiss every baby in town",
      "effects": {},
      "reaction": "Forty babies. One goose. It's fine.",
-     "vote": 4
+     "vote": 4,
+     "clip": {
+      "act": "zoom",
+      "props": [
+       "👶",
+       "🗳️",
+       "🎩"
+      ]
+     }
     },
     "down": {
      "label": "Just be yourself",
      "effects": {},
      "reaction": "Risky. We love it.",
-     "vote": 0
+     "vote": 0,
+     "clip": {
+      "act": "sulk",
+      "props": [
+       "🗳️",
+       "🎩"
+      ]
+     }
     }
    }
   }
@@ -6954,7 +11460,8 @@
   "moon": "WHO OWNS THE MOON",
   "scarecrow": "CHAIRMAN SCARECROW",
   "squirrels": "THE SQUIRREL BANK",
-  "glitter": "THE GLITTER INCIDENT"
+  "glitter": "THE GLITTER INCIDENT",
+  "law": "YOUR LAWS"
  },
  "cliffhangers": [
   "Tomorrow: a pothole with a name.",

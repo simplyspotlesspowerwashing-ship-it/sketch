@@ -1,0 +1,185 @@
+# Hand-directed clips: cardId.DIR act prop prop prop
+g1.R zoom 🌊 🦢 🪑        # the pond, in your office
+g1.L deny 🌊 🦢
+g1.U build 🌳 🌊 🦢
+g2.R eat 🍞 🦢
+g2.L chase 👷 🦢
+g3.R party 🌊 🦢 🎀
+g3.L sulk 🦢 🌊
+g4.R fix 🌊 📁
+g4.L flood 🛶 📁
+g5.R fix 💩 🧹
+g5.L rain 💩 🍀 🦢
+g5r.R build 🌉 🦝
+g5r.L flood 🛶 📚
+g6.R swarm 🐣 🌊
+g6.L sulk 🐣
+g2x.R build 🌊 🦢
+g2x.L chase 🦢 👮
+gw2.R love 🦢 🍞
+gw2.L swarm 🍞 🦢
+gw3.R boo 🦢
+gw3.L love 🦢 🎩
+g2p.R build 🏠 🌊
+g2p.L news 🦢 ✍️
+bv1.R race 🛵 🚓
+bv1.L deny 🛵 👵
+bv2.R race 🛵 🚓
+bv2.L steal 🛵 👮
+bv2b.R swarm 📝 👵
+bv2b.L deny 📝
+bv3.R race 🛵 🛵
+bv3.L deny 🏁 🥬
+bevtattoo.R ink 💀 💀 🧁   # skull holding a smaller skull holding a scone
+bevtattoo.L deny 💀 👵
+bevdate.R love 👵 🦝
+bevdate.L sulk 🗑️ 💘
+rn1.R eat 🔑 🦝
+rn1.L fix 🔒 🔑
+rn1.U morph 🦝 👑
+rn2.R cheer 🦝
+rn2.L swarm 🦝 ♻️
+rn2b.R steal 🏛️ 🦝
+rn2b.L zoom 🧥 🦝 🏛️
+rn3.R news 🦝 🗳️
+rn3.L deny 📜 🦝
+rn4.R cheer 🦝
+rn4.L eat 🎤 🦝
+randyfridge.R court 🦝 🥪
+randyfridge.L eat 🥪 🦝
+randycoat.R swarm 🦝 🍞
+randycoat.L zoom 🧥 🤧
+randyspeech.R cheer 🦝
+randyspeech.L zoom 🗑️ 🦝
+randyballots.R deny 🗳️ 🦝
+randyballots.L eat 🗳️ 🦢
+randystatue.R eat 🗿 🦝
+randystatue.L sulk 🦝 🗑️
+wh1.R cashout 🐟 🐈
+wh1.L court 🐈 📦
+wh2c.R court 🐈 😰
+wh2c.L boom 🔨 🐈
+wh2.R morph 🐈 ⚖️
+wh2.L court 🐈
+wh3.R court 🐈 📄
+wh3.L swarm 📦 🐈
+whiskersnap.R zoom 🪑 🐈 ☀️
+whiskersnap.L zoom ⌨️ 🐈
+whiskersbox.R zoom 📦 🐈 👑
+whiskersbox.L boom 🐈 🧶
+br1.R launch 📱 🤳
+br1.L deny 📱
+br1.U show 🎙️ 😴
+br2.R cashin ⛲ 📢
+br2.L deny 📢 ⛲
+br2p.R fix 🔊 🕰️
+br2p.L show 🎙️ 🕛
+br3.R deny 🤖 📱
+br3.L morph 😰 🤖
+nr1.R rain 🍲 🥣 🥄
+nr1.L sulk 🌧️ 🍲
+nr1.U rain 🍲 🥖 🥣
+nr2.R cashin 🥧 🥣
+nr2.L swarm 🥣 🍞
+nr3.R love 🕰️ 🌧️
+nr3.L rain 💧 🍟 🕰️
+sl1.R eat 🛞 🕵️
+sl1.L deny 🛞 🍲
+sl2.R party 🍝 🛞
+sl2.L sulk ⭐ 🥾
+co1.R party 🏅 🔥
+co1.L swarm 🧍 ❓
+co2.R cheer 🦝
+co2.L court 🐈 🦝
+sh1.R morph 🌑 🦝
+sh1.L sulk 🔮
+sh2.R show 🔮 🟣
+sh2.L boom 🔮 💢
+mc1.R zoom 🚪 🤡 🫥
+mc1.L chase 🤡 👮
+mc2.R show 🔑 🤡 😢
+mc2.L boom 🧱 🤡
+cheese.R cashin 🧀
+cheese.L party 🧀 🎈
+cheese.U zoom 🏦 🧀 🚪
+cheese2.R eat 📚 🧀
+cheese2.L zoom 🧀 📖
+cheese2s.R zoom 🏦 🧀
+cheese2s.L cashin 🧀 🏚️
+cheese3.R cheer 🧀
+cheese3.L morph 😰 🧀
+bus.R fix 🚌 🚏
+bus.L morph 🚌 🏛️
+bus2.R show 🛂 🥔
+bus2.L boo 🚌
+bus3.R love 🚌 🚌
+bus3.L sulk 🚌 🙈
+robot.R build 🌉 🏰 🤖
+robot.L sulk 🤖 🚪
+robot2.R love 🤖 😰
+robot2.L deny 🤖 🤑
+robot3.R love 🤖 🦢
+robot3.L sulk 🤖 🤑
+wizard.R morph 🧙 💨
+wizard.L morph 🗑️ 🕊️
+wizard2.R morph 🐸 🚓
+wizard2.L zoom 🐸 👮
+moon.R launch 🚩 🌙
+moon.L cashin 🌙 🤑
+moon2.R love 🌙 ✉️
+moon2.L deny 🌙 📄
+moon2c.R cashout 🌙 💡
+moon2c.L morph 🌙 🌑
+noraclone.R morph 😰 👥
+noraclone.L morph 👥 😰
+noramoon.R morph 🌙 🌕
+noravolcano.R chase 🏃 🌋
+noravolcano.L party 🌋 🥇
+noradog.R show 🐕 💬 📮
+k1.R fix 🕳️ 🚧
+k1.L zoom 🕳️ 👀
+k1.U cashin 🎟️ 🕳️
+law1.R swarm 🎩
+law1.L chase 👵 👮
+law1.U rain 🍞 🦢
+law2.R cashin 📏 🧍
+law2.L cashin 🐦 🍞
+law2.U cashin 🤑
+law2.D sulk 🦝 🎩
+law3.R swarm 😴 💤
+law3.L swarm 🦢 💼
+law3.U sulk 🤑 🎈
+law4.R deny 📅
+law4.L deny 📣
+law4.U deny 💦
+law5.R build 🪧 🦢
+law5.L chase 🪧 👮
+law5.U build 🪧 📸
+law6.R cheer 🦢
+law6.L eat 📜 🦝
+law6.U zoom 🕳️ 👑
+law7.R build 🪧 🙂
+law7.L zoom 🕳️ 🏠
+law7.U cashin 🪧 🤑
+law8.R swarm 🚗 🍞
+law8.L race 🛵 🚓
+law8.U race 🦢 🚗
+law9.R rain 🍦 🗳️
+law9.L swarm 🗑️ 🦝
+law9.U build 🗿 👥
+law10.R build 🏷️ 🕳️
+law10.L zoom 🤫 📚
+law10.U sulk 📅 😩
+law11.R love 💐 🙂
+law11.L swarm 🦢 🕯️
+law11.U party 📅 🏖️
+law12.R news 🙏 📜
+law12.L deny 🚧
+law12.U rain 🍞 🦢
+sk1.R steal 🫙 🤑
+sk2.R steal 🍞 🦢
+sk3.R steal 📁 🦝
+sk4.R news 🛒 🧀
+sk5.R race 🚗 👮
+sk6.R fix 🖼️ 🥸
+k3.L steal 🚗 🕳️

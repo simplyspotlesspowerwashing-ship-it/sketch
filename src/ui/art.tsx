@@ -6,12 +6,13 @@ import type { Effects, GroupId } from '../engine/types.ts';
 /** What the town map needs to draw itself. Projects and laws are flags: `built:<id>`, `law:<id>`. */
 export interface TownView { day: number; approval: Record<GroupId, number>; flags: Record<string, true>; fresh?: string | null }
 
-export const INK = '#232A44';
-export const GROUP_COLOR: Record<GroupId, string> = { people: '#FF7A45', business: '#19B36B', law: '#3D7BFF', press: '#A55EEA' };
+export const INK = '#29231F';
+export const GROUP_COLOR: Record<GroupId, string> = { people: '#D9653B', business: '#3F8F5A', law: '#3B6FB6', press: '#B0892A' };
 export const GROUP_NAME: Record<GroupId, string> = { people: 'People', business: 'Business', law: 'Law', press: 'Press' };
 export const LEADER: Record<GroupId, string> = { people: 'pam', business: 'chad', law: 'barb', press: 'marge' };
 export const NAMES: Record<string, string> = {
   pam: 'Pam, PTA President', chad: 'Chad, Billionaire', barb: 'Chief Barb', marge: 'Marge, The Bugle', gerald: 'Gerald, Goose Union',
+  desk: 'Your desk · your move',
   randy: 'Deputy Randy (a raccoon)', bev: 'Bev, 97, oldest resident', brayden: 'Brayden, Head of Innovation', nora: 'Dr Nora, Town Scientist',
   whiskers: 'Mr Whiskers, Esq. (a cat)', marcel: 'Marcel, Town Mime', sal: "Sal, Sal's Fine Dining & Tyres", coach: 'Coach Dunk', sheila: 'Psychic Sheila', linda: 'Linda, Librarian', doug: 'Doug, Treasurer', steve: 'Stormy Steve', timmy: 'Timmy, age 8', stranger: 'The Stranger',
 };
@@ -193,6 +194,15 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
       over={<><path d="M40 12 l2 5 l5 0 l-4 3 l2 5 l-5 -3 l-5 3 l2 -5 l-4 -3 l5 0z" fill="#F7D774" {...S} stroke-width="1.2" /><circle cx="26" cy="62" r="7" fill="none" stroke="#E8C55A" stroke-width="2.5" /><circle cx="74" cy="62" r="7" fill="none" stroke="#E8C55A" stroke-width="2.5" /></>}
       collar={<><circle cx="50" cy="94" r="9" fill="#BFE0F0" {...S} /><path d="M45 90 q3 -3 6 -1" stroke="#fff" stroke-width="2" fill="none" /></>} />
   ),
+  desk: () => (
+    <>
+      <rect x="0" y="62" width="100" height="42" fill="#8A5A3C" {...S} />
+      <path d="M22 26 h44 q8 0 8 8 v34 h-44 q-8 0 -8 -8z" fill="#FBF7EE" {...S} />
+      <path d="M30 40 h30 M30 48 h30 M30 56 h18" stroke={INK} stroke-width="2.5" stroke-linecap="round" />
+      <g transform="rotate(-18 70 60)"><rect x="62" y="34" width="16" height="22" rx="4" fill="#C23B3B" {...S} /><rect x="56" y="56" width="28" height="9" rx="2" fill="#6B4B32" {...S} /></g>
+      <circle cx="42" cy="64" r="7" fill="none" stroke="#C23B3B" stroke-width="3" />
+    </>
+  ),
   randy: (m) => {
     const raccoon = (x: number, y: number, s: number, mood: Mood) => (
       <g transform={`translate(${x} ${y}) scale(${s})`}>
@@ -228,7 +238,7 @@ export function Portrait({ who, mood = 'neutral', size = 64, ring }: { who: stri
   return (
     <svg class="portrait" width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={`${NAMES[who] ?? who}, ${mood}`}>
       <defs><clipPath id={id}><circle cx="50" cy="50" r="47" /></clipPath></defs>
-      <circle cx="50" cy="50" r="47" fill={ring ?? '#E9EEF8'} />
+      <circle cx="50" cy="50" r="47" fill={ring ?? '#E6DBC6'} />
       <g clip-path={`url(#${id})`}>{draw(mood)}</g>
       <circle cx="50" cy="50" r="47" fill="none" stroke={INK} stroke-width="3" />
     </svg>

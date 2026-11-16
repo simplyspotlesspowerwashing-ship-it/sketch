@@ -33,7 +33,7 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **Stories build.** A choice can schedule follow-up cards a few cards later (`then: [[cardId, cardsFromNow]]`) and set flags that later cards require. The goose pond goes: demand → the contractor is a goose → grand opening → it leaks into the records room → goose poop on every floor → forty goslings want a second pond. Refuse the pond and you get the car park occupation and the goose war instead.
 - Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. Each cause has its own named ending.
 - A recall ends that day's run. You come back the next day as Acting Mayor with every meter at 40, and Sunday's vote takes 8 points. A third recall ends the term.
-- Cards show no effects. Dragging shows which meters will move (a dot, bigger for a big change), not which way. After each swipe a full-screen reveal shows each meter that moved (▲/▼ and the amount), the character's reaction and how many mayors chose the same. Tap to skip. The day ends on a short panel: score, share grid, where the vote stands and a line about tomorrow.
+- Cards show no effects. Dragging shows which meters will move (a dot, bigger for a big change), not which way. After each swipe a full-screen reveal shows each meter that moved (▲/▼ and the amount), the character's reaction and how many mayors chose the same. Tap to skip. At the end of the day the Bugle shows the poll, your score, the share grid and a line about tomorrow.
 - **Daily score** (`src/engine/score.ts`): 10 per card, plus a rarity bonus for choices few mayors made (under 5% +50, under 15% +30, under 35% +15, under 65% +5), minus 100 for a recall. Tiers run from Rubber Stamp to One in a Million Mayor. The day review gives a spoiler-free share grid with one square per card.
 - **Crowd numbers are simulated** (`node sim/crowd.ts` -> `week1.crowd.json`, labelled "preview data" in the game) until a stats backend is approved.
 - **Sneak moment**: one card a day (slot 13) is a hold-and-release: wind up, let go while the character isn't looking. Getting away with it is the `right` option, getting caught the `left` one.
@@ -44,14 +44,10 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **After every card** the town scene plays: the camera moves to the building of the group most affected, the camera visits each group that moved, in turn, and that group acts it out (src/ui/acts.tsx): People crowd the school cheering or protesting under a storm; Business lights up with money bags and a limo, or goes dark with a CLOSED sign and a tumbleweed; Law gets a police car arriving and a burglar led away, or raccoons escaping with swag; the Bugle throws out HOORAY or SCANDAL papers; coins rain into a pile or fly off on wings. The story's creatures parade past. Then each meter change counts up, and the crowd share is shown.
 - The scrapbook keeps unlocked endings, a career record and deeds across weeks.
 
-## Design system
+## Clips: the animation after each choice
 
-`src/ui/styles.css` starts with one token set and everything else uses it:
+Dragging a card stamps it DONE; then that choice's own clip plays, with the character's reaction as a caption, the meters that moved and the crowd share, all on one screen.
 
-- **Colour:** sky gradient background, white surfaces, navy ink; green for go, gold for score, coral for danger; one colour per group (People orange, Business green, Law blue, Press purple, Treasury gold).
-- **Shape:** three radii (12, 20, pill; 28 for the big cards), no borders on UI chrome, two shadows (a 4px "lip" under anything pressable, a soft float under cards).
-- **Type:** one rounded system font stack (no web font is downloaded), six sizes (12 / 14 / 16 / 20 / 28 / 44).
-- **Space:** 4 / 8 / 12 / 16 / 24.
-- **Outlines belong to the art** (portraits, the town); the UI stays flat so the characters stand out.
-
-Screens: a three-item top bar (menu, day progress, score), the five meters, then one thing at a time: a card, the after-card scene, or the end-of-day panel. The week, goals, scrapbook, rename and sound live in the menu.
+- A clip is an **act** (the choreography, `src/ui/clips.tsx`) plus up to three **props** (emoji): `zoom 🌊 🦢 🪑` is the pond in your office; `ink 💀 💀 🧁` is Bev's tattoo. There are 25 acts: build, zoom, party, deny, sulk, cashin, cashout, chase, race, rain, swarm, launch, news, morph, steal, cheer, boo, ink, eat, court, love, fix, flood, boom, show.
+- Hand-directed clips live in `src/content/packs/week1.clips.txt` (`cardId.DIR act prop prop prop`). `python3 sim/clips.py src/content/packs/week1.json` writes them into the pack and works out a clip for every other choice from the words on the card. Refusals get `deny` or `sulk`: the thing withers under a NO stamp and the character is annoyed.
+- **Laws:** two cards a day (`who: desk`, slots 6 and 19) are yours to start: pick a law, a tax, a holiday, a motto.
