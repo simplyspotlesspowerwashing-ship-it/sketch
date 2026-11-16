@@ -4,17 +4,18 @@
 
 | Policy | Win rate | Vote p10 / p50 / p90 | Recalled at least once | Term ended early | Cards played | Recall causes |
 |---|---|---|---|---|---|---|
-| random | 0.0% | 5 / 10 / 27 | 100.0% | 80.9% | 93 | low:treasury 4378, high:press 1095, high:people 990, low:people 780, low:business 512, high:law 411, low:law 111, low:press 89, high:business 21 |
-| dave-only | 6.3% | 29 / 40 / 48 | 22.8% | 0.0% | 147 | low:treasury 441, high:press 228, high:law 38, high:people 18, low:people 3, low:business 1 |
-| sensible | 23.7% | 40 / 46 / 52 | 0.0% | 0.0% | 151 |  |
+| random | 0.0% | 5 / 16 / 32 | 100.0% | 83.6% | 91 | low:treasury 4455, high:press 1038, high:people 1011, low:people 732, high:law 504, low:business 460, low:law 186, low:press 83, high:business 12 |
+| dave-only | 5.5% | 30 / 41 / 48 | 20.8% | 0.1% | 148 | high:press 323, low:treasury 259, high:law 58, high:people 16, low:people 4, high:business 2 |
+| sensible | 26.1% | 40 / 47 / 52 | 0.1% | 0.0% | 151 | high:press 2, high:people 1 |
 
 ## Cards never seen by any bot
 
+- `d1`
+- `d2`
 - `textbook`
 - `birthday`
 - `choir`
 - `bench`
-- `confetti`
 - `robot`
 - `robot2`
 - `robot3`
@@ -22,7 +23,6 @@
 - `mime2`
 - `raccoonpr`
 - `chess`
-- `glitter2`
 - `cake`
 - `beard`
 - `runaway`
@@ -33,11 +33,13 @@
 - `nr1`
 - `nr2`
 - `nr3`
+- `sl1`
+- `sl2`
+- `mc1`
+- `mc2`
 - `randycoat`
 - `randystatue`
 - `noravolcano`
 - `coachgeese`
 - `geraldtv`
 - `timmymayor`
-- `quietsign`
-- `folkname`

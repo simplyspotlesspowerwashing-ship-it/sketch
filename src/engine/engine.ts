@@ -66,6 +66,14 @@ export function dayDeck(pack: Pack, weekId: string, day: number, rng: Rng = seed
   const spares = 8;
   const free = deck.filter((x) => !x).length + spares;
   const deal = Array.from({ length: free }, (_, k) => order[(used + k) % order.length]!);
+  // everyone should meet a storyline early: bring up to four story starters to the front of today's deal
+  const today = free - spares;
+  const starts = (id: string) => Object.values(findCard(pack, id).options).some((o) => o!.then?.length || o!.next?.length);
+  const front = deal.slice(0, today).filter(starts).slice(0, 4);
+  const rest = deal.slice(0, today).filter((id) => !front.includes(id));
+  // spread them out: one first, then every other card
+  const mixed: string[] = []; while (front.length || rest.length) { if (front.length && mixed.length % 2 === 0) mixed.push(front.shift()!); else if (rest.length) mixed.push(rest.shift()!); else mixed.push(front.shift()!); }
+  deal.splice(0, today, ...mixed);
   let k = 0;
   return [...deck.map((x) => x ?? deal[k++]!), ...deal.slice(k)];
 }
@@ -119,7 +127,7 @@ function finish(s: State, endedEarly: boolean) {
 export function newTerm(weekId: string, playerSeed: string, pack: Pack, rng: Rng = seededRng): State {
   const m = Object.fromEntries(METERS.map((k) => [k, TUNING.start])) as Record<MeterId, number>;
   const s: State = {
-    v: 9, weekId, playerSeed, day: 1, cardInDay: 0, count: 0, meters: m, flags: {}, queue: [], seen: [], current: null,
+    v: 10, weekId, playerSeed, day: 1, cardInDay: 0, count: 0, meters: m, flags: {}, queue: [], tomorrow: [], seen: [], current: null,
     phase: 'card', dayStart: { ...m }, swipes: [], recalls: 0, recallCauses: [], recalledDays: [], objectivesDone: [], campaignVote: 0,
     profile: null, daveDays: [], polls: [], result: null,
   };
@@ -156,6 +164,9 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       s.cardInDay = 0;
       if (s.flags.__reset) { for (const k of METERS) s.meters[k] = TUNING.recall.reset; delete s.flags.__reset; }
       s.dayStart = { ...s.meters };
+      // yesterday's unfinished business opens the day, one card after another
+      s.tomorrow.forEach((id, i) => s.queue.push({ cardId: id, at: s.count + i }));
+      s.tomorrow = [];
       if (s.day >= 7) {
         const camp = pack.campaign.find((c) => holds(s, c.requires)) ?? pack.campaign[pack.campaign.length - 1]!;
         s.current = camp.id; s.phase = 'card';
@@ -173,6 +184,8 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       for (const f of ch.clear ?? []) delete s.flags[f];
       s.count += 1;
       for (const [id, n] of ch.then ?? []) s.queue.push({ cardId: id, at: s.count + Math.max(0, n - 1) });
+      // tomorrow's consequences; on the last day there is no tomorrow, so they arrive now
+      for (const id of ch.next ?? []) { if (s.day >= 6) s.queue.push({ cardId: id, at: s.count }); else s.tomorrow.push(id); }
       s.swipes.push({ day: s.day, cardId: card.id, dir: action.dir, before, after: { ...s.meters } });
       if (s.day >= 7) { s.campaignVote += ch.vote ?? 0; finish(s, false); return s; }
       for (const o of pack.objectives) if (!s.objectivesDone.includes(o.id) && holds(s, o.when)) s.objectivesDone.push(o.id);

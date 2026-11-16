@@ -74,11 +74,8 @@
       "treasury": -5
      },
      "reaction": "Work resumed. The egg is supervising.",
-     "then": [
-      [
-       "g3",
-       1
-      ]
+     "next": [
+      "g3"
      ]
     },
     "left": {
@@ -91,11 +88,8 @@
      "set": [
       "goose_grudge"
      ],
-     "then": [
-      [
-       "g3",
-       1
-      ]
+     "next": [
+      "g3"
      ]
     }
    },
@@ -157,11 +151,8 @@
       "law": 5
      },
      "reaction": "Dry again. 1987 will smell of pond forever.",
-     "then": [
-      [
-       "g5",
-       1
-      ]
+     "next": [
+      "g5"
      ]
     },
     "left": {
@@ -174,11 +165,8 @@
      "set": [
       "indoor_river"
      ],
-     "then": [
-      [
-       "g5r",
-       1
-      ]
+     "next": [
+      "g5r"
      ]
     }
    },
@@ -307,11 +295,8 @@
      "set": [
       "pond_plan"
      ],
-     "then": [
-      [
-       "g2",
-       1
-      ]
+     "next": [
+      "g2"
      ]
     },
     "left": {
@@ -325,11 +310,8 @@
      "set": [
       "goose_war"
      ],
-     "then": [
-      [
-       "gw2",
-       1
-      ]
+     "next": [
+      "gw2"
      ]
     }
    },
@@ -731,11 +713,8 @@
       "business": 5
      },
      "reaction": "It smells of hole. Chad sold it to Kevin's fans.",
-     "then": [
-      [
-       "k3",
-       1
-      ]
+     "next": [
+      "k3"
      ]
     },
     "left": {
@@ -745,11 +724,8 @@
       "press": 10
      },
      "reaction": "You arrested a hole. Marge has a front page for a week.",
-     "then": [
-      [
-       "k3",
-       1
-      ]
+     "next": [
+      "k3"
      ]
     }
    },
@@ -862,11 +838,8 @@
      "set": [
       "bear_column"
      ],
-     "then": [
-      [
-       "b3",
-       1
-      ]
+     "next": [
+      "b3"
      ]
     },
     "left": {
@@ -879,11 +852,8 @@
      "set": [
       "bear_fought"
      ],
-     "then": [
-      [
-       "b3f",
-       1
-      ]
+     "next": [
+      "b3f"
      ]
     }
    },
@@ -1003,11 +973,8 @@
       "people": -5
      },
      "reaction": "She moved to roulette. She's very good at that too.",
-     "then": [
-      [
-       "c3",
-       1
-      ]
+     "next": [
+      "c3"
      ]
     },
     "left": {
@@ -1141,11 +1108,8 @@
      "set": [
       "frog_vote"
      ],
-     "then": [
-      [
-       "f3",
-       1
-      ]
+     "next": [
+      "f3"
      ]
     }
    },
@@ -1263,11 +1227,8 @@
       "law": 5
      },
      "reaction": "The children are fluent in helicopter.",
-     "then": [
-      [
-       "h3",
-       1
-      ]
+     "next": [
+      "h3"
      ]
     }
    },
@@ -1346,11 +1307,8 @@
       "people": 5
      },
      "reaction": "Everyone's out. Linda refused. She's fine. Of course she is.",
-     "then": [
-      [
-       "r3",
-       1
-      ]
+     "next": [
+      "r3"
      ]
     },
     "left": {
@@ -1359,11 +1317,8 @@
       "press": -10
      },
      "reaction": "It did not miss.",
-     "then": [
-      [
-       "r3",
-       1
-      ]
+     "next": [
+      "r3"
      ]
     }
    },
@@ -1450,11 +1405,8 @@
       "business": -10
      },
      "reaction": "Free wet socks for all. Nobody asked for this.",
-     "then": [
-      [
-       "s3",
-       1
-      ]
+     "next": [
+      "s3"
      ]
     }
    },
@@ -1829,11 +1781,8 @@
       "people": -5
      },
      "reaction": "It didn't need the card. It has absorbed the book. Physically.",
-     "then": [
-      [
-       "cheese3",
-       1
-      ]
+     "next": [
+      "cheese3"
      ]
     },
     "left": {
@@ -1843,11 +1792,8 @@
       "press": 5
      },
      "reaction": "It's on chapter four, 'Winning Hearts'. It is winning hearts.",
-     "then": [
-      [
-       "cheese3",
-       1
-      ]
+     "next": [
+      "cheese3"
      ]
     }
    },
@@ -1866,11 +1812,8 @@
       "law": 5
      },
      "reaction": "It went quietly. It left a small cheese behind. A scout.",
-     "then": [
-      [
-       "cheese3",
-       1
-      ]
+     "next": [
+      "cheese3"
      ]
     },
     "left": {
@@ -2044,11 +1987,8 @@
       "people": 10
      },
      "reaction": "They cried. They'd never seen a second traffic light before.",
-     "then": [
-      [
-       "worse3",
-       1
-      ]
+     "next": [
+      "worse3"
      ]
     },
     "left": {
@@ -2300,11 +2240,8 @@
       "law": -5
      },
      "reaction": "Approved. Your passport photo is a drawing by the driver. You're a potato.",
-     "then": [
-      [
-       "bus3",
-       1
-      ]
+     "next": [
+      "bus3"
      ]
     },
     "left": {
@@ -2314,11 +2251,8 @@
       "people": -10
      },
      "reaction": "You got on. You couldn't get a seat. Humiliating. For everyone.",
-     "then": [
-      [
-       "bus3",
-       1
-      ]
+     "next": [
+      "bus3"
      ]
     }
    },
@@ -3666,11 +3600,8 @@
       "business": -5
      },
      "reaction": "It hugged Doug. Doug hugged it. They share a desk now. And a tissue box.",
-     "then": [
-      [
-       "robot3",
-       1
-      ]
+     "next": [
+      "robot3"
      ]
     },
     "left": {
@@ -4863,11 +4794,8 @@
       "law": -5
      },
      "reaction": "They voted you Bin Treasurer. You already owe them eleven crisps.",
-     "then": [
-      [
-       "rn3",
-       1
-      ]
+     "next": [
+      "rn3"
      ]
     },
     "left": {
@@ -4877,11 +4805,8 @@
       "people": -5
      },
      "reaction": "They moved to the recycling. Technically a different building.",
-     "then": [
-      [
-       "rn3",
-       1
-      ]
+     "next": [
+      "rn3"
      ]
     }
    },
@@ -4900,11 +4825,8 @@
       "law": 5
      },
      "reaction": "Fine! But I'm keeping the good stapler. And the bit with the clock.",
-     "then": [
-      [
-       "rn3",
-       1
-      ]
+     "next": [
+      "rn3"
      ]
     },
     "left": {
@@ -4915,11 +4837,8 @@
       "press": 10
      },
      "reaction": "Cosy. Bit dark. Something in the left pocket bit Doug.",
-     "then": [
-      [
-       "rn3",
-       1
-      ]
+     "next": [
+      "rn3"
      ]
     }
    },
@@ -5040,11 +4959,8 @@
       "law": -5
      },
      "reaction": "Bev won. She lapped the car. She stopped for a scone halfway.",
-     "then": [
-      [
-       "bv3",
-       1
-      ]
+     "next": [
+      "bv3"
      ]
     },
     "left": {
@@ -5074,11 +4990,8 @@
      "set": [
       "bev_fast"
      ],
-     "then": [
-      [
-       "bv3",
-       1
-      ]
+     "next": [
+      "bv3"
      ]
     },
     "left": {
@@ -5170,11 +5083,8 @@
       "press": 5
      },
      "reaction": "Overruled. Guilty. Sentence: one hour of stroking my client.",
-     "then": [
-      [
-       "wh3",
-       1
-      ]
+     "next": [
+      "wh3"
      ]
     },
     "left": {
@@ -5184,11 +5094,8 @@
       "law": -10
      },
      "reaction": "He did not see that coming. He knocked yours off. It's escalating.",
-     "then": [
-      [
-       "wh3",
-       1
-      ]
+     "next": [
+      "wh3"
      ]
     }
    },
@@ -5207,11 +5114,8 @@
       "business": -5
      },
      "reaction": "He's Town Solicitor. He billed us for a four-hour nap. 'Research'.",
-     "then": [
-      [
-       "wh3",
-       1
-      ]
+     "next": [
+      "wh3"
      ]
     },
     "left": {
@@ -5221,11 +5125,8 @@
       "people": 5
      },
      "reaction": "He's challenging the ban. In court. His court.",
-     "then": [
-      [
-       "wh3",
-       1
-      ]
+     "next": [
+      "wh3"
      ]
     }
    },
@@ -5314,11 +5215,8 @@
       "people": -10
      },
      "reaction": "The fountain sounds tired. It says 'brought to you by' in its sleep.",
-     "then": [
-      [
-       "br3",
-       1
-      ]
+     "next": [
+      "br3"
      ]
     },
     "left": {
@@ -5443,11 +5341,8 @@
       "people": 10
      },
      "reaction": "Everyone's in the gym. It smells incredible. People are dipping things.",
-     "then": [
-      [
-       "nr3",
-       1
-      ]
+     "next": [
+      "nr3"
      ]
     }
    },

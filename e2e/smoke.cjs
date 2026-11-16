@@ -19,10 +19,10 @@ const { chromium } = require('playwright');
     if (await pg.locator('.sheet .bugle').count()) { await shot('morning'); await pg.locator('.sheet .btn.primary').click(); continue; }
     if (await pg.locator('.panel.recall').count()) { recalls++; await shot('recall'); await pg.locator('.panel.recall .btn.primary').click(); continue; }
     if (await pg.locator('.review').count()) { days++; await shot('review'); await pg.locator('.review .btn.primary').click(); continue; }
-    if (await pg.locator('.impact').count()) {
+    if (await pg.locator('.card.result').count()) {
       reveals++;
-      if (reveals === 3) { await pg.waitForTimeout(process.env.MOTION ? 2400 : 300); await shot('reveal'); }
-      await pg.locator('.impact').click({ timeout: 1500 }).catch(() => {});
+      if (reveals === 3) { await pg.waitForTimeout(500); await shot('reveal'); if (await pg.locator('.edge-chip.flip').count()) { await pg.locator('.edge-chip.flip').click(); await pg.waitForTimeout(process.env.MOTION ? 2500 : 300); await shot('scene'); } }
+      await pg.locator('.edge-chip.next').click({ timeout: 1500 }).catch(() => {});
       continue;
     }
     if (await pg.locator('.card.sneak').count()) {
@@ -38,9 +38,9 @@ const { chromium } = require('playwright');
       await pg.waitForSelector('.card.sneak', { state: 'detached', timeout: 4000 }).catch(() => {});
       continue;
     }
-    if (await pg.locator('.card').count()) {
+    if (await pg.locator('.card:not(.result)').count()) {
       if (swipes === 0) await shot('card');
-      const card = await pg.locator('.card').boundingBox();
+      const card = await pg.locator('.card:not(.result)').boundingBox();
       const dirs = await pg.locator('.edge-chip').evaluateAll((els) => els.map((e) => [...e.classList].find((c) => ['left', 'right', 'up', 'down'].includes(c))));
       const d = dirs[(swipes * 7 + 3) % dirs.length];
       const [dx, dy] = { left: [-160, 0], right: [160, 0], up: [0, -160], down: [0, 160] }[d];

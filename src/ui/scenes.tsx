@@ -226,6 +226,7 @@ export function SceneStage({ scene, onBeat }: { scene: Scene; onBeat?: (beat: nu
       {w.water && <g class="sc-water"><rect y="150" width="400" height="160" fill="#7FB7D9" opacity=".88" /><path d="M-20 150 q10 -8 20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0 t20 0" stroke={INK} stroke-width="3" fill="none" /></g>}
       {w.actors.map((a) => (
         <g key={a.id} class="sc-actor" style={{ transform: `translate(${px(a.x)}px, ${GROUND}px)` }}>
+          <ellipse cx="0" cy="3" rx="34" ry="7" fill="rgba(41,35,31,.2)" />
           <g class={a.bornAt === step && step > 0 ? 'sc-pop' : ''}><g style={{ transform: `scale(${a.flip ? -SIZE : SIZE}, ${SIZE})` }} class="sc-flipper"><Puppet who={a.id} pose={a.pose} walking={a.movedAt === step} /></g></g>
         </g>
       ))}
@@ -245,6 +246,7 @@ function ThingView({ t, step, held }: { t: Thing; step: number; held: { x: numbe
   if (t.gone && (t.goneAt ?? 0) < step - 1 && t.gone !== 'squash') return null;
   return (
     <g class="sc-thing" style={{ transform: `translate(${px(x)}px, ${py(y)}px) scale(${s})` }}>
+      {!held && t.y >= 86 && !t.gone && t.name !== 'sign' && <ellipse cx="0" cy="1" rx="40" ry="6" fill="rgba(41,35,31,.18)" />}
       <g class={cls}><g transform="translate(-50 -100)">{t.name === 'sign' ? <Sign text={t.text ?? ''} /> : draw ? draw() : null}</g></g>
     </g>
   );

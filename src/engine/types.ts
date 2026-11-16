@@ -25,6 +25,8 @@ export interface Choice {
   clear?: string[]; // flags to clear
   /** Follow-up cards: [cardId, cards from now]. This is how stories continue. */
   then?: [string, number][];
+  /** Cards this choice brings back tomorrow morning: yesterday's decisions carry over. */
+  next?: string[];
   vote?: number; // Sunday campaign card only: added to the vote share
 }
 
@@ -71,7 +73,7 @@ export interface Result { share: number; won: boolean; endedEarly: boolean }
 export interface Profile { mayor: string; folk: string; base: GroupId }
 
 export interface State {
-  v: 9;
+  v: 10;
   weekId: string;
   playerSeed: string;
   day: number; // 1..6 governing, 7 = Sunday
@@ -80,6 +82,7 @@ export interface State {
   meters: Record<MeterId, number>;
   flags: Record<string, true>;
   queue: { cardId: string; at: number }[]; // scheduled follow-ups
+  tomorrow: string[]; // cards carried over to the start of the next day
   seen: string[];
   current: string | null;
   phase: Phase;

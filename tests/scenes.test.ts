@@ -15,9 +15,8 @@ describe('scenes', () => {
   it('every script reads cleanly: known commands, drawn props, real characters, 5 to 7 beats', () => {
     for (const [key, src] of Object.entries(SCRIPTS)) expect(lintScene(src), key).toEqual([]);
   });
-  it('a choice without a script still gets a readable stand-in', () => {
-    const s = sceneFor('nope', 'left', 'doug', 'No "thanks"', false);
-    expect(s.beats.length).toBeGreaterThanOrEqual(5);
-    expect(lintScene(`office\n${s.beats.map((b) => b.join('; ')).join('\n')}`)).toEqual([]);
+  it('a choice without a script has no scene (and the game offers no flip)', () => {
+    expect(sceneFor('nope', 'left')).toBeNull();
+    expect(sceneFor('g1', 'right')).not.toBeNull();
   });
 });

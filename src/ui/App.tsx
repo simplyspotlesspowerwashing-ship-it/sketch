@@ -9,9 +9,9 @@ import crowdData from '../content/packs/week1.crowd.json' with { type: 'json' };
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
 import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
-import { BEAT, SceneStage } from './scenes.tsx';
+import { SceneStage } from './scenes.tsx';
 import { sceneFor } from './sceneIndex.ts';
-import type { TownView } from './art.tsx';
+import type { Mood, TownView } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
 
@@ -31,7 +31,7 @@ function boot(save: Save): State {
 }
 function bootUnsafe(save: Save): State {
   const cal = calendar(save.dayOffset);
-  const kept = save.state && save.state.v === 9 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  const kept = save.state && save.state.v === 10 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, pack), pack, cal.today);
 }
 
@@ -91,59 +91,53 @@ function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
 }
 
 
-/** After a choice: its own clip, the reaction as a caption, what moved, and what other mayors did. One screen. */
+/** After a choice the card turns over: the character's face and what they said, the bars that moved and
+ *  what other mayors did. "See what happened" flips it again to play the scene. */
 function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const ch = r.card.options[r.dir]!;
   const ms = METERS.filter((m) => r.after[m] !== r.before[m]).sort((a, b) => Math.abs(r.after[b] - r.before[b]) - Math.abs(r.after[a] - r.before[a]));
   const rar = rarityOf(r.pct);
   const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
-  const scene = useMemo(() => sceneFor(r.card.id, r.dir, r.card.who, fill(ch.label), net >= 0), []);
-  // 0: the clip plays; 1: the meters land; 2: the crowd
-  const CLIP = scene.beats.length * BEAT + 300, HOLD = r.recalled ? 1600 : 900;
-  const [step, setStep] = useState(reduced() ? 2 : 0);
-  const [chars, setChars] = useState(reduced() ? 999 : 0);
-  useEffect(() => { if (reduced()) return; const t = setInterval(() => setChars((c) => c + 2), 22); return () => clearInterval(t); }, []);
+  const scene = useMemo(() => sceneFor(r.card.id, r.dir), []);
+  const [film, setFilm] = useState(0); // 0 = the portrait; n = the nth showing of the scene
+  const [bars, setBars] = useState(reduced());
+  useEffect(() => { const t = setTimeout(() => { setBars(true); sfx(ms.length === 0 ? 'tap' : net >= 0 ? 'win' : 'warn'); }, 380); return () => clearTimeout(t); }, []);
   useEffect(() => {
-    if (step >= 2) return;
-    const t = setTimeout(() => {
-      if (step === 0) sfx(ms.length === 0 ? 'tap' : net >= 0 ? 'win' : 'warn'); else sfx(r.recalled ? 'lose' : rar.points >= 30 ? 'honk' : 'tap');
-      setStep(step + 1);
-    }, step === 0 ? 500 : CLIP - 500);
-    return () => clearTimeout(t);
-  }, [step]);
-  useEffect(() => { const t = setTimeout(onDone, reduced() ? 2200 : CLIP + HOLD); return () => clearTimeout(t); }, []);
-  const full = fill(ch.reaction);
+    const k = (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); onDone(); } };
+    addEventListener('keydown', k); return () => removeEventListener('keydown', k);
+  }, []);
+  const mood: Mood = ms.length === 0 ? 'neutral' : net >= 0 ? 'pleased' : 'annoyed';
   return (
-    <button class={`impact ${r.recalled && step >= 2 ? 'recalled' : ''}`} onClick={onDone} aria-label={`${fill(ch.label)}. ${full} Tap to continue`}>
-      <span class="rv-title"><b>{ARROW[r.dir]}</b> {fill(ch.label)}</span>
-      <span class="rv-film">
-        <SceneStage scene={scene} />
-        <span class="rv-sub">
-          <span class="rv-line"><b>{NAMES[r.card.who]?.split(',')[0] ?? r.card.who}</b>{full.slice(0, chars)}{chars >= full.length && ch.then?.length ? <em> This isn't over.</em> : null}</span>
-        </span>
-      </span>
-      <span class="rv-bars">
-        {ms.length === 0 && <span class="rv-barrow none in">Nothing changed. Nobody even looked up.</span>}
-        {ms.map((m, i) => {
-          const d = r.after[m] - r.before[m], up = d > 0;
-          const edge = r.after[m] <= TUNING.low || (m !== 'treasury' && r.after[m] >= TUNING.high);
-          return (
-            <span key={m} class={`rv-barrow ${up ? 'up' : 'down'} ${step >= 1 ? 'in' : ''}`} style={{ '--g': METER_COLOR[m], '--d': `${i * 120}ms` }}>
-              <MeterIcon m={m} />
-              <span class="rv-barname">{METER_NAME[m]}{edge && step >= 1 ? <em>{r.after[m] <= TUNING.low ? ' · danger' : ' · too high'}</em> : null}</span>
-              <span class="rv-barnum">{up ? '▲' : '▼'}{step >= 1 ? <CountUp to={Math.abs(d)} bare /> : Math.abs(d)}</span>
-              <SlideBar m={m} from={r.before[m]} to={step >= 1 ? r.after[m] : r.before[m]} />
-            </span>
-          );
-        })}
-      </span>
-      <span class={`rv-crowdline r-${rar.id} ${step >= 2 ? 'in' : ''}`}>
-        {r.recalled ? <b class="rv-recalled">RECALLED</b> : r.pct !== undefined ? <>
-          <span class="rv-pct"><b>{r.pct}%</b> of mayors did this{PREVIEW && <span class="tag">preview</span>}</span>
-          <span class="rv-rar">{rar.emoji} {rar.name} <b>+{TUNING.score.perCard + rar.points}</b></span>
-        </> : <span class="rv-pct">You're the first mayor to try this.</span>}
-      </span>
-    </button>
+    <div class="stage">
+      <div class={`card result ${mood} ${r.recalled ? 'recalled' : ''}`} key={film} style={{ '--g': mood === 'pleased' ? '#3F8F5A' : mood === 'annoyed' ? '#C23B3B' : '#8C8577' }}>
+        <p class="result-choice"><b>{ARROW[r.dir]}</b> {fill(ch.label)}</p>
+        {film && scene ? <div class="result-film"><SceneStage scene={scene} /></div>
+          : <div class={`result-face ${mood}`}><Portrait who={r.card.who} size={150} mood={mood} /></div>}
+        <p class="result-quote"><b>{NAMES[r.card.who]?.split(',')[0] ?? r.card.who}</b>“{fill(ch.reaction)}”{ch.then?.length ? <em> This isn't over.</em> : ch.next?.length ? <em> You'll hear about this tomorrow.</em> : null}</p>
+        <div class="rv-bars">
+          {ms.length === 0 && <span class="rv-barrow none in">Nothing changed. Nobody even looked up.</span>}
+          {ms.map((m, i) => {
+            const d = r.after[m] - r.before[m], up = d > 0;
+            const edge = r.after[m] <= TUNING.low || (m !== 'treasury' && r.after[m] >= TUNING.high);
+            return (
+              <span key={m} class={`rv-barrow ${up ? 'up' : 'down'} ${bars ? 'in' : ''}`} style={{ '--g': METER_COLOR[m], '--d': `${i * 110}ms` }}>
+                <MeterIcon m={m} />
+                <span class="rv-barname">{METER_NAME[m]}{edge && bars ? <em>{r.after[m] <= TUNING.low ? ' · danger' : ' · too high'}</em> : null}</span>
+                <span class="rv-barnum">{up ? '▲' : '▼'}{bars ? <CountUp to={Math.abs(d)} bare /> : Math.abs(d)}</span>
+                <SlideBar m={m} from={r.before[m]} to={bars ? r.after[m] : r.before[m]} />
+              </span>
+            );
+          })}
+        </div>
+        <p class={`result-crowd r-${rar.id}`}>
+          {r.recalled ? <b class="rv-recalled">RECALLED</b> : r.pct !== undefined ? <><b>{r.pct}%</b> of mayors did this · {rar.name} <i>+{TUNING.score.perCard + rar.points}</i>{PREVIEW && <span class="tag">preview</span>}</> : 'You are the first mayor to try this.'}
+        </p>
+      </div>
+      <div class={`choices ${scene ? 'n2' : 'n1'}`}>
+        {scene && <button class="edge-chip flip" onClick={() => { setFilm(film + 1); sfx('paper'); }}><b>{film ? '↻' : '▶'}</b><span>{film ? 'Watch again' : 'See what happened'}</span></button>}
+        <button class="edge-chip right next" autoFocus onClick={onDone}><b>→</b><span>{r.recalled ? 'Oh no' : 'Next'}</span></button>
+      </div>
+    </div>
   );
 }
 
@@ -268,6 +262,7 @@ function DayReview({ s, onNext, nextLabel, sub }: { s: State; onNext: () => void
         <span><b class="tiername">{tier.name}</b><small>{sc.picks.length} cards, +{sc.rarity} for rare choices{sc.recalled ? `, −${TUNING.score.recall} for the recall` : ''}</small></span>
       </div>
       <pre class="share">{share}</pre>
+      {s.tomorrow.length > 0 && <p class="carry"><b>Waiting for you tomorrow:</b> {[...new Set(s.tomorrow.map((id) => pack.headlines[findCard(pack, id).story ?? 'town'] ?? 'unfinished business'))].join(' · ').toLowerCase()}</p>}
       {sub}
       <div class="dayend-btns">
         <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); setCopied(true); } catch { /* clipboard blocked */ } sfx('tap'); }}>{copied ? 'Copied' : 'Copy result'}</button>

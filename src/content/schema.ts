@@ -6,7 +6,7 @@ const condition = z.strictObject({ flags: z.array(z.string()), any: z.array(z.st
 const choice = z.strictObject({
   label: z.string().min(1).max(30), effects: meters, reaction: z.string().min(1).max(100),
   set: z.array(z.string()).optional(), clear: z.array(z.string()).optional(),
-  then: z.array(z.tuple([z.string(), z.number().int().min(1)])).optional(), vote: z.number().optional(),
+  then: z.array(z.tuple([z.string(), z.number().int().min(1)])).optional(), next: z.array(z.string()).optional(), vote: z.number().optional(),
 });
 const card = z.strictObject({
   id: z.string().min(1), who: z.string().min(1), text: z.string().min(1).max(150), story: z.string().optional(),
@@ -31,7 +31,7 @@ export function loadPack(raw: unknown): Pack {
     if (ids.has(c.id)) problems.push(`duplicate card id ${c.id}`);
     ids.add(c.id);
     if (Object.keys(c.options).length < 2) problems.push(`${c.id}: needs at least two options`);
-    for (const o of Object.values(c.options)) for (const [t] of o!.then ?? []) scheduled.add(t);
+    for (const o of Object.values(c.options)) for (const t of [...(o!.then ?? []).map(([id]) => id), ...(o!.next ?? [])]) scheduled.add(t);
   }
   for (const t of scheduled) if (!ids.has(t)) problems.push(`a choice schedules unknown card ${t}`);
   for (const c of pack.cards) if (c.followUp && !scheduled.has(c.id)) problems.push(`${c.id}: follow-up card is never scheduled`);

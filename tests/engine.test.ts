@@ -87,6 +87,30 @@ describe('stories build on each other', () => {
   });
 });
 
+describe('decisions carry over', () => {
+  it('some consequences wait until tomorrow and open the next day', () => {
+    // find a choice with a next-day consequence and play it
+    const src = pack.cards.find((c) => Object.values(c.options).some((o) => o!.next?.length))!;
+    const dir = options(src).find((d) => src.options[d]!.next?.length)!;
+    const target = src.options[dir]!.next![0]!;
+    let s = start();
+    s = { ...s, current: src.id, phase: 'card' };
+    s = swipe(s, dir);
+    expect(s.tomorrow).toContain(target);
+    expect(s.seen).not.toContain(target);
+    s = { ...s, phase: 'dayEnd', current: null };
+    s = reduce(s, { type: 'next' }, pack);
+    expect(s.tomorrow).toEqual([]);
+    const seenEarly: string[] = [];
+    for (let i = 0; i < 4 && s.phase === 'card'; i++) { seenEarly.push(s.current!); s = skip(s, 1); }
+    expect(seenEarly).toContain(target);
+  });
+  it('every day offers a storyline within the first ten cards', () => {
+    const starts = (id: string) => Object.values(findCard(pack, id).options).some((o) => o!.then?.length || o!.next?.length);
+    for (let d = 1; d <= 6; d++) expect(dayDeck(pack, 'week1', d).slice(0, 10).filter(starts).length, `day ${d}`).toBeGreaterThanOrEqual(2);
+  });
+});
+
 describe('both ends are dangerous', () => {
   const brink = (meters: Partial<State['meters']>): State => { const s = until(start(), 'g1'); return { ...s, meters: { ...s.meters, ...meters } }; };
   it('a group at 0 recalls you and ends the day', () => {
