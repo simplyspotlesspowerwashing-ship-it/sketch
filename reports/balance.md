@@ -4,9 +4,9 @@
 
 | Policy | Win rate | Vote p10 / p50 / p90 | Recalled at least once | Term ended early | Cards played | Recall causes |
 |---|---|---|---|---|---|---|
-| random | 0.1% | 5 / 15 / 31 | 100.0% | 75.0% | 99 | low:treasury 3823, high:people 1175, high:press 1094, low:people 814, low:business 536, high:law 422, low:law 223, low:press 72, high:business 26 |
-| dave-only | 3.9% | 30 / 40 / 47 | 12.7% | 0.0% | 149 | high:press 173, low:treasury 120, high:law 52, high:people 40, low:people 1, low:law 1, high:business 1 |
-| sensible | 25.5% | 40 / 46 / 52 | 0.1% | 0.0% | 151 | high:people 2 |
+| random | 0.0% | 5 / 10 / 27 | 100.0% | 80.9% | 93 | low:treasury 4378, high:press 1095, high:people 990, low:people 780, low:business 512, high:law 411, low:law 111, low:press 89, high:business 21 |
+| dave-only | 6.3% | 29 / 40 / 48 | 22.8% | 0.0% | 147 | low:treasury 441, high:press 228, high:law 38, high:people 18, low:people 3, low:business 1 |
+| sensible | 23.7% | 40 / 46 / 52 | 0.0% | 0.0% | 151 |  |
 
 ## Cards never seen by any bot
 
@@ -14,7 +14,7 @@
 - `birthday`
 - `choir`
 - `bench`
-- `whistle`
+- `confetti`
 - `robot`
 - `robot2`
 - `robot3`
@@ -30,9 +30,6 @@
 - `bv2`
 - `bv2b`
 - `bv3`
-- `wh2c`
-- `wh2`
-- `wh3`
 - `nr1`
 - `nr2`
 - `nr3`
@@ -42,3 +39,5 @@
 - `coachgeese`
 - `geraldtv`
 - `timmymayor`
+- `quietsign`
+- `folkname`

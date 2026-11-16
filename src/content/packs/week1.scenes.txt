@@ -535,3 +535,315 @@ gerald:angry; fx:anger@84,34
 +paper#oped@70,66*.4; gerald=oped
 sign"OP-ED: HONK. HONK. HONK."@46,30*.7
 gerald"HONK."
+
+== g3.right office
++pond@52,93*1.4; +ribbon@52,72*1.6; gerald@88; pam@8
+crowd:cheer
+gerald>62
+-ribbon; !"SNIP"@52,46; fx:confetti
+gerald:cheer; !"HONK!"@72,26
+marge@112; marge>92; fx:flash
+sign"CUT BY FACE"@52,30*.8
+
+== g3.left office
++pond@52,93*1.4; gerald@86; mayor@10
+mayor"It's open. Shh."
+fx:sparkle@52,72
+gerald:sad
+gerald"No press?"
+!"honk."@80,30
+gerald>125
+
+== g4.right office
++pond@58,93*1.3; barb@10
+fx:water; barb:shock
+mayor@-12; mayor>30; mayor:point
++bucket@38,89*.5v; +hammer@66,72*.5
+fx:clear; !"BANG BANG"@62,44; fx:dust@62,84
+barb:cheer; -hammer
+sign"1987: STILL DAMP"@40,36*.7
+
+== g4.left office
++pond@58,93*1.3; barb@10
+fx:water; barb:shock
++kayak@-12,52*.9>
+kayak>60,52; !"WHEEE"@60,30
+sign"CITY HALL RAPIDS"@52,24*.75
++kayak#k2@-12,56*.8>
+k2>30,56; barb"Through Planning."
+
+== g5.right office
+*7 poop@50,92*.3; pam@8:shock
+pam"Every floor. The ROOF."
++person2#cleaner@112,89<; +mop@102,89*.6<
+cleaner>62,89; mop>52,89
+-poop*; fx:sparkle@50,70; sign"CLEAN"@50,36*.9
+!"for about an hour"@50,56
+*5 poop@56,92*.3; pam:sad
+
+== g5.left office
+*7 poop@44,92*.3; pam@6:shock; marge@90; +paper#np@80,66*.4
+marge=np; sign"IT'S GOOD LUCK"@50,30*.8
++person@112,89<
+person>66,89
+sign"LUCKY POOP · 50p"@50,30*.75; fx:coins@8,56
++person3#p2@124,89<; p2>84,89
+pam:think; !"people want some"@50,56
+
+== g5r.right library
+fx:water; linda@8:shock
++bridge@52,70*2.3^
+fx:sparkle@52,40
+randy@52
+sign"TROLL TOLL"@52,26*.85
+randy:point; randy"Pay the troll."
+
+== g5r.left library
+fx:water; linda@8:shock; *4 book@40,56*.25
+sign"RAFTING · £5"@82,26*.8
++kayak@-12,52*.9>
+kayak>52,52; fx:coins@82,50
++kayak#k2@-12,56*.8>; k2>26,56
+!"paperwork: in the river"@50,84
+
+== g6.right park
++pond@28,94*1.1; gerald@88; *10 gosling@56,92*.3
+gerald"For the children."
+mayor@6; mayor:point; fx:stampOK@30,36
++pond#p2@70,95*1.1^; fx:splash@70,84
+gerald:cheer; !"HONK!"@82,26
+doug@112; doug>98
+!"OW"@94,40; doug:shock
+
+== g6.left park
++pond@28,94*1.1; gerald@88; *10 gosling@56,92*.3; mayor@6
+gerald"For the children."
+mayor:point; fx:stampNO@40,40
+gerald:sad
+sign"SIT-IN (VERY SMALL)"@56,50*.7
+!"peep"@50,72
+!"peep"@64,68
+
+== gw2.right street
++bakery@72,89*1.4; *4 goose@70,92*.4; barb@8
+mayor@-12; mayor>28; +bread@38,89*.5
+mayor=bread
+mayor>48
+mayor=; bread>60,89
+fx:hearts@62,60; !"honk"@72,30
+sign"PEACE (MOSTLY CRUSTS)"@44,30*.7
+
+== gw2.left street
++bakery@72,89*1.4; *4 goose@70,92*.4; barb@8; mayor@20
+barb:point; sign"SIEGE: DAY 1"@30,36*.8
+!"HONK"@72,30
+*6 bread@70,92*.25
+sign"SIEGE: DAY 40"@30,36*.8
+barb:sad; barb"You can't starve a bakery."
+
+== gw3.right school
++podium#p1@30,89*.9; +podium#p2@70,89*.9; mayor@30; gerald@70
+mayor"My plan is"
+!"HONK"@70,30
+mayor"If I could just"
+!"HONK HONK HONK"@66,26; fx:shake
+crowd:cheer; gerald:cheer
+mayor:sad; sign"WON ON VOLUME"@50,30*.8
+
+== gw3.left street
+mayor@36; gerald@64
+mayor:point; fx:stampOK@50,36
+sign"CO-MAYORS"@50,30
++tinyhat@64,38*.5v; fx:sparkle@64,36
+fx:hearts@50,56
+crowd:cheer; gerald:cheer; mayor:cheer
+
+== st2.right street
++clock@50,40*.9; stranger@84; mayor@10
+stranger"Just the clock."
+mayor:point; fx:stampOK@28,40
+stranger>58
+clock>50,70; stranger=clock
+stranger>125
+sign"TIME: ???"@50,36*.85; +person@40,89; !"what time is it?"@44,58
+
+== st2.left office
++moneybag@22,89*.45; mayor@14; stranger@82
+mayor=moneybag
+mayor>46
+stranger=moneybag; fx:coinsout@14,56
+stranger"Pity."
+stranger>125
+!"I'll be in touch. Through the basement."@50,30
+
+== cheese2.right library
++cheese@60,89*1.2; +book@74,68*.4; linda@10
+linda:point; fx:stampNO@40,40
+book>62,74
+-book; !"ABSORBED"@62,40
+linda:shock
+!"hmmmm (smarter)"@60,30
+
+== cheese2.left library
++cheese@56,89*1.2; +book@70,72*.5; linda@10
+!"flip"@70,52
+sign"CH. 4: WINNING HEARTS"@52,26*.7
+fx:hearts@58,60
++person@112,89<; person>88,89
+fx:hearts@86,52; linda:think
+linda"It's winning hearts."
+
+== cheese2s.right office
++cheese@56,89*1.2; +note@36,66*.35; doug@10
+doug"It knows my name."
++vault@56,89*1.75v; fx:shake; fx:dust@56,86
+doug:cheer
++cheese#scout@88,89*.32
+!"a scout"@86,62; doug:shock
+
+== cheese2s.left office
++cheese@56,89*1.2; +note@36,66*.35; doug@10
+doug:point; sign"SOLD (AGAIN)"@56,34*.8
+fx:coins@10,56; doug:cheer
+sign"TO: WORSE TOWN"@66,34*.75
+cheese>134,89
+!"they deserve each other"@50,30
+
+== cheese3.right school
++podium#p1@28,89*.9; +podium#p2@70,89*.9; mayor@28; +cheese@70,60*.6
+mayor"My policy is"
+!". . ."@70,36
+mayor"And another thing"
+!". . ."@70,36
+crowd:cheer; sign"STATESMANLIKE"@70,24*.75
+mayor:sad
+
+== cheese3.left office
++deskprop@60,89*1.3; +cheese@60,70*.8; doug@12; mayor@92
+mayor:point; fx:stampOK@60,36
+sign"TREASURER"@60,36*.85
+doug:shock
+sign"INTERN"#i@12,34*.65
+doug:sad; !"hmmmm"@60,56
+
+== bv2.right street
+bev@14; +scooter@22,89*.85; +policecar@8,74*.7; sign"START"@40,36*.7
+!"3 · 2 · 1 · GO"@52,28
+bev>130; scooter>138,89; policecar>46,74; fx:dust@30,86
++scooter#lap@-20,89*.85>; !"LAP 2"@30,60
+lap>132,89; policecar>60,74
+sign"BEV WINS (STOPPED FOR A SCONE)"@50,30*.6; fx:confetti
+
+== bv2.left street
+bev@20; +scooter@30,89*.85; barb@90
+barb>46
+barb=scooter
+barb>125
+bev:angry
+bev>125; fx:dust@60,86
+!"she walks faster"@56,28
+
+== bv2b.right office
+bev@78; +paper#pet@66,66*.5; mayor@14
+bev=pet; bev"400 signatures."
+bev>42
+mayor=pet; fx:stampOK@30,36
+sign"ALL 400: BEV"@52,30*.8
+bev:cheer; bev"See you at the finish."
+
+== bv2b.left office
+bev@70; +paper#pet@60,66*.5; mayor@14
+bev=pet; bev"400 signatures. All mine."
+mayor:point; fx:stampNO@44,40
+-pet!; bev:angry
++person#s1@112,89<; +person2#s2@126,89<
+s1>84,89; s2>96,89
+bev"My sisters. They're 99."
+
+== bv3.right street
+sign"BAD TOWN GRAND PRIX"@50,28*.7; coach@6; +scooter#a@-10,89*.7>; +scooter#b@-24,80*.7>; +scooter#c@-38,89*.7>
+!"GO!"@30,50
+a>122,89; b>112,80; c>100,89
+fx:flash; crowd:cheer
+bev@50:cheer; +trophy@64,89*.6v
+sign"1ST BEV · 2ND BEV · 6TH BEV"@50,28*.62
+!"banned from podiums"@50,56
+
+== bv3.left street
+coach@8; bev@82; +scooter@72,89*.85; mayor@30
+coach"Twelve entries. Nine are Bev."
+mayor:point; fx:stampNO@52,40
+bev:angry; fx:anger@82,34
+sign"MAYOR = WET LETTUCE"@56,28*.7
++person@112,89<; person>96,89; fx:coins@82,54
+bev"Ten pounds a T-shirt, dear."
+
+== d2.right office
+*5 raccoon@56,92*.45; barb@8; randy@90
+randy"They're consultants."
+mayor@-12; mayor>26; mayor:point; fx:stampOK@40,36
+sign"CONSULTANTS"@56,32*.85
++bin@36,89*.7
+-bin; !"NOM"@36,58
+randy:cheer; barb:sad; !"productivity up. bins down."@52,26
+
+== d2.left office
+*5 raccoon@56,92*.45; barb@8; randy@90; mayor@24
+barb"They're raccoons."
+mayor:point; fx:stampNO@52,44
+-raccoon*; fx:dust@56,86
+randy:sad
+!"sob"@82,30
+!"sob sob sob"@86,26
+
+== pg2.right office
++podium@50,89*.9; +pigeon@50,56*.5; +pigeon#sec@68,89*.45; marge@8
+!"coo: BREAD FOR ALL"@52,28
+mayor@-12; mayor>28; mayor:point; fx:stampOK@36,40
+*9 bread@58,92*.18
+crowd:cheer
+!"mostly crumbs"@52,30; marge:think
+
+== pg2.left office
++podium@50,89*.9; +pigeon@50,56*.5; +pigeon#sec@68,89*.45; marge@8; mayor@26
+mayor:point; fx:stampNO@50,36
+!"coo."@52,30
+pigeon>124,10
+sec>130,14
+marge:think; marge"A dignified coo."
+
+== seagull2.right studio
++deskprop@56,89*1.3; +gull@56,70*.8; steve@10; +sandwich@28,89*.35
+mayor@-12; mayor>40; mayor:point; fx:stampOK@56,36
+gull>84,70
+steve>56; steve:cheer
+gull>30,86
+-sandwich; !"GULP"@30,60
+gull>124,10; steve:sad; !"my sandwich"@50,30
+
+== seagull2.left studio
++deskprop@56,89*1.3; +gull@56,70*.8; steve@10; +chips@24,89*.5
+steve"I'd like to appeal."
+mayor@-12; mayor>36; mayor:point; fx:stampNO@30,40
+sign"CHIPS. THEN LIGHT CHIPS."@56,24*.7
+steve=chips
+steve>44; steve:sad
+steve"I hold the chips now."
+
+== squirrels2.right street
+sign"SQUIRREL BANK"#sb@78,40*.75; sign"TOWN BANK"#tb@24,40*.75; *3 squirrel@78,92*.4; doug@24
++person@50,89
+person>70,89; doug:shock
+sign"NOW PAYING IN ACORNS"#tb@26,40*.68; doug:point
+*10 acorn@30,92*.2
+person>40,89
+doug:think; !"what's an acorn worth?"@52,26
+
+== squirrels2.left street
+sign"SQUIRREL BANK"#sb@74,40*.75; *3 squirrel@74,92*.4; doug@12; +tree@92,88*1.3
+barb@-12; barb>48; barb:point
+fx:stampNO@74,44
+-sb; fx:poof@74,36
+squirrel0_0>88,50; squirrel0_1>94,44; squirrel0_2>96,56
+sign"TREE BANK · OPEN"@86,22*.65
+barb:shock; !"you can't regulate a tree"@46,28

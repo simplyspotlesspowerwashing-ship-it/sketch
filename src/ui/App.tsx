@@ -9,7 +9,7 @@ import crowdData from '../content/packs/week1.crowd.json' with { type: 'json' };
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
 import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
-import { SceneStage } from './scenes.tsx';
+import { BEAT, SceneStage } from './scenes.tsx';
 import { sceneFor } from './sceneIndex.ts';
 import type { TownView } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
@@ -99,7 +99,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
   const scene = useMemo(() => sceneFor(r.card.id, r.dir, r.card.who, fill(ch.label), net >= 0), []);
   // 0: the clip plays; 1: the meters land; 2: the crowd
-  const CLIP = scene.beats.length * 1000 + 500, METERS_T = 900, HOLD = r.recalled ? 2000 : 1500;
+  const CLIP = scene.beats.length * BEAT + 300, HOLD = r.recalled ? 1600 : 900;
   const [step, setStep] = useState(reduced() ? 2 : 0);
   const [chars, setChars] = useState(reduced() ? 999 : 0);
   useEffect(() => { if (reduced()) return; const t = setInterval(() => setChars((c) => c + 2), 22); return () => clearInterval(t); }, []);
@@ -108,10 +108,10 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
     const t = setTimeout(() => {
       if (step === 0) sfx(ms.length === 0 ? 'tap' : net >= 0 ? 'win' : 'warn'); else sfx(r.recalled ? 'lose' : rar.points >= 30 ? 'honk' : 'tap');
       setStep(step + 1);
-    }, step === 0 ? CLIP : METERS_T);
+    }, step === 0 ? 500 : CLIP - 500);
     return () => clearTimeout(t);
   }, [step]);
-  useEffect(() => { const t = setTimeout(onDone, reduced() ? 2200 : CLIP + METERS_T + HOLD); return () => clearTimeout(t); }, []);
+  useEffect(() => { const t = setTimeout(onDone, reduced() ? 2200 : CLIP + HOLD); return () => clearTimeout(t); }, []);
   const full = fill(ch.reaction);
   return (
     <button class={`impact ${r.recalled && step >= 2 ? 'recalled' : ''}`} onClick={onDone} aria-label={`${fill(ch.label)}. ${full} Tap to continue`}>
@@ -122,16 +122,16 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
           <span class="rv-line"><b>{NAMES[r.card.who]?.split(',')[0] ?? r.card.who}</b>{full.slice(0, chars)}{chars >= full.length && ch.then?.length ? <em> This isn't over.</em> : null}</span>
         </span>
       </span>
-      <span class={`rv-tiles n${Math.max(1, ms.length)}`}>
-        {ms.length === 0 && <span class="rv-tile none in">Nothing changed. Nobody even looked up.</span>}
+      <span class="rv-bars">
+        {ms.length === 0 && <span class="rv-barrow none in">Nothing changed. Nobody even looked up.</span>}
         {ms.map((m, i) => {
           const d = r.after[m] - r.before[m], up = d > 0;
           const edge = r.after[m] <= TUNING.low || (m !== 'treasury' && r.after[m] >= TUNING.high);
           return (
-            <span key={m} class={`rv-tile ${up ? 'up' : 'down'} ${step >= 1 ? 'in' : ''} ${edge ? 'edge' : ''}`} style={{ '--g': METER_COLOR[m], '--d': `${i * 110}ms` }}>
+            <span key={m} class={`rv-barrow ${up ? 'up' : 'down'} ${step >= 1 ? 'in' : ''}`} style={{ '--g': METER_COLOR[m], '--d': `${i * 120}ms` }}>
               <MeterIcon m={m} />
-              <span class="rv-num">{up ? '▲' : '▼'}{step >= 1 ? <CountUp to={Math.abs(d)} bare /> : Math.abs(d)}</span>
-              <span class="rv-name">{METER_NAME[m]}</span>
+              <span class="rv-barname">{METER_NAME[m]}{edge && step >= 1 ? <em>{r.after[m] <= TUNING.low ? ' · danger' : ' · too high'}</em> : null}</span>
+              <span class="rv-barnum">{up ? '▲' : '▼'}{step >= 1 ? <CountUp to={Math.abs(d)} bare /> : Math.abs(d)}</span>
               <SlideBar m={m} from={r.before[m]} to={step >= 1 ? r.after[m] : r.before[m]} />
             </span>
           );
@@ -512,12 +512,6 @@ export function App() {
       <div class="layout">
         <aside class="side">
           <ol class="timeline" aria-label="The week">{DAY_NAMES.map((d, i) => <li key={d} class={i + 1 === s.day ? 'now' : i + 1 < s.day ? 'past' : ''}><span>{d}</span><b>{i === 6 ? (s.result ? `${s.result.share}%` : 'Vote') : s.polls[i] !== undefined ? `${s.polls[i]}%` : ''}</b>{s.daveDays.includes(i + 1) && <i>Randy</i>}</li>)}</ol>
-          <div class="threads">
-            <h3>Stories in play</h3>
-            {(() => { const live = [...new Set(s.queue.map((q) => findCard(pack, q.cardId).story ?? 'town'))]; return live.length ? <ul>{live.map((x) => <li key={x}>{pack.headlines[x] ?? x} <small>to be continued…</small></li>)}</ul> : <p class="hint">Nothing brewing. Yet.</p>; })()}
-            <h3>This week's goals</h3>
-            <ul class="goals">{pack.objectives.map((o) => <li key={o.id} class={s.objectivesDone.includes(o.id) ? 'done' : ''}>{s.objectivesDone.includes(o.id) ? '★' : '○'} {o.text} <small>+{TUNING.vote.objective}% votes</small></li>)}</ul>
-          </div>
         </aside>
         <main class="main">
           <Meters s={s} preview={choice} />

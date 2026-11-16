@@ -8,7 +8,7 @@
 //   who"Honk."        speech bubble for this beat
 //   +pond@50,90*1.4   add a prop (x, y of its base, size)     +pond#p2@..    with its own id
 //       ...ends with  v drop in   ^ rise up   < from the right   > from the left   (default: pop)
-//   -pond             remove with a puff      -pond!   squash flat
+//   -pond             remove with a puff      -pond!   squash flat      -poop*   remove every poop
 //   pond~bin          turn one prop into another               pond>30,90     move a prop
 //   *12 gosling@50,92 scatter twelve
 //   sign"CLOSED"@70,60  a sign with words on it               !"HONK!"@50,30  a sound word
@@ -16,7 +16,7 @@
 //                     flash rain stampNO stampOK water fog clear fireworks shake
 //   crowd:cheer | crowd:protest | crowd:none
 import type { ComponentChildren } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import { INK, drawCast } from './art.tsx';
 import type { Mood } from './art.tsx';
 import { PROPS } from './props.tsx';
@@ -100,6 +100,7 @@ function play(scene: Scene, upTo: number): World {
         w.fx.push({ key: `f${at}${m[1]}${m[2] ?? ''}`, name: m[1]!, x: Number(m[2] ?? 50), y: Number(m[3] ?? 50), at });
       } else if ((m = c.match(/^crowd:(\w+)$/))) w.crowd = m[1]!;
       else if ((m = c.match(/^\+(\w+)(?:#(\w+))?@(-?\d+),(-?\d+)(?:\*([\d.]+))?([v^<>])?$/))) w.things.push({ id: m[2] ?? m[1]!, name: m[1]!, x: Number(m[3]), y: Number(m[4]), s: Number(m[5] ?? 1), enter: { v: 'drop', '^': 'rise', '<': 'inR', '>': 'inL' }[m[6] ?? ''] ?? 'pop', bornAt: at });
+      else if ((m = c.match(/^-(\w+)\*$/))) { for (const t of w.things) if (t.name === m[1] && !t.gone) { t.gone = 'poof'; t.goneAt = at; } }
       else if ((m = c.match(/^-(\w+)(!)?$/))) { const t = thing(m[1]!); if (t) { t.gone = m[2] ? 'squash' : 'poof'; t.goneAt = at; } }
       else if ((m = c.match(/^(\w+)~(\w+)$/))) { const t = thing(m[1]!); if (t) { t.name = m[2]!; t.changedAt = at; } }
       else if ((m = c.match(/^(\w+)>(-?\d+),(-?\d+)$/))) { const t = thing(m[1]!); if (t) { t.x = Number(m[2]); t.y = Number(m[3]); } }
@@ -120,7 +121,7 @@ function play(scene: Scene, upTo: number): World {
 /** Check a script before it ships: every prop exists and every command parses. Returns problems. */
 export function lintScene(src: string): string[] {
   const s = parseScene(src); const bad: string[] = [];
-  const known = /^(\*\d+ \w+@-?\d+,-?\d+(\*[\d.]+)?|sign"[^"]*"(#\w+)?@-?\d+,-?\d+(\*[\d.]+)?|!"[^"]*"@-?\d+,-?\d+|fx:\w+(@-?\d+,-?\d+)?|crowd:\w+|\+\w+(#\w+)?@-?\d+,-?\d+(\*[\d.]+)?[v^<>]?|-\w+!?|\w+~\w+|\w+>-?\d+,-?\d+|\w+@-?\d+(:\w+)?|\w+>-?\d+|\w+:\w+|\w+=\w*|\w+"[^"]*")$/;
+  const known = /^(\*\d+ \w+@-?\d+,-?\d+(\*[\d.]+)?|sign"[^"]*"(#\w+)?@-?\d+,-?\d+(\*[\d.]+)?|!"[^"]*"@-?\d+,-?\d+|fx:\w+(@-?\d+,-?\d+)?|crowd:\w+|\+\w+(#\w+)?@-?\d+,-?\d+(\*[\d.]+)?[v^<>]?|-\w+\*|-\w+!?|\w+~\w+|\w+>-?\d+,-?\d+|\w+@-?\d+(:\w+)?|\w+>-?\d+|\w+:\w+|\w+=\w*|\w+"[^"]*")$/;
   for (const beat of s.beats) for (const c of beat) {
     if (!known.test(c)) bad.push(`cannot read "${c}"`);
     const p = c.match(/^\+(\w+)/) ?? c.match(/^\*\d+ (\w+)/) ?? c.match(/^\w+~(\w+)$/);
@@ -199,8 +200,11 @@ function Effect({ f }: { f: Fx }) {
   }
 }
 
+/** How long one beat of a scene lasts, in milliseconds. */
+export const BEAT = 720;
+
 export function SceneStage({ scene, onBeat }: { scene: Scene; onBeat?: (beat: number, of: number) => void }) {
-  const BEAT = 1000;
+  const svg = useRef<SVGSVGElement>(null);
   const reduce = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
   const [step, setStep] = useState(reduce ? scene.beats.length - 1 : 0);
   useEffect(() => {
@@ -211,9 +215,11 @@ export function SceneStage({ scene, onBeat }: { scene: Scene; onBeat?: (beat: nu
   }, [step]);
   const w = play(scene, step);
   const shake = w.fx.some((f) => f.at === step && (f.name === 'shake' || f.name === 'boom' || f.name === 'stampNO'));
+  // a jolt on impacts, without rebuilding the picture (which would restart every animation)
+  useEffect(() => { if (shake && !reduce) svg.current?.animate?.([{ translate: '0 0' }, { translate: '-1.4% 1%' }, { translate: '1.4% -1%' }, { translate: '-1% -.6%' }, { translate: '.8% .6%' }, { translate: '0 0' }], { duration: 320, easing: 'ease-out' }); }, [step]);
   const hand = (a: Actor) => ({ x: a.x + (a.flip ? -9 : 9), y: ((GROUND - 58 * SIZE) / 300) * 100 });
   return (
-    <svg class={`scene ${shake ? 'shaking' : ''}`} key={shake ? `s${step}` : 's'} viewBox="0 0 400 300" role="img" aria-hidden="true">
+    <svg ref={svg} class="scene" viewBox="0 0 400 300" role="img" aria-hidden="true">
       {SETS[scene.set] ?? SETS.office}
       {w.rain && <g class="sc-rain">{Array.from({ length: 26 }, (_, i) => <path key={i} d={`M${(i * 43) % 400} ${(i * 29) % 240} l-6 18`} stroke="#7FB7D9" stroke-width="3" stroke-linecap="round" style={{ '--d': `${(i % 7) / 10}s` } as Record<string, string>} />)}</g>}
       {w.things.filter((t) => t.y < 80).map((t) => <ThingView key={t.id} t={t} step={step} held={null} />)}

@@ -69,8 +69,14 @@ describe('stories build on each other', () => {
   it('a follow-up never appears unless a choice scheduled it', () => {
     const follow = new Set(pack.cards.filter((c) => c.followUp).map((c) => c.id));
     let s = start();
-    s = skip(s, 3);
-    expect(s.seen.filter((id) => follow.has(id))).toEqual([]);
+    s = skip(s, 14);
+    const triggered = new Set(s.swipes.flatMap((w) => (findCard(pack, w.cardId).options[w.dir]!.then ?? []).map(([id]) => id)));
+    for (const id of s.seen.filter((x) => follow.has(x))) expect(triggered.has(id), `${id} was triggered by a choice`).toBe(true);
+  });
+  it('a storyline runs back to back: the next beat is the very next card (or the one after a pinned card)', () => {
+    let s = swipe(until(start(), 'g1'), 'right');
+    if (s.current !== 'g2') s = skip(s, 1);
+    expect(s.current).toBe('g2');
   });
   it('the ballots only turn up if you went into the basement', () => {
     const noBasement = { ...start(), day: 5, flags: {} };
