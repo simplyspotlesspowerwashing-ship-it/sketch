@@ -333,7 +333,7 @@ export interface Burst { key: number; skill: 0 | 1 | 2 }
 export const HOME: Record<GroupId, [number, number, number]> = { people: [55, 60, 40], law: [211, 28, 40], press: [287, 76, 28], business: [347, 30, 20] };
 const HOME_NAME: Record<GroupId, string> = { people: 'SCHOOL', law: 'TOWN HALL', press: 'BUGLE', business: 'CHAD' };
 
-export function Town({ s, pulse, scene, burst }: { s: TownView; pulse?: Pulse | null; scene?: string | null; burst?: Burst | null }) {
+export function Town({ s, pulse, scene, burst, vb, children }: { s: TownView; pulse?: Pulse | null; scene?: string | null; burst?: Burst | null; vb?: string; children?: ComponentChildren }) {
   const has = (id: string) => !!s.flags[`built:${id}`];
   const fresh = (id: string) => (s.fresh === `built:${id}` ? 'built fresh' : 'built');
   const f = s.flags;
@@ -348,7 +348,7 @@ export function Town({ s, pulse, scene, burst }: { s: TownView; pulse?: Pulse | 
   const avg = GROUPS.reduce((n, g) => n + s.approval[g], 0) / 4;
   const gloomy = avg < 40, sunny = avg >= 60;
   return (
-    <svg class={`town ${burst && burst.skill === 0 ? 'quake' : ''}`} key={burst && burst.skill === 0 ? burst.key : 0} viewBox="0 0 400 170" role="img" aria-label={`Bad Town. Built: ${Object.keys(s.flags).filter((f) => f.startsWith('built:')).map((f) => f.slice(6)).join(', ') || 'nothing yet'}.`}>
+    <svg class={`town ${burst && burst.skill === 0 ? 'quake' : ''}`} key={burst && burst.skill === 0 ? burst.key : 0} viewBox={vb ?? '0 0 400 170'} role="img" aria-label={`Bad Town. Built: ${Object.keys(s.flags).filter((f) => f.startsWith('built:')).map((f) => f.slice(6)).join(', ') || 'nothing yet'}.`}>
       <rect width="400" height="170" fill={sky} />
       {night ? <><circle cx="340" cy="30" r="14" fill="#F2EBDD" /><circle cx="346" cy="26" r="12" fill={sky} />{[30, 80, 140, 200, 260, 300, 370].map((x, i) => <circle key={x} class="blink" style={{ 'animation-delay': `${i * 0.3}s`, 'animation-duration': '3s' }} cx={x} cy={12 + ((i * 17) % 34)} r="1.4" fill="#F2EBDD" />)}</>
         : <g class="sun"><circle cx={60 + s.day * 45} cy={s.day > 4 ? 50 : 28} r="15" fill="#F7D774" stroke={INK} stroke-width="2" /></g>}
@@ -485,6 +485,7 @@ export function Town({ s, pulse, scene, burst }: { s: TownView; pulse?: Pulse | 
       {burst && burst.skill === 2 && Array.from({ length: 22 }, (_, i) => <rect key={`${burst.key}c${i}`} class="confetti" style={{ 'animation-delay': `${(i % 7) * 0.09}s` }} x={12 + i * 17.5} y={-8} width="5" height="8" rx="1" fill={['#D9653B', '#3F8F5A', '#3B6FB6', '#E8C55A'][i % 4]} transform={`rotate(${i * 37} ${12 + i * 17.5} -4)`} />)}
       {burst && burst.skill === 0 && [60, 140, 215, 290, 350].map((x, i) => <g key={`${burst.key}s${i}`} class="smokeup" style={{ 'animation-delay': `${i * 0.12}s` }} transform={`translate(${x} ${96 + (i % 2) * 14})`}><circle r="11" fill="#6B6257" opacity=".85" /><circle cx="9" cy="-7" r="8" fill="#8C8577" opacity=".85" /><circle cx="-8" cy="-5" r="7" fill="#8C8577" opacity=".85" /></g>)}
       {s.approval.people < 35 && <g class="built">{[22, 40, 58].map((x, i) => <g key={x} class="goose" style={{ 'animation-delay': `${i * 0.2}s` }} transform={`translate(${x} 128)`}><rect x="-7" y="-22" width="14" height="10" fill="#fff" stroke={INK} stroke-width="1.5" /><path d="M0 -12 v12" stroke={INK} stroke-width="2" /><circle cx="0" cy="2" r="3.5" fill="#D9653B" stroke={INK} stroke-width="1.5" /><path d="M-4 -17 h8" stroke="#C23B3B" stroke-width="2" /></g>)}</g>}
+      {children}
     </svg>
   );
 }

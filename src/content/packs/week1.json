@@ -4204,7 +4204,7 @@
    "id": "rn1",
    "who": "randy",
    "story": "randy",
-   "text": "Mayor {mayor}. Friend. I've still got the keys to City Hall. Not giving them back. Just letting you know. As a friend.",
+   "text": "Boss. Small thing. When I stepped down, I kept the keys to City Hall. Sentimental reasons. Not giving them back.",
    "options": {
     "right": {
      "label": "Ask nicely for the keys",
@@ -4229,7 +4229,7 @@
       "treasury": -10,
       "law": 10
      },
-     "reaction": "Lovely new locks. I've already got copies. I was at the locksmith's first.",
+     "reaction": "Lovely new locks. I've got copies already. I was at the locksmith's first.",
      "set": [
       "randy_spite"
      ],
@@ -4263,7 +4263,7 @@
    "id": "rn2",
    "who": "barb",
    "story": "randy",
-   "text": "Randy is holding 'shadow council meetings' in the bins behind City Hall. Attendance is excellent. It's all raccoons.",
+   "text": "Your deputy is holding 'shadow council meetings' in the bins behind City Hall. Attendance is excellent. It's all raccoons.",
    "options": {
     "right": {
      "label": "Attend a meeting",
@@ -4338,15 +4338,15 @@
    "id": "rn3",
    "who": "marge",
    "story": "randy",
-   "text": "Randy is running a write-in campaign for Sunday. Slogan: 'RANDY: He's Back (He Never Left)'. He's polling at 9%.",
+   "text": "Randy has made your campaign posters without asking. They say 'VOTE {mayor}: NOT A RACCOON'. He's very proud.",
    "options": {
     "right": {
-     "label": "Debate him",
+     "label": "Put them up",
      "effects": {
       "press": 10,
       "people": -5
      },
-     "reaction": "He answered every question with 'bins'. The crowd went wild.",
+     "reaction": "Now everyone suspects you might be a raccoon. Randy calls this 'buzz'.",
      "then": [
       [
        "rn4",
@@ -4355,12 +4355,12 @@
      ]
     },
     "left": {
-     "label": "Ignore him",
+     "label": "Take them down",
      "effects": {
       "people": -5,
       "press": -5
      },
-     "reaction": "He's at 14% now. He promised free bins. People really like bins.",
+     "reaction": "He's made new ones. 'VOTE {mayor}: PROBABLY NOT A RACCOON'.",
      "then": [
       [
        "rn4",
@@ -4375,27 +4375,24 @@
    "id": "rn4",
    "who": "randy",
    "story": "randy",
-   "text": "I'll drop out of the race, boss. For a price. I get to be mayor on Wednesdays. And one hat. A big one.",
+   "text": "Boss! I've organised you a campaign rally. Venue: the bins. Crowd: 300. Raccoons: 290. Will you do a speech?",
    "options": {
     "right": {
-     "label": "Wednesdays and a hat",
+     "label": "Give the speech",
      "effects": {
       "people": 5,
-      "law": -10,
-      "press": 5
+      "law": -5,
+      "press": 10
      },
-     "reaction": "Wednesday is Bin Day now. Every bin. Every hour. The hat is a bin.",
-     "set": [
-      "randy_wed"
-     ]
+     "reaction": "They hissed for twenty minutes. In raccoon, that's a standing ovation."
     },
     "left": {
-     "label": "No deals with raccoons",
+     "label": "Cancel the rally",
      "effects": {
-      "law": 10,
+      "people": -5,
       "press": -5
      },
-     "reaction": "You'll regret this. I'll be in the bins, regretting it on your behalf."
+     "reaction": "Randy went on alone. Said lovely things about you for an hour. Then ate the podium."
     }
    },
    "followUp": true
@@ -5231,10 +5228,10 @@
    "id": "randyballots",
    "who": "randy",
    "story": "town",
-   "text": "Honest question, boss. If I ate the Sunday ballots, would that count as voting? Hypothetically. Very hypothetically.",
+   "text": "Honest question, boss. If I ate some ballots on Sunday, to help you, would that be bad? Very hypothetically.",
    "options": {
     "right": {
-     "label": "No, it would not",
+     "label": "Yes. Very bad.",
      "effects": {
       "law": 10
      },
@@ -5246,7 +5243,7 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "You hired a goose. The goose ate the ballots. Randy is furious. That was his job."
+     "reaction": "You hired a goose. The goose ate the ballots. Randy is furious. That was his idea."
     }
    }
   },
@@ -6346,7 +6343,7 @@
   "town": "AROUND TOWN",
   "pressure": "TROUBLE AT HOME",
   "sneak": "CAUGHT IN THE ACT",
-  "randy": "RANDY STRIKES BACK",
+  "randy": "RANDY HELPS (UNFORTUNATELY)",
   "bev": "BEV OPENS THE THROTTLE",
   "whiskers": "TOWN V. MR WHISKERS",
   "brayden": "BAD TOWN+ (TERMS APPLY)",

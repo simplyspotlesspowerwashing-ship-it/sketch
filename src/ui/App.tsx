@@ -8,7 +8,8 @@ import type { Crowd } from '../engine/score.ts';
 import crowdData from '../content/packs/week1.crowd.json' with { type: 'json' };
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
-import { GROUP_COLOR, GROUP_NAME, HOME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
+import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
+import { Act, STAGE } from './acts.tsx';
 import type { Mood, TownView } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
@@ -80,7 +81,7 @@ const moodLine = (m: MeterId, d: number, seed: string) => {
   return pick(Math.abs(d) >= 10 ? set.big : set.small, seed + m);
 };
 
-function CountUp({ to, ms = 650 }: { to: number; ms?: number }) {
+function CountUp({ to, ms = 650, bare }: { to: number; ms?: number; bare?: boolean }) {
   const [v, setV] = useState(reduced() ? to : 0);
   useEffect(() => {
     if (reduced()) return;
@@ -89,12 +90,12 @@ function CountUp({ to, ms = 650 }: { to: number; ms?: number }) {
     raf = requestAnimationFrame(f);
     return () => cancelAnimationFrame(raf);
   }, []);
-  return <>{v > 0 ? '+' : v < 0 ? '−' : ''}{Math.abs(v)}</>;
+  return <>{bare ? '' : v > 0 ? '+' : v < 0 ? '−' : ''}{Math.abs(v)}</>;
 }
 
 function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
   const [w, setW] = useState(reduced() ? to : from);
-  useEffect(() => { const t = setTimeout(() => setW(to), 120); return () => clearTimeout(t); }, []);
+  useEffect(() => { const t = setTimeout(() => setW(to), 120); return () => clearTimeout(t); }, [to]);
   return (
     <span class="rv-bar">
       <i class="zone low" style={{ width: `${TUNING.low}%` }} />
@@ -105,30 +106,31 @@ function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
   );
 }
 
-/** Particles: confetti and hearts for a gain, a storm for a loss, coins for the treasury. */
-function RowFx({ m, d }: { m: MeterId; d: number }) {
-  const big = Math.abs(d) >= 10;
-  if (m === 'treasury') return (
-    <span class={`rv-fx ${d > 0 ? 'coins-in' : 'coins-out'}`} aria-hidden="true">
-      {Array.from({ length: big ? 9 : 5 }, (_, k) => <i key={k} style={{ '--x': `${(k * 37) % 100}%`, '--d': `${(k * 70) % 400}ms`, '--r': `${(k * 53) % 360}deg` }}><Icon.coin size={18} /></i>)}
-    </span>
-  );
-  if (d > 0) return (
-    <span class="rv-fx cheer" aria-hidden="true">
-      {Array.from({ length: big ? 18 : 10 }, (_, k) => <i key={k} class="cf" style={{ '--a': `${(k * 360) / (big ? 18 : 10) + (k % 3) * 7}deg`, '--dist': `${50 + (k * 29) % 50}px`, '--c': k % 3 === 0 ? 'var(--gold)' : k % 3 === 1 ? METER_COLOR[m] : '#fff', '--d': `${(k % 4) * 30}ms` }} />)}
-      {Array.from({ length: big ? 4 : 2 }, (_, k) => <b key={k} class="heart" style={{ '--x': `${-18 + k * 14}px`, '--d': `${120 + k * 140}ms` }}>♥</b>)}
-    </span>
-  );
-  return (
-    <span class={`rv-fx storm ${big ? 'big' : ''}`} aria-hidden="true">
-      <svg class="cloud" viewBox="0 0 60 30" width="58" height="29"><path d="M12 26 Q2 26 4 18 Q4 10 14 11 Q18 2 30 4 Q40 0 45 10 Q58 9 56 19 Q56 26 46 26 Z" fill="#6E6A78" stroke="#29231F" stroke-width="2.5" stroke-linejoin="round" /></svg>
-      {Array.from({ length: big ? 8 : 5 }, (_, k) => <i key={k} class="drop" style={{ '--x': `${8 + k * (44 / (big ? 8 : 5))}px`, '--d': `${(k * 97) % 500}ms` }} />)}
-      {big && <svg class="bolt" viewBox="0 0 20 36" width="18" height="32"><path d="M12 0 L2 20 L9 20 L6 36 L18 13 L11 13 L14 0 Z" fill="#FFD84A" stroke="#29231F" stroke-width="2" stroke-linejoin="round" /></svg>}
-    </span>
-  );
-}
-
 const MOOD_OF = (d: number): Mood => (d > 0 ? 'pleased' : 'annoyed');
+
+/** A camera on the town: tweens the SVG viewport between shots. Aspect is 4:3. */
+type Shot = { x: number; y: number; w: number };
+const ASPECT = 0.75;
+const WIDE: Shot = { x: 86, y: 0, w: 170 / ASPECT };
+const shotOn = (cx: number, w = 150): Shot => ({ x: Math.max(0, Math.min(400 - w, cx - w / 2)), y: Math.max(0, Math.min(170 - w * ASPECT, 104 - (w * ASPECT) / 2)), w });
+function useCamera(target: Shot): Shot {
+  const [cam, setCam] = useState(target);
+  const cur = useRef(target);
+  useEffect(() => {
+    if (reduced()) { cur.current = target; setCam(target); return; }
+    const from = { ...cur.current }, t0 = performance.now();
+    let raf = 0;
+    const f = (now: number) => {
+      const p = Math.min(1, (now - t0) / 700), e = p < 0.5 ? 4 * p ** 3 : 1 - (-2 * p + 2) ** 3 / 2;
+      const c = { x: from.x + (target.x - from.x) * e, y: from.y + (target.y - from.y) * e, w: from.w + (target.w - from.w) * e };
+      cur.current = c; setCam(c);
+      if (p < 1) raf = requestAnimationFrame(f);
+    };
+    raf = requestAnimationFrame(f);
+    return () => cancelAnimationFrame(raf);
+  }, [target.x, target.y, target.w]);
+  return cam;
+}
 
 function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const ch = r.card.options[r.dir]!;
@@ -136,18 +138,14 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const rar = rarityOf(r.pct);
   const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
   const tone = ms.length === 0 ? 'flat' : ms.every((m) => r.after[m] > r.before[m]) ? 'good' : ms.every((m) => r.after[m] < r.before[m]) ? 'bad' : net >= 0 ? 'mixed good' : 'mixed bad';
-  // stage 0: stamp + character; 1..n: one group each; n+1: crowd; n+2: hold
-  const INTRO = 620, ROW = 400, CROWD = 480, HOLD = r.recalled ? 1800 : 1150;
+  // stage 0: the stamp over a wide shot; 1..n: the camera visits each group in turn; n+1: wide again and the crowd
+  const INTRO = 700, ROW = 900, CROWD = 550, HOLD = r.recalled ? 1900 : 1400;
   const [step, setStep] = useState(reduced() ? 99 : 0);
   const [chars, setChars] = useState(reduced() ? 999 : 0);
   useEffect(() => { sfx('stamp'); }, []);
+  useEffect(() => { if (reduced()) return; const t = setInterval(() => setChars((c) => c + 2), 18); return () => clearInterval(t); }, []);
   useEffect(() => {
-    if (reduced()) return;
-    const t = setInterval(() => setChars((c) => c + 2), 18);
-    return () => clearInterval(t);
-  }, []);
-  useEffect(() => {
-    if (step > ms.length + 1) return;
+    if (step > ms.length) return;
     const t = setTimeout(() => {
       const m = ms[step];
       if (m) sfx(r.after[m] > r.before[m] ? (m === 'treasury' ? 'coin' : 'win') : 'warn');
@@ -157,53 +155,50 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
     }, step === 0 ? INTRO : step <= ms.length ? ROW : CROWD);
     return () => clearTimeout(t);
   }, [step]);
-  useEffect(() => { const t = setTimeout(onDone, reduced() ? 1800 : INTRO + ms.length * ROW + CROWD + HOLD); return () => clearTimeout(t); }, []);
+  useEffect(() => { const t = setTimeout(onDone, reduced() ? 2000 : INTRO + ms.length * ROW + CROWD + HOLD); return () => clearTimeout(t); }, []);
   const headline = ms.length === 0 ? 'Nobody noticed. Somehow that is worse.'
     : ms.slice(0, 3).map((m) => { const d = r.after[m] - r.before[m]; return m === 'treasury' ? (d > 0 ? 'Treasury up' : 'Treasury down') : `${METER_NAME[m]} ${d > 0 ? 'up' : 'down'}`; }).join(' · ');
   const full = fill(ch.reaction);
   const reaction = full.slice(0, chars);
-  const focus = ms[0];
-  const [fx, fy] = [!focus ? 200 : focus === 'treasury' ? 211 : HOME[focus as GroupId][0], 112]; // aim at street level, where the crowds gather
-  const effects: Record<string, number> = {};
-  for (const m of ms) effects[m] = r.after[m] - r.before[m];
-  const view: TownView = { day: r.day, approval: { people: r.after.people, business: r.after.business, law: r.after.law, press: r.after.press }, flags: r.flags, fresh: r.fresh };
   const crowdIn = step > ms.length;
+  const focus = step >= 1 && step <= ms.length ? ms[step - 1] : null;
+  const cam = useCamera(focus ? shotOn(STAGE[focus].x) : step === 0 ? shotOn(ms[0] ? STAGE[ms[0]].x : 200, 260) : WIDE);
+  const view: TownView = { day: r.day, approval: { people: r.after.people, business: r.after.business, law: r.after.law, press: r.after.press }, flags: r.flags, fresh: r.fresh };
   return (
     <button class={`impact tone-${tone.replace(' ', ' tone-')} ${r.recalled && crowdIn ? 'recalled' : ''}`} onClick={onDone} aria-label={`${fill(ch.label)}. ${headline}. Tap to continue`}>
       <span class="rv-rays" aria-hidden="true" />
       <span class="rv-flash" aria-hidden="true" />
       {tone === 'good' && (
-        <span class={`rv-weather ${tone}`} aria-hidden="true">
-          {Array.from({ length: tone === 'good' ? 28 : 34 }, (_, k) => <i key={k} style={{ '--x': `${(k * 37) % 100}%`, '--d': `${(k * 113) % 900}ms`, '--r': `${(k * 71) % 360}deg`, '--c': ['var(--gold)', 'var(--people)', 'var(--business)', 'var(--law)', 'var(--press)', '#fff'][k % 6] }} />)}
+        <span class="rv-weather good" aria-hidden="true">
+          {Array.from({ length: 28 }, (_, k) => <i key={k} style={{ '--x': `${(k * 37) % 100}%`, '--d': `${(k * 113) % 900}ms`, '--r': `${(k * 71) % 360}deg`, '--c': ['var(--gold)', 'var(--people)', 'var(--business)', 'var(--law)', 'var(--press)', '#fff'][k % 6] }} />)}
         </span>
       )}
       <span class="rv-flashline" aria-hidden="true"><b>BUGLE FLASH</b> {headline}</span>
       <span class={`rv-stamp from-${r.dir}`}><b>{ARROW[r.dir]}</b>{fill(ch.label)}</span>
-      <span class="rv-scene">
-        <span class="rv-cam" style={{ '--tx': `${50 - Math.min(68, Math.max(32, fx / 4))}%`, '--ty': `${50 - Math.min(68, Math.max(32, fy / 1.7))}%` }}><Town s={view} pulse={{ key: r.key, effects }} scene={sceneOf(r.card)} /></span>
+      <span class="rv-scene" aria-hidden="true">
+        <Town s={view} scene={sceneOf(r.card)} vb={`${cam.x} ${cam.y} ${cam.w} ${cam.w * ASPECT}`}>
+          {ms.slice(0, Math.min(step, ms.length)).map((m) => <Act key={m} m={m} d={r.after[m] - r.before[m]} />)}
+        </Town>
+        {focus && <span key={focus} class={`rv-caption ${r.after[focus] > r.before[focus] ? 'up' : 'down'}`} style={{ '--g': METER_COLOR[focus] }}>{METER_NAME[focus]} {r.after[focus] > r.before[focus] ? '▲' : '▼'} {moodLine(focus, r.after[focus] - r.before[focus], r.card.id + r.dir)}</span>}
       </span>
       <span class="rv-hero">
-        <span class={`rv-face mood-${net >= 0 ? 'up' : 'down'}`}><Portrait who={r.card.who} size={64} mood={ms.length ? MOOD_OF(net) : 'neutral'} /></span>
+        <span class={`rv-face mood-${net >= 0 ? 'up' : 'down'}`}><Portrait who={r.card.who} size={56} mood={ms.length ? MOOD_OF(net) : 'neutral'} /></span>
         <span class="rv-bubble"><span class="rv-who">{NAMES[r.card.who] ?? r.card.who}</span>“{reaction}”{chars >= full.length && ch.then?.length ? <small>This isn't over.</small> : null}</span>
       </span>
-      <span class="rv-rows">
+      <span class="rv-chips">
         {ms.map((m, i) => {
-          const d = r.after[m] - r.before[m], up = d > 0, big = Math.abs(d) >= 10;
+          const d = r.after[m] - r.before[m], up = d > 0;
           const edge = r.after[m] <= TUNING.low || (m !== 'treasury' && r.after[m] >= TUNING.high);
-          if (i >= step) return <span key={m} class="rv-row pending" />;
           return (
-            <span key={m} class={`rv-row ${up ? 'up' : 'down'} ${big ? 'big' : ''}`} style={{ '--g': METER_COLOR[m] }}>
-              <span class="rv-actor">
-                {m === 'treasury' ? <span class="rv-coin"><Icon.coin size={40} /></span> : <Portrait who={LEADER[m as GroupId]!} size={48} ring={METER_COLOR[m]} mood={MOOD_OF(d)} />}
-                <RowFx m={m} d={d} />
-              </span>
-              <span class="rv-text"><b>{METER_NAME[m]}</b><small>{moodLine(m, d, r.card.id + r.dir)}</small></span>
-              <span class="rv-num"><span class="arrow">{up ? '▲' : '▼'}</span><CountUp to={d} /></span>
-              <SlideBar m={m} from={r.before[m]} to={r.after[m]} />
-              {edge && <span class="rv-edge">{r.after[m] <= TUNING.low ? (m === 'treasury' ? 'Running dry' : 'Close to revolt') : 'Getting too powerful'}</span>}
+            <span key={m} class={`rv-chip ${up ? 'up' : 'down'} ${i < step ? 'in' : ''} ${edge ? 'edge' : ''}`} style={{ '--g': METER_COLOR[m] }}>
+              <MeterIcon m={m} />
+              <span class="rv-chipbody"><b>{METER_NAME[m]}</b><SlideBar m={m} from={r.before[m]} to={i < step ? r.after[m] : r.before[m]} /></span>
+              <span class="rv-chipnum">{up ? '▲' : '▼'}{i < step ? <CountUp to={Math.abs(d)} bare /> : 0}</span>
+              {edge && i < step && <span class="rv-edge">{r.after[m] <= TUNING.low ? (m === 'treasury' ? 'Running dry' : 'Close to revolt') : 'Too powerful'}</span>}
             </span>
           );
         })}
+        {ms.length === 0 && <span class="rv-chip in none">Nothing changed. Nobody even looked up.</span>}
       </span>
       {crowdIn && r.pct !== undefined && (
         <span class={`rv-crowd r-${rar.id}`}>
@@ -463,13 +458,14 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
     <div class="op-slide" key="1">
       <div class="op-who bounce"><Portrait who="randy" size={150} mood="pleased" /></div>
       <h2 class="op-title">Until last week, the mayor was Randy.</h2>
-      <p>Randy is a raccoon. Nobody is sure how he got elected. Randy is very sure. He ran on a platform of “bins, but more of them”.</p>
-      <p class="op-quote">“I was a great mayor. Ask anyone. Don't ask the bins.” <b>— Randy</b></p>
+      <p>Randy is a raccoon. He was mayor for eleven years. Nobody remembers voting for him. Last week he stepped down “to spend more time with his bins”.</p>
+      <p class="op-quote">“I'm not going anywhere, boss. I'm staying on as your deputy. To help. Mostly to help.” <b>— Deputy Randy</b></p>
     </div>,
     <div class="op-slide" key="2">
-      <div class="op-ballot"><span class="op-votes"><b>You</b><i style={{ '--w': '100%' }} /><em>1 vote</em></span><span class="op-votes randy"><b>Randy</b><i style={{ '--w': '0%' }} /><em>0 votes*</em></span></div>
-      <h2 class="op-title">Then you ran against him. And won. By one vote.</h2>
-      <p>*Randy is demanding a recount. He has eaten the ballots. He is now your Deputy, because nobody could find the paperwork to fire him. He also ate the paperwork.</p>
+      <div class="op-ballot"><span class="op-votes"><b>{mayor || 'You'}</b><i style={{ '--w': '100%' }} /><em>1 vote</em></span><span class="op-votes randy"><b>A traffic cone</b><i style={{ '--w': '0%' }} /><em>0 votes*</em></span></div>
+      <h2 class="op-title">So you ran. Against a traffic cone. You won by one vote.</h2>
+      <p>*The cone has not conceded. The cone is running again on Sunday. Polls say it's close. The cone has never once been recalled.</p>
+      <p>Randy has promised to help. Nobody asked him to. He has a lot of ideas. Most of them are bins.</p>
     </div>,
     <div class="op-slide" key="3">
       <div class="op-cast">{GROUPS.map((g, k) => <span key={g} class="op-castmember" style={{ '--g': GROUP_COLOR[g], 'animation-delay': `${k * 120}ms` }}><Portrait who={LEADER[g]!} size={64} ring={GROUP_COLOR[g]} mood="neutral" /><b>{GROUP_NAME[g]}</b><small>{NAMES[LEADER[g]!]?.split(',')[0]}</small></span>)}<span class="op-castmember" style={{ '--g': '#B58D55', 'animation-delay': '480ms' }}><Portrait who="doug" size={64} ring="#B58D55" mood="annoyed" /><b>Treasury</b><small>Doug</small></span></div>
