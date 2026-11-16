@@ -9,8 +9,6 @@ import crowdData from '../content/packs/week1.crowd.json' with { type: 'json' };
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
 import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
-import { SceneStage } from './scenes.tsx';
-import { sceneFor } from './sceneIndex.ts';
 import type { Mood, TownView } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
@@ -92,14 +90,12 @@ function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
 
 
 /** After a choice the card turns over: the character's face and what they said, the bars that moved and
- *  what other mayors did. "See what happened" flips it again to play the scene. */
+ *  what other mayors did. */
 function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const ch = r.card.options[r.dir]!;
   const ms = METERS.filter((m) => r.after[m] !== r.before[m]).sort((a, b) => Math.abs(r.after[b] - r.before[b]) - Math.abs(r.after[a] - r.before[a]));
   const rar = rarityOf(r.pct);
   const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
-  const scene = useMemo(() => sceneFor(r.card.id, r.dir), []);
-  const [film, setFilm] = useState(0); // 0 = the portrait; n = the nth showing of the scene
   const [bars, setBars] = useState(reduced());
   useEffect(() => { const t = setTimeout(() => { setBars(true); sfx(ms.length === 0 ? 'tap' : net >= 0 ? 'win' : 'warn'); }, 380); return () => clearTimeout(t); }, []);
   useEffect(() => {
@@ -109,10 +105,9 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const mood: Mood = ms.length === 0 ? 'neutral' : net >= 0 ? 'pleased' : 'annoyed';
   return (
     <div class="stage">
-      <div class={`card result ${mood} ${r.recalled ? 'recalled' : ''}`} key={film} style={{ '--g': mood === 'pleased' ? '#3F8F5A' : mood === 'annoyed' ? '#C23B3B' : '#8C8577' }}>
+      <div class={`card result ${mood} ${r.recalled ? 'recalled' : ''}`} style={{ '--g': mood === 'pleased' ? '#3F8F5A' : mood === 'annoyed' ? '#C23B3B' : '#8C8577' }}>
         <p class="result-choice"><b>{ARROW[r.dir]}</b> {fill(ch.label)}</p>
-        {film && scene ? <div class="result-film"><SceneStage scene={scene} /></div>
-          : <div class={`result-face ${mood}`}><Portrait who={r.card.who} size={150} mood={mood} /></div>}
+        <div class={`result-face ${mood}`}><Portrait who={r.card.who} size={150} mood={mood} /></div>
         <p class="result-quote"><b>{NAMES[r.card.who]?.split(',')[0] ?? r.card.who}</b>“{fill(ch.reaction)}”{ch.then?.length ? <em> This isn't over.</em> : ch.next?.length ? <em> You'll hear about this tomorrow.</em> : null}</p>
         <div class="rv-bars">
           {ms.length === 0 && <span class="rv-barrow none in">Nothing changed. Nobody even looked up.</span>}
@@ -133,8 +128,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
           {r.recalled ? <b class="rv-recalled">RECALLED</b> : r.pct !== undefined ? <><b>{r.pct}%</b> of mayors did this · {rar.name} <i>+{TUNING.score.perCard + rar.points}</i>{PREVIEW && <span class="tag">preview</span>}</> : 'You are the first mayor to try this.'}
         </p>
       </div>
-      <div class={`choices ${scene ? 'n2' : 'n1'}`}>
-        {scene && <button class="edge-chip flip" onClick={() => { setFilm(film + 1); sfx('paper'); }}><b>{film ? '↻' : '▶'}</b><span>{film ? 'Watch again' : 'See what happened'}</span></button>}
+      <div class="choices n1">
         <button class="edge-chip right next" autoFocus onClick={onDone}><b>→</b><span>{r.recalled ? 'Oh no' : 'Next'}</span></button>
       </div>
     </div>
@@ -197,10 +191,11 @@ function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview
   const commit = (d: Dir) => {
     if (locked || leaving || stamped || !card.options[d]) return;
     // stamped as done first, then the card leaves
-    setStamped(d); setDrag(null); onPreview(null); sfx('stamp');
+    setStamped(d); setDrag(null); onPreview(null);
     if (reduced()) { onSwipe(d); return; }
-    setTimeout(() => { setLeaving(d); sfx('paper'); }, 560);
-    setTimeout(() => onSwipe(d), 820);
+    setTimeout(() => sfx('stamp'), 300);
+    setTimeout(() => { setLeaving(d); sfx('paper'); }, 1050);
+    setTimeout(() => onSwipe(d), 1300);
   };
   useEffect(() => {
     const k = (e: KeyboardEvent) => { const m: Record<string, Dir> = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' }; const d = m[e.key]; if (d && card.options[d]) { e.preventDefault(); commit(d); } };
@@ -220,7 +215,18 @@ function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview
         <div class="card-who"><Portrait who={card.who} size={110} mood={valid ? 'annoyed' : 'neutral'} /><span>{NAMES[card.who] ?? card.who}</span></div>
         <p class="card-text">{fill(card.text)}</p>
         {valid && !stamped && <div class={`choice-banner ${valid}`}>{fill(card.options[valid]!.label)}</div>}
-        {stamped && <div class="done-stamp"><span>{fill(card.options[stamped]!.label)}</span><b>DONE</b></div>}
+        {stamped && (
+          <div class="done-stamp">
+            <span>{fill(card.options[stamped]!.label)}</span>
+            <b>DONE</b>
+            <svg class="stamper" viewBox="0 0 120 150" aria-hidden="true">
+              <ellipse cx="60" cy="22" rx="26" ry="18" fill="#8A5A3C" stroke="#29231F" stroke-width="5" />
+              <rect x="48" y="34" width="24" height="54" rx="6" fill="#B58D55" stroke="#29231F" stroke-width="5" />
+              <rect x="14" y="86" width="92" height="30" rx="8" fill="#6B4B32" stroke="#29231F" stroke-width="5" />
+              <rect x="8" y="114" width="104" height="16" rx="4" fill="#2C6B41" stroke="#29231F" stroke-width="5" />
+            </svg>
+          </div>
+        )}
         <p class="card-hint">Drag the card {dirs.map((d) => ARROW[d]).join(' ')}</p>
       </div>
       <div class={`choices n${dirs.length}`}>

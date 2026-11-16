@@ -38,24 +38,19 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **Crowd numbers are simulated** (`node sim/crowd.ts` -> `week1.crowd.json`, labelled "preview data" in the game) until a stats backend is approved.
 - **Sneak moment**: one card a day (slot 13) is a hold-and-release: wind up, let go while the character isn't looking. Getting away with it is the `right` option, getting caught the `left` one.
 - Pressure cards appear when a meter is very low or very high (crime wave, protest, the treasury running dry, Chad trying to buy the town).
-- Vote share = 34 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
+- Vote share = 32 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
 - You can start any day; Deputy Randy plays the missed days and hands back a town with every meter between 35 and 65.
 - **First visit:** a six-slide opening (Bad Town, Randy the raccoon ex-mayor who stepped down and stayed on as deputy, the one-vote win over a traffic cone, the five meters, how to swipe) ending with the oath: you name your mayor and what the townsfolk are called, and pick who voted for you. The game is always "Mayor of Bad Town". Later terms offer the same names again. Cards can say `{mayor}` and `{folk}`.
 - **After every card** the town scene plays: the camera moves to the building of the group most affected, the camera visits each group that moved, in turn, and that group acts it out (src/ui/acts.tsx): People crowd the school cheering or protesting under a storm; Business lights up with money bags and a limo, or goes dark with a CLOSED sign and a tumbleweed; Law gets a police car arriving and a burglar led away, or raccoons escaping with swag; the Bugle throws out HOORAY or SCANDAL papers; coins rain into a pile or fly off on wings. The story's creatures parade past. Then each meter change counts up, and the crowd share is shown.
 - The scrapbook keeps unlocked endings, a career record and deeds across weeks.
 
-## Scenes: the film after each choice
+## After a choice
 
-Dragging a card stamps it DONE and turns it over: the character's portrait with their expression, what they said, the bars that moved and the crowd share. "See what happened" flips it again to play that choice's scene (about 4 to 5 seconds); choices without a scripted scene don't offer the flip.
-
-- **Art:** full-body characters built from the cast portraits (`Puppet` in `src/ui/scenes.tsx`), drawn sets (office, street, park, school, library, studio, court) and a library of drawn props (`src/ui/props.tsx`), all in the same ink-outline style. No emoji.
-- **Scripts:** `src/content/packs/week1.scenes.txt` holds one script per choice: `== cardId.direction set`, then one line per beat (about a second each). Commands are listed at the top of `scenes.tsx`: characters enter, walk, change pose, hand props to each other, speak; props drop in, rise, leave or get squashed; signs carry words; effects (splash, stamp, coins, crowd) land on a beat.
-- **Coverage:** every choice on this week's Monday deck and the goose follow-ups is scripted (98 scenes, including the storylines those cards lead into). A choice without a script gets a plain stand-in: the character, the mayor, a YES or NO stamp and the choice on a sign.
-- `tests/scenes.test.ts` checks every script: real card and direction, known commands, drawn props, real characters, 5 to 7 beats.
-- **Laws:** two cards a day (`who: desk`) are yours to start: pick a law, a tax, a holiday, a motto.
+A rubber stamp comes down on the card and leaves DONE; the card then turns over to show the character's portrait with their expression, what they said, the bars that moved and how many mayors chose the same. Next moves on.
 
 ## Stories carry
 
 - A choice can lead straight to the next beat (`then`) or bring a card back tomorrow morning (`next`). In week 1, beats alternate: the first follow-up is the very next card, the one after that opens the next day.
 - Each day's deck brings up to four story starters into the first ten cards, so everyone meets a storyline early.
 - The end-of-day panel lists what is waiting for you tomorrow.
+- Every storyline has an ending: short ones get a finale the next day, and a refusal usually brings a comeback card instead of ending the story.

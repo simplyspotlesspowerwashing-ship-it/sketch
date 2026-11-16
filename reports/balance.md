@@ -4,9 +4,9 @@
 
 | Policy | Win rate | Vote p10 / p50 / p90 | Recalled at least once | Term ended early | Cards played | Recall causes |
 |---|---|---|---|---|---|---|
-| random | 0.0% | 5 / 16 / 32 | 100.0% | 83.6% | 91 | low:treasury 4455, high:press 1038, high:people 1011, low:people 732, high:law 504, low:business 460, low:law 186, low:press 83, high:business 12 |
-| dave-only | 5.5% | 30 / 41 / 48 | 20.8% | 0.1% | 148 | high:press 323, low:treasury 259, high:law 58, high:people 16, low:people 4, high:business 2 |
-| sensible | 26.1% | 40 / 47 / 52 | 0.1% | 0.0% | 151 | high:press 2, high:people 1 |
+| random | 0.0% | 5 / 15 / 32 | 100.0% | 85.2% | 90 | low:treasury 4347, high:press 1188, high:people 1116, low:people 729, high:law 521, low:business 371, low:law 188, low:press 73, high:business 9 |
+| dave-only | 4.4% | 26 / 40 / 47 | 26.9% | 0.0% | 147 | high:press 404, low:treasury 330, high:law 82, high:people 46, low:people 4, low:law 1, low:business 1 |
+| sensible | 23.5% | 40 / 46 / 52 | 0.5% | 0.0% | 151 | high:people 13, high:press 2 |
 
 ## Cards never seen by any bot
 
@@ -42,4 +42,12 @@
 - `noravolcano`
 - `coachgeese`
 - `geraldtv`
+- `dougfilm`
 - `timmymayor`
+- `sl3`
+- `mc3`
+- `d3`
+- `robot1b`
+- `sl1b`
+- `mc1b`
+- `nr1b`

@@ -8,6 +8,6 @@ export const TUNING = {
   high: 75, // warning zone (UI) above this
   recall: { reset: 40, election: -8, max: 2 },
   setupBase: 6,
-  vote: { base: Number(globalThis.process?.env?.VBASE ?? 34), people: 0.5, press: 0.2, business: 0.15, law: 0.15, treasury: 0.1, objective: 3, min: 5, max: 95 },
+  vote: { base: Number(globalThis.process?.env?.VBASE ?? 32), people: 0.5, press: 0.2, business: 0.15, law: 0.15, treasury: 0.1, objective: 3, min: 5, max: 95 },
   handover: { floor: 35, ceiling: 65 }, // after Randy covers missed days
 };

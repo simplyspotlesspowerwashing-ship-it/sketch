@@ -1482,7 +1482,10 @@
       "business": 5,
       "law": -10
      },
-     "reaction": "Productivity is up. The bins are down."
+     "reaction": "Productivity is up. The bins are down.",
+     "next": [
+      "d3"
+     ]
     },
     "left": {
      "label": "Evict them",
@@ -1490,7 +1493,10 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "They left. Randy cried. Three times. Simultaneously."
+     "reaction": "They left. Randy cried. Three times. Simultaneously.",
+     "next": [
+      "d3"
+     ]
     }
    },
    "followUp": true
@@ -1541,7 +1547,10 @@
       "people": 10,
       "business": -5
      },
-     "reaction": "Bread for everyone. Mostly crumbs."
+     "reaction": "Bread for everyone. Mostly crumbs.",
+     "next": [
+      "pg3"
+     ]
     },
     "left": {
      "label": "Clip its wings, politically",
@@ -1549,7 +1558,10 @@
       "law": 10,
       "press": -10
      },
-     "reaction": "The pigeon resigned. In a single, dignified coo."
+     "reaction": "The pigeon resigned. In a single, dignified coo.",
+     "next": [
+      "pg3"
+     ]
     }
    },
    "followUp": true
@@ -1905,7 +1917,10 @@
       "press": 5,
       "people": 5
      },
-     "reaction": "Accepted. The tide is back where it was. Mostly. The pond is still acting up."
+     "reaction": "Accepted. The tide is back where it was. Mostly. The pond is still acting up.",
+     "next": [
+      "moon3"
+     ]
     },
     "left": {
      "label": "We have the paperwork",
@@ -1913,7 +1928,10 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "The moon has stopped coming out on Tuesdays. In protest."
+     "reaction": "The moon has stopped coming out on Tuesdays. In protest.",
+     "next": [
+      "moon3"
+     ]
     }
    },
    "followUp": true
@@ -1930,7 +1948,10 @@
       "treasury": -10,
       "business": 10
      },
-     "reaction": "The moon stays on. You're welcome, everybody. It was that or darkness."
+     "reaction": "The moon stays on. You're welcome, everybody. It was that or darkness.",
+     "next": [
+      "moon3"
+     ]
     },
     "left": {
      "label": "Turn the moon off",
@@ -1938,7 +1959,10 @@
       "treasury": 5,
       "people": -10
      },
-     "reaction": "He did. He actually did. It's very dark. People keep falling into Kevin."
+     "reaction": "He did. He actually did. It's very dark. People keep falling into Kevin.",
+     "next": [
+      "moon3"
+     ]
     }
    },
    "followUp": true
@@ -1970,7 +1994,13 @@
       "press": 5,
       "business": -5
      },
-     "reaction": "Their mayor wept. 'It's bigger than ours,' he said."
+     "reaction": "Their mayor wept. 'It's bigger than ours,' he said.",
+     "then": [
+      [
+       "worse1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -2152,7 +2182,13 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "He left. The clock still says 'Ooooh'."
+     "reaction": "He left. The clock still says 'Ooooh'.",
+     "then": [
+      [
+       "wizard1b",
+       1
+      ]
+     ]
     },
     "left": {
      "label": "Make him town magician",
@@ -2183,7 +2219,10 @@
       "law": 10,
       "treasury": -5
      },
-     "reaction": "It's a station again. It still ribbits when you shut the door."
+     "reaction": "It's a station again. It still ribbits when you shut the door.",
+     "next": [
+      "wizard3"
+     ]
     },
     "left": {
      "label": "Keep the frog station",
@@ -2191,7 +2230,10 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "Crime is down. Nobody wants to be put in the frog."
+     "reaction": "Crime is down. Nobody wants to be put in the frog.",
+     "next": [
+      "wizard3"
+     ]
     }
    },
    "followUp": true
@@ -2209,7 +2251,13 @@
       "people": 5,
       "business": 5
      },
-     "reaction": "They got off. Some of them got back on. They miss it."
+     "reaction": "They got off. Some of them got back on. They miss it.",
+     "then": [
+      [
+       "bus1b",
+       1
+      ]
+     ]
     },
     "left": {
      "label": "Recognise their government",
@@ -2554,7 +2602,13 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "They chittered. One saluted."
+     "reaction": "They chittered. One saluted.",
+     "then": [
+      [
+       "squirrels1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -2570,7 +2624,10 @@
       "treasury": -10,
       "business": 5
      },
-     "reaction": "We pay in acorns now too. Nobody knows what anything's worth. The economy is nuts."
+     "reaction": "We pay in acorns now too. Nobody knows what anything's worth. The economy is nuts.",
+     "next": [
+      "squirrels3"
+     ]
     },
     "left": {
      "label": "Shut the squirrel bank",
@@ -2578,7 +2635,10 @@
       "law": 10,
       "people": -5
      },
-     "reaction": "Closed. They operate out of a tree now. You can't regulate a tree."
+     "reaction": "Closed. They operate out of a tree now. You can't regulate a tree.",
+     "next": [
+      "squirrels3"
+     ]
     }
    },
    "followUp": true
@@ -3504,7 +3564,13 @@
       "treasury": -3,
       "press": 5
      },
-     "reaction": "It took the chips and the report. Classic gull."
+     "reaction": "It took the chips and the report. Classic gull.",
+     "then": [
+      [
+       "seagull1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -3520,7 +3586,10 @@
       "press": 5,
       "people": -5
      },
-     "reaction": "The gull took it well. It took Steve's sandwich better."
+     "reaction": "The gull took it well. It took Steve's sandwich better.",
+     "next": [
+      "seagull3"
+     ]
     },
     "left": {
      "label": "The gull stays",
@@ -3528,7 +3597,10 @@
       "press": 10,
       "people": 5
      },
-     "reaction": "'Chips. Then light chips.' Steve is its assistant now. He holds the chips."
+     "reaction": "'Chips. Then light chips.' Steve is its assistant now. He holds the chips.",
+     "next": [
+      "seagull3"
+     ]
     }
    },
    "followUp": true
@@ -3583,7 +3655,13 @@
       "business": -10,
       "people": 5
      },
-     "reaction": "It's sulking in the cupboard. Robots can sulk now."
+     "reaction": "It's sulking in the cupboard. Robots can sulk now.",
+     "then": [
+      [
+       "robot1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -3856,7 +3934,13 @@
      "effects": {
       "people": -5
      },
-     "reaction": "It's taken it personally. Rot is coming."
+     "reaction": "It's taken it personally. Rot is coming.",
+     "then": [
+      [
+       "compost1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -3872,7 +3956,10 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "Vetoed. The heap has gone very quiet. Warm, and very quiet."
+     "reaction": "Vetoed. The heap has gone very quiet. Warm, and very quiet.",
+     "next": [
+      "compost3"
+     ]
     },
     "left": {
      "label": "Let the rot commence",
@@ -3880,7 +3967,10 @@
       "people": 5,
       "business": -5
      },
-     "reaction": "The allotments have never been greener. The high street has never smelled worse."
+     "reaction": "The allotments have never been greener. The high street has never smelled worse.",
+     "next": [
+      "compost3"
+     ]
     }
    },
    "followUp": true
@@ -4243,7 +4333,13 @@
       "treasury": -10,
       "people": -5
      },
-     "reaction": "They're glittery now too. It spreads."
+     "reaction": "They're glittery now too. It spreads.",
+     "then": [
+      [
+       "glitter1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -4259,7 +4355,10 @@
       "treasury": -10,
       "law": 5
      },
-     "reaction": "Clean. Mostly. Doug still glows a bit when he's nervous. So, always."
+     "reaction": "Clean. Mostly. Doug still glows a bit when he's nervous. So, always.",
+     "next": [
+      "glitter3"
+     ]
     },
     "left": {
      "label": "Sell it as fancy water",
@@ -4267,7 +4366,10 @@
       "treasury": 10,
       "people": -5
      },
-     "reaction": "'Bad Town Sparkling.' It's selling. Customers light up. Literally."
+     "reaction": "'Bad Town Sparkling.' It's selling. Customers light up. Literally.",
+     "next": [
+      "glitter3"
+     ]
     }
    },
    "followUp": true
@@ -4345,7 +4447,13 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "It's appealing. Its hand is a rake."
+     "reaction": "It's appealing. Its hand is a rake.",
+     "then": [
+      [
+       "scarecrow1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -4361,7 +4469,10 @@
       "people": 10,
       "press": -5
      },
-     "reaction": "You stood in a field all day saying nothing. Approval went up four points."
+     "reaction": "You stood in a field all day saying nothing. Approval went up four points.",
+     "next": [
+      "scarecrow3"
+     ]
     },
     "left": {
      "label": "Fire the scarecrow",
@@ -4369,7 +4480,10 @@
       "people": -10,
       "law": 5
      },
-     "reaction": "It didn't react. Somehow it still won the argument."
+     "reaction": "It didn't react. Somehow it still won the argument.",
+     "next": [
+      "scarecrow3"
+     ]
     }
    },
    "followUp": true
@@ -4566,7 +4680,10 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "She arm-wrestled Barb for it. Barb's arm is in a sling. Barb is impressed."
+     "reaction": "She arm-wrestled Barb for it. Barb's arm is in a sling. Barb is impressed.",
+     "next": [
+      "higgins3"
+     ]
     },
     "left": {
      "label": "Make her Head of Doors",
@@ -4574,7 +4691,10 @@
       "people": 10,
       "law": -5
      },
-     "reaction": "Every door in town is open. Forever. Draughty, but friendly."
+     "reaction": "Every door in town is open. Forever. Draughty, but friendly.",
+     "next": [
+      "higgins3"
+     ]
     }
    },
    "followUp": true
@@ -5183,7 +5303,13 @@
       "people": 5,
       "business": -5
      },
-     "reaction": "That's exactly what someone with no vision says. Going on the podcast."
+     "reaction": "That's exactly what someone with no vision says. Going on the podcast.",
+     "then": [
+      [
+       "br1b",
+       1
+      ]
+     ]
     },
     "up": {
      "label": "Do a podcast instead",
@@ -5307,7 +5433,13 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "It won't switch off. It's sulking. Light drizzle of broth."
+     "reaction": "It won't switch off. It's sulking. Light drizzle of broth.",
+     "then": [
+      [
+       "nr1b",
+       1
+      ]
+     ]
     },
     "up": {
      "label": "Free lunch for all",
@@ -5399,7 +5531,13 @@
       "law": 10,
       "business": -10
      },
-     "reaction": "Closed for a week. The tyre has been rehomed. It went quietly."
+     "reaction": "Closed for a week. The tyre has been rehomed. It went quietly.",
+     "then": [
+      [
+       "sl1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -5416,14 +5554,20 @@
       "business": 10,
       "press": 10
      },
-     "reaction": "Black tie and black tyres. The soup was 'rubbery but elegant'."
+     "reaction": "Black tie and black tyres. The soup was 'rubbery but elegant'.",
+     "next": [
+      "sl3"
+     ]
     },
     "left": {
      "label": "Bit much",
      "effects": {
       "business": -5
      },
-     "reaction": "Fine. One star on the sign. The other star I keep in my heart. And my boot."
+     "reaction": "Fine. One star on the sign. The other star I keep in my heart. And my boot.",
+     "next": [
+      "sl3"
+     ]
     }
    },
    "followUp": true
@@ -5453,7 +5597,13 @@
      "effects": {
       "people": -5
      },
-     "reaction": "A queue has started anyway. Nobody knows what for. It's very long."
+     "reaction": "A queue has started anyway. Nobody knows what for. It's very long.",
+     "then": [
+      [
+       "co1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -5469,7 +5619,10 @@
       "people": 5,
       "press": 5
      },
-     "reaction": "Everyone stood. Some wept. It was, honestly, quite moving."
+     "reaction": "Everyone stood. Some wept. It was, honestly, quite moving.",
+     "next": [
+      "co3"
+     ]
     },
     "left": {
      "label": "Disqualify Randy",
@@ -5477,7 +5630,10 @@
       "law": 10,
       "people": -5
      },
-     "reaction": "He's appealing. To Mr Whiskers. That's going to go badly for you."
+     "reaction": "He's appealing. To Mr Whiskers. That's going to go badly for you.",
+     "next": [
+      "co3"
+     ]
     }
    },
    "followUp": true
@@ -5507,7 +5663,13 @@
      "effects": {
       "press": 5
      },
-     "reaction": "When the darkness comes, don't come crying to me. It won't. But don't."
+     "reaction": "When the darkness comes, don't come crying to me. It won't. But don't.",
+     "then": [
+      [
+       "sh1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -5523,7 +5685,10 @@
       "treasury": -5,
       "press": 10
      },
-     "reaction": "She told you to wear purple. You did. Nothing happened. 'A sign.'"
+     "reaction": "She told you to wear purple. You did. Nothing happened. 'A sign.'",
+     "next": [
+      "sh3"
+     ]
     },
     "left": {
      "label": "Ask for a refund",
@@ -5531,7 +5696,10 @@
       "treasury": 5,
       "press": -5
      },
-     "reaction": "She saw that coming, she says. She didn't. She's furious."
+     "reaction": "She saw that coming, she says. She didn't. She's furious.",
+     "next": [
+      "sh3"
+     ]
     }
    },
    "followUp": true
@@ -5562,7 +5730,13 @@
       "law": 10,
       "people": -10
      },
-     "reaction": "He mimed being dragged away. Very moving. Barb clapped."
+     "reaction": "He mimed being dragged away. Very moving. Barb clapped.",
+     "then": [
+      [
+       "mc1b",
+       1
+      ]
+     ]
     }
    }
   },
@@ -5578,7 +5752,10 @@
       "people": 10,
       "press": 5
      },
-     "reaction": "You mimed it perfectly. Marcel wept. Silently, obviously."
+     "reaction": "You mimed it perfectly. Marcel wept. Silently, obviously.",
+     "next": [
+      "mc3"
+     ]
     },
     "left": {
      "label": "Walk straight through",
@@ -5586,7 +5763,10 @@
       "law": 5,
       "press": -5
      },
-     "reaction": "You walked through. Marcel mimed devastation. Then he mimed a lawyer."
+     "reaction": "You walked through. Marcel mimed devastation. Then he mimed a lawyer.",
+     "next": [
+      "mc3"
+     ]
     }
    },
    "followUp": true
@@ -7199,6 +7379,822 @@
    },
    "day": 6,
    "slot": 18
+  },
+  {
+   "id": "sl3",
+   "who": "sal",
+   "story": "sal",
+   "text": "Bad news, Mayor. The tyre from the soup is up for Chef of the Year. Against me. I taught it everything it knows.",
+   "options": {
+    "right": {
+     "label": "Back Sal",
+     "effects": {
+      "business": 5,
+      "people": 5
+     },
+     "reaction": "Sal won by one vote. The tyre demanded a recount. It's been spinning ever since."
+    },
+    "left": {
+     "label": "Back the tyre",
+     "effects": {
+      "press": 10,
+      "business": -5
+     },
+     "reaction": "The tyre won. Its speech was one slow leak. Not a dry eye in the house."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "co3",
+   "who": "coach",
+   "story": "coach",
+   "text": "Closing ceremony. The queueing final is in its ninth day. Nobody will leave. Bev is selling them sandwiches at a criminal markup.",
+   "options": {
+    "right": {
+     "label": "Everyone's a winner",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "Four thousand gold medals. They're chocolate. Randy has eaten the podium."
+    },
+    "left": {
+     "label": "Join the queue",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "You queued six hours. At the front was a sign: 'QUEUE STARTS HERE'."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "sh3",
+   "who": "sheila",
+   "story": "sheila",
+   "text": "Final vision. I see you standing in a pond. In an office. A goose is your boss. …I may have had this one before.",
+   "options": {
+    "right": {
+     "label": "That already happened",
+     "effects": {
+      "press": 5,
+      "people": 5
+     },
+     "reaction": "Then I'm RIGHT! First time ever! Put it in the Bugle! PUT IT IN THE BUGLE!"
+    },
+    "left": {
+     "label": "Predict something new",
+     "effects": {
+      "treasury": -5,
+      "press": 5
+     },
+     "reaction": "'Tomorrow there will be weather.' Steve is furious. That's his whole job."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "mc3",
+   "who": "marge",
+   "story": "marcel",
+   "text": "Marcel is on strike. Nobody can tell. He's been 'not working' in the square for a week. It looks exactly like his work.",
+   "options": {
+    "right": {
+     "label": "Meet his demands",
+     "effects": {
+      "treasury": -5,
+      "people": 10
+     },
+     "reaction": "He demanded an invisible pay rise. You handed it over. He counted it. Twice."
+    },
+    "left": {
+     "label": "Mime a refusal",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "You mimed 'no' for four minutes. He was moved. He's offered you a job."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wizard3",
+   "who": "linda",
+   "story": "wizard",
+   "text": "The wizard is leaving. He says Bad Town is 'too weird'. As a goodbye he's turned Doug into a slightly taller Doug.",
+   "options": {
+    "right": {
+     "label": "Keep tall Doug",
+     "effects": {
+      "people": 5,
+      "treasury": 5
+     },
+     "reaction": "Doug can reach the top shelf now. He's found the 1994 budget. And a sandwich."
+    },
+    "left": {
+     "label": "Ask for old Doug back",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "Normal Doug is back. He misses the view. He's standing on a box."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "compost3",
+   "who": "pam",
+   "story": "compost",
+   "text": "Councillor Compost is up for re-election. Slogan: 'I Will Break Down Everything.' It means that literally. Voters love it.",
+   "options": {
+    "right": {
+     "label": "Endorse the heap",
+     "effects": {
+      "people": 10,
+      "press": -5
+     },
+     "reaction": "It won. Its victory speech was a faint warmth and one mushroom."
+    },
+    "left": {
+     "label": "Run a clean campaign",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "'Clean' was the wrong word to use against compost. It took that personally."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "higgins3",
+   "who": "bev",
+   "story": "higgins",
+   "text": "Higgins has the key to this town, dear. I'm three years older. I want the key to the next town over.",
+   "options": {
+    "right": {
+     "label": "Give Bev Worse Town's key",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "She's already there. She's already speeding. They've already given up."
+    },
+    "left": {
+     "label": "One key is plenty",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Then I'll arm-wrestle Higgins for hers. Thursday. Tickets are a fiver."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "seagull3",
+   "who": "steve",
+   "story": "seagull",
+   "text": "The gull's been offered national television. Unlimited chips. It wants a leaving do. The guest list just says 'chips'.",
+   "options": {
+    "right": {
+     "label": "Throw the party",
+     "effects": {
+      "treasury": -5,
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Lovely do. The guest of honour ate the buffet, the cake and a speech."
+    },
+    "left": {
+     "label": "Counter-offer: more chips",
+     "effects": {
+      "treasury": -10,
+      "press": 10
+     },
+     "reaction": "It stays. Steve is its assistant's assistant now. He's thrilled, he says, through his teeth."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "moon3",
+   "who": "linda",
+   "story": "moon",
+   "text": "The moon has sent a lawyer. It's Mr Whiskers. The moon wants custody of the tide and one night off a week.",
+   "options": {
+    "right": {
+     "label": "Give the moon Mondays off",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Monday nights are pitch black. Crime is up. So is hide-and-seek."
+    },
+    "left": {
+     "label": "See the moon in court",
+     "effects": {
+      "law": 5,
+      "press": 10
+     },
+     "reaction": "The moon didn't show. It was daytime. Adjourned until dusk."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "scarecrow3",
+   "who": "pam",
+   "story": "scarecrow",
+   "text": "Worse Town want the scarecrow as their mayor. It hasn't said yes. It hasn't said anything. They're taking that as a yes.",
+   "options": {
+    "right": {
+     "label": "Let it go",
+     "effects": {
+      "people": -5,
+      "press": 5
+     },
+     "reaction": "Worse Town's approval is up forty points. Their mayor is a coat on a stick. Think about that."
+    },
+    "left": {
+     "label": "Make a counter-offer",
+     "effects": {
+      "treasury": -5,
+      "people": 10
+     },
+     "reaction": "You offered it a hat. It stayed. It's wearing the hat. Deal of the century."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "squirrels3",
+   "who": "doug",
+   "story": "squirrels",
+   "text": "The squirrel bank has bought our bank. I work for a Mr Nutkins now. He docked my pay for 'insufficient burying'.",
+   "options": {
+    "right": {
+     "label": "Buy the bank back",
+     "effects": {
+      "treasury": -10,
+      "business": 5
+     },
+     "reaction": "We paid in acorns. We'd been storing them. Turns out we're good at this."
+    },
+    "left": {
+     "label": "Bury some money, Doug",
+     "effects": {
+      "treasury": 5,
+      "people": 5
+     },
+     "reaction": "Doug buried the pension fund in the park. He drew a map. He ate the map. He's gone native."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "glitter3",
+   "who": "timmy",
+   "story": "glitter",
+   "text": "I worked out how to get the glitter off! You sneeze it somewhere else. I sneezed. It's all on Worse Town now. They love it.",
+   "options": {
+    "right": {
+     "label": "Bill Worse Town for it",
+     "effects": {
+      "treasury": 10,
+      "press": -5
+     },
+     "reaction": "They paid. For glitter we sneezed on them. Nobody tell them."
+    },
+    "left": {
+     "label": "Sneeze some back",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "The town sparkles again. Barb says crime is 'adorable' now."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "pg3",
+   "who": "linda",
+   "story": "pigeon",
+   "text": "The pigeon is writing its memoirs. 'Coo: My Year in Office.' Chapter one is about you: 'The Stapler Was Mine First'.",
+   "options": {
+    "right": {
+     "label": "Write the foreword",
+     "effects": {
+      "press": 10,
+      "people": 5
+     },
+     "reaction": "Your foreword was cut for length. The pigeon kept one word. The word was 'the'."
+    },
+    "left": {
+     "label": "Demand the stapler back",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "It returned a stapler. A different stapler. It's making a point."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "d3",
+   "who": "randy",
+   "story": "randy",
+   "text": "Boss. The cousins have unionised. With the geese. Gerald gave them tiny hats. I've never been so proud or so scared.",
+   "options": {
+    "right": {
+     "label": "Recognise the Raccoon Local",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "First demand: bins open Sundays. Second demand: also Sundays. They'd only prepared one."
+    },
+    "left": {
+     "label": "Break up the union",
+     "effects": {
+      "law": 10,
+      "people": -10
+     },
+     "reaction": "Geese and raccoons, picketing together. Honk-hiss-honk. Nobody has slept."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "bus1b",
+   "who": "doug",
+   "story": "bus",
+   "text": "The new bus stop has formed its own government. Just the stop. One bench. It has declared war on the bus.",
+   "options": {
+    "right": {
+     "label": "Broker peace",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Treaty signed. The bus stops there on Tuesdays. The bench gets a vote.",
+     "then": [
+      [
+       "bus2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Remove the bench",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The bench is in exile. In the park. Plotting. Benches are patient."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "worse1b",
+   "who": "pam",
+   "story": "worse",
+   "text": "Worse Town's mayor won't stop crying about our pothole. He's asked if Kevin can visit theirs. As a guest speaker.",
+   "options": {
+    "right": {
+     "label": "Send Kevin",
+     "effects": {
+      "press": 10,
+      "people": 5
+     },
+     "reaction": "Kevin got a standing ovation. He can't stand. That made it more moving.",
+     "then": [
+      [
+       "worse2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Kevin stays home",
+     "effects": {
+      "people": -5,
+      "business": 5
+     },
+     "reaction": "Kevin's merch is flying. 'I'M WITH HOLE' is our best-selling mug."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "robot1b",
+   "who": "chad",
+   "story": "robot",
+   "text": "You unplugged my robot. It's plugged itself back in. On its own. I didn't build that bit. Nobody built that bit.",
+   "options": {
+    "right": {
+     "label": "Plug it in properly",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "It said 'thank you'. Then 'EXTERMINATE'. Then 'sorry'. It's working on it.",
+     "then": [
+      [
+       "robot2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Hide the socket",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "It found the socket behind your desk. It's charging. It's watching you type."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wizard1b",
+   "who": "barb",
+   "story": "wizard",
+   "text": "I evicted the wizard. He turned the eviction notice into a duck. The duck has rights. I checked. The duck knew them.",
+   "options": {
+    "right": {
+     "label": "Evict the duck too",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The duck hired Mr Whiskers. We lost. We owe a duck four thousand pounds."
+    },
+    "left": {
+     "label": "Let the wizard stay",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "He's so pleased he fixed the clock. It says 'Ooooh' on the half hour too now.",
+     "then": [
+      [
+       "wizard2",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "compost1b",
+   "who": "pam",
+   "story": "compost",
+   "text": "You had the compost turned over. It's furious. It's started a rival heap. In your garden. It knows where you live.",
+   "options": {
+    "right": {
+     "label": "Apologise to the heap",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It accepted. Damply. It would still like that council seat.",
+     "then": [
+      [
+       "compost2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Fence off the garden",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "The heap is coming over the fence. Slowly. It has all the time in the world."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "seagull1b",
+   "who": "steve",
+   "story": "seagull",
+   "text": "The gull ate the chips, read my report on air and got better ratings than me. It's left a CV on my desk. It's a chip.",
+   "options": {
+    "right": {
+     "label": "Hire the gull",
+     "effects": {
+      "press": 10,
+      "people": 5
+     },
+     "reaction": "'Chips. Later chips.' The viewers adore it.",
+     "then": [
+      [
+       "seagull2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Put a scarecrow on the roof",
+     "effects": {
+      "treasury": -5,
+      "press": -5
+     },
+     "reaction": "The gull and the scarecrow are friends now. They do the forecast. Steve does the coffee."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "scarecrow1b",
+   "who": "pam",
+   "story": "scarecrow",
+   "text": "The scarecrow is appealing. Its lawyer is a rake. The rake is very persuasive. It's been leaning on people.",
+   "options": {
+    "right": {
+     "label": "Let the result stand",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Chairman Scarecrow. First act: more crows. Bold. Popular.",
+     "then": [
+      [
+       "scarecrow2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Hold a re-run",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "It won again. Bigger margin. A crow voted twice. Nobody dared say anything."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "squirrels1b",
+   "who": "doug",
+   "story": "squirrels",
+   "text": "Word's out that I forgive loans. There's a queue. A badger. Two foxes. A hedgehog with a business plan. It's a good plan.",
+   "options": {
+    "right": {
+     "label": "Fund the hedgehog",
+     "effects": {
+      "treasury": -5,
+      "business": 10
+     },
+     "reaction": "'Spike's Bike Hire.' Thriving. He can't reach the pedals. He rents to taller hedgehogs.",
+     "then": [
+      [
+       "squirrels2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Close the loans desk",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "The foxes opened their own. Terrible rates. Everyone's too scared not to borrow."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "glitter1b",
+   "who": "timmy",
+   "story": "glitter",
+   "text": "The cleaners are glittery now. And their van. And the road. And everywhere the road goes. I think I glittered the county.",
+   "options": {
+    "right": {
+     "label": "Call it a festival",
+     "effects": {
+      "people": 10,
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "'GlitterFest.' Sold out. Nobody can find their car. All the cars are the same sparkle.",
+     "then": [
+      [
+       "glitter2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Blame Worse Town",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "They said 'we wish'. That hurt more than it should have."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "sl1b",
+   "who": "sal",
+   "story": "sal",
+   "text": "I'm closed for a week, Mayor. No soup. No tyres. I've been reduced to cooking normal food. People will notice.",
+   "options": {
+    "right": {
+     "label": "Eat there for morale",
+     "effects": {
+      "business": 5,
+      "people": 5
+     },
+     "reaction": "You had the soup. No tyre. You said it 'lacked something'. Sal wept with joy.",
+     "then": [
+      [
+       "sl2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Tell him to pick one trade",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "He picked tyres. The tyre shop serves soup now. He can't help himself."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "co1b",
+   "who": "coach",
+   "story": "coach",
+   "text": "The queue nobody understands has reached the next town. Their mayor joined it. He doesn't know what it's for. It 'feels right'.",
+   "options": {
+    "right": {
+     "label": "Put something at the front",
+     "effects": {
+      "treasury": -5,
+      "people": 10
+     },
+     "reaction": "You put a biscuit at the front. One biscuit. The queue is THRILLED.",
+     "then": [
+      [
+       "co2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Cut in line",
+     "effects": {
+      "people": -10,
+      "press": 10
+     },
+     "reaction": "'MAYOR JUMPS QUEUE.' Front page. With a diagram."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "sh1b",
+   "who": "sheila",
+   "story": "sheila",
+   "text": "I said a great darkness would fall on Thursday. You ignored me. It's Thursday. My shop's had a power cut. Who's laughing now?",
+   "options": {
+    "right": {
+     "label": "Fix her lights",
+     "effects": {
+      "treasury": -5,
+      "press": 5
+     },
+     "reaction": "And lo, there was light. She says she predicted that. She wrote it down afterwards.",
+     "then": [
+      [
+       "sh2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "'So you were right?'",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "'TECHNICALLY!' She's had it printed on a mug."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "mc1b",
+   "who": "barb",
+   "story": "marcel",
+   "text": "The mime's in a cell. He mimed a tunnel. He mimed crawling through it. He's still in the cell. He looks so free, though.",
+   "options": {
+    "right": {
+     "label": "Release him",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "He mimed gratitude. Then he mimed locking ME in. I was in there forty minutes.",
+     "then": [
+      [
+       "mc2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Mime a longer sentence",
+     "effects": {
+      "law": 5,
+      "press": 5
+     },
+     "reaction": "I mimed a judge. He mimed a lawyer. It's been hours. We're both enjoying it."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "br1b",
+   "who": "brayden",
+   "story": "brayden",
+   "text": "Fine. No app. Bad Town is a newsletter now. Daily. Sixty pages. Issue one: 'Why The Mayor Is Wrong, Part One Of Nine'.",
+   "options": {
+    "right": {
+     "label": "Subscribe",
+     "effects": {
+      "press": 5,
+      "business": 5
+     },
+     "reaction": "You're his only subscriber. He sent a welcome hamper. It's an invoice.",
+     "then": [
+      [
+       "br2p",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Unsubscribe the town",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "There's no unsubscribe button. He says that's 'a feature'. Part Two has arrived."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "nr1b",
+   "who": "nora",
+   "story": "nora",
+   "text": "The weather machine didn't like being switched off. It's set itself to 'spite'. It's raining on you. Only you. Indoors.",
+   "options": {
+    "right": {
+     "label": "Apologise to the machine",
+     "effects": {
+      "press": 5,
+      "people": 5
+     },
+     "reaction": "It stopped. It's making you a small rainbow over your desk. It's quite sweet, actually.",
+     "then": [
+      [
+       "nr2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "Buy a bigger umbrella",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "It's raining sideways now. You have to respect it."
+    }
+   },
+   "followUp": true
   }
  ],
  "campaign": [
