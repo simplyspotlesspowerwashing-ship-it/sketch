@@ -48,6 +48,6 @@ CONTENT_GUIDE.md  how to write cards and stories
 
 Dragging a card stamps it DONE; then that choice's own clip plays, with the character's reaction as a caption, the meters that moved and the crowd share, all on one screen.
 
-- A clip is an **act** (the choreography, `src/ui/clips.tsx`) plus up to three **props** (emoji): `zoom 🌊 🦢 🪑` is the pond in your office; `ink 💀 💀 🧁` is Bev's tattoo. There are 25 acts: build, zoom, party, deny, sulk, cashin, cashout, chase, race, rain, swarm, launch, news, morph, steal, cheer, boo, ink, eat, court, love, fix, flood, boom, show.
+- A clip is an **act** (the choreography, `src/ui/clips.tsx`), up to three **props** (emoji, or `@name` for one of the cast) and an optional sound word: `zoom 🌊 @gerald 🪑 !SPLASH!` is the pond in your office. Each of the 25 acts is a three-beat scene on a drawn set (office, street, park, courtroom, press room, stage) with the card's character in it: a crane lowers a build into place, a chase comes back with the roles swapped, a launch falls back down charred, a swarm counts up to ×4,000.
 - Hand-directed clips live in `src/content/packs/week1.clips.txt` (`cardId.DIR act prop prop prop`). `python3 sim/clips.py src/content/packs/week1.json` writes them into the pack and works out a clip for every other choice from the words on the card. Refusals get `deny` or `sulk`: the thing withers under a NO stamp and the character is annoyed.
 - **Laws:** two cards a day (`who: desk`, slots 6 and 19) are yours to start: pick a law, a tax, a holiday, a motto.

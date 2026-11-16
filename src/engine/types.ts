@@ -18,7 +18,7 @@ export interface Condition {
 }
 
 /** The clip that plays after a choice: an act (the choreography) and its props (emoji), e.g. build + pond, goose. */
-export interface Clip { act: string; props: string[] }
+export interface Clip { act: string; props: string[]; word?: string }
 export interface Choice {
   clip?: Clip;
   label: string; // max 30

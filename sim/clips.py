@@ -43,6 +43,8 @@ WORDS = [
 WHO = {'gerald':'🦢','randy':'🦝','bev':'👵','chad':'🤑','doug':'😰','barb':'👮','marge':'📰','linda':'📚','steve':'🌦️','timmy':'👦','stranger':'🕵️',
        'pam':'🍎','sal':'🍝','coach':'📣','sheila':'🔮','nora':'🔬','brayden':'📱','marcel':'🤡','whiskers':'🐈','desk':'📜'}
 
+CAST = {'🦝': 'randy', '👵': 'bev', '🤑': 'chad', '😰': 'doug', '👮': 'barb', '🐈': 'whiskers'}
+
 NO = r"^(no\b|refuse|ban\b|decline|reject|absolutely not|hands off|evict|cancel|deny|not |bit much|veto|shut|close|fire |send .* home|disqualify|one .* is plenty|.* stays?$|unplug|turn .* off|take .* down|remove|pack it|overturn|geese only|.*isn't for sale|.*aren't for sale|.*not for sale|politely decline|safety first)"
 RULES = [  # (pattern on the label, act)
  (r"ignore|leave |let (it|them|him)|pretend|keep it quiet|work from|when you're older|it's fine|is fine|say no|just be", 'sulk'),
@@ -96,7 +98,9 @@ def main(path):
     try:
         for line in open(path.replace('.json', '.clips.txt')):
             line = line.split('#')[0].split()
-            if len(line) >= 3: over[line[0]] = {'act': line[1], 'props': line[2:5]}
+            if len(line) >= 3:
+                word = next((t[1:].replace('_', ' ') for t in line[2:] if t.startswith('!')), None)
+                over[line[0]] = {'act': line[1], 'props': [t for t in line[2:] if not t.startswith('!')][:3], **({'word': word} if word else {})}
     except FileNotFoundError: pass
     names = {'R': 'right', 'L': 'left', 'U': 'up', 'D': 'down'}
     acts, weak, used = {}, [], set()
@@ -107,6 +111,15 @@ def main(path):
             else:
                 p = props_for(card, opt); opt['clip'] = {'act': act_for(card, opt, p), 'props': p}
                 if p[0] == WHO.get(card['who']): weak.append(f"{card['id']}.{d}: {opt['label']}")
+            # the cast play themselves; the card's own character is already in the scene
+            props = []
+            for e in opt['clip']['props']:
+                who = CAST.get(e)
+                if who == card['who']:
+                    if len(opt['clip']['props']) > 1: continue
+                elif who: e = '@' + who
+                props.append(e)
+            opt['clip']['props'] = props or opt['clip']['props']
             acts[opt['clip']['act']] = acts.get(opt['clip']['act'], 0) + 1
     json.dump(pack, open(path, 'w'), ensure_ascii=False, indent=1)
     print(sum(acts.values()), 'choices;', len(over), 'hand-written,', len(set(over) - used), 'unused overrides', sorted(set(over) - used)[:8])

@@ -10,7 +10,7 @@ import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
 import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
 import { ClipStage } from './clips.tsx';
-import type { Mood, TownView } from './art.tsx';
+import type { TownView } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
 
@@ -98,7 +98,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
   const clip = ch.clip ?? { act: net >= 0 ? 'show' : 'sulk', props: ['❓'] };
   // 0: the clip plays; 1: the meters land; 2: the crowd
-  const CLIP = 2100, METERS_T = 900, HOLD = r.recalled ? 2000 : 1500;
+  const CLIP = 2900, METERS_T = 900, HOLD = r.recalled ? 2000 : 1500;
   const [step, setStep] = useState(reduced() ? 2 : 0);
   const [chars, setChars] = useState(reduced() ? 999 : 0);
   useEffect(() => { if (reduced()) return; const t = setInterval(() => setChars((c) => c + 2), 22); return () => clearInterval(t); }, []);
@@ -112,14 +112,12 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   }, [step]);
   useEffect(() => { const t = setTimeout(onDone, reduced() ? 2200 : CLIP + METERS_T + HOLD); return () => clearTimeout(t); }, []);
   const full = fill(ch.reaction);
-  const mood: Mood = ms.length === 0 ? 'neutral' : clip.act === 'deny' || clip.act === 'sulk' || clip.act === 'boo' || net < 0 ? 'annoyed' : 'pleased';
   return (
     <button class={`impact ${r.recalled && step >= 2 ? 'recalled' : ''}`} onClick={onDone} aria-label={`${fill(ch.label)}. ${full} Tap to continue`}>
       <span class="rv-title"><b>{ARROW[r.dir]}</b> {fill(ch.label)}</span>
       <span class="rv-film">
-        <ClipStage clip={clip} label={fill(ch.label)} />
+        <ClipStage clip={clip} label={fill(ch.label)} who={r.card.who} good={net >= 0} />
         <span class="rv-sub">
-          <span class={`rv-face ${mood}`}><Portrait who={r.card.who} size={60} mood={mood} /></span>
           <span class="rv-line"><b>{NAMES[r.card.who]?.split(',')[0] ?? r.card.who}</b>{full.slice(0, chars)}{chars >= full.length && ch.then?.length ? <em> This isn't over.</em> : null}</span>
         </span>
       </span>
