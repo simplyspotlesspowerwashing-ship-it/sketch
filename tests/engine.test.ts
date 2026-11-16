@@ -38,7 +38,12 @@ describe('the run', () => {
   });
   it('ends the day after the set number of cards, with a poll', () => {
     let s = start();
-    s = skip(s, TUNING.cardsPerDay);
+    // a steady hand: always the option that keeps every meter nearest the middle
+    for (let i = 0; i < TUNING.cardsPerDay && s.phase === 'card'; i++) {
+      const c = findCard(pack, s.current!);
+      const cost = (d: Dir) => Object.entries(c.options[d]!.effects).reduce((n, [m, v]) => n + Math.abs(s.meters[m as keyof State['meters']] + (v ?? 0) - 50), 0);
+      s = swipe(s, options(c).sort((x, y) => cost(x) - cost(y))[0]!);
+    }
     expect(s.phase).toBe('dayEnd');
     expect(s.polls).toHaveLength(1);
     s = reduce(s, { type: 'next' }, pack);
@@ -114,7 +119,7 @@ describe('the week', () => {
     expect(s.swipes.some((w) => w.cardId.startsWith('camp'))).toBe(true);
     expect(s.result!.share).toBeGreaterThanOrEqual(5);
   });
-  it('Dave covers missed days and hands back a playable town', () => {
+  it('Randy covers missed days and hands back a playable town', () => {
     const s = coverMissedDays(start('late'), pack, 4);
     expect(s.day).toBe(4);
     expect(s.phase).toBe('card');
@@ -131,12 +136,12 @@ describe('the week', () => {
     expect(after.campaignVote).toBe(findCard(pack, s.current!).options.right!.vote ?? 0);
   });
   it('setup boosts your base group once; names can change later', () => {
-    let s = reduce(start(), { type: 'setup', profile: { mayor: ' Pat <b> ', town: 'Goosebury', base: 'law' } }, pack);
+    let s = reduce(start(), { type: 'setup', profile: { mayor: ' Pat <b> ', folk: 'Goosebury', base: 'law' } }, pack);
     expect(s.meters.law).toBe(50 + TUNING.setupBase);
     expect(s.profile!.mayor).toBe('Pat b');
     expect(() => reduce(s, { type: 'setup', profile: s.profile! }, pack)).toThrow();
-    s = reduce(s, { type: 'rename', mayor: 'Sam', town: 'Honk' }, pack);
-    expect(s.profile).toMatchObject({ mayor: 'Sam', town: 'Honk', base: 'law' });
+    s = reduce(s, { type: 'rename', mayor: 'Sam', folk: 'Honk' }, pack);
+    expect(s.profile).toMatchObject({ mayor: 'Sam', folk: 'Honk', base: 'law' });
   });
 });
 

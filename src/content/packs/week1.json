@@ -236,7 +236,7 @@
       "treasury": -10,
       "people": 5
      },
-     "reaction": "A bridge inside City Hall. It has a troll. The troll is Dave.",
+     "reaction": "A bridge inside City Hall. It has a troll. The troll is Randy.",
      "then": [
       [
        "g6",
@@ -1487,8 +1487,8 @@
   },
   {
    "id": "d1",
-   "who": "dave",
-   "story": "dave",
+   "who": "randy",
+   "story": "randy",
    "text": "Boss. Small favour. Can I... we... get a pay rise? In bin bags. Not money. Bin bags.",
    "options": {
     "right": {
@@ -1499,7 +1499,7 @@
      },
      "reaction": "Thank you. Best day of our... my life.",
      "set": [
-      "dave_paid"
+      "randy_paid"
      ],
      "then": [
       [
@@ -1520,8 +1520,8 @@
   {
    "id": "d2",
    "who": "barb",
-   "story": "dave",
-   "text": "Dave's 'cousins' have moved into City Hall. All of them. They're raccoons. Dave says they're 'consultants'.",
+   "story": "randy",
+   "text": "Randy's 'cousins' have moved into City Hall. All of them. They're raccoons. Randy says they're 'consultants'.",
    "options": {
     "right": {
      "label": "Hire the consultants",
@@ -1538,7 +1538,7 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "They left. Dave cried. Three times. Simultaneously."
+     "reaction": "They left. Randy cried. Three times. Simultaneously."
     }
    },
    "followUp": true
@@ -2978,9 +2978,9 @@
   },
   {
    "id": "sk3",
-   "who": "dave",
+   "who": "randy",
    "story": "sneak",
-   "text": "Dave is 'reorganising' the evidence room into his coat. Snatch the evidence back while his back is turned.",
+   "text": "Randy is 'reorganising' the evidence room into his coat. Snatch the evidence back while his back is turned.",
    "options": {
     "right": {
      "label": "Snatched it",
@@ -3748,7 +3748,7 @@
   },
   {
    "id": "raccoonpr",
-   "who": "dave",
+   "who": "randy",
    "story": "town",
    "text": "The raccoons would like a PR campaign. 'Bins Are For Everyone'. They've made a poster. It's mostly smudges.",
    "options": {
@@ -3956,7 +3956,7 @@
      "effects": {
       "press": -5
      },
-     "reaction": "You've found a new station. It's Dave. Talking to bins."
+     "reaction": "You've found a new station. It's Randy. Talking to bins."
     }
    }
   },
@@ -4178,7 +4178,7 @@
   },
   {
    "id": "karaoke2",
-   "who": "dave",
+   "who": "randy",
    "story": "town",
    "text": "Boss. The raccoons have entered the talent show. Their act is 'eating a bin'. They're very good at it.",
    "options": {
@@ -4196,7 +4196,1988 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "They've entered again. In a trench coat. As Dave."
+     "reaction": "They've entered again. In a trench coat. As Randy."
+    }
+   }
+  },
+  {
+   "id": "rn1",
+   "who": "randy",
+   "story": "randy",
+   "text": "Mayor {mayor}. Friend. I've still got the keys to City Hall. Not giving them back. Just letting you know. As a friend.",
+   "options": {
+    "right": {
+     "label": "Ask nicely for the keys",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Asking nicely. Classic rookie. The keys are somewhere safe. My mouth.",
+     "set": [
+      "randy_keys"
+     ],
+     "then": [
+      [
+       "rn2",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "Change the locks",
+     "effects": {
+      "treasury": -10,
+      "law": 10
+     },
+     "reaction": "Lovely new locks. I've already got copies. I was at the locksmith's first.",
+     "set": [
+      "randy_spite"
+     ],
+     "then": [
+      [
+       "rn2b",
+       7
+      ]
+     ]
+    },
+    "up": {
+     "label": "Make him Keeper of Keys",
+     "effects": {
+      "business": 5,
+      "law": -10
+     },
+     "reaction": "A title! Mum will be so proud. Mum is also a raccoon.",
+     "set": [
+      "randy_keys"
+     ],
+     "then": [
+      [
+       "rn2",
+       6
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "rn2",
+   "who": "barb",
+   "story": "randy",
+   "text": "Randy is holding 'shadow council meetings' in the bins behind City Hall. Attendance is excellent. It's all raccoons.",
+   "options": {
+    "right": {
+     "label": "Attend a meeting",
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "They voted you Bin Treasurer. You already owe them eleven crisps.",
+     "then": [
+      [
+       "rn3",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "Ban bin meetings",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "They moved to the recycling. Technically a different building.",
+     "then": [
+      [
+       "rn3",
+       6
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "rn2b",
+   "who": "randy",
+   "story": "randy",
+   "text": "The new locks are great, boss. Really strong. So I've moved City Hall. It's in my coat now. Most of it.",
+   "options": {
+    "right": {
+     "label": "Demand City Hall back",
+     "effects": {
+      "treasury": -10,
+      "law": 5
+     },
+     "reaction": "Fine! But I'm keeping the good stapler. And the bit with the clock.",
+     "then": [
+      [
+       "rn3",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "Work from the coat",
+     "effects": {
+      "people": 5,
+      "business": -5,
+      "press": 10
+     },
+     "reaction": "Cosy. Bit dark. Something in the left pocket bit Doug.",
+     "then": [
+      [
+       "rn3",
+       6
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "rn3",
+   "who": "marge",
+   "story": "randy",
+   "text": "Randy is running a write-in campaign for Sunday. Slogan: 'RANDY: He's Back (He Never Left)'. He's polling at 9%.",
+   "options": {
+    "right": {
+     "label": "Debate him",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "He answered every question with 'bins'. The crowd went wild.",
+     "then": [
+      [
+       "rn4",
+       7
+      ]
+     ]
+    },
+    "left": {
+     "label": "Ignore him",
+     "effects": {
+      "people": -5,
+      "press": -5
+     },
+     "reaction": "He's at 14% now. He promised free bins. People really like bins.",
+     "then": [
+      [
+       "rn4",
+       7
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "rn4",
+   "who": "randy",
+   "story": "randy",
+   "text": "I'll drop out of the race, boss. For a price. I get to be mayor on Wednesdays. And one hat. A big one.",
+   "options": {
+    "right": {
+     "label": "Wednesdays and a hat",
+     "effects": {
+      "people": 5,
+      "law": -10,
+      "press": 5
+     },
+     "reaction": "Wednesday is Bin Day now. Every bin. Every hour. The hat is a bin.",
+     "set": [
+      "randy_wed"
+     ]
+    },
+    "left": {
+     "label": "No deals with raccoons",
+     "effects": {
+      "law": 10,
+      "press": -5
+     },
+     "reaction": "You'll regret this. I'll be in the bins, regretting it on your behalf."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "bv1",
+   "who": "bev",
+   "story": "bev",
+   "text": "I'm ninety-seven and I want the speed limit raised on Elm Street. My scooter does forty. I had it looked at. By me.",
+   "options": {
+    "right": {
+     "label": "Raise the limit",
+     "effects": {
+      "people": 5,
+      "law": -10
+     },
+     "reaction": "WHEEEEE. (She is already past the post office.)",
+     "set": [
+      "bev_fast"
+     ],
+     "then": [
+      [
+       "bv2",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "Absolutely not",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "I've outlived four mayors, dear. I can wait you out.",
+     "then": [
+      [
+       "bv2b",
+       8
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "bv2",
+   "who": "barb",
+   "story": "bev",
+   "text": "Bev just did Elm Street in eleven seconds. Wheelie at the end. She's challenging my police car to a race.",
+   "options": {
+    "right": {
+     "label": "Let them race",
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "Bev won. She lapped the car. She stopped for a scone halfway.",
+     "then": [
+      [
+       "bv3",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "Impound the scooter",
+     "effects": {
+      "law": 10,
+      "people": -10
+     },
+     "reaction": "She's walking now. She walks faster than the scooter. It's worse."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "bv2b",
+   "who": "bev",
+   "story": "bev",
+   "text": "I've got a petition to raise the speed limit. 400 signatures. All mine. I've got wonderful stamina for signing.",
+   "options": {
+    "right": {
+     "label": "Accept the petition",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Lovely. See you at the finish line, dear.",
+     "set": [
+      "bev_fast"
+     ],
+     "then": [
+      [
+       "bv3",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "One person, one signature",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Fine. I'll get my sisters. They're ninety-nine. They're quicker."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "bv3",
+   "who": "coach",
+   "story": "bev",
+   "text": "Bev wants a proper race. The Bad Town Grand Prix. Mobility scooters only. Twelve entries. Nine of them are Bev.",
+   "options": {
+    "right": {
+     "label": "Host the Grand Prix",
+     "effects": {
+      "treasury": 10,
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Bev came first, second and sixth. She's banned from podiums now.",
+     "set": [
+      "built:track"
+     ]
+    },
+    "left": {
+     "label": "Health and safety says no",
+     "effects": {
+      "law": 5,
+      "people": -10
+     },
+     "reaction": "Bev called you a 'wet lettuce'. It's on a T-shirt. Bev is selling them."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wh1",
+   "who": "whiskers",
+   "story": "whiskers",
+   "text": "My client, Mr Whiskers (me), is suing the town. There was a sunbeam on the library floor yesterday. It is gone.",
+   "options": {
+    "right": {
+     "label": "Settle out of court",
+     "effects": {
+      "treasury": -10,
+      "law": 5
+     },
+     "reaction": "My client accepts. In tuna. Unopened. His paws are delicate.",
+     "then": [
+      [
+       "wh2",
+       7
+      ]
+     ]
+    },
+    "left": {
+     "label": "See you in court",
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "Excellent. I'll be the one in the box. The cardboard one.",
+     "then": [
+      [
+       "wh2c",
+       6
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "wh2c",
+   "who": "whiskers",
+   "story": "whiskers",
+   "text": "Court is in session. The judge is my client. The jury is a box my client is sitting in. How do you plead?",
+   "options": {
+    "right": {
+     "label": "Not guilty",
+     "effects": {
+      "law": 5,
+      "press": 5
+     },
+     "reaction": "Overruled. Guilty. Sentence: one hour of stroking my client.",
+     "then": [
+      [
+       "wh3",
+       8
+      ]
+     ]
+    },
+    "left": {
+     "label": "Knock his gavel off the desk",
+     "effects": {
+      "people": 10,
+      "law": -10
+     },
+     "reaction": "He did not see that coming. He knocked yours off. It's escalating.",
+     "then": [
+      [
+       "wh3",
+       8
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wh2",
+   "who": "linda",
+   "story": "whiskers",
+   "text": "Mr Whiskers has now sued the library, the bakery and Tuesday. He won all three. Tuesday owes him tuna.",
+   "options": {
+    "right": {
+     "label": "Hire him instead",
+     "effects": {
+      "law": 10,
+      "business": -5
+     },
+     "reaction": "He's Town Solicitor. He billed us for a four-hour nap. 'Research'.",
+     "then": [
+      [
+       "wh3",
+       8
+      ]
+     ]
+    },
+    "left": {
+     "label": "Ban cat lawsuits",
+     "effects": {
+      "law": -5,
+      "people": 5
+     },
+     "reaction": "He's challenging the ban. In court. His court.",
+     "then": [
+      [
+       "wh3",
+       8
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wh3",
+   "who": "whiskers",
+   "story": "whiskers",
+   "text": "New ruling: every box in Bad Town now belongs to my client. That includes the post office. And your car.",
+   "options": {
+    "right": {
+     "label": "Appeal",
+     "effects": {
+      "law": 5,
+      "treasury": -5
+     },
+     "reaction": "Appeal denied. Appeal sat on. Appeal is warm now. Appeal is his."
+    },
+    "left": {
+     "label": "Give him the boxes",
+     "effects": {
+      "business": -10,
+      "people": 5
+     },
+     "reaction": "My client is asleep in the post office. No post until he wakes."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "br1",
+   "who": "brayden",
+   "story": "brayden",
+   "text": "Big pitch. What if Bad Town was an app? Same town. Monthly fee. Dark mode. Dark mode is just night.",
+   "options": {
+    "right": {
+     "label": "Launch the app",
+     "effects": {
+      "treasury": 10,
+      "people": -10
+     },
+     "reaction": "'Bad Town+' is live. 3 downloads: me, Randy and an accident.",
+     "then": [
+      [
+       "br2",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "The town is free",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "That's exactly what someone with no vision says. Going on the podcast."
+    },
+    "up": {
+     "label": "Do a podcast instead",
+     "effects": {
+      "press": 10,
+      "business": -5
+     },
+     "reaction": "Episode one is nine hours. Six of them are me saying 'right'.",
+     "then": [
+      [
+       "br2p",
+       8
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "br2",
+   "who": "brayden",
+   "story": "brayden",
+   "text": "Update: Bad Town+ has ads now. On the fountain. Every splash says 'brought to you by Chad'.",
+   "options": {
+    "right": {
+     "label": "Keep the ads",
+     "effects": {
+      "treasury": 10,
+      "business": 10,
+      "people": -10
+     },
+     "reaction": "The fountain sounds tired. It says 'brought to you by' in its sleep.",
+     "then": [
+      [
+       "br3",
+       7
+      ]
+     ]
+    },
+    "left": {
+     "label": "Pull the ads",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Unsubscribing a fountain is a premium feature. But fine."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "br2p",
+   "who": "marge",
+   "story": "brayden",
+   "text": "Brayden's podcast is the most listened-to in Bad Town. He plays it from the clock tower. At 5 am.",
+   "options": {
+    "right": {
+     "label": "Unplug the speaker",
+     "effects": {
+      "people": 10,
+      "press": -5
+     },
+     "reaction": "He's recorded an episode about being unplugged. It's slightly quieter."
+    },
+    "left": {
+     "label": "Give him noon",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Noon is 'Brayden Hour' now. It's four hours long."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "br3",
+   "who": "nora",
+   "story": "brayden",
+   "text": "Brayden asked me to make his app 'smarter'. Done. It now runs the town better than you. It wants your office.",
+   "options": {
+    "right": {
+     "label": "Unplug it",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "It sent you a very polite email about this. It cc'd the Bugle."
+    },
+    "left": {
+     "label": "Give it the office",
+     "effects": {
+      "business": 10,
+      "people": -10,
+      "press": 5
+     },
+     "reaction": "It works all night. It has fired Doug twice. Doug still comes in."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "nr1",
+   "who": "nora",
+   "story": "nora",
+   "text": "Good news: I built a weather machine. Bad news: the only setting is 'soup'. Tomorrow is minestrone.",
+   "options": {
+    "right": {
+     "label": "Fund more research",
+     "effects": {
+      "treasury": -10,
+      "press": 10
+     },
+     "reaction": "Three settings now! Soup, gravy and 'surprise'. Nobody likes surprise.",
+     "then": [
+      [
+       "nr2",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "Switch it off",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "It won't switch off. It's sulking. Light drizzle of broth."
+    },
+    "up": {
+     "label": "Free lunch for all",
+     "effects": {
+      "people": 10,
+      "treasury": 5
+     },
+     "reaction": "Lunch falls from the sky. Everyone carries a bowl now. Spoons sold out."
+    }
+   }
+  },
+  {
+   "id": "nr2",
+   "who": "steve",
+   "story": "nora",
+   "text": "Weather update: it is raining gravy. I'll be honest, I don't know how to present this. I just said 'beefy'.",
+   "options": {
+    "right": {
+     "label": "Sell it to the bakery",
+     "effects": {
+      "treasury": 10,
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Gravy pies. Gravy bread. Gravy gravy. Everyone's sticky. Business booms."
+    },
+    "left": {
+     "label": "Shelter everyone",
+     "effects": {
+      "treasury": -10,
+      "people": 10
+     },
+     "reaction": "Everyone's in the gym. It smells incredible. People are dipping things.",
+     "then": [
+      [
+       "nr3",
+       6
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "nr3",
+   "who": "nora",
+   "story": "nora",
+   "text": "Tiny problem. The weather machine has fallen in love with the clock tower. It only rains on the clock tower now.",
+   "options": {
+    "right": {
+     "label": "Let love bloom",
+     "effects": {
+      "people": 5,
+      "press": 10
+     },
+     "reaction": "The clock wears a tiny umbrella. Marge calls it the wedding of the year."
+    },
+    "left": {
+     "label": "Separate them",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "It's raining tears now. Actual tears. Very salty. Great on chips."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "sl1",
+   "who": "sal",
+   "story": "sal",
+   "text": "Mayor! The health inspector is coming. Please tell him the tyre in the soup is 'a crouton'. A big one.",
+   "options": {
+    "right": {
+     "label": "It's a crouton",
+     "effects": {
+      "business": 10,
+      "law": -10
+     },
+     "reaction": "He had seconds. He's been chewing for three hours. Five stars.",
+     "then": [
+      [
+       "sl2",
+       7
+      ]
+     ]
+    },
+    "left": {
+     "label": "Tell the truth",
+     "effects": {
+      "law": 10,
+      "business": -10
+     },
+     "reaction": "Closed for a week. The tyre has been rehomed. It went quietly."
+    }
+   }
+  },
+  {
+   "id": "sl2",
+   "who": "sal",
+   "story": "sal",
+   "text": "A guidebook gave me two stars! One for the food. One for the wheel alignment. Can I have a gala dinner?",
+   "options": {
+    "right": {
+     "label": "Throw the gala",
+     "effects": {
+      "treasury": -10,
+      "business": 10,
+      "press": 10
+     },
+     "reaction": "Black tie and black tyres. The soup was 'rubbery but elegant'."
+    },
+    "left": {
+     "label": "Bit much",
+     "effects": {
+      "business": -5
+     },
+     "reaction": "Fine. One star on the sign. The other star I keep in my heart. And my boot."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "co1",
+   "who": "coach",
+   "story": "coach",
+   "text": "Mayor! Town Olympics! Events: competitive queueing, synchronised complaining and the 100 metre walk to the bins.",
+   "options": {
+    "right": {
+     "label": "Light the torch",
+     "effects": {
+      "treasury": -10,
+      "people": 10
+     },
+     "reaction": "Bev won the 100m. Randy won the bins. The queue is still going.",
+     "then": [
+      [
+       "co2",
+       7
+      ]
+     ]
+    },
+    "left": {
+     "label": "No Olympics",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "A queue has started anyway. Nobody knows what for. It's very long."
+    }
+   }
+  },
+  {
+   "id": "co2",
+   "who": "coach",
+   "story": "coach",
+   "text": "Medal problem. Randy won every bin event. Now he wants a national anthem. He's written one. It's just a hiss.",
+   "options": {
+    "right": {
+     "label": "Play the hiss",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Everyone stood. Some wept. It was, honestly, quite moving."
+    },
+    "left": {
+     "label": "Disqualify Randy",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "He's appealing. To Mr Whiskers. That's going to go badly for you."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "sh1",
+   "who": "sheila",
+   "story": "sheila",
+   "text": "I've had a vision, Mayor {mayor}. On Thursday a great darkness falls over Bad Town. I'm never wrong.",
+   "options": {
+    "right": {
+     "label": "Prepare the town",
+     "effects": {
+      "treasury": -10,
+      "law": 5
+     },
+     "reaction": "Thursday was sunny. The great darkness was Randy in a big coat.",
+     "then": [
+      [
+       "sh2",
+       8
+      ]
+     ]
+    },
+    "left": {
+     "label": "Ignore her",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "When the darkness comes, don't come crying to me. It won't. But don't."
+    }
+   }
+  },
+  {
+   "id": "sh2",
+   "who": "sheila",
+   "story": "sheila",
+   "text": "New vision. Much clearer. A tall stranger will bring you money. A short stranger will take it. Then a goose.",
+   "options": {
+    "right": {
+     "label": "Hire her as an advisor",
+     "effects": {
+      "treasury": -5,
+      "press": 10
+     },
+     "reaction": "She told you to wear purple. You did. Nothing happened. 'A sign.'"
+    },
+    "left": {
+     "label": "Ask for a refund",
+     "effects": {
+      "treasury": 5,
+      "press": -5
+     },
+     "reaction": "She saw that coming, she says. She didn't. She's furious."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "mc1",
+   "who": "marcel",
+   "story": "marcel",
+   "text": "Marcel the mime has built an invisible wall around City Hall. Staff keep walking into it. Doug's nose is very sore.",
+   "options": {
+    "right": {
+     "label": "Ask him to take it down",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He mimed taking it down. Then mimed a door. You mime-knock now.",
+     "then": [
+      [
+       "mc2",
+       6
+      ]
+     ]
+    },
+    "left": {
+     "label": "Arrest him",
+     "effects": {
+      "law": 10,
+      "people": -10
+     },
+     "reaction": "He mimed being dragged away. Very moving. Barb clapped."
+    }
+   }
+  },
+  {
+   "id": "mc2",
+   "who": "barb",
+   "story": "marcel",
+   "text": "The invisible door is now the only way into City Hall. Staff mime their keys. Doug lost his. He's locked out.",
+   "options": {
+    "right": {
+     "label": "Mime Doug a key",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "You mimed it perfectly. Marcel wept. Silently, obviously."
+    },
+    "left": {
+     "label": "Walk straight through",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "You walked through. Marcel mimed devastation. Then he mimed a lawyer."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "bevtattoo",
+   "who": "bev",
+   "story": "town",
+   "text": "I'd like the council to pay for my first tattoo. I'm ninety-seven. A skull. Holding a smaller skull. Holding a scone.",
+   "options": {
+    "right": {
+     "label": "Fund the art",
+     "effects": {
+      "treasury": -5,
+      "people": 10
+     },
+     "reaction": "Gorgeous. The scone has a tiny skull on it too. Detail."
+    },
+    "left": {
+     "label": "Not with public money",
+     "effects": {
+      "people": -5,
+      "treasury": 5
+     },
+     "reaction": "I'll pay myself. In coins from 1951. They're worth more now."
+    }
+   }
+  },
+  {
+   "id": "bevdate",
+   "who": "bev",
+   "story": "town",
+   "text": "I've a date with Randy tonight, dear. Very charming. Bit bitey. Can the council pay for dinner?",
+   "options": {
+    "right": {
+     "label": "Pay for dinner",
+     "effects": {
+      "treasury": -5,
+      "people": 10
+     },
+     "reaction": "They went to Sal's. Randy ate a tyre. Bev ate the bill. True love."
+    },
+    "left": {
+     "label": "No public money for dates",
+     "effects": {
+      "people": -5,
+      "treasury": 5
+     },
+     "reaction": "Fine. We'll eat in the bins. Randy says they're lovely this time of year."
+    }
+   }
+  },
+  {
+   "id": "randyfridge",
+   "who": "randy",
+   "story": "town",
+   "text": "Boss. The office fridge. Someone ate everyone's lunch. It wasn't me. I want to be clear. Some of it was me.",
+   "options": {
+    "right": {
+     "label": "Hold an inquiry",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "The inquiry found Randy guilty. Randy ate the inquiry."
+    },
+    "left": {
+     "label": "Buy everyone lunch",
+     "effects": {
+      "treasury": -10,
+      "people": 10
+     },
+     "reaction": "Delicious. Randy had seconds. Randy also ate the receipt."
+    }
+   }
+  },
+  {
+   "id": "randycoat",
+   "who": "randy",
+   "story": "town",
+   "text": "Quick one, boss. If anyone asks, there's nothing in my coat. It's just a thick coat. (The coat sneezes.)",
+   "options": {
+    "right": {
+     "label": "Search the coat",
+     "effects": {
+      "law": 10,
+      "press": 5
+     },
+     "reaction": "Three raccoons, a toaster, the Welcome sign and a fourth raccoon."
+    },
+    "left": {
+     "label": "Bless you, coat",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Thank you. The coat says thank you. I say thank you. Not the coat."
+    }
+   }
+  },
+  {
+   "id": "randyspeech",
+   "who": "randy",
+   "story": "town",
+   "text": "Can I give the speech at school assembly? I've prepared. It's called 'Bins: A Love Story'. Mostly hissing.",
+   "options": {
+    "right": {
+     "label": "Let him speak",
+     "effects": {
+      "people": 5,
+      "press": 10
+     },
+     "reaction": "Standing ovation. Three kids now want coats with raccoons in them."
+    },
+    "left": {
+     "label": "Absolutely not",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "I'll do it anyway. From inside the school bins. Better acoustics."
+    }
+   }
+  },
+  {
+   "id": "randyballots",
+   "who": "randy",
+   "story": "town",
+   "text": "Honest question, boss. If I ate the Sunday ballots, would that count as voting? Hypothetically. Very hypothetically.",
+   "options": {
+    "right": {
+     "label": "No, it would not",
+     "effects": {
+      "law": 10
+     },
+     "reaction": "Right. Right. Just checking. Please ignore the wrapper."
+    },
+    "left": {
+     "label": "Hire a ballot guard",
+     "effects": {
+      "treasury": -10,
+      "law": 5
+     },
+     "reaction": "You hired a goose. The goose ate the ballots. Randy is furious. That was his job."
+    }
+   }
+  },
+  {
+   "id": "randystatue",
+   "who": "marge",
+   "story": "town",
+   "text": "Someone has built a statue of you, Mayor {mayor}. Out of bin bags. Randy calls it 'a tribute'. It smells like one.",
+   "options": {
+    "right": {
+     "label": "Unveil it",
+     "effects": {
+      "press": 10,
+      "people": 5
+     },
+     "reaction": "It was unveiled. Then eaten. By raccoons. A short tribute."
+    },
+    "left": {
+     "label": "Take it down",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "Randy wept tiny raccoon tears. He's building another one. Bigger."
+    }
+   }
+  },
+  {
+   "id": "brayrebrand",
+   "who": "brayden",
+   "story": "town",
+   "text": "Let's rebrand. New name: BADTWN. No vowels. Vowels are so last quarter. The logo is a goose in sunglasses.",
+   "options": {
+    "right": {
+     "label": "Rebrand",
+     "effects": {
+      "treasury": -10,
+      "business": 10,
+      "press": -5
+     },
+     "reaction": "The signs say BADTWN now. Bev can't say it. Bev calls it 'that'."
+    },
+    "left": {
+     "label": "Bad Town stays",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "Fine. But I'm keeping the goose in sunglasses. It's Gerald. He loves it."
+    }
+   }
+  },
+  {
+   "id": "brayoffice",
+   "who": "brayden",
+   "story": "town",
+   "text": "I've turned my office into a 'creativity space'. It's a ball pit. Doug fell in on Tuesday. He hasn't come out.",
+   "options": {
+    "right": {
+     "label": "Rescue Doug",
+     "effects": {
+      "treasury": 5,
+      "people": 5
+     },
+     "reaction": "Doug's out. He found nine coins and a lost intern. Morale is great."
+    },
+    "left": {
+     "label": "He looks happy",
+     "effects": {
+      "business": 5,
+      "treasury": -10
+     },
+     "reaction": "Doug approves budgets from the ball pit now. He approves everything."
+    }
+   }
+  },
+  {
+   "id": "noradog",
+   "who": "nora",
+   "story": "town",
+   "text": "I invented a dog translator. Every dog in Bad Town has been saying the same thing for years. It's 'post man'.",
+   "options": {
+    "right": {
+     "label": "Fund the translator",
+     "effects": {
+      "treasury": -5,
+      "press": 10
+     },
+     "reaction": "We added cats. The cats said things I won't repeat. Mr Whiskers sued."
+    },
+    "left": {
+     "label": "Some things are best unknown",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Agreed. Although Biscuit just said something about you. Not nice."
+    }
+   }
+  },
+  {
+   "id": "noraclone",
+   "who": "nora",
+   "story": "town",
+   "text": "Small lab accident. There are now two Dougs. Both are worried. One is mainly worried about the other one.",
+   "options": {
+    "right": {
+     "label": "Keep both Dougs",
+     "effects": {
+      "treasury": 10,
+      "business": -5
+     },
+     "reaction": "Double the budget checks. Double the crying. Weirdly productive."
+    },
+    "left": {
+     "label": "Undo it",
+     "effects": {
+      "treasury": -10,
+      "law": 5
+     },
+     "reaction": "Undone. One Doug left. He's not sure which one. Neither are we."
+    }
+   }
+  },
+  {
+   "id": "noramoon",
+   "who": "nora",
+   "story": "town",
+   "text": "I can make the moon slightly bigger. For ambience. There may be tides in the high street.",
+   "options": {
+    "right": {
+     "label": "Bigger moon",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "Gorgeous. Main Street is a beach on Tuesdays. Sal rents tyres as floats."
+    },
+    "left": {
+     "label": "Normal moon",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Normal moon. You're no fun. The moon agrees. It told me."
+    }
+   }
+  },
+  {
+   "id": "noravolcano",
+   "who": "nora",
+   "story": "town",
+   "text": "The school science fair volcano works! Bad news: it's my volcano. It's real. It's in the gym.",
+   "options": {
+    "right": {
+     "label": "Evacuate the gym",
+     "effects": {
+      "treasury": -10,
+      "law": 5
+     },
+     "reaction": "Everyone's out. The volcano is doing a small lava. Coach calls it cardio."
+    },
+    "left": {
+     "label": "Give it first prize",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "It won. Timmy came second with a potato. Timmy hates the volcano now."
+    }
+   }
+  },
+  {
+   "id": "whiskersnap",
+   "who": "whiskers",
+   "story": "town",
+   "text": "My client requests a recess. Six hours. In a sunbeam. In your chair. Starting now. Lower your voice.",
+   "options": {
+    "right": {
+     "label": "Give him the chair",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's asleep. You work from the floor now. It's honestly fine."
+    },
+    "left": {
+     "label": "It's my chair",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "Noted. My client will now sit on your keyboard. 'jjjjjjjjjjjjjjjjjj'."
+    }
+   }
+  },
+  {
+   "id": "whiskersbox",
+   "who": "whiskers",
+   "story": "town",
+   "text": "Objection. The new council printer came in a box. My client claims the box. You may keep the printer.",
+   "options": {
+    "right": {
+     "label": "He can have the box",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Sustained. He's sitting in it. He has never been more powerful."
+    },
+    "left": {
+     "label": "Box goes to recycling",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "My client has entered a hairball into evidence. On your desk."
+    }
+   }
+  },
+  {
+   "id": "marcelquiet",
+   "who": "marcel",
+   "story": "town",
+   "text": "Marcel has written a noise complaint. It's forty pages. It's about the geese. And about you breathing.",
+   "options": {
+    "right": {
+     "label": "Breathe more quietly",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You did. You fainted. Marcel applauded. Silently."
+    },
+    "left": {
+     "label": "Ask the geese to stop",
+     "effects": {
+      "people": -5,
+      "law": 5
+     },
+     "reaction": "Gerald replied with the loudest honk in recorded history. Marcel mimed dying."
+    }
+   }
+  },
+  {
+   "id": "marcelbox",
+   "who": "marcel",
+   "story": "town",
+   "text": "Marcel has been trapped in an invisible box in the square for nine days. People are worried. Is it real?",
+   "options": {
+    "right": {
+     "label": "Send the fire brigade",
+     "effects": {
+      "treasury": -10,
+      "people": 5
+     },
+     "reaction": "They mimed cutting him out. He mimed thanks. Nobody knows if it worked."
+    },
+    "left": {
+     "label": "Leave him, it's art",
+     "effects": {
+      "press": 10,
+      "business": 5
+     },
+     "reaction": "Tourists throw coins. Sal sells 'invisible box' T-shirts. They're blank."
+    }
+   }
+  },
+  {
+   "id": "mimegoose",
+   "who": "marcel",
+   "story": "town",
+   "text": "Marcel and Gerald are feuding. Marcel is miming a goose. Gerald finds it deeply offensive. Gerald is now miming a mime.",
+   "options": {
+    "right": {
+     "label": "Separate them",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Marcel mimed sorry. Gerald honked sorry. Peace, in silence and noise."
+    },
+    "left": {
+     "label": "Sell tickets",
+     "effects": {
+      "treasury": 10,
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "Sold out. Gerald won on points. Marcel mimed a rematch."
+    }
+   }
+  },
+  {
+   "id": "salmenu",
+   "who": "sal",
+   "story": "town",
+   "text": "New menu! Every meal comes with a free tyre change. The tyres come with gravy. People love the gravy.",
+   "options": {
+    "right": {
+     "label": "Back Sal",
+     "effects": {
+      "business": 10,
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Queues round the block. Cars too. Some just want gravy on their wheels."
+    },
+    "left": {
+     "label": "Food and tyres apart",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Fine. Second restaurant next door. It's the same restaurant. There's a curtain."
+    }
+   }
+  },
+  {
+   "id": "salbadger",
+   "who": "sal",
+   "story": "town",
+   "text": "There's a badger in my kitchen. He wants a job washing up. He's already better than my staff. Is that allowed?",
+   "options": {
+    "right": {
+     "label": "Hire the badger",
+     "effects": {
+      "business": 10,
+      "law": -5
+     },
+     "reaction": "Spotless plates. He's union now. Gerald signed him up."
+    },
+    "left": {
+     "label": "Badgers can't work",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "He's gone. The dishes are filthy. My staff are celebrating. I hate them."
+    }
+   }
+  },
+  {
+   "id": "coachpushups",
+   "who": "coach",
+   "story": "town",
+   "text": "Fitness is dropping, Mayor! Ten push-ups before every council meeting. Doug managed none. Doug fainted.",
+   "options": {
+    "right": {
+     "label": "Push-ups for all",
+     "effects": {
+      "people": -5,
+      "law": 5
+     },
+     "reaction": "The council is stronger. Meetings are shorter. Too tired to argue."
+    },
+    "left": {
+     "label": "Meetings stay seated",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Coach blew his whistle at you for nine minutes. Your ears still ring."
+    }
+   }
+  },
+  {
+   "id": "coachgeese",
+   "who": "coach",
+   "story": "town",
+   "text": "The geese want to play football against the town team. I've seen them train. Mayor, I'm scared. They tackle with necks.",
+   "options": {
+    "right": {
+     "label": "Play the match",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "Geese 14, Town 0. Gerald scored with his face. Coach is in therapy."
+    },
+    "left": {
+     "label": "Forfeit",
+     "effects": {
+      "people": -5,
+      "press": -5
+     },
+     "reaction": "The geese did a lap of honour anyway. Where did they get trophies?"
+    }
+   }
+  },
+  {
+   "id": "sheilatree",
+   "who": "sheila",
+   "story": "town",
+   "text": "My crystal ball says: bury the town's money under a tree in the park. I've drawn a map. On a napkin.",
+   "options": {
+    "right": {
+     "label": "Bury the money",
+     "effects": {
+      "treasury": -15,
+      "press": 10
+     },
+     "reaction": "Nobody can find the tree. The napkin got wet. 'It's there spiritually.'"
+    },
+    "left": {
+     "label": "Money stays in the bank",
+     "effects": {
+      "treasury": 5,
+      "press": -5
+     },
+     "reaction": "You'll regret it. She also said that about Tuesday. Tuesday was fine."
+    }
+   }
+  },
+  {
+   "id": "sheilaraise",
+   "who": "sheila",
+   "story": "town",
+   "text": "Vision: you lose on Sunday. Unless you give me a pay rise. Then you win. Probably. The vision was blurry.",
+   "options": {
+    "right": {
+     "label": "Pay rise",
+     "effects": {
+      "treasury": -10,
+      "press": 5
+     },
+     "reaction": "The vision is much clearer now. You'll win. Also there's a goose. There's always a goose."
+    },
+    "left": {
+     "label": "No",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Fine. Don't come crying to me when you lose. Unless you win."
+    }
+   }
+  },
+  {
+   "id": "geraldsues",
+   "who": "gerald",
+   "story": "town",
+   "text": "Gerald has hired Mr Whiskers. They're suing you for 'emotional honking damages'. Nobody knows what that means. Including them.",
+   "options": {
+    "right": {
+     "label": "Settle with bread",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "One loaf. Two lawyers. Zero crumbs. Wing shook paw."
+    },
+    "left": {
+     "label": "Fight it",
+     "effects": {
+      "law": 5,
+      "press": 5
+     },
+     "reaction": "Four-minute trial. Mr Whiskers fell asleep. Gerald honked. Dismissed. Probably."
+    }
+   }
+  },
+  {
+   "id": "geraldtv",
+   "who": "gerald",
+   "story": "town",
+   "text": "Gerald wants his own cookery show. Theme: 'bread, and how to steal it'. Episode one is called 'Your Bread'.",
+   "options": {
+    "right": {
+     "label": "Commission it",
+     "effects": {
+      "press": 10,
+      "business": -5
+     },
+     "reaction": "Gerald's Kitchen is a smash. Nobody in town has any bread left."
+    },
+    "left": {
+     "label": "No goose TV",
+     "effects": {
+      "press": -5,
+      "people": -5
+     },
+     "reaction": "He's filming it anyway on the library computer. Just honking. Huge numbers."
+    }
+   }
+  },
+  {
+   "id": "geraldcv",
+   "who": "gerald",
+   "story": "town",
+   "text": "Gerald would like a job interview. For your job. His CV is a slice of bread with 'HONK' written on it.",
+   "options": {
+    "right": {
+     "label": "Interview him",
+     "effects": {
+      "press": 10,
+      "people": 5
+     },
+     "reaction": "He was very impressive. You've been demoted to Deputy Goose."
+    },
+    "left": {
+     "label": "Reject the application",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Gerald honked a formal complaint. In triplicate. Three honks."
+    }
+   }
+  },
+  {
+   "id": "pamswings",
+   "who": "pam",
+   "story": "town",
+   "text": "Parents' evening is tonight. All 400 parents want to talk to you personally. About the swings. There is one swing.",
+   "options": {
+    "right": {
+     "label": "Build more swings",
+     "effects": {
+      "treasury": -10,
+      "people": 10
+     },
+     "reaction": "400 swings. The park is just swings. Kids are bored of swings."
+    },
+    "left": {
+     "label": "Talk to all 400",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "You finished at 4 am. You agreed to 400 things. Several contradict."
+    }
+   }
+  },
+  {
+   "id": "pambake",
+   "who": "pam",
+   "story": "town",
+   "text": "The bake sale needs a judge. Last year's judge is still recovering. Bev has entered a cake with a firework in it. Lit.",
+   "options": {
+    "right": {
+     "label": "Judge it bravely",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "You survived. Your eyebrows didn't. Bev won. Again."
+    },
+    "left": {
+     "label": "Send Randy",
+     "effects": {
+      "people": -5,
+      "law": -5
+     },
+     "reaction": "Randy ate every cake, firework included. He's fine. He's glowing."
+    }
+   }
+  },
+  {
+   "id": "chadday",
+   "who": "chad",
+   "story": "town",
+   "text": "I've bought the naming rights to Wednesday. It's 'ChadDay' now. Everyone has to say it. Happy ChadDay, Mayor.",
+   "options": {
+    "right": {
+     "label": "Fine, ChadDay",
+     "effects": {
+      "treasury": 10,
+      "business": 10,
+      "people": -10
+     },
+     "reaction": "ChadDay was a huge success. For Chad. Nobody else enjoyed ChadDay."
+    },
+    "left": {
+     "label": "Wednesday isn't for sale",
+     "effects": {
+      "business": -10,
+      "people": 5
+     },
+     "reaction": "Then I'll buy Thursday. Thursday's cheaper. Nobody likes Thursday."
+    }
+   }
+  },
+  {
+   "id": "chadmuseum",
+   "who": "chad",
+   "story": "town",
+   "text": "I'm opening the Museum of Chad. Exhibits: baby Chad, Chad's first yacht, and Chad standing in a room.",
+   "options": {
+    "right": {
+     "label": "Cut the ribbon",
+     "effects": {
+      "treasury": 5,
+      "business": 10,
+      "press": -5
+     },
+     "reaction": "Opening day: six visitors. All Chad. In different hats."
+    },
+    "left": {
+     "label": "No vanity museums",
+     "effects": {
+      "business": -10,
+      "people": 5
+     },
+     "reaction": "Fine. Museum of Not Chad. It's empty. It's very sad."
+    }
+   }
+  },
+  {
+   "id": "barbducks",
+   "who": "barb",
+   "story": "town",
+   "text": "I've put a speed camera on the duck pond. Ducks are doing nearly three miles an hour. Some of them are showing off.",
+   "options": {
+    "right": {
+     "label": "Fine the ducks",
+     "effects": {
+      "treasury": 5,
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "We collected four crumbs and a feather. The ducks are appealing."
+    },
+    "left": {
+     "label": "Ducks are exempt",
+     "effects": {
+      "law": -5,
+      "people": 5
+     },
+     "reaction": "They know they're exempt now. One did a wheelie. Ducks can't do wheelies."
+    }
+   }
+  },
+  {
+   "id": "biscuitrank",
+   "who": "barb",
+   "story": "town",
+   "text": "Sergeant Biscuit got promoted again. He's Inspector Biscuit now. He outranks me. He's ordered me to throw a ball.",
+   "options": {
+    "right": {
+     "label": "Throw the ball",
+     "effects": {
+      "law": 5,
+      "people": 5
+     },
+     "reaction": "Inspector Biscuit is satisfied. You're on his commendation list. It's a sock."
+    },
+    "left": {
+     "label": "Demote the dog",
+     "effects": {
+      "law": -10,
+      "people": -5
+     },
+     "reaction": "Biscuit filed a grievance. A long sad howl. The whole station is crying."
+    }
+   }
+  },
+  {
+   "id": "margeaward",
+   "who": "marge",
+   "story": "town",
+   "text": "The Bugle is giving you 'Most Mayor of the Year'. You were the only nominee. You still came second.",
+   "options": {
+    "right": {
+     "label": "Accept graciously",
+     "effects": {
+      "press": 10
+     },
+     "reaction": "Your speech ran in full. Including the minute where you just said 'um'."
+    },
+    "left": {
+     "label": "Boycott it",
+     "effects": {
+      "press": -10,
+      "people": 5
+     },
+     "reaction": "'MAYOR TOO SCARED OF AWARD.' Seven-page special. With diagrams."
+    }
+   }
+  },
+  {
+   "id": "margetypo",
+   "who": "marge",
+   "story": "town",
+   "text": "Small typo in today's Bugle. 'MAYOR {mayor} IS A GOOSE'. We meant 'GOOD'. Want a correction?",
+   "options": {
+    "right": {
+     "label": "Print a correction",
+     "effects": {
+      "press": 5,
+      "treasury": -5
+     },
+     "reaction": "'MAYOR NOT A GOOSE.' Gerald is offended. Gerald is suing."
+    },
+    "left": {
+     "label": "Lean into it",
+     "effects": {
+      "press": 10,
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You honked at a press conference. Approval up. The geese made you a member."
+    }
+   }
+  },
+  {
+   "id": "dougseven",
+   "who": "doug",
+   "story": "town",
+   "text": "I dropped the town calculator in the fountain. It only shows the number 7 now. I've done the whole budget with it.",
+   "options": {
+    "right": {
+     "label": "Buy a new calculator",
+     "effects": {
+      "treasury": -5,
+      "business": 5
+     },
+     "reaction": "Budget fixed. We had money all along. Some of it was 7s."
+    },
+    "left": {
+     "label": "Seven's a good number",
+     "effects": {
+      "treasury": -10,
+      "people": 5
+     },
+     "reaction": "Police budget: 7. Swings budget: 7 million. It's all 7 now."
+    }
+   }
+  },
+  {
+   "id": "dougfilm",
+   "who": "doug",
+   "story": "town",
+   "text": "Can I have a day off? I keep crying at work. Not because of work. Because of a film about a dog. The dog was fine.",
+   "options": {
+    "right": {
+     "label": "Day off",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "He saw the dog film again. He came back refreshed. And damp."
+    },
+    "left": {
+     "label": "Cry at your desk",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He did. The budget's soggy. Some numbers have run."
+    }
+   }
+  },
+  {
+   "id": "timmymayor",
+   "who": "timmy",
+   "story": "town",
+   "text": "Can I be mayor for one day? I've got a list. It's mostly 'everyone gets a dog' and 'no more Tuesdays'.",
+   "options": {
+    "right": {
+     "label": "Mayor Timmy for a day",
+     "effects": {
+      "people": 10,
+      "business": -10,
+      "law": -5
+     },
+     "reaction": "Everyone has a dog. Tuesday was cancelled. Nobody knows what day it is."
+    },
+    "left": {
+     "label": "When you're older",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "I'll be nine next month. Then you'll see. THEN YOU'LL ALL SEE."
+    }
+   }
+  },
+  {
+   "id": "stevefog",
+   "who": "steve",
+   "story": "town",
+   "text": "Weather update: fog so thick I can't see the camera. Or myself. I'm not sure I'm here. Back to the studio.",
+   "options": {
+    "right": {
+     "label": "Send a search party",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Found Steve. Also two hikers and a bus that went missing in 1994. Still running."
+    },
+    "left": {
+     "label": "Steve's fine",
+     "effects": {
+      "press": -5
+     },
+     "reaction": "Steve's been missing three days. His forecasts keep coming. All 'fog'."
+    }
+   }
+  },
+  {
+   "id": "stevesun",
+   "who": "steve",
+   "story": "town",
+   "text": "The sun hasn't set in four days. I don't know why. I'm a weatherman, not a sun-man. Should I tell people?",
+   "options": {
+    "right": {
+     "label": "Tell the public",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "Panic. Then barbecues. Then panic about the barbecues."
+    },
+    "left": {
+     "label": "Keep it quiet",
+     "effects": {
+      "law": 5,
+      "press": -10
+     },
+     "reaction": "It set this morning. Nobody noticed. Everyone was finally asleep."
+    }
+   }
+  },
+  {
+   "id": "ghostbook",
+   "who": "linda",
+   "story": "town",
+   "text": "A book came back to the library today. It was due in 1883. A ghost returned it. The ghost owes a fine.",
+   "options": {
+    "right": {
+     "label": "Waive the fine",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "The ghost said thanks and borrowed another. Due back in 2160."
+    },
+    "left": {
+     "label": "The fine stands",
+     "effects": {
+      "treasury": 10,
+      "press": 5
+     },
+     "reaction": "The ghost paid in very old coins. One is haunted. Doug is crying again."
+    }
+   }
+  },
+  {
+   "id": "quietsign",
+   "who": "linda",
+   "story": "town",
+   "text": "People say the library's 'Quiet Please' sign is too loud. 'Very shouty.' Should it whisper?",
+   "options": {
+    "right": {
+     "label": "Make it smaller",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Nobody can read it. The library is basically a nightclub now."
+    },
+    "left": {
+     "label": "Make it LOUDER",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "QUIET PLEASE. Everyone left. Linda has never been happier."
+    }
+   }
+  },
+  {
+   "id": "hatbuyer",
+   "who": "stranger",
+   "story": "town",
+   "text": "Hello again. I'd like to buy every hat in Bad Town. For hat reasons. Name your price.",
+   "options": {
+    "right": {
+     "label": "Sell the hats",
+     "effects": {
+      "treasury": 15,
+      "people": -10
+     },
+     "reaction": "Everyone's head is cold. He's wearing all 4,000 at once."
+    },
+    "left": {
+     "label": "Hats aren't for sale",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Very well. I'll be back for the scarves."
+    }
+   }
+  },
+  {
+   "id": "folkname",
+   "who": "pam",
+   "story": "town",
+   "text": "The {folk} want a vote on what they're called. Options: '{folk}', 'Bad Townsfolk', or 'Steve'.",
+   "options": {
+    "right": {
+     "label": "Let them vote",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "'Steve' won. Everyone is called Steve. Stormy Steve is upset."
+    },
+    "left": {
+     "label": "The name stays",
+     "effects": {
+      "people": -5,
+      "law": 5
+     },
+     "reaction": "The {folk} accept this. Grumpily. Some now call themselves 'the Grumbles'."
+    }
+   }
+  },
+  {
+   "id": "bearlibrary",
+   "who": "barb",
+   "story": "town",
+   "text": "The bear is back. He's not causing trouble. He's in the library, reading about bears. He's upset about the chapter on him.",
+   "options": {
+    "right": {
+     "label": "Give him a library card",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "He's borrowed 40 books. All about honey. Due back in spring."
+    },
+    "left": {
+     "label": "Escort him out",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "He left a one-star review. 'Not enough bears.'"
     }
    }
   }
@@ -4204,7 +6185,7 @@
  "campaign": [
   {
    "id": "campTruth",
-   "who": "dave",
+   "who": "randy",
    "text": "Election day. The town knows a goose won last time. Run on honesty, or run from it?",
    "options": {
     "right": {
@@ -4236,7 +6217,7 @@
   },
   {
    "id": "camp",
-   "who": "dave",
+   "who": "randy",
    "text": "Election day. One last push. What's the plan, boss? We believe in you. All three of us.",
    "options": {
     "right": {
@@ -4348,7 +6329,7 @@
   },
   "term:early": {
    "title": "Recalled for Good",
-   "text": "Three recalls. The town has filed you under Never Again. Dave has put the desk in a bin."
+   "text": "Three recalls. The town has filed you under Never Again. Randy has put the desk in a bin."
   }
  },
  "headlines": {
@@ -4361,11 +6342,19 @@
   "heli": "BARB TAKES TO THE SKIES",
   "rocket": "CHAD'S ROCKET",
   "sock": "WET SOCK",
-  "dave": "DEPUTY DAVE",
   "pigeon": "THE PIGEON CABINET",
   "town": "AROUND TOWN",
   "pressure": "TROUBLE AT HOME",
-  "sneak": "CAUGHT IN THE ACT"
+  "sneak": "CAUGHT IN THE ACT",
+  "randy": "RANDY STRIKES BACK",
+  "bev": "BEV OPENS THE THROTTLE",
+  "whiskers": "TOWN V. MR WHISKERS",
+  "brayden": "BAD TOWN+ (TERMS APPLY)",
+  "nora": "FORECAST: SOUP",
+  "sal": "SAL'S FINE DINING & TYRES",
+  "coach": "THE TOWN OLYMPICS",
+  "sheila": "SHEILA SEES ALL (WRONGLY)",
+  "marcel": "THE INVISIBLE WALL"
  },
  "cliffhangers": [
   "Tomorrow: a pothole with a name.",

@@ -14,6 +14,7 @@ const { chromium } = require('playwright');
   const shot = async (name) => { if (!shots.has(name)) { shots.add(name); await pg.screenshot({ path: `${out}/${name}.png` }); } };
   for (let i = 0; i < 2000; i++) {
     if (await pg.locator('.election .verdict').count()) break;
+    if (await pg.locator('.sheet.op').count()) { await shot('opening'); if (await pg.locator('.op-oath input').count()) await pg.locator('.op-oath input').check(); await pg.locator('.op .btn.primary').click(); continue; }
     if (await pg.locator('#mayor-name').count()) { await shot('setup'); await pg.locator('.sheet .btn.primary').click(); continue; }
     if (await pg.locator('.sheet .bugle').count()) { await shot('morning'); await pg.locator('.sheet .btn.primary').click(); continue; }
     if (await pg.locator('.panel.recall').count()) { recalls++; await shot('recall'); await pg.locator('.panel.recall .btn.primary').click(); continue; }

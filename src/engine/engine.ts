@@ -139,14 +139,14 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
     case 'setup': {
       if (s.profile) throw new Error('setup is only allowed once per term');
       const name = (t: string, f: string) => t.replace(/[<>]/g, '').trim().slice(0, 18) || f;
-      s.profile = { mayor: name(action.profile.mayor, 'Mayor'), town: name(action.profile.town, 'Bad Town'), base: action.profile.base };
+      s.profile = { mayor: name(action.profile.mayor, 'Mayor'), folk: name(action.profile.folk, 'Bad Towners'), base: action.profile.base };
       s.meters[action.profile.base] = clamp(s.meters[action.profile.base] + TUNING.setupBase, 1, 99);
       return s;
     }
     case 'rename': {
       if (!s.profile) throw new Error('rename before setup');
       s.profile.mayor = action.mayor.replace(/[<>]/g, '').trim().slice(0, 18) || s.profile.mayor;
-      s.profile.town = action.town.replace(/[<>]/g, '').trim().slice(0, 18) || s.profile.town;
+      s.profile.folk = action.folk.replace(/[<>]/g, '').trim().slice(0, 18) || s.profile.folk;
       return s;
     }
     case 'next': {
@@ -203,7 +203,7 @@ export function autoplay(state: State, policy: Policy, pack: Pack, stop: (s: Sta
   return s;
 }
 
-/** Deputy Dave runs the days you missed: he picks whatever keeps everyone calm-ish, badly. */
+/** Deputy Randy runs the days you missed: he picks whatever keeps everyone calm-ish, badly. */
 export const davePolicy: Policy = (s, legal, pack, rand) => {
   if (s.phase !== 'card') return legal[0]!;
   const card = findCard(pack, s.current!);
@@ -212,7 +212,7 @@ export const davePolicy: Policy = (s, legal, pack, rand) => {
   return { type: 'swipe', dir: dirs[0]! };
 };
 
-/** Advance to `today` (1 = Monday ... 7 = Sunday) with Dave covering missed days. The town comes back a bit worn but playable. */
+/** Advance to `today` (1 = Monday ... 7 = Sunday) with Randy covering missed days. The town comes back a bit worn but playable. */
 export function coverMissedDays(state: State, pack: Pack, today: number, rng: Rng = seededRng): State {
   let s = state;
   while (s.phase !== 'results' && s.day < today) {

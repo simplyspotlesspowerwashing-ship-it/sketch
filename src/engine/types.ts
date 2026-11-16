@@ -67,7 +67,8 @@ export interface Swipe { day: number; cardId: string; dir: Dir; before: Record<M
 
 export interface Result { share: number; won: boolean; endedEarly: boolean }
 
-export interface Profile { mayor: string; town: string; base: GroupId }
+/** The town is always Bad Town; the player names their mayor and what the townsfolk are called. */
+export interface Profile { mayor: string; folk: string; base: GroupId }
 
 export interface State {
   v: 9;
@@ -99,6 +100,6 @@ export type Action =
   | { type: 'swipe'; dir: Dir }
   | { type: 'next' } // recalled -> dayEnd, dayEnd -> next day
   | { type: 'setup'; profile: Profile }
-  | { type: 'rename'; mayor: string; town: string };
+  | { type: 'rename'; mayor: string; folk: string };
 
 export type Rng = (key: string) => () => number;

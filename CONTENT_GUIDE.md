@@ -7,7 +7,7 @@ A week is one JSON pack in `src/content/packs/`, checked by `npm run validate` (
 1. Short setup, clear ask. Card text max 150 characters, option labels max 30, reactions max 100.
 2. Every direction should hurt somewhere. Players can't see effects, so the text and the character are their clues: keep them fair.
 3. One joke per card, in the situation.
-4. Characters stay in character: Pam (PTA, People), Chad (billionaire, Business), Barb (police chief, Law), Marge (The Bugle, Press), Doug (treasurer, money), Gerald (goose union), Linda (librarian, conspiracies), Steve (weather), Timmy (8), the Stranger, Deputy Dave (three raccoons in a coat).
+4. Characters stay in character: Pam (PTA, People), Chad (billionaire, Business), Barb (police chief, Law), Marge (The Bugle, Press), Doug (treasurer, money), Gerald (goose union), Linda (librarian, conspiracies), Steve (weather), Timmy (8), the Stranger, Deputy Randy (raccoon, ex-mayor, coat full of associates), Bev (97, scooter), Brayden (Head of Innovation), Dr Nora (science, side effects), Mr Whiskers Esq. (cat lawyer), Marcel (mime), Sal (Fine Dining & Tyres), Coach Dunk (whistle), Psychic Sheila (always wrong). Cards may use {mayor} and {folk} for the player's names.
 5. Effects in steps of 5; ±15 or ±20 for big moments. Five meters: people, business, law, press, treasury.
 
 ## Stories

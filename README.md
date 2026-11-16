@@ -38,7 +38,8 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **Crowd numbers are simulated** (`node sim/crowd.ts` -> `week1.crowd.json`, labelled "preview data" in the game) until a stats backend is approved.
 - **Sneak moment**: one card a day (slot 13) is a hold-and-release: wind up, let go while the character isn't looking. Getting away with it is the `right` option, getting caught the `left` one.
 - Pressure cards appear when a meter is very low or very high (crime wave, protest, the treasury running dry, Chad trying to buy the town).
-- Vote share = 32 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
-- You can start any day; Deputy Dave plays the missed days and hands back a town with every meter between 35 and 65.
-- Names and the group that elected you are set at the end of the first day you play.
+- Vote share = 35 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
+- You can start any day; Deputy Randy plays the missed days and hands back a town with every meter between 35 and 65.
+- **First visit:** a six-slide opening (Bad Town, Randy the raccoon ex-mayor, the one-vote win, the five meters, how to swipe) ending with the oath: you name your mayor and what the townsfolk are called, and pick who voted for you. The game is always "Mayor of Bad Town". Later terms offer the same names again. Cards can say `{mayor}` and `{folk}`.
+- **After every card** the town scene plays: the camera moves to the building of the group most affected, that group's crowd runs out cheering or with protest signs, hearts or crosses and a +/− badge rise from the building, coins fly from or into the town hall, new buildings pop up, and the story's creatures (geese, bears, raccoons...) parade past. Then each meter change counts up, and the crowd share is shown.
 - The scrapbook keeps unlocked endings, a career record and deeds across weeks.

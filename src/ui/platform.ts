@@ -1,5 +1,5 @@
 // Everything that touches the browser outside rendering: the calendar, storage, sound, crowd stats.
-import type { State } from '../engine/types.ts';
+import type { Profile, State } from '../engine/types.ts';
 
 // ---------- storage (one module, versioned) ----------
 const KEY = 'badtown.save';
@@ -11,11 +11,13 @@ export interface Save {
   scrapbook: string[]; // ending keys unlocked
   career: Career;
   deeds: string[];
+  onboarded: boolean; // saw the opening sequence
+  lastProfile: Profile | null; // offered again at the start of each new term
 }
 
 function fresh(): Save {
   const seed = Math.random().toString(36).slice(2) + Date.now().toString(36);
-  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [] }, deeds: [] };
+  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [] }, deeds: [], onboarded: false, lastProfile: null };
 }
 
 /** Bring an older save up to the current schema. Unknown or broken saves start fresh. */

@@ -4,7 +4,7 @@ import { GROUPS } from '../engine/types.ts';
 import type { Effects, GroupId } from '../engine/types.ts';
 
 /** What the town map needs to draw itself. Projects and laws are flags: `built:<id>`, `law:<id>`. */
-export interface TownView { day: number; approval: Record<GroupId, number>; flags: Record<string, true>; profile: { town: string } | null; fresh?: string | null }
+export interface TownView { day: number; approval: Record<GroupId, number>; flags: Record<string, true>; fresh?: string | null }
 
 export const INK = '#29231F';
 export const GROUP_COLOR: Record<GroupId, string> = { people: '#D9653B', business: '#3F8F5A', law: '#3B6FB6', press: '#B0892A' };
@@ -12,7 +12,8 @@ export const GROUP_NAME: Record<GroupId, string> = { people: 'People', business:
 export const LEADER: Record<GroupId, string> = { people: 'pam', business: 'chad', law: 'barb', press: 'marge' };
 export const NAMES: Record<string, string> = {
   pam: 'Pam, PTA President', chad: 'Chad, Billionaire', barb: 'Chief Barb', marge: 'Marge, The Bugle', gerald: 'Gerald, Goose Union',
-  dave: 'Deputy Dave', linda: 'Linda, Librarian', doug: 'Doug, Treasurer', steve: 'Stormy Steve', timmy: 'Timmy, age 8', stranger: 'The Stranger',
+  randy: 'Deputy Randy (a raccoon)', bev: 'Bev, 97, oldest resident', brayden: 'Brayden, Head of Innovation', nora: 'Dr Nora, Town Scientist',
+  whiskers: 'Mr Whiskers, Esq. (a cat)', marcel: 'Marcel, Town Mime', sal: "Sal, Sal's Fine Dining & Tyres", coach: 'Coach Dunk', sheila: 'Psychic Sheila', linda: 'Linda, Librarian', doug: 'Doug, Treasurer', steve: 'Stormy Steve', timmy: 'Timmy, age 8', stranger: 'The Stranger',
 };
 export type Mood = 'neutral' | 'pleased' | 'annoyed';
 
@@ -134,7 +135,65 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
       <rect x="34" y="60" width="32" height="9" rx="2" fill="#C23B3B" {...S} />
     </>
   ),
-  dave: (m) => {
+  bev: (m) => (
+    <Bust top="#E79AB0" skin="#F3D3BC" mood={m}
+      hair={<><circle cx="30" cy="30" r="12" fill="#F2F0EC" {...S} /><circle cx="50" cy="20" r="14" fill="#F2F0EC" {...S} /><circle cx="70" cy="30" r="12" fill="#F2F0EC" {...S} /></>}
+      over={<><circle cx="40" cy="45" r="10" fill="rgba(255,255,255,.35)" {...S} /><circle cx="60" cy="45" r="10" fill="rgba(255,255,255,.35)" {...S} /><path d="M50 45h0" {...S} /><path d="M26 24 h48 v8 h-48z" fill="#3A322C" {...S} /><ellipse cx="38" cy="28" rx="7" ry="5" fill="#7FB7D9" {...S} /><ellipse cx="62" cy="28" rx="7" ry="5" fill="#7FB7D9" {...S} /></>}
+      collar={<>{[34, 40, 46, 52, 58, 64].map((x) => <circle key={x} cx={x} cy={82 + Math.abs(49 - x) / 4} r="2.6" fill="#fff" {...S} stroke-width="1.5" />)}</>} />
+  ),
+  brayden: (m) => (
+    <Bust top="#7A5C9C" skin="#E2A878" mood={m}
+      hair={<path d="M24 40 q0 -30 26 -30 q26 0 26 30 q-26 -10 -52 0z" fill="#E8943A" {...S} />}
+      over={<><path d="M22 36 q28 -22 56 0 l0 -8 q-28 -20 -56 0z" fill="#E8943A" {...S} /><circle cx="50" cy="12" r="4" fill="#E8943A" {...S} /><path d="M44 60 q6 -3 12 0" stroke="#B5651D" stroke-width="2.5" fill="none" stroke-linecap="round" /></>}
+      collar={<><path d="M22 84 q28 18 56 0" fill="none" stroke={INK} stroke-width="5" /><circle cx="22" cy="84" r="7" fill="#3A322C" {...S} /><circle cx="78" cy="84" r="7" fill="#3A322C" {...S} /></>} />
+  ),
+  nora: (m) => (
+    <Bust top="#F2F0EC" skin="#C68C5E" mood={m}
+      hair={<path d="M20 50 l-6 -20 l12 6 l-2 -18 l12 10 l6 -16 l8 14 l8 -14 l6 16 l12 -10 l-2 18 l12 -6 l-6 20z" fill="#9AA6B8" {...S} />}
+      over={<><rect x="27" y="26" width="46" height="10" rx="5" fill="#3A322C" {...S} /><circle cx="40" cy="31" r="6" fill="#7FB7D9" {...S} /><circle cx="60" cy="31" r="6" fill="#7FB7D9" {...S} /><path d="M66 60 q4 -2 6 2" stroke="#3A322C" stroke-width="2" fill="none" /><circle cx="70" cy="64" r="2" fill="#6B6257" /></>}
+      collar={<><path d="M36 76 l14 24 l14 -24" fill="#9DBF8A" {...S} /><path d="M66 86 h10 v10 h-10z" fill="#fff" {...S} /><path d="M69 84 v-6 M73 84 v-8" stroke="#C23B3B" stroke-width="2" /></>} />
+  ),
+  whiskers: (m) => (
+    <>
+      <path d="M14 104 q2 -30 36 -30 q34 0 36 30z" fill="#3A322C" {...S} />
+      <path d="M38 76 l12 12 l12 -12" fill="#fff" {...S} />
+      <path d="M40 86 l10 4 l10 -4 l0 8 l-10 -4 l-10 4z" fill="#C23B3B" {...S} />
+      <path d="M28 30 l-4 -22 l18 12z M72 30 l4 -22 l-18 12z" fill="#E8943A" {...S} />
+      <ellipse cx="50" cy="46" rx="26" ry="24" fill="#E8943A" {...S} />
+      <path d="M30 34 l8 4 M70 34 l-8 4 M40 22 v6 M50 20 v7 M60 22 v6" stroke="#B5651D" stroke-width="3" stroke-linecap="round" />
+      <ellipse cx="40" cy="44" rx={m === 'pleased' ? 4 : 3.5} ry={m === 'pleased' ? 1.5 : 5} fill="#3F8F5A" {...S} stroke-width="1.5" />
+      <ellipse cx="60" cy="44" rx={m === 'pleased' ? 4 : 3.5} ry={m === 'pleased' ? 1.5 : 5} fill="#3F8F5A" {...S} stroke-width="1.5" />
+      <circle cx="60" cy="44" r="9" fill="none" stroke="#E8C55A" stroke-width="2.5" /><path d="M69 46 q6 10 2 22" stroke="#E8C55A" stroke-width="1.5" fill="none" />
+      <path d="M46 54 l4 4 l4 -4z" fill="#E79AB0" {...S} stroke-width="1.5" />
+      <path d={m === 'annoyed' ? 'M42 64 q8 -5 16 0' : 'M42 60 q4 4 8 0 q4 4 8 0'} {...S} fill="none" stroke-width="2" />
+      <path d="M22 54 h14 M22 60 l14 -2 M78 54 h-14 M78 60 l-14 -2" stroke={INK} stroke-width="1.5" />
+    </>
+  ),
+  marcel: (m) => (
+    <Bust top="#F2F0EC" skin="#FBFBF8" mood={m}
+      hair={<path d="M24 40 q0 -26 26 -26 q26 0 26 26z" fill="#3A322C" {...S} />}
+      over={<><path d="M18 22 q30 -18 64 2 q-30 -4 -60 4z" fill={INK} {...S} /><path d="M50 4 v8" stroke={INK} stroke-width="3" /><path d="M38 36 v-6 M62 36 v-6" stroke={INK} stroke-width="2" /><circle cx="40" cy="54" r="4" fill="#F6C6D0" /><circle cx="60" cy="54" r="4" fill="#F6C6D0" /></>}
+      collar={<>{[82, 90, 98].map((y) => <path key={y} d={`M16 ${y} h68`} stroke={INK} stroke-width="4" />)}<path d="M40 76 l10 6 l10 -6" fill="#C23B3B" {...S} /></>} />
+  ),
+  sal: (m) => (
+    <Bust top="#F2F0EC" skin="#D9A27A" mood={m}
+      hair={<path d="M26 30 q-6 -10 2 -16 q4 -14 22 -12 q18 -2 22 12 q8 6 2 16z" fill="#fff" {...S} />}
+      over={<><path d="M26 30 h48 v6 h-48z" fill="#fff" {...S} /><path d="M32 60 q18 -14 36 0 q-6 6 -18 0 q-12 6 -18 0z" fill="#3A322C" {...S} /></>}
+      collar={<><path d="M30 80 h40 v24 h-40z" fill="#3A322C" {...S} /><circle cx="50" cy="92" r="8" fill="none" stroke="#F2EBDD" stroke-width="3" /><circle cx="50" cy="92" r="3" fill="#F2EBDD" /></>} />
+  ),
+  coach: (m) => (
+    <Bust top="#C23B3B" skin="#F0C4A0" mood={m}
+      hair={<path d="M26 40 q-2 -24 24 -26 q26 2 24 26z" fill="#6B4B32" {...S} />}
+      over={<><path d="M24 34 q26 -22 52 0 l0 -6 q-26 -20 -52 0z" fill="#3B6FB6" {...S} /><path d="M66 30 q18 0 24 6 q-12 2 -24 -2z" fill="#3B6FB6" {...S} /><path d="M27 36 h46" stroke="#fff" stroke-width="4" /></>}
+      collar={<><path d="M42 76 l8 18 l8 -18" fill="none" stroke="#fff" stroke-width="2" /><path d="M50 94 v4" stroke={INK} stroke-width="2" /><rect x="44" y="98" width="12" height="6" rx="2" fill="#C9C3BC" {...S} /><path d="M18 90 h64" stroke="#fff" stroke-width="3" /></>} />
+  ),
+  sheila: (m) => (
+    <Bust top="#4A3A7A" skin="#B9794E" mood={m}
+      hair={<><circle cx="26" cy="44" r="13" fill="#7A3E8C" {...S} /><circle cx="74" cy="44" r="13" fill="#7A3E8C" {...S} /><circle cx="34" cy="22" r="14" fill="#7A3E8C" {...S} /><circle cx="66" cy="22" r="14" fill="#7A3E8C" {...S} /><circle cx="50" cy="15" r="14" fill="#7A3E8C" {...S} /></>}
+      over={<><path d="M40 12 l2 5 l5 0 l-4 3 l2 5 l-5 -3 l-5 3 l2 -5 l-4 -3 l5 0z" fill="#F7D774" {...S} stroke-width="1.2" /><circle cx="26" cy="62" r="7" fill="none" stroke="#E8C55A" stroke-width="2.5" /><circle cx="74" cy="62" r="7" fill="none" stroke="#E8C55A" stroke-width="2.5" /></>}
+      collar={<><circle cx="50" cy="94" r="9" fill="#BFE0F0" {...S} /><path d="M45 90 q3 -3 6 -1" stroke="#fff" stroke-width="2" fill="none" /></>} />
+  ),
+  randy: (m) => {
     const raccoon = (x: number, y: number, s: number, mood: Mood) => (
       <g transform={`translate(${x} ${y}) scale(${s})`}>
         <path d="M-16 -12 l-4 -12 l12 6z M16 -12 l4 -12 l-12 6z" fill="#8C8577" {...S} />
@@ -271,7 +330,7 @@ function Car({ color, police }: { color: string; police?: boolean }) {
 
 export interface Burst { key: number; skill: 0 | 1 | 2 }
 /** Where each group lives on the map: [centre x, top y, half width]. */
-const HOME: Record<GroupId, [number, number, number]> = { people: [55, 60, 40], law: [211, 28, 40], press: [287, 76, 28], business: [347, 30, 20] };
+export const HOME: Record<GroupId, [number, number, number]> = { people: [55, 60, 40], law: [211, 28, 40], press: [287, 76, 28], business: [347, 30, 20] };
 const HOME_NAME: Record<GroupId, string> = { people: 'SCHOOL', law: 'TOWN HALL', press: 'BUGLE', business: 'CHAD' };
 
 export function Town({ s, pulse, scene, burst }: { s: TownView; pulse?: Pulse | null; scene?: string | null; burst?: Burst | null }) {
@@ -285,11 +344,11 @@ export function Town({ s, pulse, scene, burst }: { s: TownView; pulse?: Pulse | 
   const win = night ? '#F7D774' : '#F2EBDD';
   const walkers = Math.max(1, Math.round(s.approval.people / 18));
   const cars = Math.max(0, Math.round(s.approval.business / 28));
-  const town = (s.profile?.town ?? 'Bad Town').toUpperCase();
+  const town = 'BAD TOWN';
   const avg = GROUPS.reduce((n, g) => n + s.approval[g], 0) / 4;
   const gloomy = avg < 40, sunny = avg >= 60;
   return (
-    <svg class={`town ${burst && burst.skill === 0 ? 'quake' : ''}`} key={burst && burst.skill === 0 ? burst.key : 0} viewBox="0 0 400 170" role="img" aria-label={`${s.profile?.town ?? 'The town'}. Built: ${Object.keys(s.flags).filter((f) => f.startsWith('built:')).map((f) => f.slice(6)).join(', ') || 'nothing yet'}.`}>
+    <svg class={`town ${burst && burst.skill === 0 ? 'quake' : ''}`} key={burst && burst.skill === 0 ? burst.key : 0} viewBox="0 0 400 170" role="img" aria-label={`Bad Town. Built: ${Object.keys(s.flags).filter((f) => f.startsWith('built:')).map((f) => f.slice(6)).join(', ') || 'nothing yet'}.`}>
       <rect width="400" height="170" fill={sky} />
       {night ? <><circle cx="340" cy="30" r="14" fill="#F2EBDD" /><circle cx="346" cy="26" r="12" fill={sky} />{[30, 80, 140, 200, 260, 300, 370].map((x, i) => <circle key={x} class="blink" style={{ 'animation-delay': `${i * 0.3}s`, 'animation-duration': '3s' }} cx={x} cy={12 + ((i * 17) % 34)} r="1.4" fill="#F2EBDD" />)}</>
         : <g class="sun"><circle cx={60 + s.day * 45} cy={s.day > 4 ? 50 : 28} r="15" fill="#F7D774" stroke={INK} stroke-width="2" /></g>}
@@ -398,8 +457,8 @@ export function Town({ s, pulse, scene, burst }: { s: TownView; pulse?: Pulse | 
       {pulse && GROUPS.filter((g) => pulse.effects[g]).map((g) => {
         const up = pulse.effects[g]! > 0;
         const [x] = HOME[g];
-        return [0, 1, 2, 3, 4].map((i) => (
-          <g key={`${pulse.key}crowd${g}${i}`} class={`crowd ${x > 200 ? 'fromleft' : 'fromright'}`} style={{ 'animation-delay': `${i * 0.08}s` }} transform={`translate(${x - 18 + i * 9} 121)`}>
+        return [0, 1, 2, 3, 4, 5, 6].map((i) => (
+          <g key={`${pulse.key}crowd${g}${i}`} class={`crowd ${x > 200 ? 'fromleft' : 'fromright'}`} style={{ '--d': `${i * 0.08}s` }} transform={`translate(${Math.min(392, Math.max(8, x - 33 + i * 11))} ${i % 2 ? 146 : 140}) scale(1.7)`}>
             <g class="cheer" style={{ 'animation-delay': `${0.9 + i * 0.07}s` }}>
               <path d="M-3 0 q3 -9 6 0z" fill={GROUP_COLOR[g]} stroke={INK} stroke-width="1.1" /><circle cy="-9" r="2.8" fill={['#F0C4A0', '#B9794E', '#E2A878', '#8A5A3C'][i % 4]} stroke={INK} stroke-width="1.1" />
               {up ? <path d="M3 -12 l4 -7" stroke={INK} stroke-width="1.2" /> : <><path d="M3 -8 v-10" stroke={INK} stroke-width="1.2" /><rect x="0" y="-24" width="9" height="6" fill="#fff" stroke={INK} stroke-width="1" /><path d="M2 -21 h5" stroke="#C23B3B" stroke-width="1.4" /></>}
@@ -418,6 +477,11 @@ export function Town({ s, pulse, scene, burst }: { s: TownView; pulse?: Pulse | 
           </g>
         );
       })}
+      {pulse && pulse.effects.treasury ? Array.from({ length: Math.min(14, 4 + Math.abs(pulse.effects.treasury)) }, (_, i) => (
+        <g key={`${pulse.key}coin${i}`} class={pulse.effects.treasury! > 0 ? 'coinin' : 'coinout'} style={{ '--cx': `${((i * 47) % 160) - 80}px`, '--cy': `${-30 - ((i * 29) % 50)}px`, 'animation-delay': `${0.25 + i * 0.07}s` }}>
+          <g transform="translate(211 72)"><circle r="5.5" fill="#E8C55A" stroke={INK} stroke-width="1.4" /><path d="M0 -3 v6" stroke={INK} stroke-width="1.2" /></g>
+        </g>
+      )) : null}
       {burst && burst.skill === 2 && Array.from({ length: 22 }, (_, i) => <rect key={`${burst.key}c${i}`} class="confetti" style={{ 'animation-delay': `${(i % 7) * 0.09}s` }} x={12 + i * 17.5} y={-8} width="5" height="8" rx="1" fill={['#D9653B', '#3F8F5A', '#3B6FB6', '#E8C55A'][i % 4]} transform={`rotate(${i * 37} ${12 + i * 17.5} -4)`} />)}
       {burst && burst.skill === 0 && [60, 140, 215, 290, 350].map((x, i) => <g key={`${burst.key}s${i}`} class="smokeup" style={{ 'animation-delay': `${i * 0.12}s` }} transform={`translate(${x} ${96 + (i % 2) * 14})`}><circle r="11" fill="#6B6257" opacity=".85" /><circle cx="9" cy="-7" r="8" fill="#8C8577" opacity=".85" /><circle cx="-8" cy="-5" r="7" fill="#8C8577" opacity=".85" /></g>)}
       {s.approval.people < 35 && <g class="built">{[22, 40, 58].map((x, i) => <g key={x} class="goose" style={{ 'animation-delay': `${i * 0.2}s` }} transform={`translate(${x} 128)`}><rect x="-7" y="-22" width="14" height="10" fill="#fff" stroke={INK} stroke-width="1.5" /><path d="M0 -12 v12" stroke={INK} stroke-width="2" /><circle cx="0" cy="2" r="3.5" fill="#D9653B" stroke={INK} stroke-width="1.5" /><path d="M-4 -17 h8" stroke="#C23B3B" stroke-width="2" /></g>)}</g>}
