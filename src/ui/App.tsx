@@ -8,8 +8,8 @@ import type { Crowd } from '../engine/score.ts';
 import crowdData from '../content/packs/week1.crowd.json' with { type: 'json' };
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
-import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
-import type { Pulse, TownView } from './art.tsx';
+import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait } from './art.tsx';
+import type { Mood } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
 
@@ -22,14 +22,14 @@ const METER_COLOR: Record<MeterId, string> = { ...GROUP_COLOR, treasury: '#B58D5
 const ARROW: Record<Dir, string> = { left: '←', right: '→', up: '↑', down: '↓' };
 
 function boot(save: Save): State {
+  try { return bootUnsafe(save); } catch { return bootUnsafe({ ...save, state: null }); }
+}
+function bootUnsafe(save: Save): State {
   const cal = calendar(save.dayOffset);
-  const kept = save.state && save.state.v === 8 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  const kept = save.state && save.state.v === 9 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, pack), pack, cal.today);
 }
 
-const view = (s: State, fresh?: string | null): TownView => ({
-  day: s.day, approval: { people: s.meters.people, business: s.meters.business, law: s.meters.law, press: s.meters.press }, flags: s.flags, profile: s.profile, fresh,
-});
 
 // ---------- meters ----------
 function MeterIcon({ m }: { m: MeterId }) {
@@ -55,51 +55,149 @@ function Meters({ s, preview }: { s: State; preview: Choice | null }) {
   );
 }
 
-/** The big reveal after a swipe: what the choice did, meter by meter, and how many mayors did the same. */
+/** The big reveal after a swipe: a short staged scene. The choice is stamped, the character reacts,
+ *  then each group that moved acts it out (cheering, storming, coins) while its number counts and its
+ *  bar slides, and finally the crowd: how many mayors did the same, and what that's worth. */
 interface RevealData { key: number; card: Card; dir: Dir; before: Record<MeterId, number>; after: Record<MeterId, number>; pct: number | undefined; recalled: boolean }
+
+const pick = <T,>(xs: T[], seed: string) => { let h = 0; for (const c of seed) h = (h * 31 + c.charCodeAt(0)) | 0; return xs[Math.abs(h) % xs.length]!; };
+const MOODS = {
+  up: { small: ['Pleased', 'Nodding along', 'Quietly chuffed', 'Warming to you'], big: ['LOVE IT', 'OVER THE MOON', 'CARRYING YOU ON THEIR SHOULDERS', 'WRITING YOU A SONG'] },
+  down: { small: ['Grumbling', 'Unimpressed', 'Tutting loudly', 'Sighing on purpose'], big: ['FURIOUS', 'OUTRAGED', 'DRAFTING A PETITION', 'SHOUTING AT A CLOUD'] },
+  cashUp: { small: ['A bit richer', 'Coins found down the sofa'], big: ['KA-CHING', 'COFFERS OVERFLOWING'] },
+  cashDown: { small: ['A bit poorer', 'Wallet sighs'], big: ['MONEY ON FIRE', 'THE PIGGY BANK WEEPS'] },
+};
+const moodLine = (m: MeterId, d: number, seed: string) => {
+  const set = m === 'treasury' ? (d > 0 ? MOODS.cashUp : MOODS.cashDown) : d > 0 ? MOODS.up : MOODS.down;
+  return pick(Math.abs(d) >= 10 ? set.big : set.small, seed + m);
+};
+
+function CountUp({ to, ms = 650 }: { to: number; ms?: number }) {
+  const [v, setV] = useState(reduced() ? to : 0);
+  useEffect(() => {
+    if (reduced()) return;
+    let raf = 0; const t0 = performance.now();
+    const f = (now: number) => { const p = Math.min(1, (now - t0) / ms); setV(Math.round(to * (1 - (1 - p) ** 3))); if (p < 1) raf = requestAnimationFrame(f); };
+    raf = requestAnimationFrame(f);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return <>{v > 0 ? '+' : v < 0 ? '−' : ''}{Math.abs(v)}</>;
+}
+
+function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
+  const [w, setW] = useState(reduced() ? to : from);
+  useEffect(() => { const t = setTimeout(() => setW(to), 120); return () => clearTimeout(t); }, []);
+  return (
+    <span class="rv-bar">
+      <i class="zone low" style={{ width: `${TUNING.low}%` }} />
+      {m !== 'treasury' && <i class="zone high" style={{ width: `${100 - TUNING.high}%` }} />}
+      <i class="fill" style={{ width: `${w}%` }} />
+      <i class="ghost" style={{ left: `${from}%` }} />
+    </span>
+  );
+}
+
+/** Particles: confetti and hearts for a gain, a storm for a loss, coins for the treasury. */
+function RowFx({ m, d }: { m: MeterId; d: number }) {
+  const big = Math.abs(d) >= 10;
+  if (m === 'treasury') return (
+    <span class={`rv-fx ${d > 0 ? 'coins-in' : 'coins-out'}`} aria-hidden="true">
+      {Array.from({ length: big ? 9 : 5 }, (_, k) => <i key={k} style={{ '--x': `${(k * 37) % 100}%`, '--d': `${(k * 70) % 400}ms`, '--r': `${(k * 53) % 360}deg` }}><Icon.coin size={18} /></i>)}
+    </span>
+  );
+  if (d > 0) return (
+    <span class="rv-fx cheer" aria-hidden="true">
+      {Array.from({ length: big ? 18 : 10 }, (_, k) => <i key={k} class="cf" style={{ '--a': `${(k * 360) / (big ? 18 : 10) + (k % 3) * 7}deg`, '--dist': `${50 + (k * 29) % 50}px`, '--c': k % 3 === 0 ? 'var(--gold)' : k % 3 === 1 ? METER_COLOR[m] : '#fff', '--d': `${(k % 4) * 30}ms` }} />)}
+      {Array.from({ length: big ? 4 : 2 }, (_, k) => <b key={k} class="heart" style={{ '--x': `${-18 + k * 14}px`, '--d': `${120 + k * 140}ms` }}>♥</b>)}
+    </span>
+  );
+  return (
+    <span class={`rv-fx storm ${big ? 'big' : ''}`} aria-hidden="true">
+      <svg class="cloud" viewBox="0 0 60 30" width="58" height="29"><path d="M12 26 Q2 26 4 18 Q4 10 14 11 Q18 2 30 4 Q40 0 45 10 Q58 9 56 19 Q56 26 46 26 Z" fill="#6E6A78" stroke="#29231F" stroke-width="2.5" stroke-linejoin="round" /></svg>
+      {Array.from({ length: big ? 8 : 5 }, (_, k) => <i key={k} class="drop" style={{ '--x': `${8 + k * (44 / (big ? 8 : 5))}px`, '--d': `${(k * 97) % 500}ms` }} />)}
+      {big && <svg class="bolt" viewBox="0 0 20 36" width="18" height="32"><path d="M12 0 L2 20 L9 20 L6 36 L18 13 L11 13 L14 0 Z" fill="#FFD84A" stroke="#29231F" stroke-width="2" stroke-linejoin="round" /></svg>}
+    </span>
+  );
+}
+
+const MOOD_OF = (d: number): Mood => (d > 0 ? 'pleased' : 'annoyed');
+
 function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const ch = r.card.options[r.dir]!;
-  const ms = METERS.filter((m) => r.after[m] !== r.before[m]);
+  const ms = METERS.filter((m) => r.after[m] !== r.before[m]).sort((a, b) => Math.abs(r.after[b] - r.before[b]) - Math.abs(r.after[a] - r.before[a]));
   const rar = rarityOf(r.pct);
-  const total = 600 + ms.length * 420 + 1500;
+  const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
+  const tone = ms.length === 0 ? 'flat' : ms.every((m) => r.after[m] > r.before[m]) ? 'good' : ms.every((m) => r.after[m] < r.before[m]) ? 'bad' : net >= 0 ? 'mixed good' : 'mixed bad';
+  // stage 0: stamp + character; 1..n: one group each; n+1: crowd; n+2: hold
+  const INTRO = 620, ROW = 400, CROWD = 480, HOLD = r.recalled ? 1800 : 1150;
   const [step, setStep] = useState(reduced() ? 99 : 0);
+  const [chars, setChars] = useState(reduced() ? 999 : 0);
+  useEffect(() => { sfx('stamp'); }, []);
   useEffect(() => {
-    if (step > ms.length) return;
+    if (reduced()) return;
+    const t = setInterval(() => setChars((c) => c + 2), 18);
+    return () => clearInterval(t);
+  }, []);
+  useEffect(() => {
+    if (step > ms.length + 1) return;
     const t = setTimeout(() => {
       const m = ms[step];
       if (m) sfx(r.after[m] > r.before[m] ? (m === 'treasury' ? 'coin' : 'win') : 'warn');
+      else if (r.recalled) sfx('lose');
       else sfx(rar.points >= 30 ? 'honk' : 'tap');
       setStep(step + 1);
-    }, step === 0 ? 500 : 420);
+    }, step === 0 ? INTRO : step <= ms.length ? ROW : CROWD);
     return () => clearTimeout(t);
   }, [step]);
-  useEffect(() => { const t = setTimeout(onDone, reduced() ? 1600 : total); return () => clearTimeout(t); }, []);
-  const good = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0) >= 0;
+  useEffect(() => { const t = setTimeout(onDone, reduced() ? 1800 : INTRO + ms.length * ROW + CROWD + HOLD); return () => clearTimeout(t); }, []);
+  const headline = ms.length === 0 ? 'Nobody noticed. Somehow that is worse.'
+    : ms.slice(0, 3).map((m) => { const d = r.after[m] - r.before[m]; return m === 'treasury' ? (d > 0 ? 'Treasury up' : 'Treasury down') : `${METER_NAME[m]} ${d > 0 ? 'up' : 'down'}`; }).join(' · ');
+  const reaction = ch.reaction.slice(0, chars);
+  const crowdIn = step > ms.length;
   return (
-    <button class={`impact ${good ? 'good' : 'bad'}`} onClick={onDone} aria-label="Continue">
-      <span class="impact-choice"><b>{ARROW[r.dir]}</b> {ch.label}</span>
-      <span class="impact-who"><Portrait who={r.card.who} size={64} mood={good ? 'pleased' : 'annoyed'} /><span class="bubble">{ch.reaction}{ch.then?.length ? <small>This isn't over.</small> : null}</span></span>
-      <span class="impact-rows">
-        {ms.length === 0 && <span class="impact-row none">Nothing changed. Somehow that's worse.</span>}
-        {ms.map((m, i) => { const d = r.after[m] - r.before[m]; const up = d > 0; return i < step ? (
-          <span key={m} class={`impact-row ${up ? 'up' : 'down'} ${Math.abs(d) >= 15 ? 'huge' : ''}`} style={{ '--g': METER_COLOR[m] }}>
-            <MeterIcon m={m} />
-            <span class="impact-name">{METER_NAME[m]}</span>
-            <span class="impact-arrow">{up ? '▲' : '▼'}</span>
-            <span class="impact-num">{up ? '+' : '−'}{Math.abs(d)}</span>
-            <span class="impact-bar"><i class="was" style={{ width: `${r.before[m]}%` }} /><i class="now" style={{ width: `${r.after[m]}%` }} /></span>
-            {up && <span class="burst">{[0, 1, 2, 3, 4, 5].map((k) => <i key={k} style={{ '--a': `${k * 60}deg` }} />)}</span>}
-          </span>
-        ) : null; })}
-      </span>
-      {step > ms.length && r.pct !== undefined && (
-        <span class={`impact-crowd r-${rar.id}`}>
-          <span class="crowd-bar"><i style={{ width: `${Math.max(3, r.pct)}%` }} /></span>
-          <span class="crowd-text"><b>{r.pct}%</b> of mayors did this <em class="rarity">{rar.emoji} {rar.name}{rar.points ? ` +${rar.points}` : ''}</em>{PREVIEW && <span class="tag">preview data</span>}</span>
+    <button class={`impact tone-${tone.replace(' ', ' tone-')} ${r.recalled && crowdIn ? 'recalled' : ''}`} onClick={onDone} aria-label={`${ch.label}. ${headline}. Tap to continue`}>
+      <span class="rv-rays" aria-hidden="true" />
+      <span class="rv-flash" aria-hidden="true" />
+      {(tone === 'good' || tone === 'bad') && (
+        <span class={`rv-weather ${tone}`} aria-hidden="true">
+          {Array.from({ length: tone === 'good' ? 28 : 34 }, (_, k) => <i key={k} style={{ '--x': `${(k * 37) % 100}%`, '--d': `${(k * 113) % 900}ms`, '--r': `${(k * 71) % 360}deg`, '--c': ['var(--gold)', 'var(--people)', 'var(--business)', 'var(--law)', 'var(--press)', '#fff'][k % 6] }} />)}
         </span>
       )}
-      {r.recalled && step > ms.length && <span class="impact-recall">…and that was the last straw.</span>}
-      <span class="impact-skip">Tap to continue</span>
+      <span class="rv-flashline" aria-hidden="true"><b>BUGLE FLASH</b> {headline}</span>
+      <span class="rv-hero">
+        <span class={`rv-face mood-${net >= 0 ? 'up' : 'down'}`}><Portrait who={r.card.who} size={104} mood={ms.length ? MOOD_OF(net) : 'neutral'} /></span>
+        <span class={`rv-stamp from-${r.dir}`}><b>{ARROW[r.dir]}</b>{ch.label}</span>
+      </span>
+      <span class="rv-bubble"><span class="rv-who">{NAMES[r.card.who] ?? r.card.who}</span>“{reaction}”{chars >= ch.reaction.length && ch.then?.length ? <small>This isn't over.</small> : null}</span>
+      <span class="rv-rows">
+        {ms.map((m, i) => {
+          const d = r.after[m] - r.before[m], up = d > 0, big = Math.abs(d) >= 10;
+          const edge = r.after[m] <= TUNING.low || (m !== 'treasury' && r.after[m] >= TUNING.high);
+          if (i >= step) return <span key={m} class="rv-row pending" />;
+          return (
+            <span key={m} class={`rv-row ${up ? 'up' : 'down'} ${big ? 'big' : ''}`} style={{ '--g': METER_COLOR[m] }}>
+              <span class="rv-actor">
+                {m === 'treasury' ? <span class="rv-coin"><Icon.coin size={40} /></span> : <Portrait who={LEADER[m as GroupId]!} size={48} ring={METER_COLOR[m]} mood={MOOD_OF(d)} />}
+                <RowFx m={m} d={d} />
+              </span>
+              <span class="rv-text"><b>{METER_NAME[m]}</b><small>{moodLine(m, d, r.card.id + r.dir)}</small></span>
+              <span class="rv-num"><span class="arrow">{up ? '▲' : '▼'}</span><CountUp to={d} /></span>
+              <SlideBar m={m} from={r.before[m]} to={r.after[m]} />
+              {edge && <span class="rv-edge">{r.after[m] <= TUNING.low ? (m === 'treasury' ? 'Running dry' : 'Close to revolt') : 'Getting too powerful'}</span>}
+            </span>
+          );
+        })}
+      </span>
+      {crowdIn && r.pct !== undefined && (
+        <span class={`rv-crowd r-${rar.id}`}>
+          <span class="rv-crowdbar"><i style={{ width: `${Math.max(3, r.pct)}%` }} /><em style={{ left: `${Math.max(3, r.pct)}%` }}>YOU</em></span>
+          <span class="rv-crowdtext"><b>{r.pct}%</b> of mayors did this{PREVIEW && <span class="tag">preview data</span>}</span>
+          <span class="rv-rarity">{rar.emoji} {rar.name}<b>+{TUNING.score.perCard + rar.points}</b></span>
+          {rar.points >= 30 && <span class="rv-sparkle" aria-hidden="true">{Array.from({ length: 12 }, (_, k) => <i key={k} style={{ '--a': `${k * 30}deg` }}>✦</i>)}</span>}
+        </span>
+      )}
+      {r.recalled && crowdIn && <span class="rv-recall">RECALLED</span>}
+      <span class="impact-skip">Tap anywhere to continue</span>
     </button>
   );
 }
@@ -354,7 +452,6 @@ export function App() {
   const [s, setS] = useState<State>(() => boot(save));
   const [preview, setPreview] = useState<Dir | null>(null);
   const [reveal, setReveal] = useState<RevealData | null>(null);
-  const [pulse, setPulse] = useState<Pulse | null>(null);
   const [fresh, setFresh] = useState<{ endings: string[]; deeds: string[] }>({ endings: [], deeds: [] });
   const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | null>(null);
   const taps = useRef<number[]>([]);
@@ -374,9 +471,6 @@ export function App() {
     const card = findCard(pack, s.current!);
     const next = reduce(s, { type: 'swipe', dir }, pack);
     persist(next);
-    const fx: Pulse['effects'] = {};
-    for (const g of GROUPS) if (next.meters[g] !== s.meters[g]) fx[g] = next.meters[g] - s.meters[g];
-    setPulse({ key: Date.now(), effects: fx });
     if (card.who === 'gerald') sfx('honk');
     if (next.phase === 'recalled') sfx('lose');
     if (!isSunday) setReveal({ key: Date.now(), card, dir, before: s.meters, after: next.meters, pct: crowd[card.id]?.[dir], recalled: next.phase === 'recalled' });
@@ -414,7 +508,6 @@ export function App() {
       </header>
       <div class="layout">
         <aside class="side">
-          <Town s={view(s)} pulse={pulse} />
           <ol class="timeline" aria-label="The week">{DAY_NAMES.map((d, i) => <li key={d} class={i + 1 === s.day ? 'now' : i + 1 < s.day ? 'past' : ''}><span>{d}</span><b>{i === 6 ? (s.result ? `${s.result.share}%` : 'Vote') : s.polls[i] !== undefined ? `${s.polls[i]}%` : ''}</b>{s.daveDays.includes(i + 1) && <i>Dave</i>}</li>)}</ol>
           <div class="threads">
             <h3>Stories in play</h3>

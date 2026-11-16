@@ -70,7 +70,7 @@ export interface Result { share: number; won: boolean; endedEarly: boolean }
 export interface Profile { mayor: string; town: string; base: GroupId }
 
 export interface State {
-  v: 8;
+  v: 9;
   weekId: string;
   playerSeed: string;
   day: number; // 1..6 governing, 7 = Sunday

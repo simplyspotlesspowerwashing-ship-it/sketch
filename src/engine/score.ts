@@ -32,7 +32,7 @@ export function dayScore(s: State, day: number, crowd: Crowd): DayScore {
     const r = rarityOf(pct);
     return { cardId: w.cardId, pct, rarity: r, points: TUNING.score.perCard + r.points };
   });
-  const recalled = s.recalledDays.includes(day);
+  const recalled = (s.recalledDays ?? []).includes(day);
   const survived = picks.length * TUNING.score.perCard;
   const rarity = picks.reduce((n, p) => n + p.rarity.points, 0);
   return { total: Math.max(0, survived + rarity - (recalled ? TUNING.score.recall : 0)), survived, rarity, recalled, picks };

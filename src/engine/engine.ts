@@ -119,7 +119,7 @@ function finish(s: State, endedEarly: boolean) {
 export function newTerm(weekId: string, playerSeed: string, pack: Pack, rng: Rng = seededRng): State {
   const m = Object.fromEntries(METERS.map((k) => [k, TUNING.start])) as Record<MeterId, number>;
   const s: State = {
-    v: 8, weekId, playerSeed, day: 1, cardInDay: 0, count: 0, meters: m, flags: {}, queue: [], seen: [], current: null,
+    v: 9, weekId, playerSeed, day: 1, cardInDay: 0, count: 0, meters: m, flags: {}, queue: [], seen: [], current: null,
     phase: 'card', dayStart: { ...m }, swipes: [], recalls: 0, recallCauses: [], recalledDays: [], objectivesDone: [], campaignVote: 0,
     profile: null, daveDays: [], polls: [], result: null,
   };
