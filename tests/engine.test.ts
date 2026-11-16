@@ -3,8 +3,9 @@ import { week1Pack as pack } from '../src/content/index.ts';
 import { loadPack } from '../src/content/schema.ts';
 import week1 from '../src/content/packs/week1.json' with { type: 'json' };
 import { voteShare } from '../src/engine/election.ts';
-import { autoplay, coverMissedDays, davePolicy, findCard, legalActions, newTerm, options, reduce } from '../src/engine/engine.ts';
+import { autoplay, coverMissedDays, davePolicy, dayDeck, findCard, legalActions, newTerm, options, reduce } from '../src/engine/engine.ts';
 import { TUNING } from '../src/engine/tuning.ts';
+import { dayScore, rarityOf, tierOf } from '../src/engine/score.ts';
 import type { Action, Dir, State } from '../src/engine/types.ts';
 
 const start = (seed = 'p1') => newTerm('week1', seed, pack);
@@ -136,6 +137,69 @@ describe('the week', () => {
     expect(() => reduce(s, { type: 'setup', profile: s.profile! }, pack)).toThrow();
     s = reduce(s, { type: 'rename', mayor: 'Sam', town: 'Honk' }, pack);
     expect(s.profile).toMatchObject({ mayor: 'Sam', town: 'Honk', base: 'law' });
+  });
+});
+
+describe('the shared day', () => {
+  it('every player gets the same 25-card deck for a given day, and a different one next day', () => {
+    for (let d = 1; d <= 6; d++) {
+      const deck = dayDeck(pack, 'week1', d);
+      expect(deck.length).toBeGreaterThanOrEqual(TUNING.cardsPerDay);
+      expect(dayDeck(pack, 'week1', d)).toEqual(deck);
+    }
+    expect(dayDeck(pack, 'week1', 2).slice(0, 25)).not.toEqual(dayDeck(pack, 'week1', 1).slice(0, 25));
+  });
+  it('the day\'s sneak moment sits in its slot for everyone who has not been pulled aside by a follow-up', () => {
+    for (let d = 1; d <= 6; d++) {
+      const sk = pack.cards.find((c) => c.sneak && c.day === d)!;
+      expect(sk, `sneak card on day ${d}`).toBeTruthy();
+      expect(dayDeck(pack, 'week1', d)[sk.slot!]).toBe(sk.id);
+    }
+  });
+  it('the sneak moment turns up at its slot even when the town is in trouble', () => {
+    let s = start();
+    for (let i = 0; i < 12 && s.phase === 'card'; i++) {
+      const c = findCard(pack, s.current!);
+      // keep everything near the middle so the day survives to card 13
+      const d = options(c).sort((x, y) => Object.values(c.options[x]!.effects).reduce((n, v) => n + Math.abs(v ?? 0), 0) - Object.values(c.options[y]!.effects).reduce((n, v) => n + Math.abs(v ?? 0), 0))[0]!;
+      s = swipe(s, d);
+    }
+    expect(s.phase).toBe('card');
+    expect(findCard(pack, s.current!).sneak).toBe(true);
+  });
+  it('two players making the same choices see the same cards; different choices can diverge', () => {
+    const run = (seed: string, pick: (n: number) => number) => { let s = start(seed); const seen: string[] = []; for (let i = 0; i < 25 && s.phase === 'card'; i++) { seen.push(s.current!); const o = options(findCard(pack, s.current!)); s = swipe(s, o[pick(i) % o.length]!); } return seen; };
+    expect(run('a', () => 0)).toEqual(run('b', () => 0));
+  });
+});
+
+describe('the daily score', () => {
+  it('10 per card, plus a rarity bonus from how few mayors made the same choice', () => {
+    let s = start();
+    const ids: string[] = [];
+    for (let i = 0; i < 3; i++) { ids.push(s.current!); s = swipe(s, options(findCard(pack, s.current!))[0]!); }
+    const dirs = s.swipes.map((w) => w.dir);
+    const crowd = { [ids[0]!]: { [dirs[0]!]: 3 }, [ids[1]!]: { [dirs[1]!]: 20 }, [ids[2]!]: { [dirs[2]!]: 90 } };
+    const sc = dayScore(s, 1, crowd);
+    expect(sc.survived).toBe(30);
+    expect(sc.rarity).toBe(50 + 15 + 0);
+    expect(sc.total).toBe(95);
+  });
+  it('a recall costs points but never goes below zero', () => {
+    let s = start();
+    for (let i = 0; i < 40 && s.phase === 'card'; i++) {
+      const c = findCard(pack, s.current!);
+      const d = options(c).sort((a, b) => (c.options[a]!.effects.people ?? 0) - (c.options[b]!.effects.people ?? 0))[0]!;
+      s = swipe(s, d);
+    }
+    expect(s.recalledDays).toContain(1);
+    const sc = dayScore(s, 1, {});
+    expect(sc.recalled).toBe(true);
+    expect(sc.total).toBe(Math.max(0, sc.survived + sc.rarity - TUNING.score.recall));
+  });
+  it('tiers and rarity bands are ordered and cover every score', () => {
+    expect(rarityOf(2).id).toBe('unique'); expect(rarityOf(14).id).toBe('rare'); expect(rarityOf(99).id).toBe('herd'); expect(rarityOf(undefined).id).toBe('common');
+    expect(tierOf(0).name).toBe('Rubber Stamp'); expect(tierOf(10000).name).toBe('One in a Million Mayor');
   });
 });
 

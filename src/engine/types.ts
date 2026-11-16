@@ -35,6 +35,10 @@ export interface Card {
   story?: string; // which storyline this belongs to (for the day's review)
   /** Pinned to a day: shown as that day's first cards, in order, to every mayor. */
   day?: number;
+  /** With `day`: the position in that day's run (0-based) instead of the start. */
+  slot?: number;
+  /** A tense one-button moment: hold to wind up, release while they're not looking. Success = right, caught = left. */
+  sneak?: boolean;
   requires?: Condition;
   weight?: number; // in the open pool; default 1
   repeat?: boolean; // may be drawn more than once
@@ -82,6 +86,7 @@ export interface State {
   swipes: Swipe[];
   recalls: number;
   recallCauses: string[];
+  recalledDays: number[];
   objectivesDone: string[];
   campaignVote: number;
   profile: Profile | null;

@@ -22,9 +22,10 @@ The heart of the game. A story is a chain of cards that remember what you chose.
 
 ## Card kinds
 
-- **Pinned**: `day` 1-6, shown first that day to every mayor, in pack order.
+- **Pinned**: `day` 1-6, shown first that day to every mayor, in pack order; `slot: n` puts it at a fixed position instead.
+- **Sneak**: `sneak: true` with a `day` and `slot`; `right` = got away with it, `left` = caught. One a day.
 - **Follow-up**: `followUp: true`, only when scheduled.
-- **Open pool**: no `day`, no `followUp`; drawn by weight, once each unless `repeat`.
+- **Open pool**: no `day`, no `followUp`; shuffled once per week and dealt into the shared daily decks. With about 90 pool cards and roughly 130 open positions a week, stand-alone cards repeat late in the week; more pool cards fix that.
 - **Pressure**: `repeat`, a higher `weight`, and `requires.min`/`max` on a meter.
 - **Campaign** (`campaign` list): Sunday; options carry `vote`.
 

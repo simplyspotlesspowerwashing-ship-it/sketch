@@ -3,7 +3,7 @@
 // Each day is a run of cards. A choice can schedule follow-up cards a few cards later; that is how
 // stories build. Pinned day cards are the same for every mayor; the rest depend on your own story.
 import { voteShare } from './election.ts';
-import { seededRng } from './rng.ts';
+import { seededRng, shuffled } from './rng.ts';
 import { TUNING } from './tuning.ts';
 import { DIRS, GROUPS, METERS } from './types.ts';
 import type { Action, Card, Condition, Dir, MeterId, Pack, Rng, State } from './types.ts';
@@ -45,20 +45,54 @@ function weightedPick<T>(items: T[], weight: (t: T) => number, rand: () => numbe
   return items.find((t) => (r -= weight(t)) < 0) ?? items[items.length - 1];
 }
 
-/** Choose the next card: a due follow-up first, then today's pinned cards, then the open pool. */
+const isPool = (c: Card) => !c.day && !c.followUp && !c.repeat && !c.sneak;
+
+/**
+ * The day's shared running order, the same for every mayor: pinned story openers first, a pinned
+ * card at its slot, and the rest dealt from the week's pool in a fixed order. Extra spares follow,
+ * for positions a mayor can't use (a pinned card whose condition they don't meet).
+ */
+export function dayDeck(pack: Pack, weekId: string, day: number, rng: Rng = seededRng): string[] {
+  const N = TUNING.cardsPerDay;
+  const order = shuffled(pack.cards.filter(isPool).map((c) => c.id), rng(`${weekId}|pool`));
+  const pinned = pack.cards.filter((c) => c.day === day);
+  const deck: (string | null)[] = Array.from({ length: N }, () => null);
+  for (const c of pinned) if (c.slot !== undefined && c.slot < N) deck[c.slot] = c.id;
+  let i = 0;
+  for (const c of pinned) if (c.slot === undefined) { while (deck[i]) i++; deck[i] = c.id; }
+  // how many pool cards the earlier days used
+  let used = 0;
+  for (let d = 1; d < day; d++) used += N - pack.cards.filter((c) => c.day === d).length;
+  const spares = 8;
+  const free = deck.filter((x) => !x).length + spares;
+  const deal = Array.from({ length: free }, (_, k) => order[(used + k) % order.length]!);
+  let k = 0;
+  return [...deck.map((x) => x ?? deal[k++]!), ...deal.slice(k)];
+}
+
+/** The next card: the day's pinned card for this position, a due follow-up, then a pressure card if things are dire, then the shared deck. */
 function drawNext(s: State, pack: Pack, rng: Rng): string | null {
+  const deck = dayDeck(pack, s.weekId, s.day, rng);
+  const at = deck[s.cardInDay];
+  const usable = (id: string | undefined) => { if (!id) return false; const c = findCard(pack, id); return holds(s, c.requires) && !s.seen.includes(id); };
+  // The day's pinned cards (story beats, the sneak moment) keep their place; follow-ups wait one card.
+  if (usable(at) && findCard(pack, at!).day === s.day) return at!;
   s.queue.sort((a, b) => a.at - b.at);
   while (s.queue.length && s.queue[0]!.at <= s.count) {
     const q = s.queue.shift()!;
     if (holds(s, findCard(pack, q.cardId).requires)) return q.cardId;
   }
-  const pinned = pack.cards.find((c) => c.day === s.day && !s.seen.includes(c.id) && holds(s, c.requires));
-  if (pinned) return pinned.id;
-  const last = s.current ? findCard(pack, s.current).who : '';
-  let pool = pack.cards.filter((c) => !c.day && !c.followUp && (c.repeat || !s.seen.includes(c.id)) && holds(s, c.requires));
-  if (pool.some((c) => c.who !== last)) pool = pool.filter((c) => c.who !== last);
-  const pick = weightedPick(pool, (c) => c.weight ?? 1, rng(`${s.weekId}|${s.count}|${s.seen.length}`));
-  return pick?.id ?? null;
+  const recent = s.swipes.slice(-TUNING.pressureGap).map((w) => w.cardId);
+  const pressure = pack.cards.filter((c) => c.repeat && holds(s, c.requires));
+  if (pressure.length && !recent.some((id) => pressure.some((c) => c.id === id) || findCard(pack, id).repeat)) {
+    return weightedPick(pressure, (c) => c.weight ?? 1, rng(`${s.weekId}|pressure|${s.count}`))!.id;
+  }
+  if (usable(at)) return at!;
+  const spare = deck.slice(TUNING.cardsPerDay).find(usable);
+  if (spare) return spare;
+  // The week's pool has run out: a stand-alone card comes round again rather than ending the day early.
+  if (at && holds(s, findCard(pack, at).requires)) return at;
+  return deck.find((id) => holds(s, findCard(pack, id).requires) && isPool(findCard(pack, id))) ?? null;
 }
 
 function startCard(s: State, pack: Pack, rng: Rng) {
@@ -86,7 +120,7 @@ export function newTerm(weekId: string, playerSeed: string, pack: Pack, rng: Rng
   const m = Object.fromEntries(METERS.map((k) => [k, TUNING.start])) as Record<MeterId, number>;
   const s: State = {
     v: 8, weekId, playerSeed, day: 1, cardInDay: 0, count: 0, meters: m, flags: {}, queue: [], seen: [], current: null,
-    phase: 'card', dayStart: { ...m }, swipes: [], recalls: 0, recallCauses: [], objectivesDone: [], campaignVote: 0,
+    phase: 'card', dayStart: { ...m }, swipes: [], recalls: 0, recallCauses: [], recalledDays: [], objectivesDone: [], campaignVote: 0,
     profile: null, daveDays: [], polls: [], result: null,
   };
   startCard(s, pack, rng);
@@ -144,7 +178,7 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       for (const o of pack.objectives) if (!s.objectivesDone.includes(o.id) && holds(s, o.when)) s.objectivesDone.push(o.id);
       const cause = recallCause(s);
       if (cause) {
-        s.recalls += 1; s.recallCauses.push(cause); s.current = null; s.phase = 'recalled';
+        s.recalls += 1; s.recallCauses.push(cause); s.recalledDays.push(s.day); s.current = null; s.phase = 'recalled';
         if (s.recalls > TUNING.recall.max) finish(s, true);
         return s;
       }
@@ -188,7 +222,7 @@ export function coverMissedDays(state: State, pack: Pack, today: number, rng: Rn
       if (s.phase === 'results') break;
       s = structuredClone(s);
       if (s.phase === 'recalled') { s.phase = 'card'; s.current = null; }
-      s.recalls = before.recalls; s.recallCauses = s.recallCauses.slice(0, before.causes);
+      s.recalls = before.recalls; s.recallCauses = s.recallCauses.slice(0, before.causes); s.recalledDays = s.recalledDays.filter((d) => d !== s.day);
       delete s.flags.__reset;
       for (const k of METERS) s.meters[k] = clamp(s.meters[k], TUNING.handover.floor, TUNING.handover.ceiling);
       s.daveDays.push(s.day);

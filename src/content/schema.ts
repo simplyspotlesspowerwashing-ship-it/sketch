@@ -10,7 +10,7 @@ const choice = z.strictObject({
 });
 const card = z.strictObject({
   id: z.string().min(1), who: z.string().min(1), text: z.string().min(1).max(150), story: z.string().optional(),
-  day: z.number().int().min(1).max(6).optional(), requires: condition.optional(), weight: z.number().positive().optional(),
+  day: z.number().int().min(1).max(6).optional(), slot: z.number().int().min(0).optional(), sneak: z.boolean().optional(), requires: condition.optional(), weight: z.number().positive().optional(),
   repeat: z.boolean().optional(), followUp: z.boolean().optional(),
   options: z.strictObject({ left: choice, right: choice, up: choice, down: choice }).partial(),
 });

@@ -3,13 +3,19 @@ import { week1Pack as pack } from '../content/index.ts';
 import { voteParts, voteShare } from '../engine/election.ts';
 import { coverMissedDays, findCard, newTerm, options, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
+import { RARITY, dayScore, rarityOf, tierOf } from '../engine/score.ts';
+import type { Crowd } from '../engine/score.ts';
+import crowdData from '../content/packs/week1.crowd.json' with { type: 'json' };
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
 import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
-import type { Mood, Pulse, TownView } from './art.tsx';
+import type { Pulse, TownView } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
 
+/** Preview crowd data: simulated until real players exist; always labelled as such. */
+const crowd = crowdData.cards as Crowd;
+const PREVIEW = crowdData.simulated;
 const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const METER_NAME: Record<MeterId, string> = { ...GROUP_NAME, treasury: 'Treasury' };
 const METER_COLOR: Record<MeterId, string> = { ...GROUP_COLOR, treasury: '#B58D55' };
@@ -31,14 +37,6 @@ function MeterIcon({ m }: { m: MeterId }) {
 }
 
 function Meters({ s, preview }: { s: State; preview: Choice | null }) {
-  const prev = useRef(s.meters);
-  const [delta, setDelta] = useState<Partial<Record<MeterId, number>>>({});
-  useEffect(() => {
-    const d: Partial<Record<MeterId, number>> = {};
-    for (const m of METERS) if (s.meters[m] !== prev.current[m]) d[m] = s.meters[m] - prev.current[m];
-    prev.current = s.meters;
-    if (Object.keys(d).length) { setDelta(d); const t = setTimeout(() => setDelta({}), 1700); return () => clearTimeout(t); }
-  }, [s.meters]);
   return (
     <div class="meters" role="group" aria-label="Your standing">
       {METERS.map((m) => {
@@ -48,13 +46,100 @@ function Meters({ s, preview }: { s: State; preview: Choice | null }) {
         return (
           <div key={m} class={`meter ${danger ? 'danger' : ''}`} style={{ '--g': METER_COLOR[m] }} role="meter" aria-label={`${METER_NAME[m]} ${v} of 100`} aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
             <MeterIcon m={m} />
-            <span class="vbar"><i class="fill" style={{ height: `${v}%` }} />{m !== 'treasury' && <i class="edge top" />}<i class="edge bottom" /></span>
-            <span class="mname">{METER_NAME[m]}</span>
+            <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /></span>
             {hint ? <i class={`hintdot ${Math.abs(hint) >= 10 ? 'big' : ''}`} aria-label="will change" /> : null}
-            {delta[m] ? <b class={`delta ${delta[m]! > 0 ? 'up' : 'down'}`}>{delta[m]! > 0 ? '+' : '−'}{Math.abs(delta[m]!)}</b> : null}
           </div>
         );
       })}
+    </div>
+  );
+}
+
+/** The big reveal after a swipe: what the choice did, meter by meter, and how many mayors did the same. */
+interface RevealData { key: number; card: Card; dir: Dir; before: Record<MeterId, number>; after: Record<MeterId, number>; pct: number | undefined; recalled: boolean }
+function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
+  const ch = r.card.options[r.dir]!;
+  const ms = METERS.filter((m) => r.after[m] !== r.before[m]);
+  const rar = rarityOf(r.pct);
+  const total = 600 + ms.length * 420 + 1500;
+  const [step, setStep] = useState(reduced() ? 99 : 0);
+  useEffect(() => {
+    if (step > ms.length) return;
+    const t = setTimeout(() => {
+      const m = ms[step];
+      if (m) sfx(r.after[m] > r.before[m] ? (m === 'treasury' ? 'coin' : 'win') : 'warn');
+      else sfx(rar.points >= 30 ? 'honk' : 'tap');
+      setStep(step + 1);
+    }, step === 0 ? 500 : 420);
+    return () => clearTimeout(t);
+  }, [step]);
+  useEffect(() => { const t = setTimeout(onDone, reduced() ? 1600 : total); return () => clearTimeout(t); }, []);
+  const good = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0) >= 0;
+  return (
+    <button class={`impact ${good ? 'good' : 'bad'}`} onClick={onDone} aria-label="Continue">
+      <span class="impact-choice"><b>{ARROW[r.dir]}</b> {ch.label}</span>
+      <span class="impact-who"><Portrait who={r.card.who} size={64} mood={good ? 'pleased' : 'annoyed'} /><span class="bubble">{ch.reaction}{ch.then?.length ? <small>This isn't over.</small> : null}</span></span>
+      <span class="impact-rows">
+        {ms.length === 0 && <span class="impact-row none">Nothing changed. Somehow that's worse.</span>}
+        {ms.map((m, i) => { const d = r.after[m] - r.before[m]; const up = d > 0; return i < step ? (
+          <span key={m} class={`impact-row ${up ? 'up' : 'down'} ${Math.abs(d) >= 15 ? 'huge' : ''}`} style={{ '--g': METER_COLOR[m] }}>
+            <MeterIcon m={m} />
+            <span class="impact-name">{METER_NAME[m]}</span>
+            <span class="impact-arrow">{up ? '▲' : '▼'}</span>
+            <span class="impact-num">{up ? '+' : '−'}{Math.abs(d)}</span>
+            <span class="impact-bar"><i class="was" style={{ width: `${r.before[m]}%` }} /><i class="now" style={{ width: `${r.after[m]}%` }} /></span>
+            {up && <span class="burst">{[0, 1, 2, 3, 4, 5].map((k) => <i key={k} style={{ '--a': `${k * 60}deg` }} />)}</span>}
+          </span>
+        ) : null; })}
+      </span>
+      {step > ms.length && r.pct !== undefined && (
+        <span class={`impact-crowd r-${rar.id}`}>
+          <span class="crowd-bar"><i style={{ width: `${Math.max(3, r.pct)}%` }} /></span>
+          <span class="crowd-text"><b>{r.pct}%</b> of mayors did this <em class="rarity">{rar.emoji} {rar.name}{rar.points ? ` +${rar.points}` : ''}</em>{PREVIEW && <span class="tag">preview data</span>}</span>
+        </span>
+      )}
+      {r.recalled && step > ms.length && <span class="impact-recall">…and that was the last straw.</span>}
+      <span class="impact-skip">Tap to continue</span>
+    </button>
+  );
+}
+
+/** One tense moment a day: hold to wind up, let go while they're not looking. */
+function SneakCard({ card, onResult }: { card: Card; onResult: (d: Dir) => void }) {
+  const st = useRef({ t: 0, looking: false, warn: false, next: 1.4, charge: 0, holding: false, heldFull: 0, done: false, idle: 0 });
+  const [, setF] = useState(0);
+  const finish = (d: Dir) => { const s = st.current; if (s.done) return; s.done = true; sfx(d === 'right' ? 'stamp' : 'lose'); setTimeout(() => onResult(d), 600); };
+  const release = () => { const s = st.current; if (!s.holding || s.done) return; s.holding = false; if (s.charge < 0.6) return; finish(s.looking ? 'left' : 'right'); };
+  const press = () => { const s = st.current; if (s.done) return; s.holding = true; s.heldFull = 0; s.idle = 0; sfx('tap'); };
+  useEffect(() => {
+    let raf = 0, last = performance.now();
+    const tick = (now: number) => {
+      const s = st.current, dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (s.done) { setF((f) => f + 1); return; }
+      s.t += dt;
+      if (s.t >= s.next) { s.looking = !s.looking; s.warn = false; s.next = s.t + (s.looking ? 0.6 + Math.random() * 0.9 : 0.9 + Math.random() * 1.6); }
+      if (!s.looking && s.next - s.t < 0.3) s.warn = true;
+      if (s.holding) { s.charge = Math.min(1, s.charge + dt / 0.8); if (s.charge >= 1) { s.heldFull += dt; if (s.heldFull > 0.7) { s.holding = true; release(); } } }
+      else { s.charge = Math.max(0, s.charge - dt * 2); s.idle += dt; if (s.idle > 9) finish('left'); }
+      setF((f) => f + 1);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  useEffect(() => { const k = (e: KeyboardEvent) => { if (e.key !== ' ') return; e.preventDefault(); if (e.type === 'keydown' && !e.repeat) press(); if (e.type === 'keyup') release(); }; addEventListener('keydown', k); addEventListener('keyup', k); return () => { removeEventListener('keydown', k); removeEventListener('keyup', k); }; }, []);
+  const s = st.current;
+  const res = s.done ? (s.looking ? 'CAUGHT' : 'GOT AWAY WITH IT') : null;
+  return (
+    <div class="stage">
+      <div class={`card sneak ${s.looking ? 'looking' : s.warn ? 'warn' : 'away'} ${s.done ? 'over' : ''}`}>
+        <span class="sneak-tag">{res ?? (s.looking ? 'WATCHING YOU' : s.warn ? 'TURNING…' : 'NOT LOOKING')}</span>
+        <div class="card-who"><span class="sneak-face"><Portrait who={card.who} size={110} mood={s.looking ? 'annoyed' : 'neutral'} /></span><span>{NAMES[card.who] ?? card.who}</span></div>
+        <p class="card-text">{card.text}</p>
+        <span class="sneak-charge"><i style={{ width: `${s.charge * 100}%` }} /></span>
+      </div>
+      <button class={`btn mg-big sneak-btn ${s.holding ? 'go' : ''}`} onPointerDown={press} onPointerUp={release} onPointerLeave={release}>{s.holding ? (s.charge >= 1 ? 'NOW! Let go!' : 'Winding up…') : 'Hold, then let go'}</button>
+      <p class="hint">Hold to wind up, release while they're not looking. Hold too long and your arm gives out.</p>
     </div>
   );
 }
@@ -86,7 +171,8 @@ function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview
   return (
     <div class="stage">
       <div class="card" style={style}
-        onPointerDown={(e) => { if (locked || leaving) return; (e.currentTarget as Element).setPointerCapture(e.pointerId); start.current = { x: e.clientX, y: e.clientY, id: e.pointerId }; setDrag({ x: 0, y: 0 }); }}
+        onDragStart={(e) => e.preventDefault()}
+        onPointerDown={(e) => { if (locked || leaving) return; e.preventDefault(); getSelection()?.removeAllRanges(); (e.currentTarget as Element).setPointerCapture(e.pointerId); start.current = { x: e.clientX, y: e.clientY, id: e.pointerId }; setDrag({ x: 0, y: 0 }); }}
         onPointerMove={(e) => { if (start.current) setDrag({ x: e.clientX - start.current.x, y: e.clientY - start.current.y }); }}
         onPointerUp={() => { const d = drag; start.current = null; setDrag(null); if (d && Math.hypot(d.x, d.y) > THRESH) { const dir = dirOf(d.x, d.y); if (card.options[dir]) { commit(dir); return; } } onPreview(null); }}
         onPointerCancel={() => { start.current = null; setDrag(null); onPreview(null); }}>
@@ -117,11 +203,17 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
 function EffectList({ before, after, stagger = 0 }: { before: Record<MeterId, number>; after: Record<MeterId, number>; stagger?: number }) {
   const ms = METERS.filter((m) => after[m] !== before[m]);
   if (!ms.length) return <span class="eff none">No change</span>;
-  return <>{ms.map((m, i) => { const d = after[m] - before[m]; return <span key={m} class={`eff ${d > 0 ? 'up' : 'down'}`} style={{ '--g': METER_COLOR[m], 'animation-delay': `${stagger + i * 90}ms` }}><i class="dot" />{METER_NAME[m]} {d > 0 ? '▲ +' : '▼ −'}{Math.abs(d)}</span>; })}</>;
+  return <>{ms.map((m, i) => { const d = after[m] - before[m]; return <span key={m} class={`eff ${d > 0 ? 'up' : 'down'}`} style={{ '--g': METER_COLOR[m], 'animation-delay': `${Math.min(stagger, 700) + i * 90}ms` }}><i class="dot" />{METER_NAME[m]} {d > 0 ? '▲ +' : '▼ −'}{Math.abs(d)}</span>; })}</>;
 }
 
 /** The day in review: every card you played, what you chose, and what it did, story by story. */
 function DayReview({ s, onNext, nextLabel, sub }: { s: State; onNext: () => void; nextLabel: string; sub?: preact.ComponentChildren }) {
+  const sc = dayScore(s, s.day, crowd);
+  const tier = tierOf(sc.total);
+  const grid = sc.picks.map((p) => p.rarity.emoji);
+  const rows: string[] = [];
+  for (let i = 0; i < grid.length; i += 5) rows.push(grid.slice(i, i + 5).join(''));
+  const share = `Mayor of Bad Town · ${s.profile?.town ?? 'Bad Town'} · ${DAY_NAMES[s.day - 1]} · ${sc.total} pts · ${tier.name}${sc.recalled ? ' · RECALLED' : ''}\n${rows.join('\n')}`;
   const today = s.swipes.filter((w) => w.day === s.day);
   const byStory = new Map<string, typeof today>();
   for (const w of today) { const st = findCard(pack, w.cardId).story ?? 'town'; byStory.set(st, [...(byStory.get(st) ?? []), w]); }
@@ -134,6 +226,13 @@ function DayReview({ s, onNext, nextLabel, sub }: { s: State; onNext: () => void
       <div class="bugle"><div class="masthead"><span>THE BUGLE</span><small>{DAY_NAMES[s.day - 1]} · the day in review</small></div>
         <div class="poll-row"><span class="bigpoll">{poll}%</span><span>{prevPoll !== undefined ? <b class={poll >= prevPoll ? 'up' : 'down'}>{poll >= prevPoll ? '▲' : '▼'} {Math.abs(poll - prevPoll)} since yesterday</b> : 'If the election were today'}<small>50% wins on Sunday</small></span></div>
       </div>
+      <div class="dayscore">
+        <span class="bigscore">{sc.total}<small>pts</small></span>
+        <span><b class="tiername">{tier.name}</b><small>{sc.picks.length} cards × {TUNING.score.perCard} + {sc.rarity} for rare choices{sc.recalled ? ` − ${TUNING.score.recall} for the recall` : ''}</small></span>
+      </div>
+      <div class="raritykey">{RARITY.slice(0, 4).map((r) => <span key={r.id}>{r.emoji} {r.name} +{r.points}</span>)}{PREVIEW && <span class="tag">preview data</span>}</div>
+      <pre class="share">{share}</pre>
+      <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); } catch { /* clipboard blocked */ } sfx('tap'); }}>Copy today's result</button>
       <div class="dayswing">{METERS.map((m) => <div key={m} class="swing" style={{ '--g': METER_COLOR[m] }}><span>{METER_NAME[m]}</span><span class="hbar"><i class="was" style={{ width: `${s.dayStart[m]}%` }} /><i class="now" style={{ width: `${s.meters[m]}%` }} /></span><b>{s.meters[m] - s.dayStart[m] > 0 ? '+' : ''}{s.meters[m] - s.dayStart[m] || '·'}</b></div>)}</div>
       {[...byStory].map(([story, ws]) => (
         <section key={story} class="story">
@@ -141,7 +240,7 @@ function DayReview({ s, onNext, nextLabel, sub }: { s: State; onNext: () => void
           {ws.map((w) => { const c = findCard(pack, w.cardId); const ch = c.options[w.dir]!; const i = n++; return (
             <div key={`${w.cardId}${i}`} class="beat" style={{ 'animation-delay': `${i * 140}ms` }}>
               <Portrait who={c.who} size={34} />
-              <div><p class="beat-text">{c.text}</p><p class="beat-choice"><b>{ARROW[w.dir]} {ch.label}</b> <span class="effs"><EffectList before={w.before} after={w.after} stagger={i * 140 + 200} /></span></p></div>
+              <div><p class="beat-text">{c.text}</p><p class="beat-choice"><b>{ARROW[w.dir]} {ch.label}</b> <span class="effs"><EffectList before={w.before} after={w.after} stagger={i * 140 + 200} />{crowd[w.cardId]?.[w.dir] !== undefined && <span class="eff crowdeff">{rarityOf(crowd[w.cardId]![w.dir]).emoji} {crowd[w.cardId]![w.dir]}% did this</span>}</span></p></div>
             </div>
           ); })}
         </section>
@@ -254,7 +353,7 @@ export function App() {
   const [save, setSave] = useState<Save>(() => { const sv = loadSave(); setMuted(sv.muted); return sv; });
   const [s, setS] = useState<State>(() => boot(save));
   const [preview, setPreview] = useState<Dir | null>(null);
-  const [toast, setToast] = useState<{ key: number; who: string; text: string; mood: Mood; later: boolean } | null>(null);
+  const [reveal, setReveal] = useState<RevealData | null>(null);
   const [pulse, setPulse] = useState<Pulse | null>(null);
   const [fresh, setFresh] = useState<{ endings: string[]; deeds: string[] }>({ endings: [], deeds: [] });
   const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | null>(null);
@@ -273,18 +372,15 @@ export function App() {
 
   const swipe = (dir: Dir) => {
     const card = findCard(pack, s.current!);
-    const ch = card.options[dir]!;
     const next = reduce(s, { type: 'swipe', dir }, pack);
     persist(next);
     const fx: Pulse['effects'] = {};
     for (const g of GROUPS) if (next.meters[g] !== s.meters[g]) fx[g] = next.meters[g] - s.meters[g];
     setPulse({ key: Date.now(), effects: fx });
-    const good = METERS.reduce((n, m) => n + (next.meters[m] - s.meters[m]), 0) >= 0;
-    setToast({ key: Date.now(), who: card.who, text: ch.reaction, mood: good ? 'pleased' : 'annoyed', later: !!ch.then?.length });
-    sfx(card.who === 'gerald' ? 'honk' : good ? 'coin' : 'warn');
+    if (card.who === 'gerald') sfx('honk');
     if (next.phase === 'recalled') sfx('lose');
+    if (!isSunday) setReveal({ key: Date.now(), card, dir, before: s.meters, after: next.meters, pct: crowd[card.id]?.[dir], recalled: next.phase === 'recalled' });
   };
-  useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(null), 2600); return () => clearTimeout(t); }, [toast]);
 
   const jump = (days: number) => {
     const sv = { ...save, dayOffset: save.dayOffset + days, state: s };
@@ -298,9 +394,10 @@ export function App() {
   const titleTap = () => { const now = Date.now(); taps.current = [...taps.current.filter((t) => now - t < 700), now]; if (taps.current.length >= 3) { taps.current = []; setOverlay('dev'); } };
 
   const card = s.phase === 'card' && s.current ? findCard(pack, s.current) : null;
+  const today = dayScore(s, s.day, crowd);
   const choice = card && preview ? card.options[preview] ?? null : null;
   const dayName = DAY_NAMES[s.day - 1]!;
-  const needSetup = !s.profile && s.phase === 'dayEnd';
+  const needSetup = !s.profile && s.phase === 'dayEnd' && !reveal;
   const isSunday = s.day >= 7;
 
   return (
@@ -309,6 +406,7 @@ export function App() {
         <h1 onClick={titleTap}>Mayor of <span>{s.profile?.town ?? 'Bad Town'}</span></h1>
         <div class="top-right">
           <span class="daychip">{dayName}{s.phase === 'card' && !isSunday ? ` · ${s.cardInDay + 1} of ${TUNING.cardsPerDay}` : ''}</span>
+          {!isSunday && <span class="scorechip" aria-label={`Today's score ${today.total}`}><b>{today.total}</b> pts</span>}
           {s.profile && <button class="icon" aria-label="Rename" onClick={() => setOverlay('names')}><Icon.pen /></button>}
           <button class="icon" aria-label="Open the scrapbook" onClick={() => { setOverlay('book'); sfx('paper'); }}><Icon.book /></button>
           <button class="icon" aria-label={save.muted ? 'Turn sound on' : 'Turn sound off'} onClick={() => { setMuted(!save.muted); persist(s, { muted: !save.muted }); }}><Icon.sound on={!save.muted} /></button>
@@ -327,10 +425,10 @@ export function App() {
         </aside>
         <main class="main">
           <Meters s={s} preview={choice} />
-          {card && !showIntro && <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} onPreview={setPreview} onSwipe={swipe} />}
-          {toast && s.phase === "card" && <div class="toast" key={toast.key}><Portrait who={toast.who} size={46} mood={toast.mood} /><p>{toast.text}{toast.later && <small>This isn't over.</small>}</p></div>}
+          {reveal && <ImpactReveal key={reveal.key} r={reveal} onDone={() => setReveal(null)} />}
+          {card && !showIntro && !reveal && (card.sneak ? <SneakCard key={`${card.id}-${s.count}`} card={card} onResult={swipe} /> : <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} onPreview={setPreview} onSwipe={swipe} />)}
           {s.phase === 'card' && !isSunday && <div class="progress" aria-label={`Card ${s.cardInDay + 1} of ${TUNING.cardsPerDay} today`}>{Array.from({ length: TUNING.cardsPerDay }, (_, i) => <i key={i} class={i < s.cardInDay ? 'done' : i === s.cardInDay ? 'now' : ''} />)}</div>}
-          {s.phase === 'recalled' && (
+          {s.phase === 'recalled' && !reveal && (
             <div class="panel recall">
               <div class="stamp denied big">RECALLED</div>
               <EndingCard k={s.recallCauses[s.recallCauses.length - 1]!} isNew={fresh.endings.includes(s.recallCauses[s.recallCauses.length - 1]!)} />
@@ -338,8 +436,8 @@ export function App() {
               <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>See the day in review</button>
             </div>
           )}
-          {s.phase === 'dayEnd' && !needSetup && <DayReview s={s} onNext={advance} nextLabel={cal.today > s.day ? `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}` : `Play ${DAY_NAMES[s.day] ?? 'tomorrow'} now (preview only)`} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
-          {s.phase === 'results' && <Results s={s} fresh={fresh} onNewWeek={() => jump(8 - cal.today)} />}
+          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} onNext={advance} nextLabel={cal.today > s.day ? `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}` : `Play ${DAY_NAMES[s.day] ?? 'tomorrow'} now (preview only)`} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
+          {s.phase === 'results' && !reveal && <Results s={s} fresh={fresh} onNewWeek={() => jump(8 - cal.today)} />}
         </main>
       </div>
 

@@ -9,7 +9,7 @@ npm test            # engine tests (Vitest)
 npm run validate    # schema and story-integrity check of the week pack
 npm run sim         # 5,000 terms per bot -> reports/balance.md
 npm run build && npx vite preview --port 4173 &
-node e2e/smoke.cjs /tmp/shots 1 390     # browser playthrough to election night (dir, day offset, width)
+node e2e/smoke.cjs /tmp/shots 1 390     # browser playthrough (MOTION=1 to keep animations on) to election night (dir, day offset, width)
 python3 sim/bundle.py                   # one self-contained dist/single.html
 ```
 
@@ -29,13 +29,16 @@ CONTENT_GUIDE.md  how to write cards and stories
 
 ## Rules
 
-- Each day is a run of 10 cards (`TUNING.cardsPerDay`). The day's first cards are pinned and the same for every mayor; they start the week's stories. The rest come from your own story so far.
+- Each day is a run of 25 cards (`TUNING.cardsPerDay`), dealt from one shared deck per day (`dayDeck`): every mayor sees the same cards in the same order. Your own follow-ups and pressure cards take positions in it, so runs diverge only through your choices. Pinned day cards (story beats, the sneak moment) always keep their position.
 - **Stories build.** A choice can schedule follow-up cards a few cards later (`then: [[cardId, cardsFromNow]]`) and set flags that later cards require. The goose pond goes: demand → the contractor is a goose → grand opening → it leaks into the records room → goose poop on every floor → forty goslings want a second pond. Refuse the pond and you get the car park occupation and the goose war instead.
 - Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. Each cause has its own named ending.
 - A recall ends that day's run. You come back the next day as Acting Mayor with every meter at 40, and Sunday's vote takes 8 points. A third recall ends the term.
-- Cards show no effects. Dragging shows which meters will move (a dot, bigger for a big change), not which way. After each swipe the meters move and the character reacts; at the end of the day the Bugle reviews every card, story by story, with what each choice did.
+- Cards show no effects. Dragging shows which meters will move (a dot, bigger for a big change), not which way. After each swipe a full-screen reveal shows each meter that moved (▲/▼ and the amount), the character's reaction and how many mayors chose the same. Tap to skip. At the end of the day the Bugle reviews every card, story by story.
+- **Daily score** (`src/engine/score.ts`): 10 per card, plus a rarity bonus for choices few mayors made (under 5% +50, under 15% +30, under 35% +15, under 65% +5), minus 100 for a recall. Tiers run from Rubber Stamp to One in a Million Mayor. The day review gives a spoiler-free share grid with one square per card.
+- **Crowd numbers are simulated** (`node sim/crowd.ts` -> `week1.crowd.json`, labelled "preview data" in the game) until a stats backend is approved.
+- **Sneak moment**: one card a day (slot 13) is a hold-and-release: wind up, let go while the character isn't looking. Getting away with it is the `right` option, getting caught the `left` one.
 - Pressure cards appear when a meter is very low or very high (crime wave, protest, the treasury running dry, Chad trying to buy the town).
-- Vote share = 42 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
+- Vote share = 32 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
 - You can start any day; Deputy Dave plays the missed days and hands back a town with every meter between 35 and 65.
 - Names and the group that elected you are set at the end of the first day you play.
 - The scrapbook keeps unlocked endings, a career record and deeds across weeks.
