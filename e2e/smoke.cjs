@@ -16,9 +16,9 @@ const { chromium } = require('playwright');
     if (await pg.locator('.election .verdict').count()) break;
     if (await pg.locator('.sheet.op').count()) { await shot('opening'); if (await pg.locator('.op-oath input').count()) await pg.locator('.op-oath input').check(); await pg.locator('.op .btn.primary').click(); continue; }
     if (await pg.locator('#mayor-name').count()) { await shot('setup'); await pg.locator('.sheet .btn.primary').click(); continue; }
-    if (await pg.locator('.sheet .bugle').count()) { await shot('morning'); await pg.locator('.sheet .btn.primary').click(); continue; }
-    if (await pg.locator('.panel.recall').count()) { recalls++; await shot('recall'); await pg.locator('.panel.recall .btn.primary').click(); continue; }
-    if (await pg.locator('.review').count()) { days++; await shot('review'); await pg.locator('.review .btn.primary').click(); continue; }
+    if (await pg.locator('.sheet .morning').count()) { await shot('morning'); await pg.locator('.sheet .btn.primary').click(); continue; }
+    if (await pg.locator('.done.recall').count()) { recalls++; await shot('recall'); await pg.locator('.done.recall .btn.primary').click(); continue; }
+    if (await pg.locator('.done').count()) { days++; await shot('review'); await pg.locator('.done .btn.primary').click(); continue; }
     if (await pg.locator('.impact').count()) {
       reveals++;
       if (reveals === 3) { await pg.waitForTimeout(process.env.MOTION ? 2400 : 300); await shot('reveal'); }

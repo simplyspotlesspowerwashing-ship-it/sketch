@@ -6,8 +6,8 @@ import type { Effects, GroupId } from '../engine/types.ts';
 /** What the town map needs to draw itself. Projects and laws are flags: `built:<id>`, `law:<id>`. */
 export interface TownView { day: number; approval: Record<GroupId, number>; flags: Record<string, true>; fresh?: string | null }
 
-export const INK = '#29231F';
-export const GROUP_COLOR: Record<GroupId, string> = { people: '#D9653B', business: '#3F8F5A', law: '#3B6FB6', press: '#B0892A' };
+export const INK = '#232A44';
+export const GROUP_COLOR: Record<GroupId, string> = { people: '#FF7A45', business: '#19B36B', law: '#3D7BFF', press: '#A55EEA' };
 export const GROUP_NAME: Record<GroupId, string> = { people: 'People', business: 'Business', law: 'Law', press: 'Press' };
 export const LEADER: Record<GroupId, string> = { people: 'pam', business: 'chad', law: 'barb', press: 'marge' };
 export const NAMES: Record<string, string> = {
@@ -228,7 +228,7 @@ export function Portrait({ who, mood = 'neutral', size = 64, ring }: { who: stri
   return (
     <svg class="portrait" width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={`${NAMES[who] ?? who}, ${mood}`}>
       <defs><clipPath id={id}><circle cx="50" cy="50" r="47" /></clipPath></defs>
-      <circle cx="50" cy="50" r="47" fill={ring ?? '#E6DBC6'} />
+      <circle cx="50" cy="50" r="47" fill={ring ?? '#E9EEF8'} />
       <g clip-path={`url(#${id})`}>{draw(mood)}</g>
       <circle cx="50" cy="50" r="47" fill="none" stroke={INK} stroke-width="3" />
     </svg>

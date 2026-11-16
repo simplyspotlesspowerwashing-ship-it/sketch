@@ -33,13 +33,25 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **Stories build.** A choice can schedule follow-up cards a few cards later (`then: [[cardId, cardsFromNow]]`) and set flags that later cards require. The goose pond goes: demand → the contractor is a goose → grand opening → it leaks into the records room → goose poop on every floor → forty goslings want a second pond. Refuse the pond and you get the car park occupation and the goose war instead.
 - Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. Each cause has its own named ending.
 - A recall ends that day's run. You come back the next day as Acting Mayor with every meter at 40, and Sunday's vote takes 8 points. A third recall ends the term.
-- Cards show no effects. Dragging shows which meters will move (a dot, bigger for a big change), not which way. After each swipe a full-screen reveal shows each meter that moved (▲/▼ and the amount), the character's reaction and how many mayors chose the same. Tap to skip. At the end of the day the Bugle reviews every card, story by story.
+- Cards show no effects. Dragging shows which meters will move (a dot, bigger for a big change), not which way. After each swipe a full-screen reveal shows each meter that moved (▲/▼ and the amount), the character's reaction and how many mayors chose the same. Tap to skip. The day ends on a short panel: score, share grid, where the vote stands and a line about tomorrow.
 - **Daily score** (`src/engine/score.ts`): 10 per card, plus a rarity bonus for choices few mayors made (under 5% +50, under 15% +30, under 35% +15, under 65% +5), minus 100 for a recall. Tiers run from Rubber Stamp to One in a Million Mayor. The day review gives a spoiler-free share grid with one square per card.
 - **Crowd numbers are simulated** (`node sim/crowd.ts` -> `week1.crowd.json`, labelled "preview data" in the game) until a stats backend is approved.
 - **Sneak moment**: one card a day (slot 13) is a hold-and-release: wind up, let go while the character isn't looking. Getting away with it is the `right` option, getting caught the `left` one.
 - Pressure cards appear when a meter is very low or very high (crime wave, protest, the treasury running dry, Chad trying to buy the town).
-- Vote share = 35 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
+- Vote share = 33 + weighted distance of each meter from 50 + 3 per weekly goal + the campaign card − 8 per recall. 50 wins. The baseline below 50 means doing "fine" loses.
 - You can start any day; Deputy Randy plays the missed days and hands back a town with every meter between 35 and 65.
 - **First visit:** a six-slide opening (Bad Town, Randy the raccoon ex-mayor who stepped down and stayed on as deputy, the one-vote win over a traffic cone, the five meters, how to swipe) ending with the oath: you name your mayor and what the townsfolk are called, and pick who voted for you. The game is always "Mayor of Bad Town". Later terms offer the same names again. Cards can say `{mayor}` and `{folk}`.
 - **After every card** the town scene plays: the camera moves to the building of the group most affected, the camera visits each group that moved, in turn, and that group acts it out (src/ui/acts.tsx): People crowd the school cheering or protesting under a storm; Business lights up with money bags and a limo, or goes dark with a CLOSED sign and a tumbleweed; Law gets a police car arriving and a burglar led away, or raccoons escaping with swag; the Bugle throws out HOORAY or SCANDAL papers; coins rain into a pile or fly off on wings. The story's creatures parade past. Then each meter change counts up, and the crowd share is shown.
 - The scrapbook keeps unlocked endings, a career record and deeds across weeks.
+
+## Design system
+
+`src/ui/styles.css` starts with one token set and everything else uses it:
+
+- **Colour:** sky gradient background, white surfaces, navy ink; green for go, gold for score, coral for danger; one colour per group (People orange, Business green, Law blue, Press purple, Treasury gold).
+- **Shape:** three radii (12, 20, pill; 28 for the big cards), no borders on UI chrome, two shadows (a 4px "lip" under anything pressable, a soft float under cards).
+- **Type:** one rounded system font stack (no web font is downloaded), six sizes (12 / 14 / 16 / 20 / 28 / 44).
+- **Space:** 4 / 8 / 12 / 16 / 24.
+- **Outlines belong to the art** (portraits, the town); the UI stays flat so the characters stand out.
+
+Screens: a three-item top bar (menu, day progress, score), the five meters, then one thing at a time: a card, the after-card scene, or the end-of-day panel. The week, goals, scrapbook, rename and sound live in the menu.
