@@ -18,7 +18,7 @@ const { chromium } = require('playwright');
     if (await pg.locator('#mayor-name').count()) { await shot('setup'); await pg.locator('.sheet .btn.primary').click(); continue; }
     if (await pg.locator('.sheet .bugle').count()) { await shot('morning'); await pg.locator('.sheet .btn.primary').click(); continue; }
     if (await pg.locator('.panel.recall').count()) { recalls++; await shot('recall'); await pg.locator('.panel.recall .btn.primary').click(); continue; }
-    if (await pg.locator('.review').count()) { days++; await shot('review'); await pg.locator('.review .btn.primary').click(); continue; }
+    if (await pg.locator('.review').count()) { days++; await shot('review'); if (await pg.locator('.review .linkbtn').count()) await pg.locator('.review .linkbtn').click(); else await pg.locator('.review .btn.primary').click(); continue; }
     if (await pg.locator('.card.result').count()) {
       reveals++;
       if (reveals === 3) { await pg.waitForTimeout(500); await shot('reveal'); if (await pg.locator('.edge-chip.flip').count()) { await pg.locator('.edge-chip.flip').click(); await pg.waitForTimeout(process.env.MOTION ? 2500 : 300); await shot('scene'); } }

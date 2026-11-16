@@ -1,32 +1,38 @@
 # Content guide
 
-A week is one JSON pack in `src/content/packs/`, checked by `npm run validate` (schema plus story integrity: every scheduled follow-up exists, every follow-up card is scheduled by something, every card has at least two directions).
+Week packs live in `src/content/packs/`. `npm run validate` checks a pack; `npm run sim` shows how hard it is.
 
-## Writing cards
+## The rules of a card
 
-1. Short setup, clear ask. Card text max 150 characters, option labels max 30, reactions max 100.
-2. Every direction should hurt somewhere. Players can't see effects, so the text and the character are their clues: keep them fair.
-3. One joke per card, in the situation.
-4. Characters stay in character: Pam (PTA, People), Chad (billionaire, Business), Barb (police chief, Law), Marge (The Bugle, Press), Doug (treasurer, money), Gerald (goose union), Linda (librarian, conspiracies), Steve (weather), Timmy (8), the Stranger, Deputy Randy (raccoon, ex-mayor, coat full of associates), Bev (97, scooter), Brayden (Head of Innovation), Dr Nora (science, side effects), Mr Whiskers Esq. (cat lawyer), Marcel (mime), Sal (Fine Dining & Tyres), Coach Dunk (whistle), Psychic Sheila (always wrong). Cards may use {mayor} and {folk} for the player's names.
-5. Effects in steps of 5; ±15 or ±20 for big moments. Five meters: people, business, law, press, treasury.
+1. **Every card is a yes or a no.** Two options only: `right` approves, `left` rejects. The card's text ends on the question. Labels are short variations of yes and no ("Yes, build the pond" / "No ponds indoors"), 30 characters at most.
+2. **One joke per line.** The card sets up the problem (150 characters at most); each reaction lands a punchline (100 at most). Deadpan beats wacky. Be specific: "eleven crisps", not "some snacks".
+3. **Effects are never shown on the card.** Each option moves one to three of the five meters (people, business, law, press, treasury) by 5, 10 or 15. Neither answer should be free.
+4. **PG. No real people, real politics, gambling or purchases.** No words or framing borrowed from other games.
 
-## Stories
+## Rabbit holes
 
-The heart of the game. A story is a chain of cards that remember what you chose.
+A choice can lead somewhere:
 
-- Start a story with a pinned card (`day`) so everyone begins it together, or put the opener in the open pool.
-- Continue it with follow-up cards (`followUp: true`) scheduled by a choice: `then: [["g2", 5]]` puts card `g2` five cards from now.
-- Branch by scheduling different follow-ups from different choices, or by setting flags (`set`) that a later card requires (`requires: { flags: [...] }`).
-- Each beat should escalate or twist what came before, and mention it. The pond leaks *into the records room*; the bear *read the article*.
-- Give each story a `story` id and a headline in `headlines`; the day review groups cards by story.
+- `then: [["cardId", 1]]` makes that card the very next one. Yes and no should usually lead to *different* next cards.
+- `next: ["cardId"]` brings that card back tomorrow morning.
+- A card reached this way is marked `followUp: true` and never appears on its own.
 
-## Card kinds
+Each beat should escalate the one before and mention it. The pond leaks *into the records room*; Randy, having been refused the keys, has *moved City Hall into his coat*.
 
-- **Pinned**: `day` 1-6, shown first that day to every mayor, in pack order; `slot: n` puts it at a fixed position instead.
-- **Sneak**: `sneak: true` with a `day` and `slot`; `right` = got away with it, `left` = caught. One a day.
-- **Follow-up**: `followUp: true`, only when scheduled.
-- **Open pool**: no `day`, no `followUp`; shuffled once per week and dealt into the shared daily decks. With about 90 pool cards and roughly 130 open positions a week, stand-alone cards repeat late in the week; more pool cards fix that.
-- **Pressure**: `repeat`, a higher `weight`, and `requires.min`/`max` on a meter.
-- **Campaign** (`campaign` list): Sunday; options carry `vote`.
+## What a day is made of (20 cards)
 
-Mark anything not yet edited by a human with a note in the commit; all of week 1 is a draft.
+| Slot | What | How it is marked |
+|---|---|---|
+| 1 | The day's main story: five or six cards deep, back to back | `day: n, slot: 0` |
+| 8 | A law you can sign or refuse | `day: n, slot: 7`, `who: "desk"`, story `law` |
+| 12 | The day's one catastrophe, with two beats after it | `day: n, slot: 11` |
+| 16 | The sneak moment (hold, release while they look away) | `day: n, slot: 15`, `sneak: true` |
+| the rest | Side stories from the shared pool, two or three beats each | no `day` |
+
+Pressure cards (`repeat: true` with `requires.min` / `max`) cut in when a meter is very low or very high. Sunday has one election card in `campaign`, whose options carry `vote`.
+
+## The cast
+
+The funniest cards belong to the oddballs: Deputy Randy (a raccoon, ex-mayor, coat full of associates), Gerald (Goose Union), Mr Whiskers Esq. (cat, lawyer, also the judge), Kevin (a pothole; says nothing), the Cheese (hums), Clive (a traffic cone; your opponent; says nothing), Mr Nutkins (squirrel banker), Inspector Biscuit (a dog who outranks Barb), Bev (97, scooter). The humans mostly report what the oddballs have done: Doug (treasurer, cries), Barb (police), Pam (PTA), Marge (the Bugle), Chad (billionaire), Linda (librarian), Steve (weather), Timmy (8), Dr Nora, Sal, Coach Dunk, Brayden, Marcel.
+
+Cards can say `{mayor}` and `{folk}` for the player's names.

@@ -13,6 +13,7 @@ export const LEADER: Record<GroupId, string> = { people: 'pam', business: 'chad'
 export const NAMES: Record<string, string> = {
   pam: 'Pam, PTA President', chad: 'Chad, Billionaire', barb: 'Chief Barb', marge: 'Marge, The Bugle', gerald: 'Gerald, Goose Union',
   desk: 'Your desk · your move',
+  cheese: 'The Cheese (since 1987)', clive: 'Clive, a traffic cone, your opponent', kevin: 'Kevin, a pothole', nutkins: 'Mr Nutkins, Squirrel Bank', biscuit: 'Inspector Biscuit',
   mayor: 'You, the Mayor',
   randy: 'Deputy Randy (a raccoon)', bev: 'Bev, 97, oldest resident', brayden: 'Brayden, Head of Innovation', nora: 'Dr Nora, Town Scientist',
   whiskers: 'Mr Whiskers, Esq. (a cat)', marcel: 'Marcel, Town Mime', sal: "Sal, Sal's Fine Dining & Tyres", coach: 'Coach Dunk', sheila: 'Psychic Sheila', linda: 'Linda, Librarian', doug: 'Doug, Treasurer', steve: 'Stormy Steve', timmy: 'Timmy, age 8', stranger: 'The Stranger',
@@ -201,6 +202,21 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
       over={<><rect x="30" y="2" width="40" height="22" rx="3" fill="#29231F" {...S} /><rect x="20" y="22" width="60" height="7" rx="3" fill="#29231F" {...S} /><rect x="30" y="16" width="40" height="5" fill="#C23B3B" /></>}
       collar={<><path d="M20 82 l60 20" stroke="#E8C55A" stroke-width="9" /><path d="M20 82 l60 20" stroke={INK} stroke-width="1.5" fill="none" /><path d="M40 76 l10 10 l10 -10" fill="#fff" {...S} /></>} />
   ),
+  cheese: () => <><rect width="100" height="100" fill="#EFE2C4" /><g transform="translate(8 14) scale(1.95)">{spriteBody('cheese')}</g></>,
+  clive: () => <><rect width="100" height="100" fill="#D9E6EE" /><g transform="translate(8 6) scale(1.95)">{spriteBody('cone')}</g><circle cx="66" cy="58" r="9" fill="#C23B3B" {...S} stroke-width="2" /><text x="66" y="61.5" text-anchor="middle" font-size="7" font-weight="700" fill="#fff" font-family="Fredoka, sans-serif">VOTE</text></>,
+  kevin: () => <><rect width="100" height="100" fill="#8C8577" /><path d="M0 70 h100" stroke="#F2EBDD" stroke-width="5" stroke-dasharray="16 12" /><g transform="translate(6 4) scale(2)">{spriteBody('hole')}</g></>,
+  nutkins: (m) => (
+    <>
+      <rect width="100" height="100" fill="#E6DBC6" />
+      <path d="M14 104 q-18 -44 6 -70 q16 12 10 60z" fill="#B5651D" {...S} />
+      <path d="M26 104 q2 -32 26 -32 q24 0 26 32z" fill="#3A322C" {...S} /><path d="M44 74 l8 10 l8 -10" fill="#fff" {...S} /><path d="M52 84 l-3 5 l3 12 l3 -12z" fill="#C23B3B" {...S} stroke-width="1.5" />
+      <path d="M36 26 l2 -16 l12 10z M68 26 l-2 -16 l-12 10z" fill="#C8704A" {...S} />
+      <ellipse cx="52" cy="46" rx="24" ry="26" fill="#C8704A" {...S} /><ellipse cx="52" cy="58" rx="13" ry="10" fill="#F0D9A8" {...S} stroke-width="2" />
+      <circle cx="42" cy="42" r="3" fill={INK} /><circle cx="62" cy="42" r="3" fill={INK} /><circle cx="62" cy="42" r="9" fill="none" stroke="#E8C55A" stroke-width="2.5" />
+      <ellipse cx="52" cy="53" rx="3.5" ry="2.5" fill={INK} /><path d={m === 'annoyed' ? 'M46 64 q6 -4 12 0' : 'M46 61 q6 4 12 0'} {...S} fill="none" stroke-width="2" /><rect x="49" y="60" width="6" height="6" fill="#fff" {...S} stroke-width="1.5" />
+    </>
+  ),
+  biscuit: () => <><rect width="100" height="100" fill="#CFE3EE" /><g transform="translate(2 14) scale(2.05)">{spriteBody('dog')}</g><path d="M54 30 q16 -16 34 -2 l-2 -12 q-15 -10 -30 0z" fill="#27497A" {...S} /><path d="M52 32 q18 -8 38 0 l2 5 q-21 -8 -42 0z" fill={INK} /><path d="M70 14 l3 3 l-1 5 l-5 0 l-1 -5z" fill="#E8C55A" {...S} stroke-width="1.5" /></>,
   desk: () => (
     <>
       <rect x="0" y="62" width="100" height="42" fill="#8A5A3C" {...S} />

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { week1Pack as pack } from '../content/index.ts';
 import { voteParts, voteShare } from '../engine/election.ts';
-import { coverMissedDays, findCard, newTerm, options, reduce } from '../engine/engine.ts';
+import { coverMissedDays, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
 import { dayScore, rarityOf, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
@@ -22,7 +22,6 @@ const fill = (t: string) => t.replaceAll('{mayor}', who.mayor).replaceAll('{folk
 const reduced = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 const METER_NAME: Record<MeterId, string> = { ...GROUP_NAME, treasury: 'Treasury' };
 const METER_COLOR: Record<MeterId, string> = { ...GROUP_COLOR, treasury: '#B58D55' };
-const ARROW: Record<Dir, string> = { left: '←', right: '→', up: '↑', down: '↓' };
 
 function boot(save: Save): State {
   try { return bootUnsafe(save); } catch { return bootUnsafe({ ...save, state: null }); }
@@ -102,11 +101,12 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
     const k = (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); onDone(); } };
     addEventListener('keydown', k); return () => removeEventListener('keydown', k);
   }, []);
-  const mood: Mood = ms.length === 0 ? 'neutral' : net >= 0 ? 'pleased' : 'annoyed';
+  // whoever asked is pleased by a yes and put out by a no
+  const mood: Mood = r.dir === 'right' ? 'pleased' : 'annoyed';
   return (
     <div class="stage">
       <div class={`card result ${mood} ${r.recalled ? 'recalled' : ''}`} style={{ '--g': mood === 'pleased' ? '#3F8F5A' : mood === 'annoyed' ? '#C23B3B' : '#8C8577' }}>
-        <p class="result-choice"><b>{ARROW[r.dir]}</b> {fill(ch.label)}</p>
+        <p class={`result-choice ${r.dir === 'left' ? 'no' : 'yes'}`}><b>{r.dir === 'left' ? '✗' : '✓'}</b> {fill(ch.label)}</p>
         <div class={`result-face ${mood}`}><Portrait who={r.card.who} size={150} mood={mood} /></div>
         <p class="result-quote"><b>{NAMES[r.card.who]?.split(',')[0] ?? r.card.who}</b>“{fill(ch.reaction)}”{ch.then?.length ? <em> This isn't over.</em> : ch.next?.length ? <em> You'll hear about this tomorrow.</em> : null}</p>
         <div class="rv-bars">
@@ -177,15 +177,15 @@ function SneakCard({ card, onResult }: { card: Card; onResult: (d: Dir) => void 
 
 // ---------- the swipe card ----------
 const THRESH = 90;
-function dirOf(x: number, y: number): Dir { return Math.abs(x) >= Math.abs(y) ? (x > 0 ? 'right' : 'left') : (y > 0 ? 'down' : 'up'); }
+/** Every card is a yes or a no: right approves, left rejects. */
+function dirOf(x: number, _y: number): Dir { return x > 0 ? 'right' : 'left'; }
 
 function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview: (d: Dir | null) => void; onSwipe: (d: Dir) => void; locked: boolean }) {
   const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
   const [leaving, setLeaving] = useState<Dir | null>(null);
   const [stamped, setStamped] = useState<Dir | null>(null);
   const start = useRef<{ x: number; y: number; id: number } | null>(null);
-  const dirs = options(card);
-  const cur = drag && Math.hypot(drag.x, drag.y) > 24 ? dirOf(drag.x, drag.y) : null;
+    const cur = drag && Math.abs(drag.x) > 24 ? dirOf(drag.x, drag.y) : null;
   const valid = cur && card.options[cur] ? cur : null;
   useEffect(() => { onPreview(valid); }, [valid]);
   const commit = (d: Dir) => {
@@ -198,7 +198,7 @@ function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview
     setTimeout(() => onSwipe(d), 1300);
   };
   useEffect(() => {
-    const k = (e: KeyboardEvent) => { const m: Record<string, Dir> = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' }; const d = m[e.key]; if (d && card.options[d]) { e.preventDefault(); commit(d); } };
+    const k = (e: KeyboardEvent) => { const m: Record<string, Dir> = { ArrowLeft: 'left', ArrowRight: 'right', n: 'left', y: 'right' }; const d = m[e.key]; if (d && card.options[d]) { e.preventDefault(); commit(d); } };
     addEventListener('keydown', k); return () => removeEventListener('keydown', k);
   });
   const fly = leaving ? { left: [-700, 60, -30], right: [700, 60, 30], up: [0, -700, 0], down: [0, 700, 0] }[leaving] : null;
@@ -210,7 +210,7 @@ function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview
         onDragStart={(e) => e.preventDefault()}
         onPointerDown={(e) => { if (locked || leaving || stamped) return; e.preventDefault(); getSelection()?.removeAllRanges(); (e.currentTarget as Element).setPointerCapture(e.pointerId); start.current = { x: e.clientX, y: e.clientY, id: e.pointerId }; setDrag({ x: 0, y: 0 }); }}
         onPointerMove={(e) => { if (start.current) setDrag({ x: e.clientX - start.current.x, y: e.clientY - start.current.y }); }}
-        onPointerUp={() => { const d = drag; start.current = null; setDrag(null); if (d && Math.hypot(d.x, d.y) > THRESH) { const dir = dirOf(d.x, d.y); if (card.options[dir]) { commit(dir); return; } } onPreview(null); }}
+        onPointerUp={() => { const d = drag; start.current = null; setDrag(null); if (d && Math.abs(d.x) > THRESH) { const dir = dirOf(d.x, d.y); if (card.options[dir]) { commit(dir); return; } } onPreview(null); }}
         onPointerCancel={() => { start.current = null; setDrag(null); onPreview(null); }}>
         <div class="card-who"><Portrait who={card.who} size={110} mood={valid ? 'annoyed' : 'neutral'} /><span>{NAMES[card.who] ?? card.who}</span></div>
         <p class="card-text">{fill(card.text)}</p>
@@ -218,19 +218,19 @@ function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview
         {stamped && (
           <div class="done-stamp">
             <span>{fill(card.options[stamped]!.label)}</span>
-            <b>DONE</b>
+            <b class={stamped === 'left' ? 'no' : 'yes'}>{stamped === 'left' ? 'REJECTED' : 'APPROVED'}</b>
             <svg class="stamper" viewBox="0 0 120 150" aria-hidden="true">
               <ellipse cx="60" cy="22" rx="26" ry="18" fill="#8A5A3C" stroke="#29231F" stroke-width="5" />
               <rect x="48" y="34" width="24" height="54" rx="6" fill="#B58D55" stroke="#29231F" stroke-width="5" />
               <rect x="14" y="86" width="92" height="30" rx="8" fill="#6B4B32" stroke="#29231F" stroke-width="5" />
-              <rect x="8" y="114" width="104" height="16" rx="4" fill="#2C6B41" stroke="#29231F" stroke-width="5" />
+              <rect x="8" y="114" width="104" height="16" rx="4" fill={stamped === 'left' ? '#C23B3B' : '#2C6B41'} stroke="#29231F" stroke-width="5" />
             </svg>
           </div>
         )}
-        <p class="card-hint">Drag the card {dirs.map((d) => ARROW[d]).join(' ')}</p>
+        <p class="card-hint">← no · yes →</p>
       </div>
-      <div class={`choices n${dirs.length}`}>
-        {(['up', 'left', 'right', 'down'] as Dir[]).filter((d) => card.options[d]).map((d) => <button key={d} class={`edge-chip ${d} ${valid === d ? 'on' : ''}`} onClick={() => commit(d)} aria-label={`${ARROW[d]} ${fill(card.options[d]!.label)}`}><b>{ARROW[d]}</b><span>{fill(card.options[d]!.label)}</span></button>)}
+      <div class="choices n2">
+        {(['left', 'right'] as Dir[]).filter((d) => card.options[d]).map((d) => <button key={d} class={`edge-chip ${d} ${d === 'left' ? 'no' : 'yes'} ${valid === d ? 'on' : ''}`} onClick={() => commit(d)} aria-label={`${d === 'left' ? 'No' : 'Yes'}: ${fill(card.options[d]!.label)}`}><b>{d === 'left' ? '✗' : '✓'}</b><span>{fill(card.options[d]!.label)}</span></button>)}
       </div>
     </div>
   );
@@ -249,7 +249,7 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
 }
 
 /** The end of a day: score, the share grid, where the vote stands and a hook for tomorrow. No card-by-card report. */
-function DayReview({ s, onNext, nextLabel, sub }: { s: State; onNext: () => void; nextLabel: string; sub?: preact.ComponentChildren }) {
+function DayReview({ s, onNext, nextLabel, wait, sub }: { s: State; onNext: () => void; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
   const sc = dayScore(s, s.day, crowd);
   const tier = tierOf(sc.total);
   const rows: string[] = [];
@@ -272,8 +272,9 @@ function DayReview({ s, onNext, nextLabel, sub }: { s: State; onNext: () => void
       {sub}
       <div class="dayend-btns">
         <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); setCopied(true); } catch { /* clipboard blocked */ } sfx('tap'); }}>{copied ? 'Copied' : 'Copy result'}</button>
-        <button class="btn primary" onClick={onNext} autoFocus>{nextLabel}</button>
+        {wait ? <button class="btn primary" disabled>{wait}</button> : <button class="btn primary" onClick={onNext} autoFocus>{nextLabel}</button>}
       </div>
+      {wait && PREVIEW && <button class="linkbtn" onClick={onNext}>Testing: skip to the next day</button>}
     </div>
   );
 }
@@ -287,11 +288,11 @@ const DEEDS: Deed[] = [
   { id: 'landslide', name: 'Landslide', how: 'Win with 60% or more', test: (s) => (s.result?.share ?? 0) >= 60 },
   { id: 'whisker', name: 'By a Whisker', how: 'Win with 50% or 51%', test: (s) => !!s.result?.won && s.result.share <= 51 },
   { id: 'comeback', name: 'Comeback Kid', how: 'Win despite a recall', test: (s) => !!s.result?.won && s.recalls > 0 },
-  { id: 'pond', name: 'Pond Life', how: 'See the goose saga through to the goslings', test: (s) => s.seen.includes('g6') },
-  { id: 'detective', name: 'Detective', how: 'Uncover the Stranger', test: (s) => !!s.flags.exposed || !!s.flags.hush },
-  { id: 'bearfriend', name: 'Bear Necessities', how: 'Get the bear elected', test: (s) => s.swipes.some((w) => w.cardId === 'b3' && w.dir === 'right') },
-  { id: 'kevin', name: 'Kevin Forever', how: 'Let Kevin become a tourist attraction', test: (s) => !!s.flags.kevin_famous },
-  { id: 'frogs', name: 'Frog Democracy', how: 'Give the frogs the vote', test: (s) => !!s.flags.frog_vote },
+  { id: 'pond', name: 'Pond Life', how: 'Open the pond in your office', test: (s) => !!s.flags['built:pond'] },
+  { id: 'cone', name: 'Fair Play', how: 'Give the stolen cone back', test: (s) => !!s.flags.cone_back },
+  { id: 'cheese', name: 'Treasurer Cheese', how: 'Give the cheese Doug\'s job', test: (s) => !!s.flags.cheese_job },
+  { id: 'kevin', name: 'Kevin Forever', how: 'Keep Kevin unfilled', test: (s) => !!s.flags.kevin_saved },
+  { id: 'bev', name: 'Grand Prix', how: 'Send Bev to Formula One', test: (s) => !!s.flags.bev_f1 },
   { id: 'collector', name: 'Collector', how: 'Unlock six endings', test: (_s, save) => save.scrapbook.length >= 6 },
 ];
 function record(save: Save, s: State): { save: Save; endings: string[]; deeds: string[] } {
@@ -390,8 +391,8 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
     </div>,
     <div class="op-slide" key="4">
       <div class="op-demo"><span class="op-card"><Portrait who="gerald" size={70} mood="annoyed" /><small>The geese would like a pond. In your office.</small></span><span class="op-hand">👆</span></div>
-      <h2 class="op-title">25 problems a day. Swipe to decide.</h2>
-      <p>Drag the card left, right, up or down (or tap the buttons). You won't see what a choice does until you've made it. Then you'll definitely see it.</p>
+      <h2 class="op-title">20 problems a day. Yes or no.</h2>
+      <p>Drag the card right to approve, left to reject (or tap the buttons). You won't see what it does until you've decided. Then you'll definitely see it.</p>
       <p>Every mayor gets the same problems each day, so afterwards you'll see how many made the same call. Weird choices score more.</p>
       <p><b>Sunday is the election.</b> You need 50%. Most mayors don't get it.</p>
     </div>,
@@ -442,7 +443,8 @@ function Results({ s, fresh, onNewWeek }: { s: State; fresh: { endings: string[]
         {fresh.deeds.map((id) => <p key={id} class="bonus"><b>Deed: {DEEDS.find((d) => d.id === id)!.name}.</b> {DEEDS.find((d) => d.id === id)!.how}.</p>)}
         <pre class="share">{text}</pre>
         <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(text); } catch { /* select instead */ } sfx('tap'); }}>Copy result</button>
-        <button class="btn ghost" onClick={onNewWeek}>Start the next week now <small>preview only</small></button>
+        <p class="hint">A new term starts on Monday.</p>
+        {PREVIEW && <button class="linkbtn" onClick={onNewWeek}>Testing: start the next week now</button>}
       </div>}
     </div>
   );
@@ -527,7 +529,7 @@ export function App() {
               <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>See the day in review</button>
             </div>
           )}
-          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} onNext={advance} nextLabel={cal.today > s.day ? `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}` : `Play ${DAY_NAMES[s.day] ?? 'tomorrow'} now (preview only)`} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
+          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} onNext={advance} nextLabel={cal.today > s.day ? `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}` : ''} wait={cal.today > s.day ? null : `${DAY_NAMES[s.day] ?? 'Tomorrow'} opens in ${Math.floor(cal.msToMidnight / 3600000)}h ${Math.floor((cal.msToMidnight % 3600000) / 60000)}m`} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
           {s.phase === 'results' && !reveal && <Results s={s} fresh={fresh} onNewWeek={() => jump(8 - cal.today)} />}
         </main>
       </div>
@@ -553,7 +555,6 @@ export function App() {
           <button class="btn" onClick={() => { const sv: Save = { ...save, state: null, introSeen: '', dayOffset: 0 }; const n = boot(sv); setSave({ ...sv, state: n }); setS(n); writeSave({ ...sv, state: n }); setOverlay(null); }}>Reset everything</button>
         </Sheet>
       )}
-      <footer>Preview build</footer>
     </div>
   );
 }

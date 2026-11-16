@@ -933,3 +933,13 @@ h1 span { white-space: nowrap; }
 @keyframes stampjolt { 0% { scale: 1; } 30% { scale: .955; rotate: -1.2deg; translate: 0 6px; } 100% { scale: 1; rotate: 0deg; } }
 @media (prefers-reduced-motion: reduce) { .stamper { display: none; } .done-stamp b, .done-stamp span { animation: none; } }
 .choices.n1 { grid-template-columns: 1fr; }
+
+/* ---------- yes or no ---------- */
+.done-stamp b.yes { color: #2C6B41; border-color: #2C6B41; }
+.done-stamp b.no { color: var(--alert); border-color: var(--alert); }
+.done-stamp b { font-size: clamp(34px, 11vw, 50px); white-space: nowrap; }
+.edge-chip.no b { color: var(--alert); } .edge-chip.yes b { color: #2C6B41; }
+.edge-chip.no.on { background: #F6DAD3; } .edge-chip.yes.on { background: #DCEBDD; }
+.result-choice.yes b { background: #2C6B41; } .result-choice.no b { background: var(--alert); }
+.linkbtn { background: none; border: 0; padding: 6px; font: inherit; font-size: 13px; color: var(--soft); text-decoration: underline; cursor: pointer; align-self: center; }
+.btn[disabled] { opacity: .6; cursor: default; }
