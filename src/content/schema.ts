@@ -5,7 +5,6 @@ const meters = z.strictObject({ people: z.number(), business: z.number(), law: z
 const condition = z.strictObject({ flags: z.array(z.string()), any: z.array(z.string()), not: z.array(z.string()), min: meters, max: meters, fromDay: z.number().int() }).partial();
 const choice = z.strictObject({
   label: z.string().min(1).max(30), effects: meters, reaction: z.string().min(1).max(100),
-  clip: z.strictObject({ act: z.string().min(1), props: z.array(z.string().min(1)).max(3), word: z.string().max(24).optional() }).optional(),
   set: z.array(z.string()).optional(), clear: z.array(z.string()).optional(),
   then: z.array(z.tuple([z.string(), z.number().int().min(1)])).optional(), vote: z.number().optional(),
 });

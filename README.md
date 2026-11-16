@@ -44,10 +44,12 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **After every card** the town scene plays: the camera moves to the building of the group most affected, the camera visits each group that moved, in turn, and that group acts it out (src/ui/acts.tsx): People crowd the school cheering or protesting under a storm; Business lights up with money bags and a limo, or goes dark with a CLOSED sign and a tumbleweed; Law gets a police car arriving and a burglar led away, or raccoons escaping with swag; the Bugle throws out HOORAY or SCANDAL papers; coins rain into a pile or fly off on wings. The story's creatures parade past. Then each meter change counts up, and the crowd share is shown.
 - The scrapbook keeps unlocked endings, a career record and deeds across weeks.
 
-## Clips: the animation after each choice
+## Scenes: the film after each choice
 
-Dragging a card stamps it DONE; then that choice's own clip plays, with the character's reaction as a caption, the meters that moved and the crowd share, all on one screen.
+Dragging a card stamps it DONE; then that choice's scene plays (5 to 7 seconds), with the character's reaction as a caption, the meters that moved and the crowd share on one screen.
 
-- A clip is an **act** (the choreography, `src/ui/clips.tsx`), up to three **props** (emoji, or `@name` for one of the cast) and an optional sound word: `zoom 🌊 @gerald 🪑 !SPLASH!` is the pond in your office. Each of the 25 acts is a three-beat scene on a drawn set (office, street, park, courtroom, press room, stage) with the card's character in it: a crane lowers a build into place, a chase comes back with the roles swapped, a launch falls back down charred, a swarm counts up to ×4,000.
-- Hand-directed clips live in `src/content/packs/week1.clips.txt` (`cardId.DIR act prop prop prop`). `python3 sim/clips.py src/content/packs/week1.json` writes them into the pack and works out a clip for every other choice from the words on the card. Refusals get `deny` or `sulk`: the thing withers under a NO stamp and the character is annoyed.
-- **Laws:** two cards a day (`who: desk`, slots 6 and 19) are yours to start: pick a law, a tax, a holiday, a motto.
+- **Art:** full-body characters built from the cast portraits (`Puppet` in `src/ui/scenes.tsx`), drawn sets (office, street, park, school, library, studio, court) and a library of drawn props (`src/ui/props.tsx`), all in the same ink-outline style. No emoji.
+- **Scripts:** `src/content/packs/week1.scenes.txt` holds one script per choice: `== cardId.direction set`, then one line per beat (about a second each). Commands are listed at the top of `scenes.tsx`: characters enter, walk, change pose, hand props to each other, speak; props drop in, rise, leave or get squashed; signs carry words; effects (splash, stamp, coins, crowd) land on a beat.
+- **Coverage:** every choice on this week's Monday deck and the goose follow-ups is scripted (63 scenes). A choice without a script gets a plain stand-in: the character, the mayor, a YES or NO stamp and the choice on a sign.
+- `tests/scenes.test.ts` checks every script: real card and direction, known commands, drawn props, real characters, 5 to 7 beats.
+- **Laws:** two cards a day (`who: desk`) are yours to start: pick a law, a tax, a holiday, a motto.

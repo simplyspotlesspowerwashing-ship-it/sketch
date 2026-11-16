@@ -9,7 +9,8 @@ import crowdData from '../content/packs/week1.crowd.json' with { type: 'json' };
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
 import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
-import { ClipStage } from './clips.tsx';
+import { SceneStage } from './scenes.tsx';
+import { sceneFor } from './sceneIndex.ts';
 import type { TownView } from './art.tsx';
 import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
@@ -96,9 +97,9 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const ms = METERS.filter((m) => r.after[m] !== r.before[m]).sort((a, b) => Math.abs(r.after[b] - r.before[b]) - Math.abs(r.after[a] - r.before[a]));
   const rar = rarityOf(r.pct);
   const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
-  const clip = ch.clip ?? { act: net >= 0 ? 'show' : 'sulk', props: ['❓'] };
+  const scene = useMemo(() => sceneFor(r.card.id, r.dir, r.card.who, fill(ch.label), net >= 0), []);
   // 0: the clip plays; 1: the meters land; 2: the crowd
-  const CLIP = 2900, METERS_T = 900, HOLD = r.recalled ? 2000 : 1500;
+  const CLIP = scene.beats.length * 1000 + 500, METERS_T = 900, HOLD = r.recalled ? 2000 : 1500;
   const [step, setStep] = useState(reduced() ? 2 : 0);
   const [chars, setChars] = useState(reduced() ? 999 : 0);
   useEffect(() => { if (reduced()) return; const t = setInterval(() => setChars((c) => c + 2), 22); return () => clearInterval(t); }, []);
@@ -116,7 +117,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
     <button class={`impact ${r.recalled && step >= 2 ? 'recalled' : ''}`} onClick={onDone} aria-label={`${fill(ch.label)}. ${full} Tap to continue`}>
       <span class="rv-title"><b>{ARROW[r.dir]}</b> {fill(ch.label)}</span>
       <span class="rv-film">
-        <ClipStage clip={clip} label={fill(ch.label)} who={r.card.who} good={net >= 0} />
+        <SceneStage scene={scene} />
         <span class="rv-sub">
           <span class="rv-line"><b>{NAMES[r.card.who]?.split(',')[0] ?? r.card.who}</b>{full.slice(0, chars)}{chars >= full.length && ch.then?.length ? <em> This isn't over.</em> : null}</span>
         </span>

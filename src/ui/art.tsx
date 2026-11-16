@@ -13,6 +13,7 @@ export const LEADER: Record<GroupId, string> = { people: 'pam', business: 'chad'
 export const NAMES: Record<string, string> = {
   pam: 'Pam, PTA President', chad: 'Chad, Billionaire', barb: 'Chief Barb', marge: 'Marge, The Bugle', gerald: 'Gerald, Goose Union',
   desk: 'Your desk · your move',
+  mayor: 'You, the Mayor',
   randy: 'Deputy Randy (a raccoon)', bev: 'Bev, 97, oldest resident', brayden: 'Brayden, Head of Innovation', nora: 'Dr Nora, Town Scientist',
   whiskers: 'Mr Whiskers, Esq. (a cat)', marcel: 'Marcel, Town Mime', sal: "Sal, Sal's Fine Dining & Tyres", coach: 'Coach Dunk', sheila: 'Psychic Sheila', linda: 'Linda, Librarian', doug: 'Doug, Treasurer', steve: 'Stormy Steve', timmy: 'Timmy, age 8', stranger: 'The Stranger',
 };
@@ -194,6 +195,12 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
       over={<><path d="M40 12 l2 5 l5 0 l-4 3 l2 5 l-5 -3 l-5 3 l2 -5 l-4 -3 l5 0z" fill="#F7D774" {...S} stroke-width="1.2" /><circle cx="26" cy="62" r="7" fill="none" stroke="#E8C55A" stroke-width="2.5" /><circle cx="74" cy="62" r="7" fill="none" stroke="#E8C55A" stroke-width="2.5" /></>}
       collar={<><circle cx="50" cy="94" r="9" fill="#BFE0F0" {...S} /><path d="M45 90 q3 -3 6 -1" stroke="#fff" stroke-width="2" fill="none" /></>} />
   ),
+  mayor: (m) => (
+    <Bust top="#5B4B8A" skin="#E9B98F" mood={m}
+      hair={<path d="M25 44 q-3 -26 25 -27 q28 1 25 27 q-8 -12 -25 -12 q-17 0 -25 12z" fill="#4A3322" {...S} />}
+      over={<><rect x="30" y="2" width="40" height="22" rx="3" fill="#29231F" {...S} /><rect x="20" y="22" width="60" height="7" rx="3" fill="#29231F" {...S} /><rect x="30" y="16" width="40" height="5" fill="#C23B3B" /></>}
+      collar={<><path d="M20 82 l60 20" stroke="#E8C55A" stroke-width="9" /><path d="M20 82 l60 20" stroke={INK} stroke-width="1.5" fill="none" /><path d="M40 76 l10 10 l10 -10" fill="#fff" {...S} /></>} />
+  ),
   desk: () => (
     <>
       <rect x="0" y="62" width="100" height="42" fill="#8A5A3C" {...S} />
@@ -231,6 +238,9 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
     );
   },
 };
+
+/** A character's head-and-shoulders drawing in a 100x100 box, for the full-body puppets. */
+export const drawCast = (who: string, mood: Mood): ComponentChildren => (CAST[who] ?? CAST.doug!)(mood);
 
 export function Portrait({ who, mood = 'neutral', size = 64, ring }: { who: string; mood?: Mood; size?: number; ring?: string }) {
   const draw = CAST[who] ?? CAST.doug!;
