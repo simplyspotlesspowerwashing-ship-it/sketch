@@ -50,3 +50,18 @@ export function dayScore(s: State, day: number): DayScore {
   const bonus = !recalled && finished && last && steady(last.after) ? TUNING.score.steadyFinish : 0;
   return { total: Math.max(0, balance + bonus - (recalled ? TUNING.score.recall : 0)), balance, bonus, recalled, picks };
 }
+
+/** The share grid: one row per group, one square per two cards (the worse of the pair).
+ *  2 calm, 1 uneasy, 0 in danger, null not played (the day ended early). */
+export function partyRows(s: State, day: number): Record<MeterId, (0 | 1 | 2 | null)[]> {
+  const swipes = s.swipes.filter((w) => w.day === day);
+  const cells = Math.ceil(TUNING.cardsPerDay / 2);
+  const out = {} as Record<MeterId, (0 | 1 | 2 | null)[]>;
+  for (const m of METERS) out[m] = Array.from({ length: cells }, (_, i) => {
+    const pair = swipes.slice(i * 2, i * 2 + 2);
+    return pair.length ? (Math.min(...pair.map((w) => meterPoints(m, w.after[m]))) as 0 | 1 | 2) : null;
+  });
+  return out;
+}
+export const PARTY_ICON: Record<MeterId, string> = { people: '🧑', business: '💼', law: '👮', press: '📰', treasury: '💰' };
+export const CELL = (v: 0 | 1 | 2 | null) => (v === null ? '⬜' : ['🟥', '🟨', '🟩'][v]!);

@@ -5,7 +5,7 @@ import week1 from '../src/content/packs/week1.json' with { type: 'json' };
 import { voteShare } from '../src/engine/election.ts';
 import { autoplay, coverMissedDays, davePolicy, dayDeck, findCard, legalActions, newTerm, options, reduce } from '../src/engine/engine.ts';
 import { TUNING } from '../src/engine/tuning.ts';
-import { cardPoints, dayScore, meterPoints, steady as townSteady, tierOf } from '../src/engine/score.ts';
+import { CELL, cardPoints, dayScore, meterPoints, partyRows, steady as townSteady, tierOf } from '../src/engine/score.ts';
 import type { Action, Dir, MeterId, State } from '../src/engine/types.ts';
 
 const start = (seed = 'p1') => newTerm('week1', seed, pack);
@@ -225,6 +225,16 @@ describe('the daily score: points for keeping the town balanced', () => {
     expect(rs.recalled).toBe(true);
     expect(rs.bonus).toBe(0);
     expect(rs.total).toBe(Math.max(0, rs.balance - TUNING.score.recall));
+  });
+  it('the share grid has one row per group, a square per two cards, blanks after a recall', () => {
+    const full = partyRows(play(start(), TUNING.cardsPerDay), 1);
+    expect(Object.keys(full)).toEqual(['people', 'business', 'law', 'press', 'treasury']);
+    for (const row of Object.values(full)) { expect(row).toHaveLength(10); expect(row.every((v) => v !== null)).toBe(true); }
+    const r = swipe(withMeters(start(), { people: 4 }), 'left');
+    const rows = partyRows(r, 1);
+    expect(rows.people[0]).toBe(0);
+    expect(rows.people.slice(1).every((v) => v === null)).toBe(true);
+    expect([0, 1, 2, null].map((v) => CELL(v as 0 | 1 | 2 | null)).join('')).toBe('🟥🟨🟩⬜');
   });
   it('day titles cover every score', () => {
     expect(tierOf(0).name).toBe('Town On Fire'); expect(tierOf(10000).name).toBe('Perfectly Balanced');

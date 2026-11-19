@@ -16,43 +16,12 @@ export const NAMES: Record<string, string> = {
   reginald: 'Reginald, a tortoise (crossing since 1987)', gary: 'Gary, a vending machine, your opponent',
   cheese: 'The Cheese (since 1987)', clive: 'Clive, a traffic cone, your opponent', kevin: 'Kevin, a pothole', nutkins: 'Mr Nutkins, Squirrel Bank', biscuit: 'Inspector Biscuit',
   mayor: 'You, the Mayor',
-  pebbles: 'Councillor Pebbles (a goat)', flaps: 'Mr Flaps, Postmaster (a pelican)', wendy: 'Wendy, a ghost (union rep)', carl: 'Big Carl, Lifeguard',
+  pebbles: 'Councillor Pebbles (a goat)', flaps: 'Mr Flaps, Postmaster (a pelican)', wendy: 'Wendy, a ghost (union rep)', carl: 'Big Carl, Lifeguard', lorraine: 'Lorraine (a seagull)', hoot: 'Professor Hoot, Headteacher', trevor: 'Trevor (a moth)', toby: 'Toby (an oak tree)',
   randy: 'Deputy Randy (a raccoon)', bev: 'Bev, 97, oldest resident', brayden: 'Brayden, Head of Innovation', nora: 'Dr Nora, Town Scientist',
   whiskers: 'Mr Whiskers, Esq. (a cat)', marcel: 'Marcel, Town Mime', sal: "Sal, Sal's Fine Dining & Tyres", coach: 'Coach Dunk', sheila: 'Psychic Sheila', linda: 'Linda, Librarian', doug: 'Doug, Treasurer', steve: 'Stormy Steve', timmy: 'Timmy, age 8', stranger: 'The Stranger',
 };
-/** Shown once, the first time a player meets each character. */
-export const BIOS: Record<string, string> = {
-  randy: 'A raccoon. Used to be mayor. Now your deputy, because he ate the paperwork that would fire him.',
-  pam: 'Runs the PTA like a small, angry army. Has a clipboard for her clipboards.',
-  chad: "Billionaire. Bought a yacht for a town with no sea. Calls everyone 'champ'.",
-  barb: 'Chief of Police. Has arrested a goose, a cloud and, once, herself. Mostly fair.',
-  marge: "Runs The Bugle, Bad Town's only newspaper. Prints whatever she overhears.",
-  gerald: 'Head of the Goose Union. 61 members. Has never once been reasonable.',
-  doug: 'Treasurer. Keeps the town money in a biscuit tin. Cries at spreadsheets.',
-  bev: "97. Bad Town's oldest resident. Remembers everything, including things that never happened.",
-  brayden: 'Head of Innovation. Put an app on the bins. The bins did not ask for this.',
-  nora: 'Town Scientist. Her experiments mostly work. Mostly.',
-  whiskers: 'A cat. Also a lawyer. Bills by the nap.',
-  marcel: 'Town Mime. Stuck in an invisible box since 2014. Will not discuss it.',
-  sal: "Owns Sal's Fine Dining & Tyres. One kitchen. Don't ask.",
-  coach: 'Coaches every team in town, including chess. Loudly.',
-  linda: 'Librarian. Sees everything. Has shushed the weather.',
-  steve: 'Weatherman. Wrong every single time, which is weirdly useful.',
-  timmy: 'Age 8. Has written to you 41 times. Wants a volcano.',
-  reginald: 'A tortoise. Has been crossing Main Street since 1987. Nearly there.',
-  gary: 'A vending machine. Out of order. Running against you. Polling well.',
-  cheese: 'A wheel of cheese kept in the town hall since 1987. Nobody knows why. It is getting stronger.',
-  clive: "A traffic cone. Running against you for mayor. Hasn't said a word. Leading in the polls.",
-  kevin: 'A pothole on Main Street. Has a name, a fan club and a birthday.',
-  nutkins: 'A squirrel. Runs the Squirrel Bank. Pays interest in acorns. Ruthless.',
-  biscuit: 'A police dog. Promoted to Inspector by accident. Zero cases solved. Very good boy.',
-  pebbles: 'A goat. Elected to the council by accident in 2019. Has eaten three motions and a chair.',
-  flaps: 'A pelican. Runs the post office. Keeps the post in his beak. Most of it comes back out.',
-  wendy: 'A ghost. Has haunted the town hall since 1890. Now wants a desk and a pension.',
-  carl: 'Lifeguard. Bad Town has no pool. On duty anyway, twelve hours a day.',
-  sheila: 'Psychic. Knew you would read this.',
-  stranger: 'Nobody knows. That is the point.',
-};
+/** The oddballs: the first time a player meets one, the card marks them as a new face, and the scrapbook collects them. */
+export const ODDBALLS = ['randy', 'gerald', 'whiskers', 'marcel', 'cheese', 'kevin', 'nutkins', 'biscuit', 'reginald', 'clive', 'gary', 'pebbles', 'flaps', 'wendy', 'carl', 'lorraine', 'hoot', 'trevor', 'toby'];
 export type Mood = 'neutral' | 'pleased' | 'annoyed';
 
 const S = { stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' as const, 'stroke-linecap': 'round' as const };
@@ -325,6 +294,63 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
       hair={<path d="M26 34 v-16 q0 -4 4 -4 h40 q4 0 4 4 v16z" fill="#E8C55A" {...S} />}
       over={<><rect x="31" y="38" width="17" height="11" rx="3" fill={INK} /><rect x="52" y="38" width="17" height="11" rx="3" fill={INK} /><path d="M48 42 h4" stroke={INK} stroke-width="2.5" /><path d="M34 40 l5 0" stroke="#fff" stroke-width="1.6" opacity=".6" /><path d="M55 40 l5 0" stroke="#fff" stroke-width="1.6" opacity=".6" /></>}
       collar={<><path d="M36 76 q14 20 28 0" fill="none" stroke="#fff" stroke-width="2.5" /><rect x="44" y="90" width="13" height="7" rx="3" fill="#C9C3BC" {...S} stroke-width="1.8" /><path d="M68 86 h10 M73 81 v10" stroke="#fff" stroke-width="3.5" /></>} />
+  ),
+  lorraine: (m) => (
+    <>
+      <rect width="100" height="100" fill="#BFE0EA" /><rect y="80" width="100" height="20" fill="#E8D49A" />
+      <path d="M14 104 q4 -34 38 -34 q30 0 34 34z" fill="#fff" {...S} />
+      <path d="M14 104 q-6 -24 12 -34 q8 14 4 34z M86 104 q6 -24 -12 -34 q-8 14 -4 34z" fill="#B8C2CC" {...S} />
+      <circle cx="48" cy="40" r="20" fill="#fff" {...S} />
+      <path d="M62 40 l28 4 l-28 6z" fill="#F2C12E" {...S} /><circle cx="84" cy="46" r="2.4" fill="#D9453B" />
+      <path d="M84 46 l12 -8 l2 4 l-12 7z" fill="#F2D27A" {...S} stroke-width="1.5" />
+      {m === 'pleased' ? <path d="M38 36 q4 -4 8 0" fill="none" {...S} /> : <circle cx="44" cy="36" r="3.2" fill="#E8C55A" {...S} stroke-width="1.6" />}
+      {m !== 'pleased' && <circle cx="44" cy="36" r="1.4" fill={INK} />}
+      <path d={m === 'annoyed' ? 'M34 26 l14 6' : 'M34 29 l14 2'} {...S} fill="none" stroke-width="3" />
+      <path d="M36 66 q14 8 28 0" fill="none" stroke="#E8C55A" stroke-width="3" /><circle cx="50" cy="71" r="3.5" fill="#E8C55A" {...S} stroke-width="1.5" />
+    </>
+  ),
+  hoot: (m) => (
+    <>
+      <rect width="100" height="100" fill="#2F3B5C" /><circle cx="18" cy="18" r="1.5" fill="#fff" /><circle cx="84" cy="30" r="1.2" fill="#fff" /><circle cx="70" cy="12" r="1" fill="#fff" />
+      <path d="M18 104 q-4 -50 32 -62 q36 12 32 62z" fill="#9A6B44" {...S} />
+      <path d="M32 104 q-2 -30 18 -36 q20 6 18 36z" fill="#D9BC92" {...S} stroke-width="2" />
+      <path d="M34 82 q4 3 8 0 M46 88 q4 3 8 0 M58 82 q4 3 8 0" fill="none" stroke="#9A6B44" stroke-width="2" />
+      <path d="M24 36 l-4 -14 l14 8z M76 36 l4 -14 l-14 8z" fill="#9A6B44" {...S} />
+      <ellipse cx="50" cy="44" rx="28" ry="22" fill="#9A6B44" {...S} />
+      <circle cx="38" cy="44" r="11" fill="#F2E6C9" {...S} /><circle cx="62" cy="44" r="11" fill="#F2E6C9" {...S} />
+      {m === 'pleased' ? <path d="M32 45 q6 -6 12 0 M56 45 q6 -6 12 0" fill="none" {...S} /> : <><circle cx="38" cy="44" r="5" fill="#E8943A" /><circle cx="38" cy="44" r="2.5" fill={INK} /><circle cx="62" cy="44" r="5" fill="#E8943A" /><circle cx="62" cy="44" r="2.5" fill={INK} /></>}
+      {m === 'neutral' && <path d="M27 40 q11 -3 22 0 M51 40 q11 -3 22 0" fill="#9A6B44" stroke={INK} stroke-width="2" />}
+      {m === 'annoyed' && <path d="M27 32 l22 8 M73 32 l-22 8" {...S} fill="none" />}
+      <path d="M46 54 l4 8 l4 -8z" fill="#E8943A" {...S} stroke-width="2" />
+      <path d="M22 22 l28 -12 l28 12 l-28 12z" fill={INK} {...S} /><rect x="40" y="22" width="20" height="8" fill={INK} /><path d="M76 22 v14" stroke="#E8C55A" stroke-width="2.5" /><circle cx="76" cy="37" r="2.5" fill="#E8C55A" />
+    </>
+  ),
+  trevor: (m) => (
+    <>
+      <rect width="100" height="100" fill="#3A3550" /><circle cx="86" cy="14" r="16" fill="#FFE9A8" opacity=".55" /><circle cx="86" cy="14" r="8" fill="#FFF4CF" />
+      <path d="M44 50 q-30 -30 -40 -6 q-4 22 36 22z M56 50 q30 -30 40 -6 q4 22 -36 22z" fill="#C9B18A" {...S} />
+      <path d="M42 62 q-26 6 -28 24 q14 4 32 -14z M58 62 q26 6 28 24 q-14 4 -32 -14z" fill="#B39B74" {...S} />
+      <circle cx="22" cy="40" r="5" fill="#8A7558" /><circle cx="78" cy="40" r="5" fill="#8A7558" />
+      <ellipse cx="50" cy="72" rx="10" ry="26" fill="#D9C9A8" {...S} />
+      <path d="M44 22 q-10 -14 -20 -12 M56 22 q10 -14 20 -12" fill="none" {...S} /><path d="M26 8 q-4 4 0 6 M74 8 q4 4 0 6" fill="none" {...S} stroke-width="2" />
+      <circle cx="50" cy="36" r="15" fill="#E6D8BA" {...S} />
+      {m === 'pleased' ? <path d="M40 32 c-2 -4 4 -6 4 -1 c0 -5 6 -3 4 1 l-4 5z M52 32 c-2 -4 4 -6 4 -1 c0 -5 6 -3 4 1 l-4 5z" fill="#D9453B" stroke={INK} stroke-width="1.3" /> : <><circle cx="44" cy="34" r="5" fill={INK} /><circle cx="56" cy="34" r="5" fill={INK} /><circle cx="45.5" cy="32.5" r="1.5" fill="#fff" /><circle cx="57.5" cy="32.5" r="1.5" fill="#fff" /></>}
+      {m === 'annoyed' && <path d="M38 26 l9 3 M62 26 l-9 3" {...S} fill="none" />}
+      <path d={m === 'annoyed' ? 'M46 45 q4 -3 8 0' : 'M46 43 q4 3 8 0'} fill="none" {...S} stroke-width="2" />
+    </>
+  ),
+  toby: (m) => (
+    <>
+      <rect width="100" height="100" fill="#CFE8F3" /><rect y="86" width="100" height="14" fill="#7FB069" />
+      <path d="M34 100 q4 -20 2 -46 l28 0 q-2 26 2 46z" fill="#8A5A3C" {...S} />
+      <path d="M36 100 q-8 -2 -14 2 M64 100 q8 -2 14 2" fill="none" {...S} />
+      <path d="M42 80 q4 -6 2 -14 M58 84 q-2 -8 2 -14" fill="none" stroke="#6B4B32" stroke-width="2" />
+      <path d="M50 4 q20 -2 28 12 q16 4 14 20 q4 16 -12 22 q-8 10 -30 8 q-22 2 -30 -8 q-16 -6 -12 -22 q-2 -16 14 -20 q8 -14 28 -12z" fill="#4E9A5C" {...S} />
+      <circle cx="30" cy="26" r="3" fill="#B5651D" /><circle cx="70" cy="34" r="3" fill="#B5651D" /><circle cx="58" cy="16" r="3" fill="#B5651D" />
+      {m === 'pleased' ? <path d="M40 64 q4 -4 8 0 M52 64 q4 -4 8 0" fill="none" {...S} /> : <><circle cx="44" cy="64" r="2.8" fill={INK} /><circle cx="56" cy="64" r="2.8" fill={INK} /></>}
+      {m === 'annoyed' && <path d="M38 58 l9 3 M62 58 l-9 3" {...S} fill="none" />}
+      <path d={m === 'pleased' ? 'M44 72 q6 6 12 0' : m === 'annoyed' ? 'M44 75 q6 -5 12 0' : 'M45 73 h10'} fill="none" {...S} stroke-width="2" />
+    </>
   ),
   desk: () => (
     <>

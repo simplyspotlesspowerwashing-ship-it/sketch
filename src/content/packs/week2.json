@@ -3851,6 +3851,258 @@
    },
    "day": 5,
    "slot": 9
+  },
+  {
+   "id": "wlr1",
+   "who": "lorraine",
+   "story": "lorraine2",
+   "text": "(Lorraine the seagull has opened a 'Lost Property Office'. Everything in it was stolen by Lorraine.) Shut it down?",
+   "options": {
+    "right": {
+     "label": "Yes. Shut it.",
+     "effects": {
+      "law": 10,
+      "business": -5
+     },
+     "reaction": "Shut. She's moved it to your roof. Your car keys are up there. And your car, somehow.",
+     "then": [
+      [
+       "wlr2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let her trade.",
+     "effects": {
+      "business": 10,
+      "law": -5
+     },
+     "reaction": "Business is booming. People pay to get their own sandwiches back. She does a loyalty card.",
+     "then": [
+      [
+       "wlr2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 13
+  },
+  {
+   "id": "wlr2",
+   "who": "lorraine",
+   "story": "lorraine2",
+   "text": "(Lorraine has drawn up a peace treaty with the Goose Union. It's on a napkin. Gerald has already honked on it.) Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. Sign the napkin.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Seagulls get the seafront. Geese get the pond. Pigeons get nothing. Pigeons are drafting a reply."
+    },
+    "left": {
+     "label": "No. Not on a napkin.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Gerald and Lorraine have both declared war on you instead. They've never been closer."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "who1",
+   "who": "hoot",
+   "story": "hoot2",
+   "text": "(Professor Hoot would like to replace school dinners with mice. 'High in protein. Very fresh.') Approve the menu?",
+   "options": {
+    "right": {
+     "label": "Yes. Mice for all.",
+     "effects": {
+      "people": -10,
+      "business": 5
+     },
+     "reaction": "Nobody ate them. The mice were relieved. They've joined the school. They're doing well in maths.",
+     "then": [
+      [
+       "who2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Normal dinners.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Normal dinners served. Hoot ate the dinner lady's sandwich. He apologised in a long, sad hoot.",
+     "then": [
+      [
+       "who2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 2,
+   "slot": 13
+  },
+  {
+   "id": "who2",
+   "who": "hoot",
+   "story": "hoot2",
+   "text": "(Professor Hoot has set the end-of-year exam. It's one question: 'Who?' Nobody has passed.) Change the exam?",
+   "options": {
+    "right": {
+     "label": "Yes. Easier questions.",
+     "effects": {
+      "people": 10,
+      "press": -5
+     },
+     "reaction": "New question: 'Who? (multiple choice)'. Everybody passed. Hoot is disappointed in all of you."
+    },
+    "left": {
+     "label": "No. Standards matter.",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "National news: 'BAD TOWN SCHOOL HARDEST IN THE COUNTRY'. Timmy got 'a hoot'. Hoot says that counts."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wtv1",
+   "who": "trevor",
+   "story": "trevor2",
+   "text": "(Trevor the moth has a new love. Your phone screen. He sits on it during calls. He's on it now.) Let him stay?",
+   "options": {
+    "right": {
+     "label": "Yes. Love wins.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Every call has Trevor in it. He's on speaker. He says nothing. People find it calming.",
+     "then": [
+      [
+       "wtv2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Shoo him off.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Shoo'd. He's moved to the town hall telly. He's on the news now. Every night. Just sitting there.",
+     "then": [
+      [
+       "wtv2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 3,
+   "slot": 13
+  },
+  {
+   "id": "wtv2",
+   "who": "marge",
+   "story": "trevor2",
+   "text": "Mayor, Trevor the moth has a column in the Bugle. It's called 'Light'. Every week it just says 'light'. It's our best seller. Expand it?",
+   "options": {
+    "right": {
+     "label": "Yes. Two pages.",
+     "effects": {
+      "press": 10,
+      "business": -5
+     },
+     "reaction": "Two pages of 'light'. Readers call it the only honest thing in the paper. Marge is furious and rich."
+    },
+    "left": {
+     "label": "No. One word is plenty.",
+     "effects": {
+      "press": -5,
+      "business": 5
+     },
+     "reaction": "He's started a rival paper. One word. 'Lamp.' It's outselling the Bugle."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wtb1",
+   "who": "toby",
+   "story": "toby2",
+   "text": "(Toby the oak tree would like to run in the Bad Town Marathon. He's been practising. He has moved four inches.) Let him enter?",
+   "options": {
+    "right": {
+     "label": "Yes. Run, Toby.",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "The race finished hours ago. Toby is still on the start line. The crowd stayed. They're chanting.",
+     "then": [
+      [
+       "wtb2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Trees can't run.",
+     "effects": {
+      "people": -5,
+      "law": 5
+     },
+     "reaction": "He's leaning towards the finish line. Very slowly. Very determined. Marge has a weekly update.",
+     "then": [
+      [
+       "wtb2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 4,
+   "slot": 13
+  },
+  {
+   "id": "wtb2",
+   "who": "toby",
+   "story": "toby2",
+   "text": "(Toby has reached the finish line. It took six days. The marathon committee wants to give him a medal. Made of wood.) Approve the medal?",
+   "options": {
+    "right": {
+     "label": "Yes. A wooden medal.",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "He's wearing it. Woodpeckers keep visiting it. Toby says it's the proudest day of his life."
+    },
+    "left": {
+     "label": "No. It's in poor taste.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "A metal one, then. It's very heavy. Toby has bent slightly to the left. It suits him."
+    }
+   },
+   "followUp": true
   }
  ],
  "campaign": [

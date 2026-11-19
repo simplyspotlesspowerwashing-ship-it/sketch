@@ -5435,6 +5435,317 @@
    },
    "day": 5,
    "slot": 9
+  },
+  {
+   "id": "lr1",
+   "who": "lorraine",
+   "story": "lorraine",
+   "text": "(Lorraine, a seagull, lands on your desk. She drops a chip. She pushes it towards you. It feels like a bribe.) Accept the chip?",
+   "options": {
+    "right": {
+     "label": "Yes. Eat the chip.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Delicious. You now owe Lorraine a favour. She's written it down. Seagulls can write, apparently.",
+     "then": [
+      [
+       "lr2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. No chips.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "She ate the chip. Slowly. Looking at you the whole time.",
+     "then": [
+      [
+       "lr2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 13
+  },
+  {
+   "id": "lr2",
+   "who": "lorraine",
+   "story": "lorraine",
+   "text": "(Lorraine is back with forty seagulls. They'd like the seafront renamed 'Lorraine's Seafront'. Your favour is due.) Rename it?",
+   "options": {
+    "right": {
+     "label": "Yes. Lorraine's Seafront.",
+     "effects": {
+      "business": 10,
+      "people": -5
+     },
+     "reaction": "New signs. Very official. Every chip on the seafront now has a 10% Lorraine tax.",
+     "next": [
+      "lr3"
+     ]
+    },
+    "left": {
+     "label": "No. Favour denied.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Forty seagulls sat on your car. All day. You walked home. They followed you.",
+     "next": [
+      "lr3"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "lr2b",
+   "who": "barb",
+   "story": "lorraine",
+   "text": "Mayor. Someone's stolen every chip on the seafront. Witnesses saw nothing. Witnesses are terrified. Want a stakeout?",
+   "options": {
+    "right": {
+     "label": "Yes. Stake it out.",
+     "effects": {
+      "law": 10,
+      "treasury": -5
+     },
+     "reaction": "Barb sat on the seafront all night with a chip as bait. By morning she was on Lorraine's payroll.",
+     "next": [
+      "lr3"
+     ]
+    },
+    "left": {
+     "label": "No. Let it go.",
+     "effects": {
+      "people": -5,
+      "law": -5
+     },
+     "reaction": "Chips go missing daily now. Nobody reports it. Everyone just buys two."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "lr3",
+   "who": "lorraine",
+   "story": "lorraine",
+   "text": "(Lorraine has dropped a tiny hat in front of you. It's a mayor's hat. Her size. She'd like to be deputy for the seafront.) Appoint her?",
+   "options": {
+    "right": {
+     "label": "Yes. Deputy Lorraine.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Randy and Lorraine have met. They've agreed to split the bins. You were not consulted."
+    },
+    "left": {
+     "label": "No. Hat declined.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "She took the hat back. She wears it anyway. Everyone calls her Deputy now. Nobody knows why."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "ho1",
+   "who": "hoot",
+   "story": "hoot",
+   "text": "(Professor Hoot, the headteacher, is an owl. He'd like school to start at 9pm. 'For the children.' He's yawning.) Move school to night?",
+   "options": {
+    "right": {
+     "label": "Yes. Night school.",
+     "effects": {
+      "people": -10,
+      "press": 10
+     },
+     "reaction": "The children are asleep at their desks. Hoot is wide awake. He has never been happier.",
+     "then": [
+      [
+       "ho2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Daytime only.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Hoot is teaching asleep. Lessons are mostly hooting. The children say it's the best year yet.",
+     "then": [
+      [
+       "ho2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 2,
+   "slot": 13
+  },
+  {
+   "id": "ho2",
+   "who": "pam",
+   "story": "hoot",
+   "text": "The PTA would like to complain about Professor Hoot. He swallowed a mouse during assembly. Whole. The Year 2s saw. Discipline him?",
+   "options": {
+    "right": {
+     "label": "Yes. A stern word.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You had a stern word. He turned his head all the way round. You left. Nobody blames you."
+    },
+    "left": {
+     "label": "No. It's nature.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "It's now on the science curriculum. Hoot's lesson plan is just 'mouse'. Attendance has doubled."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "tv1",
+   "who": "trevor",
+   "story": "trevor",
+   "text": "(Trevor, a moth, has written to you. He loves the lamp outside the town hall. He would like to marry it.) Allow the wedding?",
+   "options": {
+    "right": {
+     "label": "Yes. Bless them.",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "A lovely service. The lamp wore a veil. Trevor wept. Gerald gave a speech. It was mostly honking.",
+     "then": [
+      [
+       "tv2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. It's a lamp.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Trevor is sitting on the lamp. Not moving. He says he will wait for as long as it takes.",
+     "then": [
+      [
+       "tv2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 3,
+   "slot": 13
+  },
+  {
+   "id": "tv2",
+   "who": "doug",
+   "story": "trevor",
+   "text": "Mayor, the lamp outside the town hall is costing a fortune. Trevor won't let us turn it off. He cries. Switch it off anyway?",
+   "options": {
+    "right": {
+     "label": "Yes. Lights out.",
+     "effects": {
+      "treasury": 10,
+      "people": -10
+     },
+     "reaction": "It's dark. Trevor flew to the next brightest thing. It's your office. He lives there now."
+    },
+    "left": {
+     "label": "No. Leave it on.",
+     "effects": {
+      "treasury": -10,
+      "people": 5
+     },
+     "reaction": "The lamp stays on forever. Trevor has invited every moth in the county. Very romantic. Very dusty."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "tb1",
+   "who": "toby",
+   "story": "toby",
+   "text": "(Toby, the old oak tree in the park, has submitted a planning application. He'd like to move. To the beach.) Approve it?",
+   "options": {
+    "right": {
+     "label": "Yes. Go, Toby.",
+     "effects": {
+      "people": 5,
+      "treasury": -10
+     },
+     "reaction": "Forty people and a crane later, Toby is on the beach. He's never seen the sea. He's overwhelmed.",
+     "then": [
+      [
+       "tb2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Trees stay put.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Toby has dropped every leaf in the park. On purpose. In one go. It's a protest. It's very crunchy.",
+     "then": [
+      [
+       "tb2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 4,
+   "slot": 13
+  },
+  {
+   "id": "tb2",
+   "who": "toby",
+   "story": "toby",
+   "text": "(Toby has a squirrel tenant who isn't paying rent. Toby would like to evict him. The squirrel is Mr Nutkins's nephew.) Back Toby?",
+   "options": {
+    "right": {
+     "label": "Yes. Evict him.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Evicted. Mr Nutkins has frozen Toby's account. Toby didn't know he had an account. It's all acorns."
+    },
+    "left": {
+     "label": "No. Squirrels stay.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "The squirrel has opened a cafe in Toby. Very cosy. Toby gets 10% of the acorns. He's warming to it."
+    }
+   },
+   "followUp": true
   }
  ],
  "campaign": [

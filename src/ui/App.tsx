@@ -3,11 +3,11 @@ import { SIMULATED_CROWD, packFor } from '../content/index.ts';
 import { voteParts, voteShare } from '../engine/election.ts';
 import { coverMissedDays, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
-import { MAX_CARD, cardPoints, dayScore, gradeOf, tierOf } from '../engine/score.ts';
+import { CELL, MAX_CARD, PARTY_ICON, cardPoints, dayScore, gradeOf, partyRows, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
-import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, BIOS, NAMES, Portrait, Town } from './art.tsx';
+import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, ODDBALLS, Portrait, Town } from './art.tsx';
 import type { Mood, TownView } from './art.tsx';
 import { DAY_NAMES, calendar, fetchCrowd, loadSave, sendVote, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
@@ -69,7 +69,7 @@ function Meters({ s, preview }: { s: State; preview: Choice | null }) {
 /** The big reveal after a swipe: a short staged scene. The choice is stamped, the character reacts,
  *  then each group that moved acts it out (cheering, storming, coins) while its number counts and its
  *  bar slides, and finally the crowd: how many mayors did the same, and what that's worth. */
-interface RevealData { key: number; card: Card; dir: Dir; before: Record<MeterId, number>; after: Record<MeterId, number>; pct: number | undefined; recalled: boolean }
+interface RevealData { key: number; card: Card; dir: Dir; before: Record<MeterId, number>; after: Record<MeterId, number>; pct: number | undefined; recalled: boolean; goals?: string[] }
 
 function CountUp({ to, ms = 650, bare }: { to: number; ms?: number; bare?: boolean }) {
   const [v, setV] = useState(reduced() ? to : 0);
@@ -141,6 +141,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
         <div class={`result-score g-${grade.id}`}>
           {r.recalled ? <b class="rv-recalled">RECALLED</b> : <><span class="pts">+{pts}<small>/{MAX_CARD}</small></span><span class="grade">{grade.name}</span><span class="why">{pts >= 9 ? 'Everyone is calm.' : pts >= 7 ? 'Mostly calm.' : pts >= 5 ? 'Somebody is getting twitchy.' : 'The town is on edge.'}</span></>}
         </div>
+        {r.goals?.map((g) => <p key={g} class="goal-met"><b>★ Goal met</b> {g} <small>+{TUNING.vote.objective} votes on Sunday</small></p>)}
         {r.pct !== undefined && !r.recalled && <p class="result-crowd"><b>{r.pct}%</b> of mayors did the same{isPreview(r.card.id) && <span class="tag">estimate</span>}</p>}
       </div>
       <div class="choices n1">
@@ -151,7 +152,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
 }
 
 /** One tense moment a day: hold to wind up, let go while they're not looking. */
-function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) => void; meet?: string }) {
+function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) => void; meet?: boolean }) {
   const st = useRef({ t: 0, looking: false, warn: false, next: 1.4, charge: 0, holding: false, heldFull: 0, done: false, idle: 0 });
   const [, setF] = useState(0);
   const finish = (d: Dir) => { const s = st.current; if (s.done) return; s.done = true; sfx(d === 'right' ? 'stamp' : 'lose'); setTimeout(() => onResult(d), 600); };
@@ -181,7 +182,7 @@ function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) =>
       <div class={`card sneak ${s.looking ? 'looking' : s.warn ? 'warn' : 'away'} ${s.done ? 'over' : ''}`}>
         <span class="sneak-tag">{res ?? (s.looking ? 'WATCHING YOU' : s.warn ? 'TURNING…' : 'NOT LOOKING')}</span>
         <div class="card-who"><span class="sneak-face"><Portrait who={card.who} size={110} mood={s.looking ? 'annoyed' : 'neutral'} /></span><span>{NAMES[card.who] ?? card.who}</span></div>
-        {meet && <Meet bio={meet} />}
+        {meet && <Meet />}
         <p class="card-text">{fill(card.text)}</p>
         <span class="sneak-charge"><i style={{ width: `${s.charge * 100}%` }} /></span>
       </div>
@@ -193,13 +194,13 @@ function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) =>
 
 // ---------- the swipe card ----------
 /** First time a character turns up: who they are, once. */
-const Meet = ({ bio }: { bio: string }) => <p class="meet"><b>New face</b>{bio}</p>;
+const Meet = () => <span class="meet">New face</span>;
 
 const THRESH = 90;
 /** Every card is a yes or a no: right approves, left rejects. */
 function dirOf(x: number, _y: number): Dir { return x > 0 ? 'right' : 'left'; }
 
-function SwipeCard({ card, onPreview, onSwipe, locked, meet }: { card: Card; onPreview: (d: Dir | null) => void; onSwipe: (d: Dir) => void; locked: boolean; meet?: string }) {
+function SwipeCard({ card, onPreview, onSwipe, locked, meet }: { card: Card; onPreview: (d: Dir | null) => void; onSwipe: (d: Dir) => void; locked: boolean; meet?: boolean }) {
   const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
   const [leaving, setLeaving] = useState<Dir | null>(null);
   const [stamped, setStamped] = useState<Dir | null>(null);
@@ -232,7 +233,7 @@ function SwipeCard({ card, onPreview, onSwipe, locked, meet }: { card: Card; onP
         onPointerUp={() => { const d = drag; start.current = null; setDrag(null); if (d && Math.abs(d.x) > THRESH) { const dir = dirOf(d.x, d.y); if (card.options[dir]) { commit(dir); return; } } onPreview(null); }}
         onPointerCancel={() => { start.current = null; setDrag(null); onPreview(null); }}>
         <div class="card-who"><Portrait who={card.who} size={110} mood={valid ? 'annoyed' : 'neutral'} /><span>{NAMES[card.who] ?? card.who}</span></div>
-        {meet && <Meet bio={meet} />}
+        {meet && <Meet />}
         <p class="card-text">{fill(card.text)}</p>
         {valid && !stamped && <div class={`choice-banner ${valid}`}>{fill(card.options[valid]!.label)}</div>}
         {stamped && (
@@ -268,12 +269,22 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
   );
 }
 
+/** This week's goals (shown up front, like a to-do list). Each one met adds votes on Sunday. */
+function Goals({ s }: { s: State }) {
+  return (
+    <div class="goals"><b class="goals-head">This week's goals <small>+{TUNING.vote.objective} votes each</small></b>
+      <ul>{pack.objectives.map((o) => { const done = s.objectivesDone.includes(o.id); return <li key={o.id} class={done ? 'done' : ''}><span aria-hidden="true">{done ? '★' : '☐'}</span>{o.text}{done && <span class="sr-only"> (done)</span>}</li>; })}</ul>
+    </div>
+  );
+}
+
 /** The end of a day: score, the share grid, where the vote stands and a hook for tomorrow. No card-by-card report. */
 function DayReview({ s, onNext, nextLabel, wait, sub }: { s: State; onNext: () => void; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
   const sc = dayScore(s, s.day);
   const tier = tierOf(sc.total);
   const rows: string[] = [];
-  for (let i = 0; i < sc.picks.length; i += 5) rows.push(sc.picks.slice(i, i + 5).map((p) => p.grade.emoji).join(''));
+  const parties = partyRows(s, s.day);
+  for (const m of METERS) rows.push(`${PARTY_ICON[m]} ${parties[m].map(CELL).join('')}`);
   const share = `Mayor of Bad Town · ${DAY_NAMES[s.day - 1]} · ${sc.total} pts · ${tier.name}${sc.recalled ? ' · RECALLED' : ''}\n${rows.join('\n')}`;
   const poll = s.polls[s.polls.length - 1] ?? voteShare(s);
   const prevPoll = s.polls[s.polls.length - 2];
@@ -288,6 +299,7 @@ function DayReview({ s, onNext, nextLabel, wait, sub }: { s: State; onNext: () =
         <span><b class="tiername">{tier.name}</b><small>{sc.balance} for keeping the town balanced{sc.bonus ? `, +${sc.bonus} for a steady finish` : ''}{sc.recalled ? `, −${TUNING.score.recall} for the recall` : ''}</small></span>
       </div>
       <pre class="share">{share}</pre>
+      <Goals s={s} />
       {s.tomorrow.length > 0 && <p class="carry"><b>Waiting for you tomorrow:</b> {[...new Set(s.tomorrow.map((id) => pack.headlines[findCard(pack, id).story ?? 'town'] ?? 'Unfinished business'))].join(' · ')}</p>}
       {sub}
       <div class="dayend-btns">
@@ -338,6 +350,8 @@ function Scrapbook({ save, onClose, onRename }: { save: Save; onClose: () => voi
       <div class="career"><span><b>{c.terms}</b>weeks served</span><span><b>{c.wins}</b>re-elections</span><span><b>{c.best ? `${c.best}%` : '–'}</b>best result</span></div>
       <h3 class="subhead">Endings <small>{save.scrapbook.length} of {ENDING_ORDER.length}</small></h3>
       <div class="endings">{ENDING_ORDER.map((k) => save.scrapbook.includes(k) ? <EndingCard key={k} k={k} /> : <div key={k} class="ending locked"><b>???</b><span>{k.startsWith('term') ? 'How a week ended' : k.startsWith('low:treasury') ? 'Ran out of money' : `${k.startsWith('low') ? 'Lost' : 'Far too loved by'} ${METER_NAME[k.split(':')[1] as MeterId]}`}</span></div>)}</div>
+      <h3 class="subhead">Oddballs met <small>{ODDBALLS.filter((w) => save.met.includes(w)).length} of {ODDBALLS.length}</small></h3>
+      <div class="cast">{ODDBALLS.map((w) => save.met.includes(w) ? <span key={w} class="cast-member"><Portrait who={w} size={56} mood="pleased" /><small>{(NAMES[w] ?? w).split(/[,(]/)[0]!.trim()}</small></span> : <span key={w} class="cast-member locked"><span class="cast-q">?</span><small>???</small></span>)}</div>
       <h3 class="subhead">Deeds <small>{save.deeds.length} of {DEEDS.length}</small></h3>
       <ul class="deeds">{DEEDS.map((d) => <li key={d.id} class={save.deeds.includes(d.id) ? 'done' : ''}><span class="seal">{save.deeds.includes(d.id) ? '★' : '·'}</span><b>{d.name}</b><small>{d.how}</small></li>)}</ul>
     </Sheet>
@@ -417,6 +431,7 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
       <h2 class="op-title">20 problems a day. Yes or no.</h2>
       <p>Drag the card right to approve, left to reject (or tap the buttons). You won't see what it does until you've decided. Then you'll definitely see it.</p>
       <p>You score points after every card for keeping every group calm: inside the striped box on each bar. Let anyone get too angry or too happy and the points dry up. Every mayor gets the same problems, so you'll see how many made the same call.</p>
+      <p>Each week has three goals (the ★ at the top). Every one you hit is worth votes.</p>
       <p><b>Sunday is the election.</b> You need 50%. Most mayors don't get it.</p>
     </div>,
     <div class="op-slide" key="5">
@@ -480,7 +495,7 @@ export function App() {
   const [preview, setPreview] = useState<Dir | null>(null);
   const [reveal, setReveal] = useState<RevealData | null>(null);
   const [fresh, setFresh] = useState<{ endings: string[]; deeds: string[] }>({ endings: [], deeds: [] });
-  const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | null>(null);
+  const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | 'goals' | null>(null);
   const taps = useRef<number[]>([]);
   const cal = useMemo(() => calendar(save.dayOffset), [save.dayOffset]);
   const introKey = `${s.weekId}:${s.day}`;
@@ -505,10 +520,10 @@ export function App() {
     const card = findCard(pack, s.current!);
     const next = reduce(s, { type: 'swipe', dir }, pack);
     sendVote(pack.id, s.weekId, card.id, dir);
-    persist(next, BIOS[card.who] && !save.met.includes(card.who) ? { met: [...save.met, card.who] } : {});
+    persist(next, ODDBALLS.includes(card.who) && !save.met.includes(card.who) ? { met: [...save.met, card.who] } : {});
     if (card.who === 'gerald') sfx('honk');
     if (next.phase === 'recalled') sfx('lose');
-    if (!isSunday) setReveal({ key: Date.now(), card, dir, before: s.meters, after: next.meters, pct: crowd[card.id]?.[dir], recalled: next.phase === 'recalled' });
+    if (!isSunday) setReveal({ key: Date.now(), card, dir, before: s.meters, after: next.meters, pct: crowd[card.id]?.[dir], recalled: next.phase === 'recalled', goals: next.objectivesDone.filter((g) => !s.objectivesDone.includes(g)).map((g) => pack.objectives.find((o) => o.id === g)?.text ?? g) });
   };
 
   const jump = (days: number) => {
@@ -526,7 +541,7 @@ export function App() {
   who.mayor = s.profile?.mayor ?? save.lastProfile?.mayor ?? 'Mayor';
   who.folk = s.profile?.folk ?? save.lastProfile?.folk ?? 'Bad Towners';
   const card = s.phase === 'card' && s.current ? findCard(pack, s.current) : null;
-  const meet = card && BIOS[card.who] && !save.met.includes(card.who) ? BIOS[card.who] : undefined;
+  const meet = !!card && ODDBALLS.includes(card.who) && !save.met.includes(card.who);
   const today = dayScore(s, s.day);
   const choice = card && preview ? card.options[preview] ?? null : null;
   const dayName = DAY_NAMES[s.day - 1]!;
@@ -536,10 +551,11 @@ export function App() {
   return (
     <div class="app">
       <header class="top">
-        <h1 onClick={titleTap}>Mayor of <span>Bad Town</span></h1>
+        <h1 onClick={titleTap} aria-label="Mayor of Bad Town"><i class="pre">Mayor of </i><span>Bad Town</span></h1>
         <div class="top-right">
           <span class="daychip">{dayName}{s.phase === 'card' && !isSunday ? ` ${s.cardInDay + 1}/${TUNING.cardsPerDay}` : ''}</span>
           {!isSunday && <span class="scorechip" aria-label={`Today's score ${today.total}`}><b>{today.total}</b> pts</span>}
+          {!isSunday && <button class="goalchip" aria-label={`This week's goals: ${s.objectivesDone.length} of ${pack.objectives.length} done`} onClick={() => { setOverlay('goals'); sfx('paper'); }}>★ {s.objectivesDone.length}/{pack.objectives.length}</button>}
           <button class="icon" aria-label="Open the scrapbook" onClick={() => { setOverlay('book'); sfx('paper'); }}><Icon.book /></button>
           <button class="icon" aria-label={save.muted ? 'Turn sound on' : 'Turn sound off'} onClick={() => { setMuted(!save.muted); persist(s, { muted: !save.muted }); }}><Icon.sound on={!save.muted} /></button>
         </div>
@@ -573,12 +589,14 @@ export function App() {
             {s.daveDays.length > 0 && s.daveDays.includes(s.day - 1) && <div class="speaker"><Portrait who="randy" size={56} mood="pleased" /><p class="bubble">You were out, so I was mayor again for {s.daveDays.length} day{s.daveDays.length > 1 ? 's' : ''}. Best {s.daveDays.length > 1 ? 'days' : 'day'} this town ever had. Don't check the bins. Don't check the vault. Don't check my coat.</p></div>}
             <p class="hint">Poll this morning: <b>{voteShare(s)}%</b>. You need 50% on Sunday.</p>
           </div>
+          {!isSunday && <Goals s={s} />}
           <button class="btn primary" autoFocus onClick={() => persist(s, { introSeen: introKey })}>To work</button>
         </Sheet>
       )}
       {needSetup && (save.onboarded ? <Setup title={`A new term, ${save.lastProfile?.mayor ?? 'Mayor'}. Same again?`} initial={save.lastProfile} onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack), { lastProfile: profile }); sfx('win'); }} />
         : <Opening onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack), { onboarded: true, lastProfile: profile, introSeen: introKey }); }} />)}
       {overlay === 'names' && s.profile && <Setup title="Rename things" rename initial={s.profile} onDone={(p) => { persist(reduce(s, { type: 'rename', mayor: p.mayor, folk: p.folk }, pack), { lastProfile: { ...p, base: s.profile!.base } }); setOverlay(null); }} />}
+      {overlay === 'goals' && <Sheet label="This week's goals" onClose={() => setOverlay(null)}><Goals s={s} /><button class="btn primary" onClick={() => setOverlay(null)}>Back to work</button></Sheet>}
       {overlay === 'book' && <Scrapbook save={save} onClose={() => setOverlay(null)} onRename={s.profile ? () => setOverlay('names') : undefined} />}
       {overlay === 'dev' && (
         <Sheet label="Dev panel" onClose={() => setOverlay(null)}>
