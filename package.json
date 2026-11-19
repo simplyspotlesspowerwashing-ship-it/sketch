@@ -9,7 +9,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "sim": "node sim/run.ts",
-    "validate": "node sim/validate.ts"
+    "validate": "node sim/validate.ts",
+    "crowd": "node sim/crowd.ts && PACK=week2 node sim/crowd.ts",
+    "check": "npm run validate && npm run typecheck && npm test",
+    "bundle": "npm run build && python3 sim/bundle.py"
   },
   "dependencies": {
     "preact": "^11.2.0",

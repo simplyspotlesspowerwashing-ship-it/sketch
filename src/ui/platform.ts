@@ -103,3 +103,37 @@ export function sfx(name: Sfx) {
     case 'lose': [392, 349, 311, 262].forEach((f, i) => tone(f, 0.3, 'sawtooth', 0.08, i * 0.18)); break;
   }
 }
+
+// ---------- crowd stats: anonymous counts of yes and no per card ----------
+// Set VITE_STATS_URL at build time to the stats worker (see worker/README.md). Without it the game
+// uses simulated shares and labels them "preview". Nothing personal is sent: pack, week, card, answer.
+const STATS_URL = (import.meta.env?.VITE_STATS_URL as string | undefined)?.replace(/\/$/, '') ?? '';
+export const STATS_ENABLED = STATS_URL.length > 0;
+/** Fewer real answers than this and a card keeps its simulated share. */
+export const MIN_SAMPLE = 30;
+
+/** Real yes/no shares for a week, for cards with enough answers; null if the service can't be reached. */
+export async function fetchCrowd(pack: string, week: string): Promise<Record<string, { left: number; right: number }> | null> {
+  if (!STATS_ENABLED) return null;
+  try {
+    const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 4000);
+    const res = await fetch(`${STATS_URL}/crowd?pack=${encodeURIComponent(pack)}&week=${encodeURIComponent(week)}`, { signal: ctl.signal });
+    clearTimeout(t);
+    if (!res.ok) return null;
+    const body = (await res.json()) as { cards?: Record<string, { left?: number; right?: number }> };
+    const out: Record<string, { left: number; right: number }> = {};
+    for (const [id, c] of Object.entries(body.cards ?? {})) {
+      const l = Number(c.left ?? 0), r = Number(c.right ?? 0), n = l + r;
+      if (n >= MIN_SAMPLE) { const right = Math.round((100 * r) / n); out[id] = { right, left: 100 - right }; }
+    }
+    return out;
+  } catch { return null; }
+}
+
+/** Count one answer. Fire and forget: the game never waits for this. */
+export function sendVote(pack: string, week: string, card: string, dir: string) {
+  if (!STATS_ENABLED || (dir !== 'left' && dir !== 'right')) return;
+  try {
+    void fetch(`${STATS_URL}/vote`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ pack, week, card, dir }), keepalive: true }).catch(() => {});
+  } catch { /* offline: the vote is simply not counted */ }
+}

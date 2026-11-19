@@ -1,0 +1,4 @@
+Fredoka and DM Serif Display are licensed under the SIL Open Font License, Version 1.1.
+https://openfontlicense.org
+Fredoka: Copyright 2016 The Fredoka Project Authors.
+DM Serif Display: Copyright 2014 The DM Serif Display Project Authors.

@@ -1,21 +1,28 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { week1Pack as pack } from '../content/index.ts';
+import { SIMULATED_CROWD, packFor } from '../content/index.ts';
 import { voteParts, voteShare } from '../engine/election.ts';
 import { coverMissedDays, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
 import { dayScore, rarityOf, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
-import crowdData from '../content/packs/week1.crowd.json' with { type: 'json' };
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
 import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
 import type { Mood, TownView } from './art.tsx';
-import { DAY_NAMES, calendar, loadSave, setMuted, sfx, writeSave } from './platform.ts';
+import { DAY_NAMES, STATS_ENABLED, calendar, fetchCrowd, loadSave, sendVote, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
 
 /** Preview crowd data: simulated until real players exist; always labelled as such. */
-const crowd = crowdData.cards as Crowd;
-const PREVIEW = crowdData.simulated;
+/** This week's pack and crowd shares. Set when the game boots for a week (see bootUnsafe). */
+let pack = packFor(calendar(0).weekId);
+/** Real shares (from the stats service) where enough mayors have played a card, simulated ones otherwise. */
+let live: Crowd = {};
+let crowd: Crowd = { ...SIMULATED_CROWD[pack.id] };
+const useWeek = (weekId: string) => { const p = packFor(weekId); if (p !== pack) { pack = p; live = {}; } crowd = { ...SIMULATED_CROWD[pack.id], ...live }; };
+/** True where the share shown for a card is still simulated. */
+const isPreview = (cardId: string) => !live[cardId];
+/** No stats service configured: this is a preview build, with testing shortcuts. */
+const PREVIEW = !STATS_ENABLED;
 /** Card text can say {mayor} and {folk}; filled from the player's names. */
 const who = { mayor: 'Mayor', folk: 'Bad Towners' };
 const fill = (t: string) => t.replaceAll('{mayor}', who.mayor).replaceAll('{folk}', who.folk);
@@ -28,6 +35,7 @@ function boot(save: Save): State {
 }
 function bootUnsafe(save: Save): State {
   const cal = calendar(save.dayOffset);
+  useWeek(cal.weekId);
   const kept = save.state && save.state.v === 10 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, pack), pack, cal.today);
 }
@@ -125,7 +133,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
           })}
         </div>
         <p class={`result-crowd r-${rar.id}`}>
-          {r.recalled ? <b class="rv-recalled">RECALLED</b> : r.pct !== undefined ? <><b>{r.pct}%</b> of mayors did this · {rar.name} <i>+{TUNING.score.perCard + rar.points}</i>{PREVIEW && <span class="tag">preview</span>}</> : 'You are the first mayor to try this.'}
+          {r.recalled ? <b class="rv-recalled">RECALLED</b> : r.pct !== undefined ? <><b>{r.pct}%</b> of mayors did this · {rar.name} <i>+{TUNING.score.perCard + rar.points}</i>{isPreview(r.card.id) && <span class="tag">preview</span>}</> : 'You are the first mayor to try this.'}
         </p>
       </div>
       <div class="choices n1">
@@ -268,7 +276,7 @@ function DayReview({ s, onNext, nextLabel, wait, sub }: { s: State; onNext: () =
         <span><b class="tiername">{tier.name}</b><small>{sc.picks.length} cards, +{sc.rarity} for rare choices{sc.recalled ? `, −${TUNING.score.recall} for the recall` : ''}</small></span>
       </div>
       <pre class="share">{share}</pre>
-      {s.tomorrow.length > 0 && <p class="carry"><b>Waiting for you tomorrow:</b> {[...new Set(s.tomorrow.map((id) => pack.headlines[findCard(pack, id).story ?? 'town'] ?? 'unfinished business'))].join(' · ').toLowerCase()}</p>}
+      {s.tomorrow.length > 0 && <p class="carry"><b>Waiting for you tomorrow:</b> {[...new Set(s.tomorrow.map((id) => pack.headlines[findCard(pack, id).story ?? 'town'] ?? 'Unfinished business'))].join(' · ')}</p>}
       {sub}
       <div class="dayend-btns">
         <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); setCopied(true); } catch { /* clipboard blocked */ } sfx('tap'); }}>{copied ? 'Copied' : 'Copy result'}</button>
@@ -293,6 +301,8 @@ const DEEDS: Deed[] = [
   { id: 'cheese', name: 'Treasurer Cheese', how: 'Give the cheese Doug\'s job', test: (s) => !!s.flags.cheese_job },
   { id: 'kevin', name: 'Kevin Forever', how: 'Keep Kevin unfilled', test: (s) => !!s.flags.kevin_saved },
   { id: 'bev', name: 'Grand Prix', how: 'Send Bev to Formula One', test: (s) => !!s.flags.bev_f1 },
+  { id: 'reginald', name: 'Slow and Steady', how: 'Give Reginald his road', test: (s) => !!s.flags.reg_road },
+  { id: 'gary', name: 'Good Sport', how: 'Help Gary up when he falls', test: (s) => !!s.flags.gary_help },
   { id: 'collector', name: 'Collector', how: 'Unlock six endings', test: (_s, save) => save.scrapbook.length >= 6 },
 ];
 function record(save: Save, s: State): { save: Save; endings: string[]; deeds: string[] } {
@@ -307,11 +317,12 @@ function EndingCard({ k, isNew }: { k: string; isNew?: boolean }) {
   const e = pack.endings[k]!;
   return <div class={`ending ${k.split(':')[0]}`}>{isNew && <span class="newtag">NEW IN YOUR SCRAPBOOK</span>}<b>{e.title}</b><span>{e.text}</span></div>;
 }
-function Scrapbook({ save, onClose }: { save: Save; onClose: () => void }) {
+function Scrapbook({ save, onClose, onRename }: { save: Save; onClose: () => void; onRename?: () => void }) {
   const c = save.career;
   return (
     <Sheet label="Scrapbook" onClose={onClose}>
       <h2 class="display">The Mayor's Scrapbook</h2>
+      {onRename && <p class="book-who">{who.mayor}, mayor of the {who.folk} <button class="linkbtn" onClick={onRename}>Rename</button></p>}
       <div class="career"><span><b>{c.terms}</b>weeks served</span><span><b>{c.wins}</b>re-elections</span><span><b>{c.best ? `${c.best}%` : '–'}</b>best result</span></div>
       <h3 class="subhead">Endings <small>{save.scrapbook.length} of {ENDING_ORDER.length}</small></h3>
       <div class="endings">{ENDING_ORDER.map((k) => save.scrapbook.includes(k) ? <EndingCard key={k} k={k} /> : <div key={k} class="ending locked"><b>???</b><span>{k.startsWith('term') ? 'How a week ended' : k.startsWith('low:treasury') ? 'Ran out of money' : `${k.startsWith('low') ? 'Lost' : 'Far too loved by'} ${METER_NAME[k.split(':')[1] as MeterId]}`}</span></div>)}</div>
@@ -381,7 +392,7 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
     <div class="op-slide" key="2">
       <div class="op-ballot"><span class="op-votes"><b>{mayor || 'You'}</b><i style={{ '--w': '100%' }} /><em>1 vote</em></span><span class="op-votes randy"><b>A traffic cone</b><i style={{ '--w': '0%' }} /><em>0 votes*</em></span></div>
       <h2 class="op-title">So you ran. Against a traffic cone. You won by one vote.</h2>
-      <p>*The cone has not conceded. The cone is running again on Sunday. Polls say it's close. The cone has never once been recalled.</p>
+      <p>*The cone has not conceded. There's an election every Sunday, and something always runs against you. Polls say it's close. They always do.</p>
       <p>Randy has promised to help. Nobody asked him to. He has a lot of ideas. Most of them are bins.</p>
     </div>,
     <div class="op-slide" key="3">
@@ -470,10 +481,18 @@ export function App() {
     setSave(sv); setS(next); writeSave(sv);
   };
   useEffect(() => { writeSave({ ...save, state: s }); }, []);
+  // real crowd shares for this week, when the stats service is configured
+  const [, setCrowdVersion] = useState(0);
+  useEffect(() => {
+    let alive = true;
+    void fetchCrowd(pack.id, s.weekId).then((c) => { if (alive && c) { live = c; useWeek(s.weekId); setCrowdVersion((v) => v + 1); } });
+    return () => { alive = false; };
+  }, [s.weekId, s.day]);
 
   const swipe = (dir: Dir) => {
     const card = findCard(pack, s.current!);
     const next = reduce(s, { type: 'swipe', dir }, pack);
+    sendVote(pack.id, s.weekId, card.id, dir);
     persist(next);
     if (card.who === 'gerald') sfx('honk');
     if (next.phase === 'recalled') sfx('lose');
@@ -489,7 +508,8 @@ export function App() {
     if (cal.today > s.day || s.phase === 'recalled') { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }
     else jump(1);
   };
-  const titleTap = () => { const now = Date.now(); taps.current = [...taps.current.filter((t) => now - t < 700), now]; if (taps.current.length >= 3) { taps.current = []; setOverlay('dev'); } };
+  const titleTap = () => { if (!PREVIEW) return;
+    const now = Date.now(); taps.current = [...taps.current.filter((t) => now - t < 700), now]; if (taps.current.length >= 3) { taps.current = []; setOverlay('dev'); } };
 
   who.mayor = s.profile?.mayor ?? save.lastProfile?.mayor ?? 'Mayor';
   who.folk = s.profile?.folk ?? save.lastProfile?.folk ?? 'Bad Towners';
@@ -507,7 +527,6 @@ export function App() {
         <div class="top-right">
           <span class="daychip">{dayName}{s.phase === 'card' && !isSunday ? ` ${s.cardInDay + 1}/${TUNING.cardsPerDay}` : ''}</span>
           {!isSunday && <span class="scorechip" aria-label={`Today's score ${today.total}`}><b>{today.total}</b> pts</span>}
-          {s.profile && <button class="icon" aria-label="Rename" onClick={() => setOverlay('names')}><Icon.pen /></button>}
           <button class="icon" aria-label="Open the scrapbook" onClick={() => { setOverlay('book'); sfx('paper'); }}><Icon.book /></button>
           <button class="icon" aria-label={save.muted ? 'Turn sound on' : 'Turn sound off'} onClick={() => { setMuted(!save.muted); persist(s, { muted: !save.muted }); }}><Icon.sound on={!save.muted} /></button>
         </div>
@@ -547,7 +566,7 @@ export function App() {
       {needSetup && (save.onboarded ? <Setup title={`A new term, ${save.lastProfile?.mayor ?? 'Mayor'}. Same again?`} initial={save.lastProfile} onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack), { lastProfile: profile }); sfx('win'); }} />
         : <Opening onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack), { onboarded: true, lastProfile: profile, introSeen: introKey }); }} />)}
       {overlay === 'names' && s.profile && <Setup title="Rename things" rename initial={s.profile} onDone={(p) => { persist(reduce(s, { type: 'rename', mayor: p.mayor, folk: p.folk }, pack), { lastProfile: { ...p, base: s.profile!.base } }); setOverlay(null); }} />}
-      {overlay === 'book' && <Scrapbook save={save} onClose={() => setOverlay(null)} />}
+      {overlay === 'book' && <Scrapbook save={save} onClose={() => setOverlay(null)} onRename={s.profile ? () => setOverlay('names') : undefined} />}
       {overlay === 'dev' && (
         <Sheet label="Dev panel" onClose={() => setOverlay(null)}>
           <h2 class="display">Dev panel</h2>

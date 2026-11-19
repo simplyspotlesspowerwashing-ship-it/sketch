@@ -1,7 +1,8 @@
 // Balance simulator for the swipe engine. Plays whole terms with bots and writes a report.
 //   npm run sim -- [terms=5000] [out=reports/balance.md]
 import { writeFileSync } from 'node:fs';
-import { week1Pack as pack } from '../src/content/index.ts';
+import { packById } from '../src/content/index.ts';
+const pack = packById(process.env.PACK ?? 'week1');
 import { autoplay, davePolicy, findCard, newTerm, options } from '../src/engine/engine.ts';
 import type { Policy } from '../src/engine/engine.ts';
 import { TUNING } from '../src/engine/tuning.ts';
@@ -33,7 +34,7 @@ for (const [name, policy] of Object.entries(POLICIES)) {
   const shares: number[] = [];
   const causes: Record<string, number> = {};
   for (let i = 0; i < N; i++) {
-    const end = autoplay(newTerm('week1', `${name}-${i}`, pack), policy, pack, () => false);
+    const end = autoplay(newTerm(pack.id, `${name}-${i}`, pack), policy, pack, () => false);
     wins += end.result!.won ? 1 : 0;
     recalled += end.recalls > 0 ? 1 : 0;
     early += end.result!.endedEarly ? 1 : 0;

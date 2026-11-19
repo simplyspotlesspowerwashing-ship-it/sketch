@@ -1,3 +1,6 @@
+/* Self-hosted fonts (SIL Open Font License): Fredoka (variable, 300 to 700) and DM Serif Display. */
+@font-face { font-family: 'Fredoka'; font-style: normal; font-weight: 300 700; font-display: swap; src: url('/fonts/fredoka.woff2') format('woff2'); }
+@font-face { font-family: 'DM Serif Display'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/dm-serif-display.woff2') format('woff2'); }
 /* Paper cut-out look: cream desk, ink outlines, chunky rounded shapes. One theme by design. */
 :root {
   --cream: #F2EBDD; --paper: #FBF7EE; --ink: #29231F; --soft: #6B6257; --line: #D9CDB6;
@@ -943,3 +946,16 @@ h1 span { white-space: nowrap; }
 .result-choice.yes b { background: #2C6B41; } .result-choice.no b { background: var(--alert); }
 .linkbtn { background: none; border: 0; padding: 6px; font: inherit; font-size: 13px; color: var(--soft); text-decoration: underline; cursor: pointer; align-self: center; }
 .btn[disabled] { opacity: .6; cursor: default; }
+
+/* ---------- polish ---------- */
+:focus { outline: none; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; border-radius: 12px; }
+.btn.primary:focus-visible { outline-color: var(--ink); }
+.card-who .portrait { width: 108px !important; height: 108px !important; }
+.card-text { font-size: 19px; line-height: 1.32; }
+.carry { font-size: 13px; line-height: 1.35; }
+.carry b { display: block; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--soft); }
+.book-who { margin: -4px 0 6px; font-size: 14px; color: var(--soft); display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.btn.primary[disabled] { background: #6B6257; color: var(--paper); opacity: 1; }
+.top-right .icon { flex-shrink: 0; }
+@media (max-width: 380px) { .top h1 { font-size: 13px; } .daychip, .scorechip { padding: 2px 6px; } }

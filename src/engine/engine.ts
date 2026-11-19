@@ -52,6 +52,9 @@ const isPool = (c: Card) => !c.day && !c.followUp && !c.repeat && !c.sneak;
  * card at its slot, and the rest dealt from the week's pool in a fixed order. Extra spares follow,
  * for positions a mayor can't use (a pinned card whose condition they don't meet).
  */
+/** How far each day moves along the week's shared pool order. */
+const DAY_STEP = 7;
+
 export function dayDeck(pack: Pack, weekId: string, day: number, rng: Rng = seededRng): string[] {
   const N = TUNING.cardsPerDay;
   const order = shuffled(pack.cards.filter(isPool).map((c) => c.id), rng(`${weekId}|pool`));
@@ -60,10 +63,10 @@ export function dayDeck(pack: Pack, weekId: string, day: number, rng: Rng = seed
   for (const c of pinned) if (c.slot !== undefined && c.slot < N) deck[c.slot] = c.id;
   let i = 0;
   for (const c of pinned) if (c.slot === undefined) { while (deck[i]) i++; deck[i] = c.id; }
-  // how many pool cards the earlier days used
-  let used = 0;
-  for (let d = 1; d < day; d++) used += N - pack.cards.filter((c) => c.day === d).length;
-  const spares = 8;
+  // each day starts the shared pool order at a different point; every other pool card is a spare,
+  // so a mayor who has already met one story gets an unseen one instead (no repeats until the pool runs out)
+  const used = (day - 1) * DAY_STEP;
+  const spares = order.length;
   const free = deck.filter((x) => !x).length + spares;
   const deal = Array.from({ length: free }, (_, k) => order[(used + k) % order.length]!);
   // everyone should meet a storyline early: bring up to four story starters to the front of today's deal

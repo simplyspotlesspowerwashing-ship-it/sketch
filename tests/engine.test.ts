@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { week1Pack as pack } from '../src/content/index.ts';
+import { PACKS, LAUNCH_MONDAY, packFor, week1Pack as pack } from '../src/content/index.ts';
 import { loadPack } from '../src/content/schema.ts';
 import week1 from '../src/content/packs/week1.json' with { type: 'json' };
 import { voteShare } from '../src/engine/election.ts';
@@ -91,16 +91,33 @@ describe('the shared day', () => {
     for (let d = 1; d <= 6; d++) expect(dayDeck(pack, 'week1', d)).toEqual(dayDeck(pack, 'week1', d));
     expect(dayDeck(pack, 'week1', 2).slice(0, 20)).not.toEqual(dayDeck(pack, 'week1', 1).slice(0, 20));
   });
-  it('each day has its main story first, a law, one catastrophe and a sneak moment, in their places', () => {
+  for (const p of PACKS) it(`${p.id}: each day has its main story first, a law, one catastrophe and a sneak moment, in their places`, () => {
     for (let d = 1; d <= 6; d++) {
-      const deck = dayDeck(pack, 'week1', d);
-      const at = (i: number) => findCard(pack, deck[i]!);
+      const deck = dayDeck(p, p.id, d);
+      const at = (i: number) => findCard(p, deck[i]!);
       expect(at(0).day, `day ${d} opener`).toBe(d);
       expect(at(7).story, `day ${d} law`).toBe('law');
       expect(at(15).sneak, `day ${d} sneak`).toBe(true);
-      expect(pack.cards.filter((c) => c.day === d && c.slot === 11), `day ${d} catastrophe`).toHaveLength(1);
-      expect(deck[11]).toBe(pack.cards.find((c) => c.day === d && c.slot === 11)!.id);
+      expect(p.cards.filter((c) => c.day === d && c.slot === 11), `day ${d} catastrophe`).toHaveLength(1);
+      expect(deck[11]).toBe(p.cards.find((c) => c.day === d && c.slot === 11)!.id);
     }
+  });
+  for (const p of PACKS) it(`${p.id}: days do not repeat the same side stories in the same order`, () => {
+    const pool = (d: number) => dayDeck(p, p.id, d).slice(0, 20).filter((id) => !findCard(p, id).day);
+    for (let d = 2; d <= 6; d++) expect(pool(d).slice(0, 6), `day ${d}`).not.toEqual(pool(d - 1).slice(0, 6));
+  });
+  for (const p of PACKS) it(`${p.id}: every card is a yes or a no, and every link leads to a real card`, () => {
+    const ids = new Set(p.cards.map((c) => c.id));
+    for (const c of [...p.cards, ...p.campaign]) {
+      expect(Object.keys(c.options).sort(), c.id).toEqual(['left', 'right']);
+      for (const o of Object.values(c.options)) for (const t of [...(o!.then ?? []).map(([id]) => id), ...(o!.next ?? [])]) expect(ids.has(t), `${c.id} -> ${t}`).toBe(true);
+    }
+  });
+  it('the weeks rotate: launch week is week 1, the next is week 2, then round again', () => {
+    expect(packFor(LAUNCH_MONDAY).id).toBe('week1');
+    expect(packFor('2026-11-23').id).toBe('week2');
+    expect(packFor('2026-11-30').id).toBe(PACKS[2 % PACKS.length]!.id);
+    expect(packFor('2026-11-09').id).toBe(PACKS[PACKS.length - 1]!.id);
   });
   it('two mayors making the same choices see the same cards', () => {
     const run = (seed: string) => { let s = start(seed); const seen: string[] = []; for (let i = 0; i < 20 && s.phase === 'card'; i++) { seen.push(s.current!); s = swipe(s, 'right'); } return seen; };

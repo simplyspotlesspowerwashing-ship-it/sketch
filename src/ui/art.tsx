@@ -13,6 +13,7 @@ export const LEADER: Record<GroupId, string> = { people: 'pam', business: 'chad'
 export const NAMES: Record<string, string> = {
   pam: 'Pam, PTA President', chad: 'Chad, Billionaire', barb: 'Chief Barb', marge: 'Marge, The Bugle', gerald: 'Gerald, Goose Union',
   desk: 'Your desk · your move',
+  reginald: 'Reginald, a tortoise (crossing since 1987)', gary: 'Gary, a vending machine, your opponent',
   cheese: 'The Cheese (since 1987)', clive: 'Clive, a traffic cone, your opponent', kevin: 'Kevin, a pothole', nutkins: 'Mr Nutkins, Squirrel Bank', biscuit: 'Inspector Biscuit',
   mayor: 'You, the Mayor',
   randy: 'Deputy Randy (a raccoon)', bev: 'Bev, 97, oldest resident', brayden: 'Brayden, Head of Innovation', nora: 'Dr Nora, Town Scientist',
@@ -217,6 +218,30 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
     </>
   ),
   biscuit: () => <><rect width="100" height="100" fill="#CFE3EE" /><g transform="translate(2 14) scale(2.05)">{spriteBody('dog')}</g><path d="M54 30 q16 -16 34 -2 l-2 -12 q-15 -10 -30 0z" fill="#27497A" {...S} /><path d="M52 32 q18 -8 38 0 l2 5 q-21 -8 -42 0z" fill={INK} /><path d="M70 14 l3 3 l-1 5 l-5 0 l-1 -5z" fill="#E8C55A" {...S} stroke-width="1.5" /></>,
+  reginald: (m) => (
+    <>
+      <rect width="100" height="100" fill="#CFE8F3" /><rect y="76" width="100" height="24" fill="#6B6257" /><path d="M0 88 h100" stroke="#F2EBDD" stroke-width="3" stroke-dasharray="12 9" />
+      <path d="M18 80 q2 -40 40 -40 q36 0 38 40z" fill="#5FA77A" {...S} />
+      <path d="M30 78 q2 -26 28 -26 q24 0 28 26 M44 54 l6 24 M66 52 l-4 26 M34 66 h52" fill="none" stroke="#3F7A55" stroke-width="2.5" />
+      <path d="M18 76 q-6 -14 -16 -14 q-6 2 -2 10 q6 8 18 8z" fill="#9DBF8A" {...S} />
+      <circle cx="6" cy="64" r="2.4" fill={INK} /><path d={m === 'annoyed' ? 'M2 70 q4 -2 8 0' : 'M2 69 q4 3 8 0'} fill="none" {...S} stroke-width="1.8" />
+      {m === 'annoyed' && <path d="M2 60 l6 2" {...S} stroke-width="2" />}
+      <path d="M28 82 v8 M80 82 v8" stroke={INK} stroke-width="7" stroke-linecap="round" /><path d="M28 82 v8 M80 82 v8" stroke="#9DBF8A" stroke-width="4" stroke-linecap="round" />
+    </>
+  ),
+  gary: (m) => (
+    <>
+      <rect width="100" height="100" fill="#E6DBC6" />
+      <rect x="20" y="6" width="60" height="96" rx="5" fill="#C23B3B" {...S} />
+      <rect x="27" y="14" width="34" height="58" rx="3" fill="#CFE3EE" {...S} stroke-width="2" />
+      {[0, 1, 2].map((r) => [0, 1].map((c) => <rect key={`${r}${c}`} x={31 + c * 15} y={19 + r * 18} width="11" height="12" rx="2" fill={['#E8C55A', '#3F8F5A', '#D9653B', '#7A5C9C', '#3B6FB6', '#E8943A'][r * 2 + c]} stroke={INK} stroke-width="1.5" />))}
+      <rect x="65" y="14" width="10" height="16" rx="2" fill={m === 'annoyed' ? '#C23B3B' : m === 'pleased' ? '#3F8F5A' : '#29231F'} {...S} stroke-width="1.5" />
+      <text x="70" y="25" text-anchor="middle" font-size="6" font-weight="700" fill="#fff" font-family="Fredoka, sans-serif">{m === 'pleased' ? ':)' : m === 'annoyed' ? ':(' : '--'}</text>
+      {[0, 1, 2].map((i) => <circle key={i} cx="70" cy={38 + i * 9} r="3" fill="#E8C55A" {...S} stroke-width="1.2" />)}
+      <rect x="27" y="78" width="46" height="12" rx="2" fill="#29231F" {...S} stroke-width="2" />
+      <rect x="30" y="94" width="40" height="7" fill="#FBF7EE" {...S} stroke-width="1.5" /><text x="50" y="100" text-anchor="middle" font-size="5.2" font-weight="700" fill="#C23B3B" font-family="Fredoka, sans-serif">OUT OF ORDER</text>
+    </>
+  ),
   desk: () => (
     <>
       <rect x="0" y="62" width="100" height="42" fill="#8A5A3C" {...S} />

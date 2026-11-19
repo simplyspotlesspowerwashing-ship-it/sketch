@@ -1,0 +1,12 @@
+name = "bad-town-stats"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+
+[vars]
+# Comma-separated origins allowed to call the service, e.g. "https://badtown.pages.dev". "*" allows any.
+ALLOWED_ORIGIN = "*"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "bad-town-stats"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"

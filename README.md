@@ -40,8 +40,25 @@ CONTENT_GUIDE.md  how to write cards and stories
 - First visit: a short opening, ending with the oath (your mayor's name, what the townsfolk are called, who voted for you).
 - The next day opens at local midnight.
 
-## Before launch
+## Weeks
 
-- **Crowd numbers are simulated** (`node sim/crowd.ts` writes `week1.crowd.json`; the game labels them "preview"). Real numbers need a small stats service (the brief suggests a Cloudflare Worker with D1). That is a network call and has not been added.
-- While the crowd data is simulated, the day-end panel shows a "Testing: skip to the next day" link. It disappears when real data replaces the simulated file.
-- Only week 1 exists. Each new week needs its own pack.
+There are two week packs (`src/content/packs/week1.json`, `week2.json`). Week 1 runs the week of `LAUNCH_MONDAY` (`src/content/index.ts`), week 2 the next, then they repeat. Each pack has six main stories (one a day, five or six cards deep), six catastrophes, six laws, six sneak moments, a pool of side stories and a Sunday election with its own opponent (week 1: Clive, a traffic cone; week 2: Gary, a vending machine). Add a pack by writing `weekN.json`, running `PACK=weekN node sim/crowd.ts`, and listing it in `PACKS`.
+
+## Launch
+
+```bash
+npm install
+npm run check                     # both packs valid, types, tests
+PACK=week1 npm run sim            # balance report (repeat with PACK=week2)
+npm run crowd                     # regenerate simulated crowd shares for both packs
+```
+
+1. **Stats service** (optional but recommended): deploy `worker/` (see `worker/README.md`). It gives you a URL.
+2. **Set the launch Monday** in `src/content/index.ts` (`LAUNCH_MONDAY`) to the Monday you go live.
+3. **Build:** `VITE_STATS_URL=<worker url> npm run build`. Without the variable you get a preview build with testing shortcuts.
+4. **Host `dist/`** on any static host. On Cloudflare Pages: build command `npm run build`, output `dist`, and the environment variable `VITE_STATS_URL`. `public/_headers` sets caching and security headers there.
+5. **Share preview image:** `og:image` in `index.html` is relative (`/og.png`). Some sites need a full URL: change it to `https://<your domain>/og.png` once you know the domain.
+
+What players' devices store: one save in `localStorage` (their progress, names and scrapbook). Nothing else. The game loads nothing from third parties: fonts and art are bundled.
+
+`python3 sim/bundle.py` (after a build) writes `dist/single.html`, one self-contained file for sharing a preview.
