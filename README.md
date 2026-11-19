@@ -8,12 +8,13 @@ npm run dev         # play locally
 npm test            # engine tests (Vitest)
 npm run validate    # schema and story-integrity check of the week pack
 npm run sim         # 5,000 terms per bot -> reports/balance.md
-npm run build && npx vite preview --port 4173 &
+npm run build:preview && npx vite preview --port 4173 &   # smoke test needs the preview build's skip links
 node e2e/smoke.cjs /tmp/shots 1 390     # browser playthrough (MOTION=1 to keep animations on) to election night (dir, day offset, width)
-python3 sim/bundle.py                   # one self-contained dist/single.html
+npm run bundle                          # preview build + one self-contained dist/single.html
+npm run scores                          # day-score distribution by play style
 ```
 
-Node 22.18+ is required: the simulator runs the TypeScript sources directly. Triple-tap the title for the dev panel.
+Node 22.18+ is required: the simulator runs the TypeScript sources directly. Triple-tap the title for the dev panel (dev and preview builds only).
 
 ## Layout
 
@@ -55,10 +56,10 @@ npm run crowd                     # regenerate simulated crowd shares for both p
 
 1. **Stats service** (optional but recommended): deploy `worker/` (see `worker/README.md`). It gives you a URL.
 2. **Set the launch Monday** in `src/content/index.ts` (`LAUNCH_MONDAY`) to the Monday you go live.
-3. **Build:** `VITE_STATS_URL=<worker url> npm run build`. Without the variable you get a preview build with testing shortcuts.
+3. **Build:** `VITE_STATS_URL=<worker url> npm run build`. Without the stats URL the game still works; the "% of mayors" figures are then simulated estimates and are labelled "estimate". Testing shortcuts (skip a day, dev panel) only exist in `npm run dev` and `npm run build:preview`, never in `npm run build`.
 4. **Host `dist/`** on any static host. On Cloudflare Pages: build command `npm run build`, output `dist`, and the environment variable `VITE_STATS_URL`. `public/_headers` sets caching and security headers there.
 5. **Share preview image:** `og:image` in `index.html` is relative (`/og.png`). Some sites need a full URL: change it to `https://<your domain>/og.png` once you know the domain.
 
 What players' devices store: one save in `localStorage` (their progress, names and scrapbook). Nothing else. The game loads nothing from third parties: fonts and art are bundled.
 
-`python3 sim/bundle.py` (after a build) writes `dist/single.html`, one self-contained file for sharing a preview.
+`npm run bundle` makes a preview build and writes `dist/single.html`, one self-contained file for sharing a preview.

@@ -33,6 +33,10 @@ Pressure cards (`repeat: true` with `requires.min` / `max`) cut in when a meter 
 
 ## The cast
 
-The funniest cards belong to the oddballs: Deputy Randy (a raccoon, ex-mayor, coat full of associates), Gerald (Goose Union), Mr Whiskers Esq. (cat, lawyer, also the judge), Kevin (a pothole; says nothing), the Cheese (hums), Clive (a traffic cone; your opponent; says nothing), Mr Nutkins (squirrel banker), Inspector Biscuit (a dog who outranks Barb), Bev (97, scooter). The humans mostly report what the oddballs have done: Doug (treasurer, cries), Barb (police), Pam (PTA), Marge (the Bugle), Chad (billionaire), Linda (librarian), Steve (weather), Timmy (8), Dr Nora, Sal, Coach Dunk, Brayden, Marcel.
+The funniest cards belong to the oddballs: Deputy Randy (a raccoon, ex-mayor, coat full of associates), Gerald (Goose Union), Mr Whiskers Esq. (cat, lawyer, also the judge), Kevin (a pothole; says nothing), the Cheese (hums), Clive (a traffic cone; your opponent; says nothing), Mr Nutkins (squirrel banker), Inspector Biscuit (a dog who outranks Barb), Bev (97, scooter), Councillor Pebbles (a goat; eats motions), Mr Flaps (pelican postmaster; the post is in his beak), Wendy (a ghost; wants a pension), Big Carl (lifeguard; there is no pool). The humans mostly report what the oddballs have done: Doug (treasurer, cries), Barb (police), Pam (PTA), Marge (the Bugle), Chad (billionaire), Linda (librarian), Steve (weather), Timmy (8), Dr Nora, Sal, Coach Dunk, Brayden, Marcel.
+
+A new character needs three things in `src/ui/art.tsx`: a portrait in `CAST`, a name in `NAMES`, and a one-line introduction in `BIOS` (100 characters max). The introduction shows on the card the first time a player meets them, once ever. `tests/cast.test.ts` fails if anyone in a pack is missing any of the three.
+
+Each week, the four newest oddballs debut on pinned cards (`day: 1-5, slot: 9`), after the day's main story and the law, so every player meets them.
 
 Cards can say `{mayor}` and `{folk}` for the player's names.

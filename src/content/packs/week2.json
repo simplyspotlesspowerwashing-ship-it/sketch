@@ -3573,6 +3573,284 @@
      "reaction": "Randy's opened it anyway. In the coat. Admission: one crisp. It's very small. It's very popular."
     }
    }
+  },
+  {
+   "id": "wpb1",
+   "who": "pebbles",
+   "story": "goat2",
+   "text": "(Councillor Pebbles has tabled a motion. It's a turnip. She's put it on the table. She's staring at you.) Second the turnip?",
+   "options": {
+    "right": {
+     "label": "Yes. I second it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The turnip passed. It went to committee. Pebbles ate the committee.",
+     "then": [
+      [
+       "wpb2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. That's a turnip.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Pebbles is filibustering. Six hours of bleating. Nobody can leave. Bev's asleep.",
+     "then": [
+      [
+       "wpb2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 9
+  },
+  {
+   "id": "wpb2",
+   "who": "marge",
+   "story": "goat2",
+   "text": "Mayor, Pebbles has gone viral. #GoatVotes is trending. A lawnmower company wants to sponsor her. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Get that sponsor.",
+     "effects": {
+      "business": 10,
+      "press": 5
+     },
+     "reaction": "In the advert, she eats the lawnmower. Sales are up 400%. Nobody understands why."
+    },
+    "left": {
+     "label": "No. She's a councillor.",
+     "effects": {
+      "press": -5,
+      "law": 5
+     },
+     "reaction": "She's furious. She ate the offer letter. And the envelope. And Mr Flaps's hat."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wpf1",
+   "who": "flaps",
+   "story": "pelican2",
+   "text": "Mr Flaps. It's Thank-You Card Day. I've swallowed every card in town. For safety. Shall I deliver them now?",
+   "options": {
+    "right": {
+     "label": "Yes. Deliver them.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "Delivered. By coughing. On doorsteps. Wetly. People were still very touched.",
+     "then": [
+      [
+       "wpf2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Keep them safe.",
+     "effects": {
+      "people": -5,
+      "law": 5
+     },
+     "reaction": "He's holding 9,000 cards. He's sitting on the post office roof like a large egg.",
+     "then": [
+      [
+       "wpf2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 2,
+   "slot": 9
+  },
+  {
+   "id": "wpf2",
+   "who": "flaps",
+   "story": "pelican2",
+   "text": "Mr Flaps. My cousin's visiting. Mrs Flaps. Also a pelican. Twice the beak. She'd like a job. Hire her?",
+   "options": {
+    "right": {
+     "label": "Yes. Two Flaps.",
+     "effects": {
+      "business": 5,
+      "treasury": -5
+     },
+     "reaction": "Twice as fast. Twice as damp. They argue over every parcel. It's always in both of them."
+    },
+    "left": {
+     "label": "No. One Flaps only.",
+     "effects": {
+      "people": -5,
+      "treasury": 5
+     },
+     "reaction": "Mrs Flaps opened a rival post office. Faster. Wetter. Mr Flaps won't discuss it."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wwn1",
+   "who": "wendy",
+   "story": "wendy2",
+   "text": "Wooo. Wendy here. A new ghost moved in. Derek. He's not a real ghost. He's a man in a sheet. Evict him?",
+   "options": {
+    "right": {
+     "label": "Yes. Evict Derek.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Derek's gone. He took his sheet. He just wanted friends.",
+     "then": [
+      [
+       "wwn2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Derek stays.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Derek's thrilled. He says 'boo', then apologises. Everyone loves Derek.",
+     "then": [
+      [
+       "wwn2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 3,
+   "slot": 9
+  },
+  {
+   "id": "wwn2",
+   "who": "barb",
+   "story": "wendy2",
+   "text": "Mayor. Wendy's started ghost tours. She charges double. Very spooky. Also completely untaxed. Tax the ghost?",
+   "options": {
+    "right": {
+     "label": "Yes. Tax the ghost.",
+     "effects": {
+      "treasury": 10,
+      "people": -5
+     },
+     "reaction": "She paid in coins from 1890. Doug had them valued. They're worth a fortune. Doug screamed."
+    },
+    "left": {
+     "label": "No. Let her earn.",
+     "effects": {
+      "business": 10,
+      "treasury": -5
+     },
+     "reaction": "Sold out every night. Tourists leave very scared and very full of cake."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wcl1",
+   "who": "carl",
+   "story": "carl2",
+   "text": "Big Carl. It's raining. Every puddle in town is a danger. I need twelve more lifeguards. With whistles. Okay?",
+   "options": {
+    "right": {
+     "label": "Yes. Twelve more Carls.",
+     "effects": {
+      "law": 5,
+      "treasury": -10
+     },
+     "reaction": "Twelve lifeguards whistling at puddles. Nobody's drowned. Nobody can hear anything.",
+     "then": [
+      [
+       "wcl2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. You're enough.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's guarding every puddle himself. Running. In flippers. He's surprisingly fast.",
+     "then": [
+      [
+       "wcl2",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 4,
+   "slot": 9
+  },
+  {
+   "id": "wcl2",
+   "who": "steve",
+   "story": "carl2",
+   "text": "Stormy Steve. Big Carl wants me to forecast puddles. Nobody can do that. He's blowing his whistle at me. Make him stop?",
+   "options": {
+    "right": {
+     "label": "Yes. Whistle down.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Whistle confiscated. Carl just points at puddles now. Meaningfully."
+    },
+    "left": {
+     "label": "No. Forecast puddles.",
+     "effects": {
+      "press": 10,
+      "business": -5
+     },
+     "reaction": "Steve forecasts puddles. He's always wrong. Carl guards the wrong ones. Somehow it works."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wkv1",
+   "who": "kevin",
+   "story": "kevin3",
+   "text": "(Kevin the pothole is up for Landmark of the Year. Rival nominee: Reginald the tortoise, still crossing the road.) Back Kevin?",
+   "options": {
+    "right": {
+     "label": "Yes. Kevin!",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Kevin won. Reginald fell into him on the way to the ceremony. They're friends now. Sort of."
+    },
+    "left": {
+     "label": "No. Back Reginald.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "Reginald won. He's still crossing over to collect it. Kevin is sulking. Deeper."
+    }
+   },
+   "day": 5,
+   "slot": 9
   }
  ],
  "campaign": [

@@ -7,9 +7,9 @@ import { MAX_CARD, cardPoints, dayScore, gradeOf, tierOf } from '../engine/score
 import type { Crowd } from '../engine/score.ts';
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
-import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, Portrait, Town } from './art.tsx';
+import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, BIOS, NAMES, Portrait, Town } from './art.tsx';
 import type { Mood, TownView } from './art.tsx';
-import { DAY_NAMES, STATS_ENABLED, calendar, fetchCrowd, loadSave, sendVote, setMuted, sfx, writeSave } from './platform.ts';
+import { DAY_NAMES, calendar, fetchCrowd, loadSave, sendVote, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
 
 /** Preview crowd data: simulated until real players exist; always labelled as such. */
@@ -22,7 +22,8 @@ const useWeek = (weekId: string) => { const p = packFor(weekId); if (p !== pack)
 /** True where the share shown for a card is still simulated. */
 const isPreview = (cardId: string) => !live[cardId];
 /** No stats service configured: this is a preview build, with testing shortcuts. */
-const PREVIEW = !STATS_ENABLED;
+/** Testing shortcuts (skip a day, dev panel): only in `npm run dev` or a build made with VITE_PREVIEW=1. */
+const PREVIEW = import.meta.env.DEV || import.meta.env.VITE_PREVIEW === '1';
 /** Card text can say {mayor} and {folk}; filled from the player's names. */
 const who = { mayor: 'Mayor', folk: 'Bad Towners' };
 const fill = (t: string) => t.replaceAll('{mayor}', who.mayor).replaceAll('{folk}', who.folk);
@@ -140,7 +141,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
         <div class={`result-score g-${grade.id}`}>
           {r.recalled ? <b class="rv-recalled">RECALLED</b> : <><span class="pts">+{pts}<small>/{MAX_CARD}</small></span><span class="grade">{grade.name}</span><span class="why">{pts >= 9 ? 'Everyone is calm.' : pts >= 7 ? 'Mostly calm.' : pts >= 5 ? 'Somebody is getting twitchy.' : 'The town is on edge.'}</span></>}
         </div>
-        {r.pct !== undefined && !r.recalled && <p class="result-crowd"><b>{r.pct}%</b> of mayors did the same{isPreview(r.card.id) && <span class="tag">preview</span>}</p>}
+        {r.pct !== undefined && !r.recalled && <p class="result-crowd"><b>{r.pct}%</b> of mayors did the same{isPreview(r.card.id) && <span class="tag">estimate</span>}</p>}
       </div>
       <div class="choices n1">
         <button class="edge-chip right next" autoFocus onClick={onDone}><b>→</b><span>{r.recalled ? 'Oh no' : 'Next'}</span></button>
@@ -150,7 +151,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
 }
 
 /** One tense moment a day: hold to wind up, let go while they're not looking. */
-function SneakCard({ card, onResult }: { card: Card; onResult: (d: Dir) => void }) {
+function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) => void; meet?: string }) {
   const st = useRef({ t: 0, looking: false, warn: false, next: 1.4, charge: 0, holding: false, heldFull: 0, done: false, idle: 0 });
   const [, setF] = useState(0);
   const finish = (d: Dir) => { const s = st.current; if (s.done) return; s.done = true; sfx(d === 'right' ? 'stamp' : 'lose'); setTimeout(() => onResult(d), 600); };
@@ -180,6 +181,7 @@ function SneakCard({ card, onResult }: { card: Card; onResult: (d: Dir) => void 
       <div class={`card sneak ${s.looking ? 'looking' : s.warn ? 'warn' : 'away'} ${s.done ? 'over' : ''}`}>
         <span class="sneak-tag">{res ?? (s.looking ? 'WATCHING YOU' : s.warn ? 'TURNING…' : 'NOT LOOKING')}</span>
         <div class="card-who"><span class="sneak-face"><Portrait who={card.who} size={110} mood={s.looking ? 'annoyed' : 'neutral'} /></span><span>{NAMES[card.who] ?? card.who}</span></div>
+        {meet && <Meet bio={meet} />}
         <p class="card-text">{fill(card.text)}</p>
         <span class="sneak-charge"><i style={{ width: `${s.charge * 100}%` }} /></span>
       </div>
@@ -190,11 +192,14 @@ function SneakCard({ card, onResult }: { card: Card; onResult: (d: Dir) => void 
 }
 
 // ---------- the swipe card ----------
+/** First time a character turns up: who they are, once. */
+const Meet = ({ bio }: { bio: string }) => <p class="meet"><b>New face</b>{bio}</p>;
+
 const THRESH = 90;
 /** Every card is a yes or a no: right approves, left rejects. */
 function dirOf(x: number, _y: number): Dir { return x > 0 ? 'right' : 'left'; }
 
-function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview: (d: Dir | null) => void; onSwipe: (d: Dir) => void; locked: boolean }) {
+function SwipeCard({ card, onPreview, onSwipe, locked, meet }: { card: Card; onPreview: (d: Dir | null) => void; onSwipe: (d: Dir) => void; locked: boolean; meet?: string }) {
   const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
   const [leaving, setLeaving] = useState<Dir | null>(null);
   const [stamped, setStamped] = useState<Dir | null>(null);
@@ -227,6 +232,7 @@ function SwipeCard({ card, onPreview, onSwipe, locked }: { card: Card; onPreview
         onPointerUp={() => { const d = drag; start.current = null; setDrag(null); if (d && Math.abs(d.x) > THRESH) { const dir = dirOf(d.x, d.y); if (card.options[dir]) { commit(dir); return; } } onPreview(null); }}
         onPointerCancel={() => { start.current = null; setDrag(null); onPreview(null); }}>
         <div class="card-who"><Portrait who={card.who} size={110} mood={valid ? 'annoyed' : 'neutral'} /><span>{NAMES[card.who] ?? card.who}</span></div>
+        {meet && <Meet bio={meet} />}
         <p class="card-text">{fill(card.text)}</p>
         {valid && !stamped && <div class={`choice-banner ${valid}`}>{fill(card.options[valid]!.label)}</div>}
         {stamped && (
@@ -499,7 +505,7 @@ export function App() {
     const card = findCard(pack, s.current!);
     const next = reduce(s, { type: 'swipe', dir }, pack);
     sendVote(pack.id, s.weekId, card.id, dir);
-    persist(next);
+    persist(next, BIOS[card.who] && !save.met.includes(card.who) ? { met: [...save.met, card.who] } : {});
     if (card.who === 'gerald') sfx('honk');
     if (next.phase === 'recalled') sfx('lose');
     if (!isSunday) setReveal({ key: Date.now(), card, dir, before: s.meters, after: next.meters, pct: crowd[card.id]?.[dir], recalled: next.phase === 'recalled' });
@@ -520,6 +526,7 @@ export function App() {
   who.mayor = s.profile?.mayor ?? save.lastProfile?.mayor ?? 'Mayor';
   who.folk = s.profile?.folk ?? save.lastProfile?.folk ?? 'Bad Towners';
   const card = s.phase === 'card' && s.current ? findCard(pack, s.current) : null;
+  const meet = card && BIOS[card.who] && !save.met.includes(card.who) ? BIOS[card.who] : undefined;
   const today = dayScore(s, s.day);
   const choice = card && preview ? card.options[preview] ?? null : null;
   const dayName = DAY_NAMES[s.day - 1]!;
@@ -544,7 +551,7 @@ export function App() {
         <main class="main">
           <Meters s={s} preview={choice} />
           {reveal && <ImpactReveal key={reveal.key} r={reveal} onDone={() => setReveal(null)} />}
-          {card && !showIntro && !needSetup && !reveal && (card.sneak ? <SneakCard key={`${card.id}-${s.count}`} card={card} onResult={swipe} /> : <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} onPreview={setPreview} onSwipe={swipe} />)}
+          {card && !showIntro && !needSetup && !reveal && (card.sneak ? <SneakCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} meet={meet} onPreview={setPreview} onSwipe={swipe} />)}
           {s.phase === 'card' && !isSunday && <div class="progress" aria-label={`Card ${s.cardInDay + 1} of ${TUNING.cardsPerDay} today`}>{Array.from({ length: TUNING.cardsPerDay }, (_, i) => <i key={i} class={i < s.cardInDay ? 'done' : i === s.cardInDay ? 'now' : ''} />)}</div>}
           {s.phase === 'recalled' && !reveal && (
             <div class="panel recall">

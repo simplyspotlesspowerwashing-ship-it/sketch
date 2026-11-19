@@ -961,3 +961,10 @@ h1 span { white-space: nowrap; }
 .btn.primary[disabled] { background: #6B6257; color: var(--paper); opacity: 1; }
 .top-right .icon { flex-shrink: 0; }
 @media (max-width: 380px) { .top h1 { font-size: 13px; } .daychip, .scorechip { padding: 2px 6px; } }
+
+/* first appearance of a character */
+.meet { margin: 2px auto 0; max-width: 34em; text-align: center; font-size: 13px; line-height: 1.3; color: var(--ink); background: #FFF4CF; border: 2px dashed var(--ink); border-radius: 12px; padding: 6px 10px 7px; animation: meet-in .5s .15s cubic-bezier(.2, 1.5, .4, 1) both; }
+.meet b { display: inline-block; margin-right: 6px; padding: 0 7px; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; background: var(--gold); border: 2px solid var(--ink); border-radius: 99px; rotate: -3deg; }
+@keyframes meet-in { from { opacity: 0; transform: translateY(-6px) scale(.96); } }
+@media (prefers-reduced-motion: reduce) { .meet { animation: none; } }
+@media (max-height: 760px) { .meet { font-size: 12px; padding: 4px 8px 5px; } .card:has(.meet) .card-who .portrait { width: 72px !important; height: 72px !important; } .card:has(.meet) .card-text { min-height: 0; } }

@@ -4964,6 +4964,477 @@
    "day": 6,
    "slot": 15,
    "sneak": true
+  },
+  {
+   "id": "pb1",
+   "who": "pebbles",
+   "story": "goat",
+   "text": "(Councillor Pebbles has eaten today's agenda. All of it. She looks very pleased with herself.) Pass whatever she ate?",
+   "options": {
+    "right": {
+     "label": "Yes. Pass it.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Nobody knows what passed. Something about bins. Possibly a tax on bins.",
+     "then": [
+      [
+       "pb2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Reprint it.",
+     "effects": {
+      "law": 5,
+      "treasury": -5
+     },
+     "reaction": "Reprinted. She ate the reprint. And the printer's manual. The printer is scared.",
+     "then": [
+      [
+       "pb2f",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 9
+  },
+  {
+   "id": "pb2",
+   "who": "marge",
+   "story": "goat",
+   "text": "Mayor, the motion the goat ate has passed. The official record says, quote, 'MEH'. Lawyers say it's binding. Enforce it?",
+   "options": {
+    "right": {
+     "label": "Yes. MEH is law.",
+     "effects": {
+      "press": 10,
+      "law": -5
+     },
+     "reaction": "Nobody knows what MEH requires. Everyone's doing it anyway. Crime's down. Confusion's up.",
+     "next": [
+      "pb3"
+     ]
+    },
+    "left": {
+     "label": "No. Strike it out.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "Struck. Pebbles bleated through the whole meeting. It's in the minutes. As 'MEH'."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "pb2f",
+   "who": "pebbles",
+   "story": "goat",
+   "text": "(Pebbles has climbed onto the council table. She is standing on your chair. She is not getting down.) Let her chair the meeting?",
+   "options": {
+    "right": {
+     "label": "Yes. Madam Chair.",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "Shortest meeting ever. She ate the minutes. Everyone went home happy.",
+     "next": [
+      "pb3"
+     ]
+    },
+    "left": {
+     "label": "No. Get down.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She got down. Onto your car. It's a convertible now."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "pb3",
+   "who": "pebbles",
+   "story": "goat",
+   "text": "(Pebbles has a rosette. Pebbles has a slogan. It's 'MEH'. She's running for Deputy. Randy is terrified.) Endorse the goat?",
+   "options": {
+    "right": {
+     "label": "Yes. Vote goat.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Randy's smear campaign is one poster. It just says 'GOAT'. It's working on nobody."
+    },
+    "left": {
+     "label": "No. Randy stays.",
+     "effects": {
+      "people": -5,
+      "press": 5
+     },
+     "reaction": "Randy kept his job. He's made you a medal out of a bin lid. You have to wear it."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "pf1",
+   "who": "flaps",
+   "story": "pelican",
+   "text": "Mr Flaps. Postmaster. I have your post. It's in my beak. I'll need to go in for it. Would you like your post?",
+   "options": {
+    "right": {
+     "label": "Yes, my post please",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "He coughed up a tax bill, a postcard and a small fish. The fish is from your mum.",
+     "then": [
+      [
+       "pf2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Keep it in there.",
+     "effects": {
+      "law": -5,
+      "people": 5
+     },
+     "reaction": "He's kept all the town's post. He's very round now. He waddles to work.",
+     "then": [
+      [
+       "pf2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 2,
+   "slot": 9
+  },
+  {
+   "id": "pf2",
+   "who": "doug",
+   "story": "pelican",
+   "text": "Mayor, Mr Flaps delivered the town budget. Slightly chewed. It's about 30% fish now. Do we accept the fish?",
+   "options": {
+    "right": {
+     "label": "Yes. Fish is money.",
+     "effects": {
+      "treasury": 10,
+      "business": -5
+     },
+     "reaction": "The bank takes fish now. Mr Nutkins is livid. Acorns have crashed. Doug's never been richer."
+    },
+    "left": {
+     "label": "No. Reprint it.",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "Reprinted. Mr Flaps is delivering it now. Doug is watching the beak. Nervously."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "pf2b",
+   "who": "marge",
+   "story": "pelican",
+   "text": "Mayor, nobody's had post in three days. Mr Flaps is just a bag with eyes now. Bev's birthday card is in there. Squeeze him?",
+   "options": {
+    "right": {
+     "label": "Yes. Gently squeeze.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Out came 4,000 letters, two parcels and a trombone. Bev got her card. She cried.",
+     "next": [
+      "pf3"
+     ]
+    },
+    "left": {
+     "label": "No. Undignified.",
+     "effects": {
+      "people": -10,
+      "press": 10
+     },
+     "reaction": "Today's Bugle: 'MAYOR REFUSES TO SQUEEZE'. Best-selling issue ever.",
+     "next": [
+      "pf3"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "pf3",
+   "who": "flaps",
+   "story": "pelican",
+   "text": "Mr Flaps. I'd like to expand. Parcels. By beak. I can carry a microwave. I've tried. Approve Beak Express?",
+   "options": {
+    "right": {
+     "label": "Yes. Beak Express.",
+     "effects": {
+      "business": 10,
+      "law": -5
+     },
+     "reaction": "Same-day delivery. Your fridge arrived damp and smelling of mackerel. Five stars."
+    },
+    "left": {
+     "label": "No. Letters only.",
+     "effects": {
+      "business": -5,
+      "people": 5
+     },
+     "reaction": "He's sulking. Your post now arrives one letter a day. Recited from memory."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wn1",
+   "who": "wendy",
+   "story": "wendy",
+   "text": "Wooo. I'm Wendy. I've haunted this town hall since 1890. I'd like a desk. And a pension. And a name badge. Woooo?",
+   "options": {
+    "right": {
+     "label": "Yes. Welcome, Wendy.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "She has a desk. She sits in it. Not at it. In it. HR is having a lovely time.",
+     "then": [
+      [
+       "wn2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Ghosts aren't staff.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She's floated off, offended. The lights are flickering. Passive-aggressively.",
+     "then": [
+      [
+       "wn2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 3,
+   "slot": 9
+  },
+  {
+   "id": "wn2",
+   "who": "wendy",
+   "story": "wendy",
+   "text": "Wooo. Thank you for the desk. I've started a ghost union. There's eleven of us. We'd like Halloween off. Woo?",
+   "options": {
+    "right": {
+     "label": "Yes. Halloween off.",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "A very quiet Halloween. Timmy knocked on every door. Nobody spooky answered. He wants a refund.",
+     "next": [
+      "wn3"
+     ]
+    },
+    "left": {
+     "label": "No. It's peak season.",
+     "effects": {
+      "business": 10,
+      "people": -5
+     },
+     "reaction": "They worked Halloween. Twelve hours of wooing. Tourism is up. So is screaming."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wn2b",
+   "who": "barb",
+   "story": "wendy",
+   "text": "Mayor. Wendy keeps moving your desk at night. It's on the roof. Your chair's in the fountain. Should I arrest a ghost?",
+   "options": {
+    "right": {
+     "label": "Yes. Arrest her.",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "Arrested. She floated out through the cell wall. She left a note: 'Woo.' Barb's framing it."
+    },
+    "left": {
+     "label": "No. Give her a desk.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Wendy has her own desk. Yours is back on the floor. The roof misses it.",
+     "next": [
+      "wn3"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wn3",
+   "who": "wendy",
+   "story": "wendy",
+   "text": "Wooo. I've been here 135 years. I'd like a party. With cake. I can't eat cake. I just like looking at it. Okay?",
+   "options": {
+    "right": {
+     "label": "Yes. Cake for Wendy.",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "A whole cake. Nobody ate it, out of respect. It's still there. Wendy visits it daily."
+    },
+    "left": {
+     "label": "No. Cake's for the living.",
+     "effects": {
+      "people": -5,
+      "treasury": 5
+     },
+     "reaction": "She's haunting the bakery now. The bread rises on its own. Nobody trusts the croissants."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "cl1",
+   "who": "carl",
+   "story": "carl",
+   "text": "Big Carl. Lifeguard. Bad Town has no pool. I've been guarding the car park. Someone nearly fell in a puddle. Can I have a pool?",
+   "options": {
+    "right": {
+     "label": "Yes. Build a pool.",
+     "effects": {
+      "people": 10,
+      "treasury": -10
+     },
+     "reaction": "Building it. Carl's guarding the hole. He's whistled at four diggers. They respect him.",
+     "then": [
+      [
+       "cl2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. No pool.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He's still guarding the car park. In his trunks. In November. He's a lovely blue.",
+     "then": [
+      [
+       "cl2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 4,
+   "slot": 9
+  },
+  {
+   "id": "cl2",
+   "who": "doug",
+   "story": "carl",
+   "text": "Mayor, the pool's finished. It's quite small. It's a bucket. Carl says it'll do. He's in it now. Open it to the public?",
+   "options": {
+    "right": {
+     "label": "Yes. Grand opening.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "One swimmer at a time. The queue goes round the block. Carl has never been happier."
+    },
+    "left": {
+     "label": "No. It's Carl's now.",
+     "effects": {
+      "people": -5,
+      "business": 5
+     },
+     "reaction": "Carl lives in the bucket now. He's built a tiny deckchair. He waves at everyone."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "cl2b",
+   "who": "carl",
+   "story": "carl",
+   "text": "Big Carl. I found some water. The fountain. I'm guarding it. Someone threw a coin in. I saved it. Can I keep guarding?",
+   "options": {
+    "right": {
+     "label": "Yes. Guard the fountain.",
+     "effects": {
+      "law": 5,
+      "people": 5
+     },
+     "reaction": "400 coins saved this week. He gave them all to Doug. Doug cried."
+    },
+    "left": {
+     "label": "No. Let people wish.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "People wish again. Mostly for a pool. Carl wishes hardest. With his whistle."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "kv2",
+   "who": "kevin",
+   "story": "kevin2",
+   "text": "(Kevin the pothole has a fan club. They want to throw him a birthday party. Inside him.) Allow the party?",
+   "options": {
+    "right": {
+     "label": "Yes. Party in Kevin.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Thirty people in a pothole. Cake. Balloons. A small band. Kevin has never looked deeper."
+    },
+    "left": {
+     "label": "No. Fill him in.",
+     "effects": {
+      "law": 5,
+      "people": -10
+     },
+     "reaction": "You filled him in. There's a candlelit vigil. Someone has started digging Kevin II."
+    }
+   },
+   "day": 5,
+   "slot": 9
   }
  ],
  "campaign": [

@@ -16,8 +16,42 @@ export const NAMES: Record<string, string> = {
   reginald: 'Reginald, a tortoise (crossing since 1987)', gary: 'Gary, a vending machine, your opponent',
   cheese: 'The Cheese (since 1987)', clive: 'Clive, a traffic cone, your opponent', kevin: 'Kevin, a pothole', nutkins: 'Mr Nutkins, Squirrel Bank', biscuit: 'Inspector Biscuit',
   mayor: 'You, the Mayor',
+  pebbles: 'Councillor Pebbles (a goat)', flaps: 'Mr Flaps, Postmaster (a pelican)', wendy: 'Wendy, a ghost (union rep)', carl: 'Big Carl, Lifeguard',
   randy: 'Deputy Randy (a raccoon)', bev: 'Bev, 97, oldest resident', brayden: 'Brayden, Head of Innovation', nora: 'Dr Nora, Town Scientist',
   whiskers: 'Mr Whiskers, Esq. (a cat)', marcel: 'Marcel, Town Mime', sal: "Sal, Sal's Fine Dining & Tyres", coach: 'Coach Dunk', sheila: 'Psychic Sheila', linda: 'Linda, Librarian', doug: 'Doug, Treasurer', steve: 'Stormy Steve', timmy: 'Timmy, age 8', stranger: 'The Stranger',
+};
+/** Shown once, the first time a player meets each character. */
+export const BIOS: Record<string, string> = {
+  randy: 'A raccoon. Used to be mayor. Now your deputy, because he ate the paperwork that would fire him.',
+  pam: 'Runs the PTA like a small, angry army. Has a clipboard for her clipboards.',
+  chad: "Billionaire. Bought a yacht for a town with no sea. Calls everyone 'champ'.",
+  barb: 'Chief of Police. Has arrested a goose, a cloud and, once, herself. Mostly fair.',
+  marge: "Runs The Bugle, Bad Town's only newspaper. Prints whatever she overhears.",
+  gerald: 'Head of the Goose Union. 61 members. Has never once been reasonable.',
+  doug: 'Treasurer. Keeps the town money in a biscuit tin. Cries at spreadsheets.',
+  bev: "97. Bad Town's oldest resident. Remembers everything, including things that never happened.",
+  brayden: 'Head of Innovation. Put an app on the bins. The bins did not ask for this.',
+  nora: 'Town Scientist. Her experiments mostly work. Mostly.',
+  whiskers: 'A cat. Also a lawyer. Bills by the nap.',
+  marcel: 'Town Mime. Stuck in an invisible box since 2014. Will not discuss it.',
+  sal: "Owns Sal's Fine Dining & Tyres. One kitchen. Don't ask.",
+  coach: 'Coaches every team in town, including chess. Loudly.',
+  linda: 'Librarian. Sees everything. Has shushed the weather.',
+  steve: 'Weatherman. Wrong every single time, which is weirdly useful.',
+  timmy: 'Age 8. Has written to you 41 times. Wants a volcano.',
+  reginald: 'A tortoise. Has been crossing Main Street since 1987. Nearly there.',
+  gary: 'A vending machine. Out of order. Running against you. Polling well.',
+  cheese: 'A wheel of cheese kept in the town hall since 1987. Nobody knows why. It is getting stronger.',
+  clive: "A traffic cone. Running against you for mayor. Hasn't said a word. Leading in the polls.",
+  kevin: 'A pothole on Main Street. Has a name, a fan club and a birthday.',
+  nutkins: 'A squirrel. Runs the Squirrel Bank. Pays interest in acorns. Ruthless.',
+  biscuit: 'A police dog. Promoted to Inspector by accident. Zero cases solved. Very good boy.',
+  pebbles: 'A goat. Elected to the council by accident in 2019. Has eaten three motions and a chair.',
+  flaps: 'A pelican. Runs the post office. Keeps the post in his beak. Most of it comes back out.',
+  wendy: 'A ghost. Has haunted the town hall since 1890. Now wants a desk and a pension.',
+  carl: 'Lifeguard. Bad Town has no pool. On duty anyway, twelve hours a day.',
+  sheila: 'Psychic. Knew you would read this.',
+  stranger: 'Nobody knows. That is the point.',
 };
 export type Mood = 'neutral' | 'pleased' | 'annoyed';
 
@@ -242,6 +276,56 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
       <rect x="30" y="94" width="40" height="7" fill="#FBF7EE" {...S} stroke-width="1.5" /><text x="50" y="100" text-anchor="middle" font-size="5.2" font-weight="700" fill="#C23B3B" font-family="Fredoka, sans-serif">OUT OF ORDER</text>
     </>
   ),
+  pebbles: (m) => (
+    <>
+      <rect width="100" height="100" fill="#DDEBC9" />
+      <path d="M16 104 q2 -28 34 -28 q32 0 34 28z" fill="#F4EFE6" {...S} />
+      <g transform="translate(70 88)"><path d="M-4 6 l-4 12 l5 -3 l2 5 l2 -13z M4 6 l4 12 l-5 -3 l-2 5 l-2 -13z" fill="#3B6FB6" {...S} stroke-width="1.5" /><circle r="8" fill="#3B6FB6" {...S} stroke-width="2" /><circle r="3.5" fill="#E8C55A" {...S} stroke-width="1.5" /></g>
+      <path d="M38 24 q-8 -18 -24 -14 q12 3 16 18z M62 24 q8 -18 24 -14 q-12 3 -16 18z" fill="#B8B1A4" {...S} />
+      <path d="M33 36 q-16 -4 -24 4 q10 8 24 3z M67 36 q16 -4 24 4 q-10 8 -24 3z" fill="#F4EFE6" {...S} />
+      <path d="M45 66 l5 16 l5 -16z" fill="#E2D8C6" {...S} stroke-width="2" />
+      <path d="M33 26 q17 -12 34 0 q5 20 -4 40 q-13 8 -26 0 q-9 -20 -4 -40z" fill="#F4EFE6" {...S} />
+      <ellipse cx="42" cy="39" rx="5.5" ry="4.2" fill="#E8C55A" {...S} stroke-width="1.6" /><ellipse cx="58" cy="39" rx="5.5" ry="4.2" fill="#E8C55A" {...S} stroke-width="1.6" />
+      {m === 'pleased' ? <path d="M38 40 q4 -4 8 0 M54 40 q4 -4 8 0" fill="none" {...S} stroke-width="2" /> : <><rect x="39" y="38" width="6" height="2.4" fill={INK} /><rect x="55" y="38" width="6" height="2.4" fill={INK} /></>}
+      {m === 'annoyed' && <path d="M35 31 l11 3 M65 31 l-11 3" {...S} fill="none" />}
+      <path d="M46 55 l1.5 1.5 M54 55 l-1.5 1.5" {...S} stroke-width="2" />
+      <path d={m === 'pleased' ? 'M44 61 q6 6 12 0' : m === 'annoyed' ? 'M44 64 q6 -5 12 0' : 'M45 62 h10'} fill="none" {...S} stroke-width="2" />
+      {m !== 'pleased' && <path d="M54 61 l11 3 l-2 7 l-11 -3z" fill="#fff" {...S} stroke-width="1.5" />}
+    </>
+  ),
+  flaps: (m) => (
+    <>
+      <rect width="100" height="100" fill="#CFE3EE" />
+      <path d="M12 104 q2 -30 36 -30 q34 0 36 30z" fill="#fff" {...S} />
+      <path d="M36 82 q-4 -26 2 -44 l18 0 q4 22 0 44z" fill="#fff" {...S} />
+      <path d="M54 36 q2 32 24 28 q14 -4 14 -24z" fill="#F7CF7A" {...S} />
+      <g transform="rotate(-12 74 50)"><rect x="66" y="44" width="16" height="11" rx="1" fill="#fff" {...S} stroke-width="1.5" /><path d="M66 44 l8 6 l8 -6" fill="none" {...S} stroke-width="1.5" /></g>
+      <ellipse cx="44" cy="30" rx="16" ry="14" fill="#fff" {...S} />
+      <path d="M54 27 l40 11 l-40 3z" fill="#F2B544" {...S} />
+      {m === 'pleased' ? <path d="M39 29 q4 -4 8 0" fill="none" {...S} /> : <circle cx="43" cy="28" r="3" fill={INK} />}
+      {m === 'annoyed' && <path d="M36 21 l11 4" {...S} fill="none" />}
+      <path d="M27 20 q17 -16 34 0 l-2 -9 q-15 -9 -30 0z" fill="#27497A" {...S} /><path d="M50 19 q10 -1 16 3" {...S} fill="none" stroke-width="3.5" /><circle cx="44" cy="12" r="2.6" fill="#E8C55A" {...S} stroke-width="1.2" />
+    </>
+  ),
+  wendy: (m) => (
+    <>
+      <rect width="100" height="100" fill="#4A4266" />
+      <circle cx="82" cy="18" r="7" fill="#F2EBDD" opacity=".85" />
+      <path d="M24 64 q-12 2 -14 -10 M76 64 q12 2 14 -10" fill="none" stroke={INK} stroke-width="10" stroke-linecap="round" /><path d="M24 64 q-12 2 -14 -10 M76 64 q12 2 14 -10" fill="none" stroke="#F7F4FB" stroke-width="5" stroke-linecap="round" />
+      <path d="M22 98 v-46 q0 -40 28 -40 q28 0 28 40 v46 q-4.7 -6 -9.3 0 q-4.7 6 -9.3 0 q-4.7 -6 -9.3 0 q-4.7 6 -9.3 0 q-4.7 -6 -9.3 0 q-4.7 6 -9.3 0z" fill="#F7F4FB" {...S} />
+      {m === 'pleased' ? <path d="M36 42 q5 -6 10 0 M54 42 q5 -6 10 0" fill="none" {...S} stroke-width="3" /> : <><ellipse cx="41" cy="40" rx="4.5" ry="6.5" fill={INK} /><ellipse cx="59" cy="40" rx="4.5" ry="6.5" fill={INK} /></>}
+      {m === 'annoyed' && <path d="M34 30 l12 4 M66 30 l-12 4" {...S} fill="none" />}
+      {m === 'pleased' ? <path d="M42 53 q8 8 16 0z" fill={INK} {...S} /> : m === 'annoyed' ? <path d="M43 58 q7 -6 14 0" fill="none" {...S} /> : <ellipse cx="50" cy="56" rx="4" ry="5.5" fill={INK} />}
+      <path d="M38 66 l12 11 l12 -11" fill="none" stroke="#C23B3B" stroke-width="2.2" />
+      <rect x="39" y="75" width="22" height="12" rx="2" fill="#fff" {...S} stroke-width="1.6" /><text x="50" y="83.6" text-anchor="middle" font-size="5.6" font-weight="700" fill={INK} font-family="Fredoka, sans-serif">WENDY</text>
+    </>
+  ),
+  carl: (m) => (
+    <Bust top="#D9453B" skin="#D9A06F" mood={m}
+      hair={<path d="M26 34 v-16 q0 -4 4 -4 h40 q4 0 4 4 v16z" fill="#E8C55A" {...S} />}
+      over={<><rect x="31" y="38" width="17" height="11" rx="3" fill={INK} /><rect x="52" y="38" width="17" height="11" rx="3" fill={INK} /><path d="M48 42 h4" stroke={INK} stroke-width="2.5" /><path d="M34 40 l5 0" stroke="#fff" stroke-width="1.6" opacity=".6" /><path d="M55 40 l5 0" stroke="#fff" stroke-width="1.6" opacity=".6" /></>}
+      collar={<><path d="M36 76 q14 20 28 0" fill="none" stroke="#fff" stroke-width="2.5" /><rect x="44" y="90" width="13" height="7" rx="3" fill="#C9C3BC" {...S} stroke-width="1.8" /><path d="M68 86 h10 M73 81 v10" stroke="#fff" stroke-width="3.5" /></>} />
+  ),
   desk: () => (
     <>
       <rect x="0" y="62" width="100" height="42" fill="#8A5A3C" {...S} />
@@ -282,6 +366,9 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
 
 /** A character's head-and-shoulders drawing in a 100x100 box, for the full-body puppets. */
 export const drawCast = (who: string, mood: Mood): ComponentChildren => (CAST[who] ?? CAST.doug!)(mood);
+
+/** Characters with a drawn portrait (anyone else falls back to Doug's face). */
+export const DRAWN = (who: string) => who in CAST;
 
 export function Portrait({ who, mood = 'neutral', size = 64, ring }: { who: string; mood?: Mood; size?: number; ring?: string }) {
   const draw = CAST[who] ?? CAST.doug!;
