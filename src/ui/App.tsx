@@ -3,7 +3,7 @@ import { SIMULATED_CROWD, packFor } from '../content/index.ts';
 import { voteParts, voteShare } from '../engine/election.ts';
 import { coverMissedDays, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
-import { dayScore, rarityOf, tierOf } from '../engine/score.ts';
+import { MAX_CARD, cardPoints, dayScore, gradeOf, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
@@ -56,7 +56,7 @@ function Meters({ s, preview }: { s: State; preview: Choice | null }) {
         return (
           <div key={m} class={`meter ${danger ? 'danger' : ''}`} style={{ '--g': METER_COLOR[m] }} role="meter" aria-label={`${METER_NAME[m]} ${v} of 100`} aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
             <MeterIcon m={m} />
-            <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /></span>
+            <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /><CalmZone m={m} /></span>
             {hint ? <i class={`hintdot ${Math.abs(hint) >= 10 ? 'big' : ''}`} aria-label="will change" /> : null}
           </div>
         );
@@ -82,6 +82,9 @@ function CountUp({ to, ms = 650, bare }: { to: number; ms?: number; bare?: boole
   return <>{bare ? '' : v > 0 ? '+' : v < 0 ? '−' : ''}{Math.abs(v)}</>;
 }
 
+/** The band where a meter earns full points (45–55; the treasury: 45 and up). */
+const CalmZone = ({ m }: { m: MeterId }) => { const c = TUNING.score.calm; return <i class="calm" aria-hidden="true" style={{ left: `${50 - c}%`, width: m === 'treasury' ? `${50 + c}%` : `${2 * c}%` }} />; };
+
 function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
   const [w, setW] = useState(reduced() ? to : from);
   useEffect(() => { const t = setTimeout(() => setW(to), 120); return () => clearTimeout(t); }, [to]);
@@ -90,6 +93,7 @@ function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
       <i class="zone low" style={{ width: `${TUNING.low}%` }} />
       {m !== 'treasury' && <i class="zone high" style={{ width: `${100 - TUNING.high}%` }} />}
       <i class="fill" style={{ width: `${w}%` }} />
+      <CalmZone m={m} />
       <i class="ghost" style={{ left: `${from}%` }} />
     </span>
   );
@@ -101,7 +105,8 @@ function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
 function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const ch = r.card.options[r.dir]!;
   const ms = METERS.filter((m) => r.after[m] !== r.before[m]).sort((a, b) => Math.abs(r.after[b] - r.before[b]) - Math.abs(r.after[a] - r.before[a]));
-  const rar = rarityOf(r.pct);
+  const pts = cardPoints(r.after);
+  const grade = gradeOf(pts);
   const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
   const [bars, setBars] = useState(reduced());
   useEffect(() => { const t = setTimeout(() => { setBars(true); sfx(ms.length === 0 ? 'tap' : net >= 0 ? 'win' : 'warn'); }, 380); return () => clearTimeout(t); }, []);
@@ -132,9 +137,10 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
             );
           })}
         </div>
-        <p class={`result-crowd r-${rar.id}`}>
-          {r.recalled ? <b class="rv-recalled">RECALLED</b> : r.pct !== undefined ? <><b>{r.pct}%</b> of mayors did this · {rar.name} <i>+{TUNING.score.perCard + rar.points}</i>{isPreview(r.card.id) && <span class="tag">preview</span>}</> : 'You are the first mayor to try this.'}
-        </p>
+        <div class={`result-score g-${grade.id}`}>
+          {r.recalled ? <b class="rv-recalled">RECALLED</b> : <><span class="pts">+{pts}<small>/{MAX_CARD}</small></span><span class="grade">{grade.name}</span><span class="why">{pts >= 9 ? 'Everyone is calm.' : pts >= 7 ? 'Mostly calm.' : pts >= 5 ? 'Somebody is getting twitchy.' : 'The town is on edge.'}</span></>}
+        </div>
+        {r.pct !== undefined && !r.recalled && <p class="result-crowd"><b>{r.pct}%</b> of mayors did the same{isPreview(r.card.id) && <span class="tag">preview</span>}</p>}
       </div>
       <div class="choices n1">
         <button class="edge-chip right next" autoFocus onClick={onDone}><b>→</b><span>{r.recalled ? 'Oh no' : 'Next'}</span></button>
@@ -258,10 +264,10 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
 
 /** The end of a day: score, the share grid, where the vote stands and a hook for tomorrow. No card-by-card report. */
 function DayReview({ s, onNext, nextLabel, wait, sub }: { s: State; onNext: () => void; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
-  const sc = dayScore(s, s.day, crowd);
+  const sc = dayScore(s, s.day);
   const tier = tierOf(sc.total);
   const rows: string[] = [];
-  for (let i = 0; i < sc.picks.length; i += 5) rows.push(sc.picks.slice(i, i + 5).map((p) => p.rarity.emoji).join(''));
+  for (let i = 0; i < sc.picks.length; i += 5) rows.push(sc.picks.slice(i, i + 5).map((p) => p.grade.emoji).join(''));
   const share = `Mayor of Bad Town · ${DAY_NAMES[s.day - 1]} · ${sc.total} pts · ${tier.name}${sc.recalled ? ' · RECALLED' : ''}\n${rows.join('\n')}`;
   const poll = s.polls[s.polls.length - 1] ?? voteShare(s);
   const prevPoll = s.polls[s.polls.length - 2];
@@ -273,7 +279,7 @@ function DayReview({ s, onNext, nextLabel, wait, sub }: { s: State; onNext: () =
       </div>
       <div class="dayscore">
         <span class="bigscore">{sc.total}<small>pts</small></span>
-        <span><b class="tiername">{tier.name}</b><small>{sc.picks.length} cards, +{sc.rarity} for rare choices{sc.recalled ? `, −${TUNING.score.recall} for the recall` : ''}</small></span>
+        <span><b class="tiername">{tier.name}</b><small>{sc.balance} for keeping the town balanced{sc.bonus ? `, +${sc.bonus} for a steady finish` : ''}{sc.recalled ? `, −${TUNING.score.recall} for the recall` : ''}</small></span>
       </div>
       <pre class="share">{share}</pre>
       {s.tomorrow.length > 0 && <p class="carry"><b>Waiting for you tomorrow:</b> {[...new Set(s.tomorrow.map((id) => pack.headlines[findCard(pack, id).story ?? 'town'] ?? 'Unfinished business'))].join(' · ')}</p>}
@@ -404,7 +410,7 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
       <div class="op-demo"><span class="op-card"><Portrait who="gerald" size={70} mood="annoyed" /><small>The geese would like a pond. In your office.</small></span><span class="op-hand">👆</span></div>
       <h2 class="op-title">20 problems a day. Yes or no.</h2>
       <p>Drag the card right to approve, left to reject (or tap the buttons). You won't see what it does until you've decided. Then you'll definitely see it.</p>
-      <p>Every mayor gets the same problems each day, so afterwards you'll see how many made the same call. Weird choices score more.</p>
+      <p>You score points after every card for keeping every group calm: inside the striped box on each bar. Let anyone get too angry or too happy and the points dry up. Every mayor gets the same problems, so you'll see how many made the same call.</p>
       <p><b>Sunday is the election.</b> You need 50%. Most mayors don't get it.</p>
     </div>,
     <div class="op-slide" key="5">
@@ -514,7 +520,7 @@ export function App() {
   who.mayor = s.profile?.mayor ?? save.lastProfile?.mayor ?? 'Mayor';
   who.folk = s.profile?.folk ?? save.lastProfile?.folk ?? 'Bad Towners';
   const card = s.phase === 'card' && s.current ? findCard(pack, s.current) : null;
-  const today = dayScore(s, s.day, crowd);
+  const today = dayScore(s, s.day);
   const choice = card && preview ? card.options[preview] ?? null : null;
   const dayName = DAY_NAMES[s.day - 1]!;
   const needSetup = !s.profile && s.phase === 'card' && !s.result;

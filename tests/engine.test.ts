@@ -5,7 +5,7 @@ import week1 from '../src/content/packs/week1.json' with { type: 'json' };
 import { voteShare } from '../src/engine/election.ts';
 import { autoplay, coverMissedDays, davePolicy, dayDeck, findCard, legalActions, newTerm, options, reduce } from '../src/engine/engine.ts';
 import { TUNING } from '../src/engine/tuning.ts';
-import { dayScore, rarityOf, tierOf } from '../src/engine/score.ts';
+import { cardPoints, dayScore, meterPoints, steady as townSteady, tierOf } from '../src/engine/score.ts';
 import type { Action, Dir, MeterId, State } from '../src/engine/types.ts';
 
 const start = (seed = 'p1') => newTerm('week1', seed, pack);
@@ -195,24 +195,39 @@ describe('the week', () => {
   });
 });
 
-describe('the daily score', () => {
-  it('10 per card, plus a bonus for choices few mayors made', () => {
-    let s = start(); const ids: string[] = [];
-    for (let i = 0; i < 3; i++) { ids.push(s.current!); s = swipe(s, 'right'); }
-    const sc = dayScore(s, 1, { [ids[0]!]: { right: 3 }, [ids[1]!]: { right: 20 }, [ids[2]!]: { right: 90 } });
-    expect(sc.survived).toBe(30);
-    expect(sc.rarity).toBe(50 + 15 + 0);
-    expect(sc.total).toBe(95);
+describe('the daily score: points for keeping the town balanced', () => {
+  const calm = { people: 50, business: 50, law: 50, press: 50, treasury: 50 };
+  it('each group earns 2 points when calm, 1 when uneasy, 0 in danger', () => {
+    expect(meterPoints('people', 50)).toBe(2); expect(meterPoints('people', 55)).toBe(2); expect(meterPoints('people', 45)).toBe(2);
+    expect(meterPoints('people', 60)).toBe(1); expect(meterPoints('people', 35)).toBe(1); expect(meterPoints('people', 65)).toBe(1);
+    expect(meterPoints('people', 70)).toBe(0); expect(meterPoints('people', 30)).toBe(0); expect(meterPoints('people', 100)).toBe(0);
   });
-  it('a recall costs points but never goes below zero', () => {
-    const s = swipe(withMeters(start(), { people: 4 }), 'left');
-    const sc = dayScore(s, 1, {});
-    expect(sc.recalled).toBe(true);
-    expect(sc.total).toBe(Math.max(0, sc.survived + sc.rarity - TUNING.score.recall));
+  it('a full treasury is never a problem; an empty one is', () => {
+    expect(meterPoints('treasury', 100)).toBe(2); expect(meterPoints('treasury', 45)).toBe(2); expect(meterPoints('treasury', 40)).toBe(1); expect(meterPoints('treasury', 30)).toBe(0);
   });
-  it('tiers and rarity bands cover every score', () => {
-    expect(rarityOf(2).id).toBe('unique'); expect(rarityOf(14).id).toBe('rare'); expect(rarityOf(99).id).toBe('herd'); expect(rarityOf(undefined).id).toBe('common');
-    expect(tierOf(0).name).toBe('Rubber Stamp'); expect(tierOf(10000).name).toBe('One in a Million Mayor');
+  it('a perfectly calm town scores 10 for the card; a lopsided one much less', () => {
+    expect(cardPoints(calm)).toBe(10);
+    expect(cardPoints({ ...calm, people: 90, law: 40 })).toBe(7);
+  });
+  it('rarity no longer matters: two mayors in the same state score the same whatever they chose', () => {
+    const a = swipe(start(), 'right'), b = swipe(start(), 'left');
+    expect(dayScore(a, 1).total).toBe(cardPoints(a.meters));
+    expect(dayScore(b, 1).total).toBe(cardPoints(b.meters));
+  });
+  it('a full, steady day earns the bonus; a recall costs points but never below zero', () => {
+    const s = play(start(), TUNING.cardsPerDay);
+    const sc = dayScore(s, 1);
+    expect(sc.picks).toHaveLength(20);
+    expect(sc.bonus).toBe(townSteady(s.meters) ? TUNING.score.steadyFinish : 0);
+    expect(sc.total).toBe(sc.balance + sc.bonus);
+    const r = swipe(withMeters(start(), { people: 4 }), 'left');
+    const rs = dayScore(r, 1);
+    expect(rs.recalled).toBe(true);
+    expect(rs.bonus).toBe(0);
+    expect(rs.total).toBe(Math.max(0, rs.balance - TUNING.score.recall));
+  });
+  it('day titles cover every score', () => {
+    expect(tierOf(0).name).toBe('Town On Fire'); expect(tierOf(10000).name).toBe('Perfectly Balanced');
   });
 });
 

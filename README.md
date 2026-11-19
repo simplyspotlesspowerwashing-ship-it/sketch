@@ -34,7 +34,7 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **Rabbit holes.** Yes and no lead to different next cards, straight away (`then`), five or six deep in a day's main story. Some consequences come back the next morning (`next`).
 - Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. A recall ends that day; you return next day with every meter at 40 and Sunday's vote takes 8 points. A third recall ends the term.
 - Pressure cards appear when a meter is very low or very high.
-- **Daily score** (`src/engine/score.ts`): 10 per card, plus a bonus for choices few mayors made (under 5% +50, under 15% +30, under 35% +15, under 65% +5), minus 100 for a recall. The day-end panel has a spoiler-free share grid.
+- **Daily score** (`src/engine/score.ts`): points for keeping the town balanced. After every card each of the five meters earns 2 if it is calm (45–55), 1 if uneasy (35–65), 0 if in danger; the treasury only counts if it runs low. Up to 10 per card, 200 a day, +30 for ending a full day with nobody in danger, −100 for a recall. The crowd % (how many mayors made the same call) is shown but not scored. The day-end panel has a spoiler-free share grid (🟩 steady, 🟨 fine, 🟧 wobbly, 🟥 on fire).
 - **Sunday:** vote share = 21 + weighted distance of each meter from 50 + 3 per weekly goal + the election card − 8 per recall. 50 wins. Most mayors lose (`reports/balance.md`).
 - You can start any day: Deputy Randy plays the days you missed and hands back a town with every meter between 35 and 65.
 - First visit: a short opening, ending with the oath (your mayor's name, what the townsfolk are called, who voted for you).

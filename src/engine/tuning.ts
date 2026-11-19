@@ -3,7 +3,7 @@ export const TUNING = {
   start: 50,
   cardsPerDay: 20,
   pressureGap: 6, // at least this many cards between pressure cards
-  score: { perCard: 10, recall: 100 },
+  score: { calm: 5, uneasy: 15, steadyFinish: 30, recall: 100 }, // balance scoring: distance from 50 for 2 points, for 1 point; bonus for ending the day steady
   low: 25, // warning zone (UI) below this
   high: 75, // warning zone (UI) above this
   recall: { reset: 40, election: -8, max: 2 },
