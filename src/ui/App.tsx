@@ -3,7 +3,7 @@ import { SIMULATED_CROWD, packFor } from '../content/index.ts';
 import { voteParts, voteShare } from '../engine/election.ts';
 import { coverMissedDays, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
-import { CELL, MAX_CARD, PARTY_ICON, cardPoints, dayScore, gradeOf, partyRows, tierOf } from '../engine/score.ts';
+import { MAX_CARD, cardPoints, dayScore, gradeOf, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
@@ -282,9 +282,9 @@ function Goals({ s }: { s: State }) {
 function DayReview({ s, onNext, nextLabel, wait, sub }: { s: State; onNext: () => void; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
   const sc = dayScore(s, s.day);
   const tier = tierOf(sc.total);
-  const rows: string[] = [];
-  const parties = partyRows(s, s.day);
-  for (const m of METERS) rows.push(`${PARTY_ICON[m]} ${parties[m].map(CELL).join('')}`);
+  const today = s.swipes.filter((w) => w.day === s.day);
+  const end = today[today.length - 1]?.after ?? s.meters;
+  const rows = METERS.map((m) => `${METER_NAME[m]}: ${end[m]}`);
   const share = `Mayor of Bad Town · ${DAY_NAMES[s.day - 1]} · ${sc.total} pts · ${tier.name}${sc.recalled ? ' · RECALLED' : ''}\n${rows.join('\n')}`;
   const poll = s.polls[s.polls.length - 1] ?? voteShare(s);
   const prevPoll = s.polls[s.polls.length - 2];
@@ -298,7 +298,7 @@ function DayReview({ s, onNext, nextLabel, wait, sub }: { s: State; onNext: () =
         <span class="bigscore">{sc.total}<small>pts</small></span>
         <span><b class="tiername">{tier.name}</b><small>{sc.balance} for keeping the town balanced{sc.bonus ? `, +${sc.bonus} for a steady finish` : ''}{sc.recalled ? `, −${TUNING.score.recall} for the recall` : ''}</small></span>
       </div>
-      <pre class="share">{share}</pre>
+      <ul class="levels" aria-label="Where everyone ended the day">{METERS.map((m, i) => <li key={m}>{rows[i]}</li>)}</ul>
       <Goals s={s} />
       {s.tomorrow.length > 0 && <p class="carry"><b>Waiting for you tomorrow:</b> {[...new Set(s.tomorrow.map((id) => pack.headlines[findCard(pack, id).story ?? 'town'] ?? 'Unfinished business'))].join(' · ')}</p>}
       {sub}

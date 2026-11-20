@@ -986,3 +986,7 @@ h1 span { white-space: nowrap; }
 @media (max-height: 700px) { .card:has(.meet) .card-who .portrait { width: 84px !important; height: 84px !important; } }
 .top h1 .pre { font-style: normal; }
 @media (max-width: 380px) { .top h1 .pre { display: none; } }
+.levels { list-style: none; margin: 6px 0; padding: 0; font-size: 15px; line-height: 1.5; text-align: left; }
+@media (max-width: 500px) { .top h1 { font-size: 14px; } .top h1 span { padding: 1px 6px 2px; } .top-right { gap: 4px; } .top .icon { width: 30px; height: 30px; } .daychip, .scorechip, .goalchip { font-size: 11px; padding: 2px 6px; } }
+@media (max-width: 400px) { .top h1 .pre { display: none; } }
+@media (max-width: 380px) { .top h1 { font-size: 13px; } .top-right { gap: 3px; } .top .icon { width: 28px; height: 28px; } .daychip, .scorechip, .goalchip { font-size: 10.5px; padding: 2px 5px; } }
