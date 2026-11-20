@@ -27,7 +27,8 @@ export interface Choice {
   then?: [string, number][];
   /** Cards this choice brings back tomorrow morning: yesterday's decisions carry over. */
   next?: string[];
-  vote?: number; // Sunday campaign card only: added to the vote share
+  /** A rare ending: this choice ends the day on the spot (you're out) with this Scrapbook ending, e.g. 'rare:cone'. */
+  ending?: string;
 }
 
 export interface Card {
@@ -41,6 +42,8 @@ export interface Card {
   slot?: number;
   /** A tense one-button moment: hold to wind up, release while they're not looking. Success = right, caught = left. */
   sneak?: boolean;
+  /** Ribbon-cutting mini-game: stop the swinging scissors in the gold zone before Gerald gets there. Success = right, too slow = left. */
+  ribbon?: boolean;
   requires?: Condition;
   weight?: number; // in the open pool; default 1
   repeat?: boolean; // may be drawn more than once
@@ -56,9 +59,10 @@ export interface Pack {
   id: string;
   title: string;
   cards: Card[];
-  campaign: Card[]; // Sunday: first whose condition holds; options carry a vote bonus in `effects.people`-free form via `vote`
+  /** The week's theme: shown each morning; `drift` nudges meters after every card (e.g. a heatwave drains the treasury). */
+  theme: { name: string; text: string; drift?: Effects };
   objectives: Objective[];
-  endings: Record<string, Ending>; // low:<meter>, high:<group>, term:won|landslide|lost|early
+  endings: Record<string, Ending>; // low:<meter>, high:<group>, rare:<id> (this week's long-plot endings)
   headlines: Record<string, string>; // story id -> headline for the day's review
   cliffhangers: string[];
 }
@@ -67,16 +71,17 @@ export type Phase = 'card' | 'recalled' | 'dayEnd' | 'results';
 
 export interface Swipe { day: number; cardId: string; dir: Dir; before: Record<MeterId, number>; after: Record<MeterId, number> }
 
-export interface Result { share: number; won: boolean; endedEarly: boolean }
+/** The week, once Sunday night's vote is in. */
+export interface Result { daysWon: number }
 
 /** The town is always Bad Town; the player names their mayor and what the townsfolk are called. */
 export interface Profile { mayor: string; folk: string; base: GroupId }
 
 export interface State {
-  v: 10;
+  v: 11;
   weekId: string;
   playerSeed: string;
-  day: number; // 1..6 governing, 7 = Sunday
+  day: number; // 1 = Monday ... 7 = Sunday; every night is a re-election
   cardInDay: number;
   count: number; // cards played this term
   meters: Record<MeterId, number>;
@@ -89,13 +94,13 @@ export interface State {
   dayStart: Record<MeterId, number>;
   swipes: Swipe[];
   recalls: number;
-  recallCauses: string[];
-  recalledDays: number[];
+  endings: string[]; // Scrapbook keys earned this week: recalls, rare endings, voted-out nights
+  recalledDays: number[]; // days that ended early (recall or rare ending)
   objectivesDone: string[];
-  campaignVote: number;
   profile: Profile | null;
   daveDays: number[];
-  polls: number[];
+  polls: number[]; // each night's vote share
+  won: boolean[]; // each night: re-elected?
   result: Result | null;
 }
 

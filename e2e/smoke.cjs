@@ -1,4 +1,4 @@
-// Smoke test: plays from today (plus an optional day offset) to election night in a real browser,
+// Smoke test: plays from today (plus an optional day offset) through every nightly election to the week in review in a real browser,
 // swiping by dragging the card. Takes screenshots along the way.
 //   npm run build && npx vite preview --port 4173 &   then   node e2e/smoke.cjs <screenshot-dir> [dayOffset] [width]
 const { chromium } = require('playwright');
@@ -10,19 +10,33 @@ const { chromium } = require('playwright');
   const pg = await ctx.newPage();
   const errs = []; pg.on('pageerror', (e) => errs.push(String(e)));
   await pg.goto(process.env.URL ?? 'http://localhost:4173/');
-  let swipes = 0, days = 0, recalls = 0, reveals = 0, sneaks = { ok: 0, caught: 0 }, shots = new Set();
+  let swipes = 0, days = 0, recalls = 0, reveals = 0, sneaks = { ok: 0, caught: 0 }, ribbons = { hit: 0, miss: 0 }, shots = new Set();
   const shot = async (name) => { if (!shots.has(name)) { shots.add(name); await pg.screenshot({ path: `${out}/${name}.png` }); } };
   for (let i = 0; i < 2000; i++) {
-    if (await pg.locator('.election .verdict').count()) break;
+    if (await pg.locator('.review.recap').count()) break;
     if (await pg.locator('.sheet.op').count()) { await shot('opening'); if (await pg.locator('.op-oath input').count()) await pg.locator('.op-oath input').check(); await pg.locator('.op .btn.primary').click(); continue; }
     if (await pg.locator('#mayor-name').count()) { await shot('setup'); await pg.locator('.sheet .btn.primary').click(); continue; }
     if (await pg.locator('.sheet .bugle').count()) { await shot('morning'); await pg.locator('.sheet .btn.primary').click(); continue; }
     if (await pg.locator('.panel.recall').count()) { recalls++; await shot('recall'); await pg.locator('.panel.recall .btn.primary').click(); continue; }
-    if (await pg.locator('.review').count()) { days++; await shot('review'); if (await pg.locator('.review .linkbtn').count()) await pg.locator('.review .linkbtn').click(); else await pg.locator('.review .btn.primary').click(); continue; }
+    if (await pg.locator('.review.dayend').count()) { days++; await shot('review'); if (await pg.locator('.review .linkbtn').count()) await pg.locator('.review .linkbtn').click(); else await pg.locator('.review .btn.primary').click(); continue; }
     if (await pg.locator('.card.result').count()) {
       reveals++;
       if (reveals === 3) { await pg.waitForTimeout(500); await shot('reveal'); if (await pg.locator('.edge-chip.flip').count()) { await pg.locator('.edge-chip.flip').click(); await pg.waitForTimeout(process.env.MOTION ? 2500 : 300); await shot('scene'); } }
       await pg.locator('.edge-chip.next').click({ timeout: 1500 }).catch(() => {});
+      continue;
+    }
+    if (await pg.locator('.card.cutcard').count()) {
+      await shot('ribbon');
+      // aim for the gold zone on the first ribbon of the week, deliberately miss the rest
+      const aim = ribbons.hit === 0;
+      for (let k = 0; k < 200; k++) {
+        const left = await pg.locator('.scissors').evaluate((e) => parseFloat(e.style.left)).catch(() => 0);
+        if (!aim || (left > 45 && left < 55)) break;
+        await pg.waitForTimeout(15);
+      }
+      for (let k = 0; k < 3 && !(await pg.locator('.card.cutcard.hit, .card.cutcard.miss').count()); k++) { await pg.locator('.ribbon-btn').click().catch(() => {}); await pg.waitForTimeout(aim ? 30 : 120); }
+      if (await pg.locator('.card.cutcard.hit').count()) ribbons.hit++; else ribbons.miss++;
+      await pg.waitForSelector('.card.cutcard', { state: 'detached', timeout: 4000 }).catch(() => {});
       continue;
     }
     if (await pg.locator('.card.sneak').count()) {
@@ -55,13 +69,13 @@ const { chromium } = require('playwright');
     }
     await pg.waitForTimeout(60);
   }
-  await pg.waitForSelector('.election .verdict', { timeout: 15000 }).catch(async (e) => { await pg.screenshot({ path: `${out}/stuck.png` }); const st = await pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.save')).state); console.log('stuck errs', errs.slice(0, 3), swipes, st.day, st.phase, st.cardInDay, st.current); throw e; });
-  await pg.screenshot({ path: `${out}/election.png`, fullPage: true });
+  await pg.waitForSelector('.review.recap', { timeout: 15000 }).catch(async (e) => { await pg.screenshot({ path: `${out}/stuck.png` }); const st = await pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.save')).state); console.log('stuck errs', errs.slice(0, 3), swipes, st.day, st.phase, st.cardInDay, st.current); throw e; });
+  await pg.screenshot({ path: `${out}/recap.png`, fullPage: true });
   const st = await pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.save')).state);
   const per = {}; for (const w of st.swipes) per[w.day] = (per[w.day] ?? 0) + 1;
   console.log('cards per day', JSON.stringify(per), 'recalled days', JSON.stringify(st.recalledDays), 'dave days', JSON.stringify(st.daveDays));
   const overflow = await pg.evaluate(() => document.documentElement.scrollWidth > innerWidth);
-  console.log('swipes', swipes, 'reveals', reveals, 'sneaks', JSON.stringify(sneaks), 'days reviewed', days, 'recalls', recalls, 'overflow', overflow, 'errors', errs.slice(0, 5));
-  console.log(await pg.locator('.share').textContent());
+  console.log('swipes', swipes, 'reveals', reveals, 'sneaks', JSON.stringify(sneaks), 'ribbons', JSON.stringify(ribbons), 'nights won', JSON.stringify(st.won), 'days reviewed', days, 'recalls', recalls, 'overflow', overflow, 'errors', errs.slice(0, 5));
+  console.log(await pg.locator('.recap-name').textContent());
   await b.close();
 })();

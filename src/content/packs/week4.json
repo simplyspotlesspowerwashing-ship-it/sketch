@@ -1,0 +1,4190 @@
+{
+ "id": "week4",
+ "title": "Week 4: The Big Freeze",
+ "theme": {
+  "name": "The Big Freeze",
+  "text": "Snow, ice and frozen pipes. Shops can barely open. Business slows a little every few cards.",
+  "drift": {
+   "business": -1
+  }
+ },
+ "cards": [
+  {
+   "id": "w4m1_1",
+   "who": "coach",
+   "story": "ice",
+   "text": "Mayor! The river's frozen solid! I want an ice rink! Skating! Ice hockey! Geese versus town! Open the river?",
+   "options": {
+    "right": {
+     "label": "Yes. Open the rink.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Four hundred skaters by lunch. Gerald is skating. On his face. It works for him.",
+     "then": [
+      [
+       "w4m1_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Too dangerous.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Coach is skating anyway. Alone. In a circle. Shouting encouragement at himself.",
+     "then": [
+      [
+       "w4m1_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 0
+  },
+  {
+   "id": "w4m1_2",
+   "who": "bev",
+   "story": "ice",
+   "text": "Mayor, I've put spikes on my scooter. I want to drive it on the ice. Forty miles an hour. It's for science. Let me?",
+   "options": {
+    "right": {
+     "label": "Yes. Go, Bev.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "She did a lap in eleven seconds. Then a jump. Then another jump. Nobody asked for the jumps.",
+     "then": [
+      [
+       "w4m1_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Skates only.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She's on skates. Somehow faster. She's lapping the geese.",
+     "then": [
+      [
+       "w4m1_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m1_2b",
+   "who": "barb",
+   "story": "ice",
+   "text": "Mayor. Coach Dunk has been skating alone on the river for six hours. He's shouting 'GOOD HUSTLE' at a duck. Bring him in?",
+   "options": {
+    "right": {
+     "label": "Yes. Bring him in.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "We brought him in. He's wrapped in a blanket. He's given the blanket a team talk.",
+     "then": [
+      [
+       "w4m1_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let him skate.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The duck has joined him. They're a team now. The duck's very fast.",
+     "then": [
+      [
+       "w4m1_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m1_3",
+   "who": "gerald",
+   "story": "ice",
+   "text": "HONK. (Gerald would like an ice hockey match. Geese against the town. Tonight. Winner gets the river.) Accept?",
+   "options": {
+    "right": {
+     "label": "Yes. Game on.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "The geese won 14-0. They didn't use sticks. They used Gerald.",
+     "then": [
+      [
+       "w4m1_4",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Shared river.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Gerald has drawn a line down the middle of the river. With his beak. In the ice.",
+     "then": [
+      [
+       "w4m1_4",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m1_4",
+   "who": "nora",
+   "story": "ice",
+   "text": "Mayor, the ice is starting to creak. I give it until tomorrow morning. Close the rink before then?",
+   "options": {
+    "right": {
+     "label": "Yes. Close it.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Closed in time. At midnight the ice went 'crack'. Gerald was on it. He's fine. He floated."
+    },
+    "left": {
+     "label": "No. One more night.",
+     "effects": {
+      "people": 5,
+      "law": -10
+     },
+     "reaction": "Everybody skated till dawn. At 6am it cracked. Everyone was home. Except the duck. The duck's fine."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m2_1",
+   "who": "timmy",
+   "story": "snowman",
+   "text": "Dear Mayor. I built a snowman. He wants to stand for council. His name is Mr Frost. He has a carrot. Can he stand?",
+   "options": {
+    "right": {
+     "label": "Yes. Mr Frost stands.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Mr Frost is on the ballot. He's polling well. He hasn't said anything. Voters love that.",
+     "then": [
+      [
+       "w4m2_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. He's snow.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Timmy is devastated. Mr Frost has been entered as a write-in. In snow. On your car.",
+     "then": [
+      [
+       "w4m2_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 2,
+   "slot": 0
+  },
+  {
+   "id": "w4m2_2",
+   "who": "marge",
+   "story": "snowman",
+   "text": "Mayor, Mr Frost is ahead in the council race. His campaign promise is 'staying cold'. People say it's realistic. Debate him?",
+   "options": {
+    "right": {
+     "label": "Yes. Debate a snowman.",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "He said nothing. You said lots. He won. He's very good at saying nothing.",
+     "then": [
+      [
+       "w4m2_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Ignore him.",
+     "effects": {
+      "people": -5,
+      "press": 5
+     },
+     "reaction": "Ignoring him has made him more popular. He's mysterious now.",
+     "then": [
+      [
+       "w4m2_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m2_2b",
+   "who": "timmy",
+   "story": "snowman",
+   "text": "Dear Mayor. Mr Frost is sad. He's melting a bit. On purpose. It's a protest. Can you say sorry to him?",
+   "options": {
+    "right": {
+     "label": "Yes. Sorry, Mr Frost.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You apologised to a snowman. On camera. He accepted. His carrot looked moved.",
+     "then": [
+      [
+       "w4m2_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. It's weather.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Timmy has told the whole school. You're now known as 'the Snowman Hater'.",
+     "then": [
+      [
+       "w4m2_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m2_3",
+   "who": "barb",
+   "story": "snowman",
+   "text": "Mayor. Overnight, forty more snowmen have appeared. All with carrots. All facing City Hall. Same as last week with the cones. Clear them?",
+   "options": {
+    "right": {
+     "label": "Yes. Clear them.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Cleared. By morning there were eighty. One was wearing your hat.",
+     "then": [
+      [
+       "w4m2_4",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. It's democracy.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The snowmen have formed a party. The Frost Party. Policy: winter.",
+     "then": [
+      [
+       "w4m2_4",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m2_4",
+   "who": "timmy",
+   "story": "snowman",
+   "text": "Dear Mayor. The sun is coming out tomorrow. Mr Frost will melt. Can he go in the big freezer at the fish shop?",
+   "options": {
+    "right": {
+     "label": "Yes. Into the freezer.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Mr Frost is safe. In Sal's freezer. Between the fish. He seems happy. He's re-elected himself.",
+     "set": [
+      "frost_saved"
+     ]
+    },
+    "left": {
+     "label": "No. That's nature.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "He melted. Timmy kept the carrot. It's on his windowsill. He talks to it."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m3_1",
+   "who": "randy",
+   "story": "snowedin",
+   "text": "Boss. We're snowed in at City Hall. Me, you, Doug and the Cheese. The door's blocked. We've got one sandwich. Share it?",
+   "options": {
+    "right": {
+     "label": "Yes. Share it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Four bites each. The Cheese didn't eat. Randy ate the Cheese's bite. Morale is high.",
+     "then": [
+      [
+       "w4m3_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Ration it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Doug has made a spreadsheet for the sandwich. It's very detailed. Nobody's eaten.",
+     "then": [
+      [
+       "w4m3_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 3,
+   "slot": 0
+  },
+  {
+   "id": "w4m3_2",
+   "who": "doug",
+   "story": "snowedin",
+   "text": "Mayor. We're still snowed in. Randy says he can dig us out. With a spoon. It might take a month. Let him dig?",
+   "options": {
+    "right": {
+     "label": "Yes. Dig, Randy.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He dug for six hours. He came out in the basement. Of the library. Linda's furious.",
+     "then": [
+      [
+       "w4m3_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Wait for the plough.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "The plough is Bev. She's on her way. At forty miles an hour.",
+     "then": [
+      [
+       "w4m3_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m3_2b",
+   "who": "randy",
+   "story": "snowedin",
+   "text": "Boss. Doug's sandwich spreadsheet has a mistake. Cell B4. I'm owed a crumb. I'd like my crumb. Please?",
+   "options": {
+    "right": {
+     "label": "Yes. Give him the crumb.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Randy ate the crumb. Slowly. He looked you in the eye the whole time.",
+     "then": [
+      [
+       "w4m3_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Audit it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You audited the sandwich. It took three hours. The sandwich is gone. Nobody knows how.",
+     "then": [
+      [
+       "w4m3_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m3_3",
+   "who": "cheese",
+   "story": "snowedin",
+   "text": "(Snowed in, the Cheese has started to glow. Faintly. It's warm. Everyone has gathered round it.) Huddle round the Cheese?",
+   "options": {
+    "right": {
+     "label": "Yes. Huddle.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You all huddled round the Cheese. It hummed. You slept better than you have in years.",
+     "then": [
+      [
+       "w4m3_4",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Keep away.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "You kept away. The cold set in. Doug is wearing the spreadsheet. As a scarf.",
+     "then": [
+      [
+       "w4m3_4",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m3_4",
+   "who": "bev",
+   "story": "snowedin",
+   "text": "(Bev has ploughed the door open. With her scooter. She's brought soup.) Thank Bev with a medal?",
+   "options": {
+    "right": {
+     "label": "Yes. Bev's medal.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Bev's had the medal welded onto the scooter. It's a hood ornament now."
+    },
+    "left": {
+     "label": "No. Thanks is enough.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Bev says thanks isn't enough. She's taken the soup back. With interest."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m4_1",
+   "who": "doug",
+   "story": "grit",
+   "text": "Mayor. Bad news. The town's entire supply of road grit is gone. Gerald ate it. All of it. The roads are ice. Buy more?",
+   "options": {
+    "right": {
+     "label": "Yes. Buy more grit.",
+     "effects": {
+      "treasury": -10
+     },
+     "reaction": "Bought. Gerald is guarding it now. Nobody asked him to. He's eaten some.",
+     "then": [
+      [
+       "w4m4_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Use sand.",
+     "effects": {
+      "treasury": 5,
+      "law": -5
+     },
+     "reaction": "The beach is now on the roads. Ice-skating has become sand-skating. It's worse.",
+     "then": [
+      [
+       "w4m4_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 4,
+   "slot": 0
+  },
+  {
+   "id": "w4m4_2",
+   "who": "nora",
+   "story": "grit",
+   "text": "Mayor, I've examined Gerald. He's eaten forty tonnes of grit. He's fine. He's a bit crunchy. He's also very heavy. Can he fly?",
+   "options": {
+    "right": {
+     "label": "Yes. Let him try.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He took off. Eventually. He's flying very low. He's gritting the roads as he goes.",
+     "then": [
+      [
+       "w4m4_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Rest him.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's resting in the town square. Children are sledging down him. He's allowing it.",
+     "then": [
+      [
+       "w4m4_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m4_2b",
+   "who": "chad",
+   "story": "grit",
+   "text": "Mayor. Your sand ruined my car. It's a sand car now. It's quite nice actually. Want to buy it?",
+   "options": {
+    "right": {
+     "label": "Yes. Buy the sand car.",
+     "effects": {
+      "business": 10
+     },
+     "reaction": "It's the official mayoral car. It leaves a trail. You're easy to follow.",
+     "then": [
+      [
+       "w4m4_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Keep your car.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "He's entered it in a car show as 'Beach Edition'. It won.",
+     "then": [
+      [
+       "w4m4_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m4_3",
+   "who": "barb",
+   "story": "grit",
+   "text": "Mayor. Because of the ice, everyone is sliding to work. Chief Biscuit wants to give out speeding tickets. To sliders. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Ticket them.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Biscuit gave out 400 tickets. Then slid into a lamp post. He's given himself a ticket.",
+     "then": [
+      [
+       "w4m4_4",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let them slide.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The town slides everywhere. Work is quicker. Stopping is harder. Bev is loving it.",
+     "then": [
+      [
+       "w4m4_4",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m4_4",
+   "who": "gerald",
+   "story": "grit",
+   "text": "HONK. (Gerald has offered to give the grit back. You would not like how. You can guess how.) Accept his offer?",
+   "options": {
+    "right": {
+     "label": "Yes. Grit is grit.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The roads are gritted. Nobody wants to talk about how. The geese are very proud."
+    },
+    "left": {
+     "label": "No. Keep it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's keeping it. He rattles. He's taken up percussion."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m5_1",
+   "who": "nora",
+   "story": "pipes",
+   "text": "Mayor, every water pipe in town is frozen. I can thaw them with my heat ray. It might also thaw the Cheese. Use the ray?",
+   "options": {
+    "right": {
+     "label": "Yes. Fire the ray.",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Pipes thawed. The Cheese is also slightly warmer. It's giving off a smell of 1987.",
+     "then": [
+      [
+       "w4m5_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Kettles.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Every kettle in town is pouring into a drain. It's working. Slowly. Doug's counting kettles.",
+     "then": [
+      [
+       "w4m5_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 5,
+   "slot": 0
+  },
+  {
+   "id": "w4m5_2",
+   "who": "doug",
+   "story": "pipes",
+   "text": "Mayor, Nora's heat ray also defrosted Sal's freezer. Mr Frost the snowman is now a puddle. Timmy is in the waiting room. Tell him?",
+   "options": {
+    "right": {
+     "label": "Yes. Tell him gently.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "You told him. He was brave. He asked for the puddle. He's keeping it in a jar.",
+     "then": [
+      [
+       "w4m5_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Build a new one.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Mr Frost II is a bit taller. Timmy says he 'has the same eyes'. It's the same coal.",
+     "then": [
+      [
+       "w4m5_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m5_2b",
+   "who": "randy",
+   "story": "pipes",
+   "text": "Boss. I've been helping with the kettles. I've boiled 400 kettles. Some of them were the water. Some were soup. The drains smell of soup. Okay?",
+   "options": {
+    "right": {
+     "label": "Yes. Soup is fine.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The town smells of minestrone. People are sniffing the drains. That's a separate problem.",
+     "then": [
+      [
+       "w4m5_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Water only.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's switched to water. He's still sad about the soup. He saved a bowl. For you.",
+     "then": [
+      [
+       "w4m5_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m5_3",
+   "who": "linda",
+   "story": "pipes",
+   "text": "Mayor, a pipe has burst under the library. The basement is flooded. The 1987 time capsule is floating. Rescue it?",
+   "options": {
+    "right": {
+     "label": "Yes. Rescue it.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Rescued. Inside: a note from 1987. It says 'DON'T TRUST THE CHEESE'. Interesting.",
+     "then": [
+      [
+       "w4m5_4",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Books first.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Books saved. The capsule floated out into the river. Gerald is sitting on it.",
+     "then": [
+      [
+       "w4m5_4",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m5_4",
+   "who": "nora",
+   "story": "pipes",
+   "text": "Mayor, the heat ray is still on. It's stuck. It's slowly defrosting the whole town. Spring is coming early. Leave it on?",
+   "options": {
+    "right": {
+     "label": "Yes. Early spring.",
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "Daffodils in the snow. The geese are confused. Bev has taken her coat off. A first."
+    },
+    "left": {
+     "label": "No. Turn it off.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Off. Winter resumed immediately. Everyone sighed. In unison. It was quite loud."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m6_1",
+   "who": "carl",
+   "story": "carlice",
+   "text": "Big Carl. Mayor. My pool's frozen. Solid. It's an ice rink now. Am I a lifeguard or an ice guard? I need to know.",
+   "options": {
+    "right": {
+     "label": "Yes. Ice guard.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "He has new skates. And a new whistle. It's frozen. He's blowing it anyway. Silently.",
+     "then": [
+      [
+       "w4m6_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Take a break.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's taking a break. On the ice. Guarding it. While on a break.",
+     "then": [
+      [
+       "w4m6_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 6,
+   "slot": 0
+  },
+  {
+   "id": "w4m6_2",
+   "who": "carl",
+   "story": "carlice",
+   "text": "Big Carl. Someone fell over on my ice. It was me. I'd like to rescue myself. Officially. Can I file it as a rescue?",
+   "options": {
+    "right": {
+     "label": "Yes. It counts.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It's his first official rescue. He's framed the form. He's very proud. He's limping.",
+     "then": [
+      [
+       "w4m6_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. You fell over.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's filed it anyway. Under 'near rescue'. It's a new category.",
+     "then": [
+      [
+       "w4m6_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m6_2b",
+   "who": "marge",
+   "story": "carlice",
+   "text": "Mayor, the Bugle has had a letter. It says Big Carl's ice pool is 'the best thing in Bad Town'. It's from Big Carl. Print it?",
+   "options": {
+    "right": {
+     "label": "Yes. Print it.",
+     "effects": {
+      "press": 5,
+      "people": 5
+     },
+     "reaction": "Printed. Seventeen people visited the pool. Carl rescued all of them. None needed it.",
+     "then": [
+      [
+       "w4m6_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Bias.",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "Carl has written another letter. Signed 'Not Carl'. It's in his handwriting.",
+     "then": [
+      [
+       "w4m6_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m6_3",
+   "who": "coach",
+   "story": "carlice",
+   "text": "Mayor! Big Carl's ice pool would be perfect for the Winter Games! Curling! Speed skating! Goose bobsleigh! Book it?",
+   "options": {
+    "right": {
+     "label": "Yes. Winter Games.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The goose bobsleigh was a highlight. Gerald steered. The sled was Gerald.",
+     "then": [
+      [
+       "w4m6_4",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Carl's pool.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Carl is relieved. He's had the ice to himself. He's skating in circles. Happily.",
+     "then": [
+      [
+       "w4m6_4",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m6_4",
+   "who": "carl",
+   "story": "carlice",
+   "text": "Big Carl. Mayor. It's thawing tomorrow. Then it'll be a pool. A real pool. Will you come for the first swim?",
+   "options": {
+    "right": {
+     "label": "Yes. I'll come.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "You swam. It was freezing. Carl rescued you. You didn't need it. You'll never tell him."
+    },
+    "left": {
+     "label": "No. Too cold.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He swam alone. Then rescued himself. Again. He's going for a record."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m7_1",
+   "who": "pam",
+   "story": "ball",
+   "text": "The PTA is organising the Winter Ball. In City Hall. Tonight. The theme is 'snow'. You'll need a costume. Wear one?",
+   "options": {
+    "right": {
+     "label": "Yes. Costume.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "You came as a snowflake. Gerald came as a snowflake. You were mistaken for each other all night.",
+     "then": [
+      [
+       "w4m7_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Suit.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You came in a suit. Everyone else was snow. You looked like a lamp post. A dog agreed.",
+     "then": [
+      [
+       "w4m7_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 7,
+   "slot": 0
+  },
+  {
+   "id": "w4m7_2",
+   "who": "randy",
+   "story": "ball",
+   "text": "Boss. I've been asked to DJ the Winter Ball. I have one record. It's of bins. Being emptied. In winter. Can I?",
+   "options": {
+    "right": {
+     "label": "Yes. DJ Randy.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The bin record was a hit. People danced. Mostly to the lid noises.",
+     "then": [
+      [
+       "w4m7_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Bev's DJing.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "DJ Bev is back. She's played the whistling man again. It's become a tradition.",
+     "then": [
+      [
+       "w4m7_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m7_2b",
+   "who": "chad",
+   "story": "ball",
+   "text": "Mayor. I'd like to sponsor the Winter Ball. It'll be the ChadBall. There will be a chocolate fountain. And my face in ice. Agree?",
+   "options": {
+    "right": {
+     "label": "Yes. ChadBall.",
+     "effects": {
+      "business": 10,
+      "people": -5
+     },
+     "reaction": "The ice sculpture of Chad melted halfway through. Now it's Chad's chin. Just the chin.",
+     "then": [
+      [
+       "w4m7_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Community ball.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Community ball it is. Pam brought sandwiches. 400 of them. All egg.",
+     "then": [
+      [
+       "w4m7_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m7_3",
+   "who": "cheese",
+   "story": "ball",
+   "text": "(At midnight, the Cheese arrives at the Winter Ball. On a trolley. Wearing a small bow tie. Nobody invited it.) Let it in?",
+   "options": {
+    "right": {
+     "label": "Yes. Let it in.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It didn't dance. Everyone danced round it. It was the guest of honour. Somehow.",
+     "then": [
+      [
+       "w4m7_4",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Cheese out.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The trolley rolled back to the vault. The Cheese's bow tie stayed. It's on the floor. Watching.",
+     "then": [
+      [
+       "w4m7_4",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4m7_4",
+   "who": "randy",
+   "story": "ball",
+   "text": "Boss. Ball's ending. Everyone's asking for a last dance. With you. I've already said yes. On your behalf. Dance?",
+   "options": {
+    "right": {
+     "label": "Yes. Last dance.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "You danced with Randy. Then Bev. Then Gerald. Then Bev again. Best night of the year."
+    },
+    "left": {
+     "label": "No. Home time.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You went home. Randy danced alone. To the bin record. Under a disco ball. Which was his."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4law1",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: ice may only be skated on with written permission. Coach has already submitted forty forms. Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. Sign it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Ninety forms by noon. Doug has approved all of them. He's very cold."
+    },
+    "left": {
+     "label": "No. Free skating.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Gerald has skated into City Hall. Through the window. Free skating."
+    }
+   },
+   "day": 1,
+   "slot": 7
+  },
+  {
+   "id": "w4law2",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: snowmen may not stand for office. Timmy's at the door with Mr Frost. Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. No snowmen.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Mr Frost has been disqualified. He's standing outside your window. Silently. As always."
+    },
+    "left": {
+     "label": "No. Snow rights.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Mr Frost is officially a candidate. His running mate is a carrot."
+    }
+   },
+   "day": 2,
+   "slot": 7
+  },
+  {
+   "id": "w4law3",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: the Cheese must be kept at a safe distance from all mayors. Doug wrote it. He's hiding behind the door. Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. Safe distance.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The Cheese is now three metres from you at all times. It feels further. It feels closer."
+    },
+    "left": {
+     "label": "No. It's fine.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The Cheese has been moved into your office. Nobody admits doing it."
+    }
+   },
+   "day": 3,
+   "slot": 7
+  },
+  {
+   "id": "w4law4",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: geese may not eat road grit. Gerald has eaten the draft. Sign the photocopy?",
+   "options": {
+    "right": {
+     "label": "Yes. Sign it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Signed. Gerald has eaten the photocopy. And the photocopier. He rattles."
+    },
+    "left": {
+     "label": "No. He's suffered enough.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Gerald has been pardoned. He's eaten the pardon. He's never been happier."
+    }
+   },
+   "day": 4,
+   "slot": 7
+  },
+  {
+   "id": "w4law5",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: heat rays must be licensed. Nora's has been on since Tuesday. Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. License them.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Nora has a licence. It's laminated. She melted the lamination with the ray."
+    },
+    "left": {
+     "label": "No. Science is free.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Three new heat rays by teatime. One is a hairdryer. Brayden."
+    }
+   },
+   "day": 5,
+   "slot": 7
+  },
+  {
+   "id": "w4law6",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: every pool must have a lifeguard. Bad Town has one pool. It's ice. Big Carl is weeping with joy. Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. Carl's law.",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "Carl is now required by law. He's printed it on his towel. And his whistle."
+    },
+    "left": {
+     "label": "No. Carl volunteers.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Carl volunteers anyway. Harder. He's been there since 4am."
+    }
+   },
+   "day": 6,
+   "slot": 7
+  },
+  {
+   "id": "w4law7",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: every Winter Ball must have a last dance. Pam wrote it. She's holding the pen out. Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. Last dances.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Signed. Tonight's last dance lasted until 3am. Nobody could agree which was last."
+    },
+    "left": {
+     "label": "No. Optional dancing.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Pam is disappointed. She's dancing anyway. Defiantly."
+    }
+   },
+   "day": 7,
+   "slot": 7
+  },
+  {
+   "id": "w4x1",
+   "who": "steve",
+   "story": "blizzard",
+   "text": "Stormy Steve. I forecast sunshine. So, naturally, it's a blizzard. The worst in forty years. Everyone's stuck. Send the snowplough?",
+   "options": {
+    "right": {
+     "label": "Yes. Send it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The snowplough is Bev. She's cleared every street. And one or two gardens.",
+     "then": [
+      [
+       "w4x1a",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Snow day.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Snow day. Nobody went to work. Shops shut. Everyone built snowmen. One is running for council.",
+     "then": [
+      [
+       "w4x1b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 11
+  },
+  {
+   "id": "w4x1a",
+   "who": "chad",
+   "story": "blizzard",
+   "text": "Mayor. Bev ploughed my garden. My statues are buried. All forty-one. Each one is me. Dig them out?",
+   "options": {
+    "right": {
+     "label": "Yes. Dig them out.",
+     "effects": {
+      "business": 10
+     },
+     "reaction": "Forty-one Chads, freshly dug. He's thrilled. The town's quieter without them."
+    },
+    "left": {
+     "label": "No. Spring will.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Children are building snowmen on top of them. Chad is ninety percent snowman now."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x1b",
+   "who": "doug",
+   "story": "blizzard",
+   "text": "Mayor, a snow day costs the town a fortune. Nobody's buying anything. I've worked it out. It's... a lot. One more?",
+   "options": {
+    "right": {
+     "label": "Yes. One more.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Two snow days. The happiest town in the county. The poorest, too. Doug's ok."
+    },
+    "left": {
+     "label": "No. Back to work.",
+     "effects": {
+      "business": 10,
+      "people": -5
+     },
+     "reaction": "Everyone's back. Grumpy. Snow in their shoes. Productivity is up. Morale is not."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x2",
+   "who": "barb",
+   "story": "sledge",
+   "text": "EMERGENCY. Someone's built a sledge run from the top of the clock tower. It ends in the town square. Children are queuing. Close it?",
+   "options": {
+    "right": {
+     "label": "Yes. Close it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Closed. The children have built a new sledge run. Down the library steps. Linda is furious.",
+     "then": [
+      [
+       "w4x2a",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let them sledge.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Best day ever. One sledge overshot. Into the fountain. It was Randy. He's fine.",
+     "then": [
+      [
+       "w4x2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 2,
+   "slot": 11
+  },
+  {
+   "id": "w4x2a",
+   "who": "linda",
+   "story": "sledge",
+   "text": "Mayor. There are children sledging down the library steps. They're shushing each other as they go. It's very polite. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Quiet sledging.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Silent sledging. Very respectful. Linda has issued library cards to the sledges."
+    },
+    "left": {
+     "label": "No. Not the library.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Sledging has moved to the town hall steps. Right outside your window."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x2b",
+   "who": "randy",
+   "story": "sledge",
+   "text": "Boss. I built the sledge run. It's a business. I'm charging. In crisps. Business is very good. Can I keep it?",
+   "options": {
+    "right": {
+     "label": "Yes. Randy's run.",
+     "effects": {
+      "business": 10,
+      "law": -5
+     },
+     "reaction": "It's the most profitable thing in Bad Town. He's paid tax. In crisps. Doug's eating them."
+    },
+    "left": {
+     "label": "No. Shut it down.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Shut down. Randy is sulking. He's using it himself. Over and over."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x3",
+   "who": "doug",
+   "story": "heating",
+   "text": "Mayor. The town hall heating has broken. It's minus four in here. Randy's put on four coats. They're all the same coat. Fix it?",
+   "options": {
+    "right": {
+     "label": "Yes. Fix it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The heating's fixed. It's now forty degrees. Everyone's in shorts. Doug is wearing a spreadsheet.",
+     "then": [
+      [
+       "w4x3a",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Wear jumpers.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Everyone's in jumpers. Doug knitted one for the Cheese. The Cheese seems warmer.",
+     "then": [
+      [
+       "w4x3b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 3,
+   "slot": 11
+  },
+  {
+   "id": "w4x3a",
+   "who": "nora",
+   "story": "heating",
+   "text": "Mayor, the heating's stuck at forty degrees. The Cheese is sweating. It's forming a puddle. The puddle is moving. Turn it down?",
+   "options": {
+    "right": {
+     "label": "Yes. Turn it down.",
+     "effects": {
+      "law": 5,
+      "treasury": -5
+     },
+     "reaction": "Turned down. The puddle has stopped. Pointing at you. Coincidence."
+    },
+    "left": {
+     "label": "No. Leave it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The puddle has reached the door. It's leaving the building. Where's it going?"
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x3b",
+   "who": "randy",
+   "story": "heating",
+   "text": "Boss. I've been wearing four coats. I can't take them off. The cousins are frozen to the lining. Help?",
+   "options": {
+    "right": {
+     "label": "Yes. Help him.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Unfrozen. Forty cousins came out. One by one. Each thanked you personally."
+    },
+    "left": {
+     "label": "No. Stay warm.",
+     "effects": {
+      "people": -5,
+      "law": 5
+     },
+     "reaction": "He's staying in the coats. All winter. He waddles. Like Mr Flaps."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x4",
+   "who": "marge",
+   "story": "avalanche",
+   "text": "BREAKING. A small avalanche on Bad Hill. Nobody hurt. But it buried Sal's restaurant. The diners are still eating. Dig them out?",
+   "options": {
+    "right": {
+     "label": "Yes. Dig them out.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Dug out. The diners asked for the bill. Sal charged them for the snow.",
+     "then": [
+      [
+       "w4x4a",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. They're eating.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "They finished pudding. Then dug themselves out. Five stars. Atmospheric.",
+     "then": [
+      [
+       "w4x4b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 4,
+   "slot": 11
+  },
+  {
+   "id": "w4x4a",
+   "who": "sal",
+   "story": "avalanche",
+   "text": "Mayor. The avalanche has given me an idea. Igloo dining. You eat in snow. Under snow. It's the future. Approve the licence?",
+   "options": {
+    "right": {
+     "label": "Yes. Igloo dining.",
+     "effects": {
+      "business": 10,
+      "law": -5
+     },
+     "reaction": "Fully booked till spring. The tyres stay frozen. People say they're crunchier."
+    },
+    "left": {
+     "label": "No. It's dangerous.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "He's opened anyway. In a fridge. A big fridge. Same thing, he says."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x4b",
+   "who": "lorraine",
+   "story": "avalanche",
+   "text": "(Lorraine the seagull has been seen at the top of Bad Hill. With a very large chip. She drops it. Another avalanche.) Arrest her?",
+   "options": {
+    "right": {
+     "label": "Yes. Arrest her.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Arrested. She escaped through the window. With the arrest warrant. And Barb's chips."
+    },
+    "left": {
+     "label": "No. It's a chip.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Three more avalanches. Each with a chip. Lorraine's very pleased. She's started a business."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x5",
+   "who": "nora",
+   "story": "iceberg",
+   "text": "EMERGENCY. An iceberg has floated up the river. A real one. It's stuck under the bridge. It has a penguin on it. Keep it?",
+   "options": {
+    "right": {
+     "label": "Yes. Keep the iceberg.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "The iceberg is a tourist attraction. The penguin is called Dennis. Everyone loves Dennis.",
+     "then": [
+      [
+       "w4x5a",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Push it out.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Pushed. It floated back. Dennis waved.",
+     "then": [
+      [
+       "w4x5b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 5,
+   "slot": 11
+  },
+  {
+   "id": "w4x5a",
+   "who": "gerald",
+   "story": "iceberg",
+   "text": "HONK. (Gerald and Dennis the penguin are having a stand-off. On the iceberg. Neither has blinked in four hours.) Intervene?",
+   "options": {
+    "right": {
+     "label": "Yes. Separate them.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Separated. Gerald is furious. Dennis is very calm. Dennis has won."
+    },
+    "left": {
+     "label": "No. Let them settle it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "They're best friends now. Dennis has joined the Goose Union. The first non-goose. He's treasurer.",
+     "set": [
+      "dennis_home"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x5b",
+   "who": "barb",
+   "story": "iceberg",
+   "text": "Mayor. The iceberg keeps floating back. With the penguin. He's started waving. People are waving back. Do something?",
+   "options": {
+    "right": {
+     "label": "Yes. Rehome Dennis.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Dennis has a pond. With the geese. He's learning to honk. It sounds like a cough.",
+     "set": [
+      "dennis_home"
+     ]
+    },
+    "left": {
+     "label": "No. Wave back.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Everyone waves at Dennis. Every morning. He waves back. He's the most popular person in Bad Town."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x6",
+   "who": "carl",
+   "story": "thinice",
+   "text": "Big Carl. Mayor. EMERGENCY. Someone's on thin ice. It's Gerald. He's sitting there. On purpose. Can I go in?",
+   "options": {
+    "right": {
+     "label": "Yes. Go in.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Carl dived in. Gerald stood up. Walked off. Carl is in the river. Rescuing himself. Again.",
+     "then": [
+      [
+       "w4x6a",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Gerald floats.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Gerald fell through. He floated. He honked. He's fine. Carl is crying with frustration.",
+     "then": [
+      [
+       "w4x6b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 6,
+   "slot": 11
+  },
+  {
+   "id": "w4x6a",
+   "who": "carl",
+   "story": "thinice",
+   "text": "Big Carl. I rescued myself again. That's my fourth this week. Is there a medal? There should be a medal.",
+   "options": {
+    "right": {
+     "label": "Yes. A medal.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Medal of Self-Rescue. He's the only holder. He's the only possible holder."
+    },
+    "left": {
+     "label": "No. Stop falling in.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's taken that advice. He's wearing a life jacket. Indoors."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x6b",
+   "who": "gerald",
+   "story": "thinice",
+   "text": "HONK. (Gerald would like to complain about being rescued. He wasn't rescued. He'd still like to complain.) Hear him out?",
+   "options": {
+    "right": {
+     "label": "Yes. Hear him out.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He honked for nine minutes. You nodded. He felt heard. He left a feather."
+    },
+    "left": {
+     "label": "No. Nobody rescued you.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's filing a formal complaint. Against the river."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x7",
+   "who": "nora",
+   "story": "thaw",
+   "text": "EMERGENCY. Everything's thawing at once. All of it. The town is one big puddle. Ankle-deep. Rising. Sandbags?",
+   "options": {
+    "right": {
+     "label": "Yes. Sandbags.",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "Sandbagged. The water's gone round. Into the next town. They've sent a strongly worded letter.",
+     "then": [
+      [
+       "w4x7a",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Wellies for all.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Wellies for everyone. The town is wading. Bev has a boat.",
+     "then": [
+      [
+       "w4x7b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 7,
+   "slot": 11
+  },
+  {
+   "id": "w4x7a",
+   "who": "marge",
+   "story": "thaw",
+   "text": "Mayor, the next town says our thaw has flooded them. They want an apology. And a mop. Send both?",
+   "options": {
+    "right": {
+     "label": "Yes. Both.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Apology sent. Mop sent. They've sent the mop back. Wetter."
+    },
+    "left": {
+     "label": "No. Weather is weather.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "The next town has declared a cold war. It's appropriate. It's winter."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4x7b",
+   "who": "carl",
+   "story": "thaw",
+   "text": "Big Carl. Mayor. The whole town is ankle-deep water. Technically, it's all a pool now. I'm on duty. Everywhere. Okay?",
+   "options": {
+    "right": {
+     "label": "Yes. Guard everything.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Carl has never been happier. He's guarded the whole town. Rescued four ducks. They didn't need it."
+    },
+    "left": {
+     "label": "No. Rest, Carl.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "He's resting. Standing in the water. With his whistle. Just in case."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_1",
+   "who": "doug",
+   "story": "cheesesaga",
+   "text": "Mayor, the 1987 cheese in the vault has moved. Six inches. Towards the door. Lock the vault?",
+   "options": {
+    "right": {
+     "label": "Yes. Lock it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Locked. You heard a small sound behind the door. Like cheese settling. Or waiting.",
+     "next": [
+      "w4g_2a"
+     ]
+    },
+    "left": {
+     "label": "No. Let it roam.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Doug left the door ajar. By morning the cheese was in the corridor. Facing your office.",
+     "next": [
+      "w4g_2b"
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 8
+  },
+  {
+   "id": "w4g_2a",
+   "who": "nora",
+   "story": "cheesesaga",
+   "text": "Mayor, I've studied the cheese. It hasn't moved. The vault has. Slowly. Towards the cheese. Should I worry?",
+   "options": {
+    "right": {
+     "label": "Yes. Worry.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Nora is worrying professionally. She's bought a clipboard. It's shaking.",
+     "next": [
+      "w4g_3a"
+     ]
+    },
+    "left": {
+     "label": "No. It's cheese.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "'It's cheese,' you said. The vault creaked. Doug has started sleeping at home.",
+     "next": [
+      "w4g_3a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_2b",
+   "who": "randy",
+   "story": "cheesesaga",
+   "text": "Boss. The cheese is outside your office. I said hello. It didn't say hello back. But I felt it. Let it in?",
+   "options": {
+    "right": {
+     "label": "Yes. Let it in.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It's in your office. On a trolley. Facing your desk. It feels like a meeting.",
+     "next": [
+      "w4g_3b"
+     ]
+    },
+    "left": {
+     "label": "No. Back to the vault.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Randy wheeled it back. He came out pale. He won't say what it said.",
+     "next": [
+      "w4g_3a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_3a",
+   "who": "linda",
+   "story": "cheesesaga",
+   "text": "Mayor, the 1987 council minutes mention the cheese. Once. They say: 'DO NOT LET IT NEAR THE CHAIR.' Which chair, do you think?",
+   "options": {
+    "right": {
+     "label": "Yes. Find out.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "The minutes continue on page 2. Page 2 is missing. There's a cheese stain where it was.",
+     "next": [
+      "w4g_4a"
+     ]
+    },
+    "left": {
+     "label": "No. Don't want to know.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Linda has filed the minutes under 'Ominous'. It's a new section.",
+     "next": [
+      "w4g_4a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_3b",
+   "who": "cheese",
+   "story": "cheesesaga",
+   "text": "(This morning the cheese is on your chair. Your mayor's chair. Beside it, a small card: 'ACTING'.) Remove it?",
+   "options": {
+    "right": {
+     "label": "Yes. Remove it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Removed. The chair is warm. Faintly cheese-scented. You sit on it anyway. Bravely.",
+     "next": [
+      "w4g_4a"
+     ]
+    },
+    "left": {
+     "label": "No. Let it act.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It's acting mayor for the day. You worked from the beanbag. Nobody noticed.",
+     "next": [
+      "w4g_4b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_4a",
+   "who": "doug",
+   "story": "cheesesaga",
+   "text": "Mayor, the cheese is back in the vault behind three locks. It seems patient. A fourth lock?",
+   "options": {
+    "right": {
+     "label": "Yes. Four locks.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Four locks. Doug checks them hourly. Last night all four were warm.",
+     "next": [
+      "w4g_5a"
+     ]
+    },
+    "left": {
+     "label": "No. Three is plenty.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Three locks. The cheese seems to accept this. For now.",
+     "next": [
+      "w4g_5a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_4b",
+   "who": "marge",
+   "story": "cheesesaga",
+   "text": "Mayor, the cheese has been acting mayor for a day. Approval is up 9%. It hasn't done anything. People find that restful. Let it carry on?",
+   "options": {
+    "right": {
+     "label": "Yes. Let it rest.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "It carried on. It signed nothing. Crime fell. Nobody can explain it.",
+     "next": [
+      "w4g_5b"
+     ]
+    },
+    "left": {
+     "label": "No. My job.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You took your chair back. The cheese was wheeled out to light applause.",
+     "next": [
+      "w4g_5a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_5a",
+   "who": "randy",
+   "story": "cheesesaga",
+   "text": "Boss. The cheese is locked up. But every morning there's a small cheese-shaped dent in your chair. Investigate?",
+   "options": {
+    "right": {
+     "label": "Yes. Investigate.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "You stayed up all night. Nothing came. At dawn there was a dent. You'd blinked.",
+     "next": [
+      "w4g_6a"
+     ]
+    },
+    "left": {
+     "label": "No. It's a nice dent.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You sit in the dent now. It fits you perfectly. That's the worrying part.",
+     "next": [
+      "w4g_6a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_5b",
+   "who": "cheese",
+   "story": "cheesesaga",
+   "text": "(The cheese holds a press conference. It says nothing. The town hangs on every silence. There's one seat left on stage. Behind it.) Take the seat?",
+   "options": {
+    "right": {
+     "label": "Yes. Sit behind it.",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "You sat behind the cheese. You've been behind it ever since.",
+     "ending": "rare:cheese_mayor"
+    },
+    "left": {
+     "label": "No. Stand beside it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You stood beside it. Equals. The cheese seemed to respect that.",
+     "next": [
+      "w4g_6b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_6a",
+   "who": "nora",
+   "story": "cheesesaga",
+   "text": "Mayor, test results: 1987 cheddar. Normal. Except it's warm, and it hums when you say its name. Leave it alone?",
+   "options": {
+    "right": {
+     "label": "Yes. Leave it alone.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You've left it alone. It hums softly. It sounds almost like a lullaby.",
+     "next": [
+      "w4g_7a"
+     ]
+    },
+    "left": {
+     "label": "No. One more test.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Nora said its name into a microphone. The lights dimmed. She's stopped testing.",
+     "next": [
+      "w4g_7a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_6b",
+   "who": "doug",
+   "story": "cheesesaga",
+   "text": "Mayor, the cheese has proposed a fondue. For the whole town. At the Winter Ball. You're the guest of honour. In the middle. Of the fondue. Agree?",
+   "options": {
+    "right": {
+     "label": "Yes. Fondue it is.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Doug has ordered a cauldron. A big one. Bigger than you. He measured.",
+     "next": [
+      "w4g_7b"
+     ]
+    },
+    "left": {
+     "label": "No fondue.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "No fondue. The cheese went very quiet. Quieter than usual.",
+     "next": [
+      "w4g_7a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_7a",
+   "who": "cheese",
+   "story": "cheesesaga",
+   "text": "(Sunday. The cheese has sent you a card. It's blank. It smells of cheese. It feels like a thank you.) Keep the card?",
+   "options": {
+    "right": {
+     "label": "Yes. Keep it.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "It's on your desk. Still warm. You feel strangely safe."
+    },
+    "left": {
+     "label": "No. Bin it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Randy rescued it from the bin. It's in the coat now. For luck."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4g_7b",
+   "who": "cheese",
+   "story": "cheesesaga",
+   "text": "(The Winter Ball. A cauldron of fondue bubbles. The cheese sits beside it on its trolley. There's a little step. For you.) Step in?",
+   "options": {
+    "right": {
+     "label": "Yes. Step in.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It was warm. Very warm. Then it was everything.",
+     "ending": "rare:fondue"
+    },
+    "left": {
+     "label": "No. Dip some bread.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You dipped one piece of bread. The cheese seemed satisfied. For now."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4sk1",
+   "who": "coach",
+   "story": "sneak",
+   "text": "Coach Dunk is about to skate onto thin ice. Swap his skates for wellies while he's not looking.",
+   "options": {
+    "right": {
+     "label": "Swapped them",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's in wellies. On the bank. Skating motions. He hasn't noticed."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He caught you holding his skate. 'You want to join the team?' You're on the team now."
+    }
+   },
+   "day": 1,
+   "slot": 15,
+   "sneak": true
+  },
+  {
+   "id": "w4rb2",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "Mr Frost's campaign office opens today. Gerald is waddling at the ribbon, face first. Cut it before he does!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Open. Mr Frost said nothing. Timmy said it was his best speech."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Gerald cut it, then ate Mr Frost's carrot. Timmy is inconsolable."
+    }
+   },
+   "day": 2,
+   "slot": 15,
+   "ribbon": true
+  },
+  {
+   "id": "w4sk3",
+   "who": "randy",
+   "story": "sneak",
+   "text": "Randy is eating the last sandwich. Again. Grab it back while he's not looking.",
+   "options": {
+    "right": {
+     "label": "Got it",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "You've got the sandwich. Half of it. Randy has the other half. In the coat."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "people": -5,
+      "law": 5
+     },
+     "reaction": "He turned round, sandwich in mouth. He offered you the crust. It was a kind gesture."
+    }
+   },
+   "day": 3,
+   "slot": 15,
+   "sneak": true
+  },
+  {
+   "id": "w4rb4",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "The new grit store opens today. Gerald is racing at the ribbon. He's hungry. Cut it first!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "law": 5,
+      "people": 5
+     },
+     "reaction": "Open. Full of grit. Barb's guarding it. Gerald's guarding Barb."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Gerald cut it. Then went in. Then came out. Then the grit was gone."
+    }
+   },
+   "day": 4,
+   "slot": 15,
+   "ribbon": true
+  },
+  {
+   "id": "w4sk5",
+   "who": "nora",
+   "story": "sneak",
+   "text": "Nora is about to turn the heat ray up to eleven. Unplug it while she's not looking.",
+   "options": {
+    "right": {
+     "label": "Unplugged",
+     "effects": {
+      "business": -5
+     },
+     "reaction": "Unplugged. The ray powered down. Nora thinks it was a power cut. She's suing the power."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "She caught you holding the plug. She's given you a lab coat. You're her assistant now."
+    }
+   },
+   "day": 5,
+   "slot": 15,
+   "sneak": true
+  },
+  {
+   "id": "w4rb6",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "Big Carl's ice pool reopens today. Gerald is skating at the ribbon. Fast. Cut it first!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Open. Carl blew his frozen whistle. A tiny icicle came out. He's thrilled."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Gerald cut it with his face. At speed. He's still sliding. He's past the town now."
+    }
+   },
+   "day": 6,
+   "slot": 15,
+   "ribbon": true
+  },
+  {
+   "id": "w4sk7",
+   "who": "chad",
+   "story": "sneak",
+   "text": "Chad is changing the Winter Ball sign to 'CHADBALL'. Swap it back while he's not looking.",
+   "options": {
+    "right": {
+     "label": "Swapped it",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It's the Winter Ball again. Chad doesn't know. He's introducing himself as host."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "He caught you mid-swap. Now it says 'CHADBALL (WINTER)'. A compromise."
+    }
+   },
+   "day": 7,
+   "slot": 15,
+   "sneak": true
+  },
+  {
+   "id": "w4o1",
+   "who": "flaps",
+   "story": "flaps4",
+   "text": "Mr Flaps. The snow has closed the roads. I'll deliver by beak. It's a long way. I'll need more fish. Approve the fish budget?",
+   "options": {
+    "right": {
+     "label": "Yes. More fish.",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Every letter delivered. Slightly fishy. Bev got her pension. In a herring.",
+     "then": [
+      [
+       "w4o1b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Post can wait.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "The post is waiting. In Mr Flaps. He's very round. He's practically a snowman.",
+     "then": [
+      [
+       "w4o1b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 9
+  },
+  {
+   "id": "w4o1b",
+   "who": "pam",
+   "story": "flaps4",
+   "text": "The PTA's winter fair invitations went out by pelican. They arrived damp. They now say 'WINTER F'. Reprint them?",
+   "options": {
+    "right": {
+     "label": "Yes. Reprint.",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "Reprinted. Sent by Mr Flaps. Arrived damp. Now say 'NTER FAI'. Progress."
+    },
+    "left": {
+     "label": "No. Winter F it is.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "'Winter F' was a huge success. Nobody knew what it was. Everybody came."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o2",
+   "who": "pebbles",
+   "story": "pebbles4",
+   "text": "(Pebbles is eating the snowmen. Only the carrots. Every snowman in town looks very surprised.) Stop her?",
+   "options": {
+    "right": {
+     "label": "Yes. Stop her.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Stopped. She's eaten the 'Stop' sign on her way past.",
+     "then": [
+      [
+       "w4o2b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. She needs vitamins.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Forty carrots eaten. Forty surprised snowmen. Mr Frost is next. Timmy is guarding him.",
+     "then": [
+      [
+       "w4o2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 2,
+   "slot": 9
+  },
+  {
+   "id": "w4o2b",
+   "who": "timmy",
+   "story": "pebbles4",
+   "text": "Dear Mayor. The goat is looking at Mr Frost's carrot. I have a stick. It's for pointing. Can you help?",
+   "options": {
+    "right": {
+     "label": "Yes. Guard Mr Frost.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "You stood guard. Pebbles ate your scarf instead. Mr Frost is safe. Timmy is thrilled."
+    },
+    "left": {
+     "label": "No. Let nature decide.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Pebbles ate the carrot. Mr Frost now has a parsnip. Timmy says he looks 'different'."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o3",
+   "who": "wendy",
+   "story": "wendy5",
+   "text": "Wooo. Mayor. It's very cold. Ghosts feel the cold. I'd like a hot water bottle. It'll fall through me. I'd still like one.",
+   "options": {
+    "right": {
+     "label": "Yes. Hot water bottle.",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "It fell through her. Into the basement. Wendy says it's the thought that counts.",
+     "then": [
+      [
+       "w4o3b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. You're a ghost.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She's haunting the boiler room. For warmth. The pipes are making woo noises.",
+     "then": [
+      [
+       "w4o3b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 3,
+   "slot": 9
+  },
+  {
+   "id": "w4o3b",
+   "who": "wendy",
+   "story": "wendy5",
+   "text": "Wooo. I've found a way to keep warm. I'm haunting Doug's cardigan. He hasn't noticed. Can I stay?",
+   "options": {
+    "right": {
+     "label": "Yes. Stay warm.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Doug's cardigan says 'wooo' when he sits down. He thinks it's his back. It's not."
+    },
+    "left": {
+     "label": "No. Leave Doug alone.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She's haunting your scarf now. It's very warm. It sighs."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o4",
+   "who": "trevor",
+   "story": "trevor4",
+   "text": "(Trevor the moth has found the warmest lamp in Bad Town. It's your desk lamp. He's moved in. He's very happy.) Let him stay?",
+   "options": {
+    "right": {
+     "label": "Yes. Stay, Trevor.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "He lives on your lamp. He watches you work. He's very supportive.",
+     "then": [
+      [
+       "w4o4b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Shoo.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's moved to the lamp in the corridor. He looks at you every time you pass.",
+     "then": [
+      [
+       "w4o4b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 4,
+   "slot": 9
+  },
+  {
+   "id": "w4o4b",
+   "who": "trevor",
+   "story": "trevor4",
+   "text": "(Trevor has brought friends. Forty moths. All on your lamp. It's dim now. They're very happy.) Get a second lamp?",
+   "options": {
+    "right": {
+     "label": "Yes. Second lamp.",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Two lamps. Eighty moths. One very bright office. You need sunglasses indoors."
+    },
+    "left": {
+     "label": "No. Work in the dark.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "You're working by moth. It flickers. You've signed four things you didn't mean to."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o5",
+   "who": "hoot",
+   "story": "hoot5",
+   "text": "(Professor Hoot wants to cancel school for snow. It isn't snowing at the school. He'd just like a nap.) Cancel school?",
+   "options": {
+    "right": {
+     "label": "Yes. Snow day.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "No school. The children built Hoot a snow nest. He's asleep in it. Peacefully.",
+     "then": [
+      [
+       "w4o5b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No school's open.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "School's open. Hoot is asleep at his desk. The children are teaching the lesson. On owls.",
+     "then": [
+      [
+       "w4o5b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 5,
+   "slot": 9
+  },
+  {
+   "id": "w4o5b",
+   "who": "pam",
+   "story": "hoot5",
+   "text": "The PTA has noticed Professor Hoot sleeps all day. They'd like a daytime deputy head. Approve one?",
+   "options": {
+    "right": {
+     "label": "Yes. A day deputy.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "The new deputy is Bev. She's been a deputy head before. In 1952. She's very strict."
+    },
+    "left": {
+     "label": "No. Owls are owls.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The school is run at night now. Officially. The children are nocturnal. Parents are tired."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o6",
+   "who": "toby",
+   "story": "toby4",
+   "text": "(Toby the oak tree is cold. He'd like a scarf. A big one. Forty metres.) Knit Toby a scarf?",
+   "options": {
+    "right": {
+     "label": "Yes. Knit it.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "The whole town knitted. Forty metres of scarf. Toby has never looked so cosy.",
+     "then": [
+      [
+       "w4o6b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Trees are fine.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "He's dropped every icicle on the town hall steps. One at a time. Pointedly.",
+     "then": [
+      [
+       "w4o6b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 6,
+   "slot": 9
+  },
+  {
+   "id": "w4o6b",
+   "who": "toby",
+   "story": "toby4",
+   "text": "(Toby would like matching mittens. For his branches. There are two hundred branches.) Knit mittens?",
+   "options": {
+    "right": {
+     "label": "Yes. Two hundred mittens.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Two hundred mittens. Every squirrel in town lives in one now. Mr Nutkins charges rent."
+    },
+    "left": {
+     "label": "No. One scarf is plenty.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's sulking. Slowly. Over several weeks. Trees sulk long."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p1",
+   "who": "kevin",
+   "story": "kevin5",
+   "text": "(Kevin the pothole has frozen over. Children are skating in him. He seems delighted.) Put up a sign?",
+   "options": {
+    "right": {
+     "label": "Yes. 'Kevin's Rink'.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Kevin's Rink is the most popular attraction in town. He's very deep. And very still."
+    },
+    "left": {
+     "label": "No. Grit him.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Gritted. The children are sad. Kevin is crunchy now."
+    }
+   }
+  },
+  {
+   "id": "w4p2",
+   "who": "clive",
+   "story": "clive4",
+   "text": "(Clive the traffic cone is wearing a snow hat. Nobody put it there. He looks very pleased with himself.) Take it off?",
+   "options": {
+    "right": {
+     "label": "Yes. Take it off.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Removed. By morning, a new hat. Knitted. In his colours. Someone's on his side."
+    },
+    "left": {
+     "label": "No. It suits him.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "He's been voted 'Best Dressed Cone'. He's the only entrant. He won anyway."
+    }
+   }
+  },
+  {
+   "id": "w4p3",
+   "who": "gary",
+   "story": "gary4",
+   "text": "(Gary the vending machine has frozen. Every can is a slushie now. He's selling them as 'winter specials'.) Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Winter specials.",
+     "effects": {
+      "business": 10,
+      "people": -5
+     },
+     "reaction": "Sold out. Everyone's brain is frozen. Gary is very pleased. He's humming in C."
+    },
+    "left": {
+     "label": "No. Thaw him.",
+     "effects": {
+      "business": -5
+     },
+     "reaction": "Thawed. Everything fizzed out at once. Gary's display reads 'SORRY'. Again."
+    }
+   }
+  },
+  {
+   "id": "w4p4",
+   "who": "reginald",
+   "story": "reginald4",
+   "text": "(Reginald the tortoise has gone into hibernation. In the middle of the road. Again.) Move him?",
+   "options": {
+    "right": {
+     "label": "Yes. Gently.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Moved to the pavement. He woke up for one second. He went back to the road.",
+     "then": [
+      [
+       "w4p4b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Divert traffic.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Traffic goes round him. Very slowly. Out of respect. And caution."
+    }
+   }
+  },
+  {
+   "id": "w4p4b",
+   "who": "barb",
+   "story": "reginald4",
+   "text": "Mayor. Reginald is back in the road. Sleeping. Chief Biscuit wants to give him a parking ticket. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Ticket him.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Ticketed. He'll read it in April. He'll pay it in 2031."
+    },
+    "left": {
+     "label": "No. He's sleeping.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Biscuit has curled up next to him. Two sleeping officers of the road."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p5",
+   "who": "nutkins",
+   "story": "nutkins4",
+   "text": "Mr Nutkins. Squirrel Bank. I've buried the bank's reserves for winter. I can't remember where. I need a short-term loan. From you. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Lend him some.",
+     "effects": {
+      "treasury": -5,
+      "business": 10
+     },
+     "reaction": "Lent. By spring he'll find the reserves. Under your car. Under all of it.",
+     "then": [
+      [
+       "w4p5b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Dig harder.",
+     "effects": {
+      "treasury": 5,
+      "business": -5
+     },
+     "reaction": "He's digging up the park. Every hole has an acorn. None of them are his."
+    }
+   }
+  },
+  {
+   "id": "w4p5b",
+   "who": "nutkins",
+   "story": "nutkins4",
+   "text": "Mr Nutkins. I've found the reserves. They're under the town hall. Directly under. May I dig?",
+   "options": {
+    "right": {
+     "label": "Yes. Dig.",
+     "effects": {
+      "business": 10,
+      "law": -5
+     },
+     "reaction": "He dug. The town hall now leans. Slightly. Nobody's mentioned it."
+    },
+    "left": {
+     "label": "No. Wait for spring.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "He's waiting. On your doorstep. Every morning. Looking at the floor."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p6",
+   "who": "biscuit",
+   "story": "biscuit4",
+   "text": "(Inspector Biscuit would like a winter coat. With a badge. And four sleeves.) Approve the uniform budget?",
+   "options": {
+    "right": {
+     "label": "Yes. Four sleeves.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "He looks magnificent. He's arrested three snowmen just to show it off."
+    },
+    "left": {
+     "label": "No. You have fur.",
+     "effects": {
+      "law": -5,
+      "people": 5
+     },
+     "reaction": "He's filed a grievance. With his paw. On your trousers."
+    }
+   }
+  },
+  {
+   "id": "w4p7",
+   "who": "marcel",
+   "story": "marcel4",
+   "text": "(Marcel the mime is miming being cold. Very convincingly. People are giving him blankets. Real ones.) Intervene?",
+   "options": {
+    "right": {
+     "label": "Yes. He's fine.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You told everyone he's fine. He mimed being hurt by that. Very convincingly."
+    },
+    "left": {
+     "label": "No. More blankets.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "He has forty blankets. He's mimed a fireplace. People are sitting round it."
+    }
+   }
+  },
+  {
+   "id": "w4p8",
+   "who": "whiskers",
+   "story": "whiskers4",
+   "text": "Mr Whiskers Esq. is suing the snow. It sat on his chair. Without permission. He'd like the town to pay damages.",
+   "options": {
+    "right": {
+     "label": "Yes. Pay the cat.",
+     "effects": {
+      "treasury": -5
+     },
+     "reaction": "Paid. He's spent it on a heated chair. He's suing the next snowfall in advance."
+    },
+    "left": {
+     "label": "No. Snow can't be sued.",
+     "effects": {
+      "law": -5,
+      "people": 5
+     },
+     "reaction": "He's taking it to a higher court. It's Barb's helicopter."
+    }
+   }
+  },
+  {
+   "id": "w4p9",
+   "who": "lorraine",
+   "story": "lorraine5",
+   "text": "(Lorraine the seagull has stolen every scarf from the lost property. She's wearing all of them. She can't fly.) Get them back?",
+   "options": {
+    "right": {
+     "label": "Yes. Get them back.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Unwound. Took an hour. She went round and round. She's dizzy. Not sorry.",
+     "then": [
+      [
+       "w4p9b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. She's cold too.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "She's waddling round town in forty scarves. People are calling her 'the Duchess'. She loves it."
+    }
+   }
+  },
+  {
+   "id": "w4p9b",
+   "who": "lorraine",
+   "story": "lorraine5",
+   "text": "(Lorraine is back. She's brought you a scarf. It's yours. She stole it this morning. It's a gift now.) Accept?",
+   "options": {
+    "right": {
+     "label": "Yes. Thank you.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You thanked a seagull for your own scarf. She seemed genuinely moved."
+    },
+    "left": {
+     "label": "No. It's mine.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "She's kept it. She wears it on your windowsill. Every morning."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p10",
+   "who": "bev",
+   "story": "bevswim2",
+   "text": "Mayor, I'd like to go wild swimming in the frozen lake. Through a hole. I've already cut the hole. Coming?",
+   "options": {
+    "right": {
+     "label": "Yes. I'll come.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You lasted four seconds. Bev did forty minutes. She says you're 'soft'.",
+     "then": [
+      [
+       "w4p10b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Big Carl can.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Carl went in to supervise. Bev had to rescue him. Again."
+    }
+   }
+  },
+  {
+   "id": "w4p10b",
+   "who": "carl",
+   "story": "bevswim2",
+   "text": "Big Carl. Bev has rescued me eleven times this year. I'd like to give her my whistle. As a thank you. Is that allowed?",
+   "options": {
+    "right": {
+     "label": "Yes. Give it to her.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "She's wearing it. She blew it at a bus. The bus stopped. She's keeping it."
+    },
+    "left": {
+     "label": "No. You need it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's kept it. He's bought her a second whistle. She's blowing both."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p11",
+   "who": "timmy",
+   "story": "timmy5",
+   "text": "Dear Mayor. It isn't snowing at school. Only at my house. I'm very sure. Can I have a snow day?",
+   "options": {
+    "right": {
+     "label": "Yes. Timmy's snow day.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Snow day for one. He built a snowman. It's running for council."
+    },
+    "left": {
+     "label": "No. To school.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He went. He told everyone it snowed at his house. Everyone believed him."
+    }
+   }
+  },
+  {
+   "id": "w4p12",
+   "who": "linda",
+   "story": "linda4",
+   "text": "Mayor, the library's 'How to Survive Winter' was borrowed in 1987. It's never come back. Shall we send a search party?",
+   "options": {
+    "right": {
+     "label": "Yes. Find that book.",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "Found. In the cheese vault. It's warm. The cheese seems to have been reading it.",
+     "then": [
+      [
+       "w4p12b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Buy another.",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "New copy bought. It has a 400-year waiting list. Mostly Bev."
+    }
+   }
+  },
+  {
+   "id": "w4p12b",
+   "who": "linda",
+   "story": "linda4",
+   "text": "Mayor, the book we found in the cheese vault has notes in the margins. In very small letters. They say 'SOON'. Return it to the shelf?",
+   "options": {
+    "right": {
+     "label": "Yes. Shelve it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Shelved. Under 'Not Ominous'. Linda has moved the shelf further away."
+    },
+    "left": {
+     "label": "No. Burn the notes.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You can't burn them. They're cheese. They melted. Now the whole book says SOON."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p13",
+   "who": "sal",
+   "story": "sal4",
+   "text": "Mayor. I'm selling hot soup. In tyres. The tyres keep it warm. Will you try one?",
+   "options": {
+    "right": {
+     "label": "Yes. Try one.",
+     "effects": {
+      "people": 5,
+      "business": 10
+     },
+     "reaction": "It's soup. Warm, tyre-y soup. Four thousand sold. The tyres are refillable."
+    },
+    "left": {
+     "label": "No thank you.",
+     "effects": {
+      "people": -5,
+      "business": 5
+     },
+     "reaction": "Gerald tried it. He liked it. He tried the tyre. He liked that too."
+    }
+   }
+  },
+  {
+   "id": "w4p14",
+   "who": "marge",
+   "story": "snowcomp",
+   "text": "Mayor, the Bugle's Best Snowman competition. Mr Frost has entered. Timmy is his campaign manager. Is it rigged?",
+   "options": {
+    "right": {
+     "label": "Yes. Investigate.",
+     "effects": {
+      "law": 5,
+      "press": 5
+     },
+     "reaction": "It's rigged. In favour of Mr Frost. Timmy did it. With a crayon. He's eight.",
+     "then": [
+      [
+       "w4p14b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let it run.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Mr Frost won. He said nothing. Timmy cried. The carrot looked proud."
+    }
+   }
+  },
+  {
+   "id": "w4p14b",
+   "who": "timmy",
+   "story": "snowcomp",
+   "text": "Dear Mayor. Yes I rigged it. Mr Frost deserved it. He is very good at standing. Am I in trouble?",
+   "options": {
+    "right": {
+     "label": "Yes. A little.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "He's been banned from rigging for a week. He's rigging something else. You can feel it."
+    },
+    "left": {
+     "label": "No. Good job.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Timmy's been hired by Chad. As a consultant. He's earning more than Doug."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p15",
+   "who": "brayden",
+   "story": "socks",
+   "text": "Mayor! Heated socks! App-controlled! They only work on Wi-Fi! So, indoors. Stay indoors! Approve them?",
+   "options": {
+    "right": {
+     "label": "Yes. Heated socks.",
+     "effects": {
+      "business": 10,
+      "people": -5
+     },
+     "reaction": "Everyone's feet are warm. Nobody's leaving the house. Business is booming. Indoors."
+    },
+    "left": {
+     "label": "No. Normal socks.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Brayden has sold four thousand anyway. Everyone's standing near the router."
+    }
+   }
+  },
+  {
+   "id": "w4p16",
+   "who": "coach",
+   "story": "fishing",
+   "text": "Mayor! Ice fishing! I've never caught a fish! This is the year! Can I use the town hall pond? It's frozen!",
+   "options": {
+    "right": {
+     "label": "Yes. Fish, Coach.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Six hours. No fish. He caught a boot. He's coached it. It's doing well.",
+     "then": [
+      [
+       "w4p16b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. There are no fish.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "There are fish. Three. They're watching him. Smugly. Through the ice."
+    }
+   }
+  },
+  {
+   "id": "w4p16b",
+   "who": "coach",
+   "story": "fishing",
+   "text": "Mayor! I caught a fish! It's Gerald! He bit the line! Do I keep him?",
+   "options": {
+    "right": {
+     "label": "Yes. Catch and keep.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Gerald has been weighed. He's a record. He's honking about it. Coach is crying."
+    },
+    "left": {
+     "label": "No. Catch and release.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Released. Gerald immediately bit the line again. They're doing it all day."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p17",
+   "who": "doug",
+   "story": "heating2",
+   "text": "Mayor. I'd like to turn the heating down one degree. It saves £3. Per year. Everyone will be furious. Do it?",
+   "options": {
+    "right": {
+     "label": "Yes. One degree.",
+     "effects": {
+      "treasury": 5,
+      "people": -10
+     },
+     "reaction": "Down one degree. The office is wearing hats. Randy is wearing two coats. Again."
+    },
+    "left": {
+     "label": "No. Stay warm.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Doug is turning it down in secret. Half a degree. At night. Everyone suspects."
+    }
+   }
+  },
+  {
+   "id": "w4p18",
+   "who": "steve",
+   "story": "weather4",
+   "text": "Stormy Steve. I forecast snow. Which means sun. I've been wrong six weeks running. Am I due a right one?",
+   "options": {
+    "right": {
+     "label": "Yes. You're due.",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "It snowed. He was right. He's in shock. He's handed in his resignation. Doug refused it."
+    },
+    "left": {
+     "label": "No. Stay wrong.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It was sunny. He was wrong. Everyone was relieved. It's tradition now."
+    }
+   }
+  },
+  {
+   "id": "w4p19",
+   "who": "pam",
+   "story": "fair",
+   "text": "The PTA wants a winter fair. In the car park. On the ice. Stalls, games and a coconut shy. With snowballs. Approve it?",
+   "options": {
+    "right": {
+     "label": "Yes. Winter fair.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Best fair in years. Bev won the coconut shy. Then the coconuts. Then the shy.",
+     "then": [
+      [
+       "w4p19b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Too icy.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "They held it in the library. Linda shushed every stall."
+    }
+   }
+  },
+  {
+   "id": "w4p19b",
+   "who": "pam",
+   "story": "fair",
+   "text": "The winter fair made £400! The PTA would like to spend it on a hot chocolate fountain. For the school. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Hot chocolate.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The fountain is a triumph. The school smells of chocolate. Exam results are up. Somehow."
+    },
+    "left": {
+     "label": "No. Books.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "400 books. All about hot chocolate. The children are reading. Angrily."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p20",
+   "who": "randy",
+   "story": "snowraccoon",
+   "text": "Boss. I built a snow-raccoon. It's bigger than me. It's wearing my coat. I'm cold. Can I have the coat back?",
+   "options": {
+    "right": {
+     "label": "Yes. Take it back.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He took the coat. The snow-raccoon looks sad. He gave it a scarf. Out of guilt."
+    },
+    "left": {
+     "label": "No. It's art.",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "It's in the Bugle: 'GIANT SNOW RACCOON'. Randy is shivering in the photo. Proudly."
+    }
+   }
+  },
+  {
+   "id": "w4p21",
+   "who": "chad",
+   "story": "heater",
+   "text": "Mayor. I'd like to heat the whole high street. With a giant patio heater. Shaped like me. It's ninety feet. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Heat the street.",
+     "effects": {
+      "business": 10,
+      "treasury": -5
+     },
+     "reaction": "It's lovely and warm. Snow has melted in a Chad-shaped circle. Visible from space.",
+     "then": [
+      [
+       "w4p21b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. It's ninety feet.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "He's built it on his own lawn. Facing the high street. Pointedly."
+    }
+   }
+  },
+  {
+   "id": "w4p21b",
+   "who": "nora",
+   "story": "heater",
+   "text": "Mayor, the giant Chad heater is melting the clock tower. It's leaning. Towards the heater. Turn it off?",
+   "options": {
+    "right": {
+     "label": "Yes. Off.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Off. The clock tower straightened. Mostly. It's two minutes slow now."
+    },
+    "left": {
+     "label": "No. Lean with it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The clock tower has leaned all the way. It's resting on Chad. He's fine. He's charging rent."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p22",
+   "who": "gerald",
+   "story": "migrate",
+   "text": "HONK. (Gerald would like to migrate. He has never migrated. He'd like a leaving party. He has packed a bag. It's bread.) Throw the party?",
+   "options": {
+    "right": {
+     "label": "Yes. Farewell, Gerald.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The party was lovely. He left. He came back an hour later. He'd forgotten his bread.",
+     "then": [
+      [
+       "w4p22b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Stay.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He stayed. He's very relieved. He's unpacked the bread. And eaten it."
+    }
+   }
+  },
+  {
+   "id": "w4p22b",
+   "who": "gerald",
+   "story": "migrate",
+   "text": "HONK. (Gerald would like a second leaving party. He promises to actually leave this time.) Throw another?",
+   "options": {
+    "right": {
+     "label": "Yes. One more.",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "Second party. He left. He came back in the morning. He'd migrated to the next street."
+    },
+    "left": {
+     "label": "No. You live here.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He agreed. He's unpacked. He's never been happier. He honked about it all night."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p23",
+   "who": "nora",
+   "story": "snow2",
+   "text": "Mayor, I've made artificial snow. It's warm. It's pink. It's everywhere. It smells of strawberries. Keep it?",
+   "options": {
+    "right": {
+     "label": "Yes. Pink snow.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "The town is pink. Children are eating it. Nora says it's 'probably' fine."
+    },
+    "left": {
+     "label": "No. Normal snow.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Hosed away. The river runs pink. The ducks are thrilled. They smell of strawberries."
+    }
+   }
+  },
+  {
+   "id": "w4p24",
+   "who": "carl",
+   "story": "fountain2",
+   "text": "Big Carl. I'm on duty at the frozen fountain. Someone dropped a coin. I'm chipping it out. It's been six hours. Keep going?",
+   "options": {
+    "right": {
+     "label": "Yes. Keep going.",
+     "effects": {
+      "people": 5,
+      "treasury": 5
+     },
+     "reaction": "Nine hours. He got it. It was 2p. He gave it to Doug. Doug cried. Again."
+    },
+    "left": {
+     "label": "No. Let it go.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He let it go. He comes back every day. Just to look at it."
+    }
+   }
+  },
+  {
+   "id": "w4p25",
+   "who": "flaps",
+   "story": "flaps5",
+   "text": "Mr Flaps. I have delivered a parcel. It's a snowball. From the next town. Addressed to you. Return to sender?",
+   "options": {
+    "right": {
+     "label": "Yes. Send it back.",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "Sent back. By beak. It arrived as water. They've sent a strongly worded puddle.",
+     "then": [
+      [
+       "w4p25b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Throw it back.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "You threw it. It hit the next town's mayor. On television. Snowball war declared."
+    }
+   }
+  },
+  {
+   "id": "w4p25b",
+   "who": "marge",
+   "story": "flaps5",
+   "text": "Mayor, the next town has declared a snowball war. They're massing on the border. With snow. Fight back?",
+   "options": {
+    "right": {
+     "label": "Yes. Snowball war!",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Bad Town won. Mostly thanks to Bev. And her scooter. And the geese."
+    },
+    "left": {
+     "label": "No. Make peace.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Peace treaty signed. In snow. It melted at lunch. War resumed."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4p26",
+   "who": "pebbles",
+   "story": "pebbles5",
+   "text": "(Councillor Pebbles is sitting in your seat at the council meeting. She's chewing something. It's the agenda. Again.) Start without it?",
+   "options": {
+    "right": {
+     "label": "Yes. Wing it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You winged it. It was the best meeting in years. Pebbles abstained. With her mouth full."
+    },
+    "left": {
+     "label": "No. Reprint the agenda.",
+     "effects": {
+      "law": 5,
+      "treasury": -5
+     },
+     "reaction": "Reprinted. She ate that too. The printer has fled."
+    }
+   }
+  },
+  {
+   "id": "w4crime",
+   "who": "barb",
+   "story": "pressure",
+   "text": "Crime is up. Someone's stealing snowmen's carrots. Every carrot in town. It's organised. Hire more officers?",
+   "options": {
+    "right": {
+     "label": "Yes. More officers.",
+     "effects": {
+      "treasury": -10,
+      "law": 10
+     },
+     "reaction": "Four new officers. All snowmen. They're very good at standing guard."
+    },
+    "left": {
+     "label": "No. Do your best.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Barb's on carrot watch. Alone. With a flask. She's seen things."
+    }
+   },
+   "repeat": true,
+   "weight": 4,
+   "requires": {
+    "max": {
+     "law": 25
+    }
+   }
+  },
+  {
+   "id": "w4protest",
+   "who": "pam",
+   "story": "pressure",
+   "text": "There's a protest outside City Hall. About the cold. They've brought placards and a brazier. They've lit the placards. Talk to them?",
+   "options": {
+    "right": {
+     "label": "Yes. Talk to them.",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "You listened. You brought soup. They've forgiven you. For now."
+    },
+    "left": {
+     "label": "No. Wait it out.",
+     "effects": {
+      "people": -5,
+      "law": 5
+     },
+     "reaction": "They've built an igloo. It's got a kettle. They're never leaving."
+    }
+   },
+   "repeat": true,
+   "weight": 4,
+   "requires": {
+    "max": {
+     "people": 25
+    }
+   }
+  },
+  {
+   "id": "w4broke",
+   "who": "doug",
+   "story": "pressure",
+   "text": "Mayor. The freeze has cost everything. I've sold my winter coat. I'm in a duvet. Sell the town's snowplough?",
+   "options": {
+    "right": {
+     "label": "Yes. Sell the plough.",
+     "effects": {
+      "treasury": 15,
+      "people": -10
+     },
+     "reaction": "Sold. Bev is the snowplough now. Officially. She's charging."
+    },
+    "left": {
+     "label": "No. Tax the snow.",
+     "effects": {
+      "treasury": 10,
+      "business": -10
+     },
+     "reaction": "Snow tax. Per flake. Doug is counting. He'll be some time."
+    }
+   },
+   "repeat": true,
+   "weight": 5,
+   "requires": {
+    "max": {
+     "treasury": 20
+    }
+   }
+  },
+  {
+   "id": "w4slump",
+   "who": "chad",
+   "story": "pressure",
+   "text": "Mayor. Business is frozen. Literally. My shops are shut. Everyone's shut. Give a winter grant?",
+   "options": {
+    "right": {
+     "label": "Yes. Winter grant.",
+     "effects": {
+      "treasury": -10,
+      "business": 15
+     },
+     "reaction": "Shops are open. Doors are warm. Chad has used his grant on a hot tub. For 'business'."
+    },
+    "left": {
+     "label": "No. Wait for spring.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Everyone's waiting for spring. In the shops. With the lights off."
+    }
+   },
+   "repeat": true,
+   "weight": 5,
+   "requires": {
+    "max": {
+     "business": 25
+    }
+   }
+  },
+  {
+   "id": "w4buyout",
+   "who": "chad",
+   "story": "pressure",
+   "text": "Business is booming! Even in the freeze! I'd like to buy the snow. All of it. Then sell it back. Agree?",
+   "options": {
+    "right": {
+     "label": "Yes. Sell the snow.",
+     "effects": {
+      "treasury": 15,
+      "business": -10,
+      "people": -10
+     },
+     "reaction": "Chad owns the snow. It's £2 a snowball. Children are furious."
+    },
+    "left": {
+     "label": "No.",
+     "effects": {
+      "business": -10
+     },
+     "reaction": "He's bought the clouds instead. It's unclear how. Doug's checking."
+    }
+   },
+   "repeat": true,
+   "weight": 4,
+   "requires": {
+    "min": {
+     "business": 75
+    }
+   }
+  }
+ ],
+ "objectives": [
+  {
+   "id": "frost",
+   "text": "Save Mr Frost from the thaw",
+   "when": {
+    "flags": [
+     "frost_saved"
+    ]
+   }
+  },
+  {
+   "id": "dennis",
+   "text": "Give Dennis the penguin a home",
+   "when": {
+    "flags": [
+     "dennis_home"
+    ]
+   }
+  },
+  {
+   "id": "warm",
+   "text": "Get Business above 65 in the freeze",
+   "when": {
+    "min": {
+     "business": 65
+    }
+   }
+  }
+ ],
+ "endings": {
+  "low:people": {
+   "title": "Snowballed Out",
+   "text": "The whole town lined up with snowballs. Bev threw first. Bev threw last. Bev threw most of the middle."
+  },
+  "low:business": {
+   "title": "Frozen Out",
+   "text": "Every shop shut. Chad moved his business into a glacier. You're the glacier's receptionist now."
+  },
+  "low:law": {
+   "title": "Put on Ice",
+   "text": "Barb arrested you and kept you in the walk-in freezer. Next to Mr Frost. He was very understanding."
+  },
+  "low:press": {
+   "title": "Cold Shoulder",
+   "text": "The Bugle stopped mentioning you. Completely. Even when you were on fire. You were not on fire. It's winter."
+  },
+  "low:treasury": {
+   "title": "Heating Bill",
+   "text": "The heating bill came. Doug opened it and lay down in the snow. The town's money is now a snowman."
+  },
+  "high:people": {
+   "title": "Carried to the Ball",
+   "text": "The town loved you so much they carried you to the Winter Ball. Then kept carrying. You've been at a ball for six weeks."
+  },
+  "high:business": {
+   "title": "Franchised",
+   "text": "Chad turned you into a franchise. There are forty mayors now. All you. All in different towns. All very tired."
+  },
+  "high:law": {
+   "title": "Winter Sheriff",
+   "text": "Barb made you Winter Sheriff. You have a badge and a horse. The horse is Gerald. It's going badly."
+  },
+  "high:press": {
+   "title": "Front Page, Frozen",
+   "text": "The Bugle put you on the front page so often the printing press froze in your shape. Now every page is you."
+  },
+  "rare:cheese_mayor": {
+   "title": "The Cheese Is Mayor Now",
+   "text": "You sat behind the cheese. It has been mayor ever since. It has never said a word. It is the most popular mayor in history."
+  },
+  "rare:fondue": {
+   "title": "Fondue",
+   "text": "You stepped into the fondue. Nobody is quite sure what happened next. There's a statue of you in the square now. It's cheese. It smiles."
+  }
+ },
+ "headlines": {
+  "ice": "THE RIVER RINK",
+  "snowman": "MR FROST FOR COUNCIL",
+  "snowedin": "SNOWED IN WITH A CHEESE",
+  "grit": "GERALD ATE THE GRIT",
+  "pipes": "EVERY PIPE FROZEN",
+  "carlice": "THE ICE POOL",
+  "ball": "THE WINTER BALL",
+  "law": "YOUR LAWS",
+  "blizzard": "THE BLIZZARD",
+  "sledge": "THE CLOCK TOWER SLEDGE RUN",
+  "heating": "THE HEATING",
+  "avalanche": "AVALANCHE AT SAL'S",
+  "iceberg": "DENNIS THE PENGUIN",
+  "thinice": "GERALD ON THIN ICE",
+  "thaw": "THE GREAT THAW",
+  "sneak": "CAUGHT IN THE ACT",
+  "ribbon": "THE RIBBON RACE",
+  "cheesesaga": "THE CHEESE RISES",
+  "pressure": "TROUBLE AT HOME",
+  "town": "AROUND TOWN",
+  "flaps4": "POST BY BEAK",
+  "pebbles4": "THE CARROT THIEF",
+  "wendy5": "A COLD GHOST",
+  "trevor4": "MOTHS ON YOUR LAMP",
+  "hoot5": "THE OWL'S SNOW DAY",
+  "toby4": "A SCARF FOR TOBY",
+  "kevin5": "KEVIN'S RINK",
+  "clive4": "CLIVE'S HAT",
+  "gary4": "GARY'S SLUSHIES",
+  "reginald4": "HIBERNATING IN THE ROAD",
+  "nutkins4": "THE BURIED BANK",
+  "biscuit4": "FOUR SLEEVES",
+  "marcel4": "THE COLD MIME",
+  "whiskers4": "CAT V. SNOW",
+  "lorraine5": "THE DUCHESS OF SCARVES",
+  "bevswim2": "BEV IN THE LAKE",
+  "timmy5": "TIMMY'S SNOW DAY",
+  "linda4": "THE BOOK THAT SAYS SOON",
+  "sal4": "TYRE SOUP",
+  "snowcomp": "BEST SNOWMAN",
+  "socks": "HEATED SOCKS",
+  "fishing": "ICE FISHING",
+  "heating2": "ONE DEGREE",
+  "weather4": "STEVE IS DUE",
+  "fair": "THE WINTER FAIR",
+  "snowraccoon": "THE SNOW RACCOON",
+  "heater": "THE CHAD HEATER",
+  "migrate": "GERALD MIGRATES (BRIEFLY)",
+  "snow2": "PINK SNOW",
+  "fountain2": "THE FROZEN COIN",
+  "flaps5": "SNOWBALL WAR",
+  "pebbles5": "THE AGENDA, EATEN"
+ },
+ "cliffhangers": [
+  "Tomorrow: a snowman wants your job.",
+  "Tomorrow: you, Randy, Doug, the Cheese and one sandwich.",
+  "Tomorrow: the grit is gone. Gerald is crunchy.",
+  "Tomorrow: every pipe in town is frozen.",
+  "Tomorrow: Big Carl's pool is ice.",
+  "Tomorrow: Sunday. The Winter Ball. The Cheese has an invitation."
+ ]
+}

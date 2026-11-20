@@ -1,6 +1,6 @@
 # Mayor of Bad Town (working title)
 
-A daily comedy card game. One real week is one term in office. Each day you face 20 cards: someone asks for something and you say yes or no. Every answer moves five meters (People, Business, Law, Press, Treasury), and you only see which way after you have answered. Sunday is the election.
+A daily comedy card game. Every day is a term in office; every night is a re-election. Each day you face 20 cards: someone asks for something and you say yes or no. Every answer moves five meters (People, Business, Law, Press, Treasury), and you only see which way after you have answered. Keep everyone calm, get 50% tonight, keep your streak. Each real week is a themed chapter with its own long story.
 
 ```bash
 npm install
@@ -31,29 +31,35 @@ CONTENT_GUIDE.md  how to write cards and stories
 ## Rules
 
 - **Every card is a yes or a no.** Drag right to approve, left to reject (or tap, or press Y / N). A rubber stamp marks the card APPROVED or REJECTED; it then turns over to show the character's face, what they said, the bars that moved and how many mayors chose the same.
-- **20 cards a day**, the same deck for every mayor (`dayDeck`). Each day opens with its main story, has one law to sign or refuse, one catastrophe and one sneak moment; side stories fill the rest. See CONTENT_GUIDE.md.
-- **Rabbit holes.** Yes and no lead to different next cards, straight away (`then`), five or six deep in a day's main story. Some consequences come back the next morning (`next`).
-- Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. A recall ends that day; you return next day with every meter at 40 and Sunday's vote takes 8 points. A third recall ends the term.
+- **20 cards a day, seven days a week**, the same deck for every mayor (`dayDeck`). Each day opens with its main story, has one law to sign or refuse, one catastrophe and one mini-game (sneak or ribbon); side stories fill the rest. See CONTENT_GUIDE.md.
+- **Rabbit holes.** Yes and no lead to different next cards, straight away (`then`), four or five deep in a day's main story. Some consequences come back the next morning (`next`).
+- **Every night is a re-election** (`src/engine/election.ts`). Tonight's vote = 20 + 0.2 × today's score + 3 per weekly goal met. 50% keeps the job and adds to your streak (🔥, kept in the save; Randy's covered days pause it). Lose and you get a "voted out" ending for the Scrapbook, blamed on the least happy group; tomorrow you run again with everything at 40.
+- Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. A recall ends the day on the spot and loses tonight's vote.
+- **The week's theme** (`theme` in each pack) nudges one meter every third card: Goose Migration Week (Law down), Heatwave (Treasury down), Festival Week (Press up), The Big Freeze (Business down).
+- **The week's saga**: one long story, one card a day from Monday (`day: 1, slot: 8`) to Sunday via `next`. Going along with it all the way leads to a **rare ending** (`ending: "rare:..."` on a choice): the day ends on the spot with a special Scrapbook page. Two per week; bots find them in about 3–6% of weeks.
+- **Mini-games:** the sneak (hold, release while they look away) and the ribbon cut (stop the swinging scissors in the gold zone before Gerald cuts it with his face; three tries).
 - Pressure cards appear when a meter is very low or very high.
-- **Daily score** (`src/engine/score.ts`): points for keeping the town balanced. After every card each of the five meters earns 2 if it is calm (45–55), 1 if uneasy (35–65), 0 if in danger; the treasury only counts if it runs low. Up to 10 per card, 200 a day, +30 for ending a full day with nobody in danger, −100 for a recall. The crowd % (how many mayors made the same call) is shown but not scored. The day end lists where each group finished (People: 54, Business: 48, ...); Copy result copies that with the score.
-- **Weekly goals:** three per pack (`objectives`), shown in the morning paper, at day end and behind the ★ chip in the header; each one met is +3 votes on Sunday and is announced on the card that met it.
-- **Scrapbook:** endings, deeds, and the oddballs you've met.
-- **Sunday:** vote share = 21 + weighted distance of each meter from 50 + 3 per weekly goal + the election card − 8 per recall. 50 wins. Most mayors lose (`reports/balance.md`).
-- You can start any day: Deputy Randy plays the days you missed and hands back a town with every meter between 35 and 65.
+- **Daily score** (`src/engine/score.ts`): points for keeping the town balanced. After every card each of the five meters earns 2 if it is calm (45–55), 1 if uneasy (35–65), 0 if in danger; the treasury only counts if it runs low. Up to 10 per card, 200 a day, +30 for ending a full day with nobody in danger, −100 for a recall. The crowd % is shown but not scored.
+- **Weekly goals:** three per pack (`objectives`), shown in the morning paper, at day end and behind the ★ chip; each one met adds 3% to every night's vote.
+- **Scrapbook:** rare endings, voted-out endings, recall endings, the oddballs you've met, deeds, nights won and streaks.
+- **The week in review** after Sunday night: a nickname for the week, each night's result, your best day, your oddest call (lowest crowd %), the oddballs you dealt with and the endings you found.
+- You can start any day: Deputy Randy plays the days you missed (he always wins his nights: he counts the votes) and hands back a town with every meter between 35 and 65.
 - First visit: a short opening, ending with the oath (your mayor's name, what the townsfolk are called, who voted for you).
 - The next day opens at local midnight.
 
 ## Weeks
 
-There are two week packs (`src/content/packs/week1.json`, `week2.json`). Week 1 runs the week of `LAUNCH_MONDAY` (`src/content/index.ts`), week 2 the next, then they repeat. Each pack has six main stories (one a day, five or six cards deep), six catastrophes, six laws, six sneak moments, a pool of side stories and a Sunday election with its own opponent (week 1: Clive, a traffic cone; week 2: Gary, a vending machine). Add a pack by writing `weekN.json`, running `PACK=weekN node sim/crowd.ts`, and listing it in `PACKS`.
+Four week packs (`src/content/packs/week1.json` … `week4.json`), about 650 cards in all. Week 1 runs the week of `LAUNCH_MONDAY` (`src/content/index.ts`), week 2 the next, and so on; after week 4 they repeat. Each pack has a theme, seven main stories, seven laws, seven catastrophes, seven mini-games, a saga with two rare endings, oddball debuts, a pool of side stories and its own recall endings. Add a pack by writing `weekN.json`, running `PACK=weekN node sim/crowd.ts`, and listing it in `PACKS`.
+
+Balance (`PACK=weekN npm run sim`, 250 weeks per bot): a careful bot that can see every effect is re-elected on 61–86% of nights depending on the week; random play on 16–35%. Real players sit in between.
 
 ## Launch
 
 ```bash
 npm install
-npm run check                     # both packs valid, types, tests
-PACK=week1 npm run sim            # balance report (repeat with PACK=week2)
-npm run crowd                     # regenerate simulated crowd shares for both packs
+npm run check                     # all packs valid, types, tests
+PACK=week1 npm run sim            # balance report (repeat for week2..week4)
+npm run crowd                     # regenerate simulated crowd shares for every pack
 ```
 
 1. **Stats service** (optional but recommended): deploy `worker/` (see `worker/README.md`). It gives you a URL.

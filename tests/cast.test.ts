@@ -4,7 +4,7 @@ import { DRAWN, NAMES, ODDBALLS } from '../src/ui/art.tsx';
 
 describe('the cast', () => {
   for (const pack of PACKS) {
-    const who = [...new Set([...pack.cards, ...pack.campaign].map((c) => c.who))];
+    const who = [...new Set(pack.cards.map((c) => c.who))];
     it(`${pack.id}: everyone who appears has a portrait, and a name`, () => {
       for (const w of who) {
         expect(DRAWN(w), `${w} portrait`).toBe(true);

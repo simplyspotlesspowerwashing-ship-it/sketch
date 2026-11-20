@@ -990,3 +990,50 @@ h1 span { white-space: nowrap; }
 @media (max-width: 500px) { .top h1 { font-size: 14px; } .top h1 span { padding: 1px 6px 2px; } .top-right { gap: 4px; } .top .icon { width: 30px; height: 30px; } .daychip, .scorechip, .goalchip { font-size: 11px; padding: 2px 6px; } }
 @media (max-width: 400px) { .top h1 .pre { display: none; } }
 @media (max-width: 380px) { .top h1 { font-size: 13px; } .top-right { gap: 3px; } .top .icon { width: 28px; height: 28px; } .daychip, .scorechip, .goalchip { font-size: 10.5px; padding: 2px 5px; } }
+
+/* ---------- nightly elections ---------- */
+.streakchip { font-size: 13px; font-weight: 700; padding: 2px 8px; border: 2px solid var(--ink); border-radius: 99px; background: #FFE3C2; white-space: nowrap; }
+@media (max-width: 500px) { .streakchip { font-size: 11px; padding: 2px 6px; } }
+@media (max-width: 380px) { .streakchip { font-size: 10.5px; padding: 2px 5px; } }
+.verdict-tag { display: inline-block; font-size: 15px; letter-spacing: .06em; padding: 1px 10px; border: 3px solid var(--ink); border-radius: 8px; rotate: -3deg; margin-bottom: 4px; animation: thunk .4s .2s both; }
+.verdict-tag.won { background: #C9EFB4; } .verdict-tag.lost { background: #F9B9AB; }
+.streakline { margin: 6px 0 0; font-size: 14px; font-weight: 700; }
+.ending.out { background: #F9E3C9; } .ending.rare { background: linear-gradient(135deg, #EADCF7, #FBF3D6); box-shadow: 0 0 0 3px var(--gold); }
+.timeline li.won b { color: #2C6B41; } .timeline li.lost b { color: var(--alert); }
+.theme-line { margin: 0 0 6px; font-size: 13px; line-height: 1.35; background: #FFF4CF; border: 2px dashed var(--ink); border-radius: 10px; padding: 5px 9px; }
+.theme-line b { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+
+/* ---------- week in review ---------- */
+.recap { display: flex; flex-direction: column; gap: 10px; }
+.recap-name { margin: 4px 0 2px; font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 6.5vw, 34px); line-height: 1.05; }
+.recap-sub { margin: 0; font-size: 14px; }
+.recap-days { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.recap-days li { border: 2px solid var(--ink); border-radius: 8px; padding: 3px 0; background: #fff; display: flex; flex-direction: column; font-size: 11px; line-height: 1.2; }
+.recap-days li b { font-size: 13px; } .recap-days li small { color: var(--soft); font-size: 10px; }
+.recap-days li.won { background: #DFF3D3; } .recap-days li.lost { background: #F9D6CD; }
+.recap-line { margin: 0; font-size: 14px; }
+.recap-odd { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: center; background: #fff; border: 2px solid var(--ink); border-radius: 12px; padding: 8px 10px; font-size: 13.5px; line-height: 1.35; }
+.recap-odd > b { grid-column: 1 / -1; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.recap-met { display: flex; flex-direction: column; gap: 4px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.recap-met span { display: flex; flex-wrap: wrap; gap: 4px; }
+
+/* ---------- ribbon cutting ---------- */
+.card.cutcard.shake { animation: shake .3s both; }
+.card.cutcard.hit { background: #E6F5DC; } .card.cutcard.miss { background: #F9E3DC; }
+.ribbon-track { position: relative; height: 34px; margin: 4px 6px 0; border: 2.5px solid var(--ink); border-radius: 10px; background: #fff; overflow: hidden; }
+.ribbon-zone { position: absolute; top: 0; bottom: 0; background: var(--gold); border-inline: 2px solid var(--ink); }
+.ribbon-band { position: absolute; left: 0; right: 0; top: 50%; height: 8px; margin-top: -4px; background: #C23B3B; }
+.card.cutcard.hit .ribbon-band { background: linear-gradient(90deg, #C23B3B 48%, transparent 48% 52%, #C23B3B 52%); }
+.scissors { position: absolute; top: 50%; translate: -50% -50%; font-size: 24px; line-height: 1; color: var(--ink); text-shadow: 0 1px 0 #fff; }
+.goose-lane { position: relative; height: 38px; margin: 6px 6px 0; border-bottom: 3px dotted var(--soft); }
+.goose-walk { position: absolute; bottom: 0; transition: left .5s cubic-bezier(.3, 1.5, .5, 1); }
+.goose-goal { position: absolute; right: 0; bottom: 4px; font-size: 22px; }
+.ribbon-btn { min-width: 200px; }
+.recap .bonus { margin: 0; }
+@media (max-width: 500px) { .daychip .dc-n { display: none; } }
+@media (max-width: 380px) { .scorechip .pts-word { display: none; } .top-right { gap: 2px; } }
+@media (max-width: 620px) { .daychip .dc-n { display: none; } .top h1 { font-size: 14px; } .top h1 span { padding: 1px 6px 2px; } .top-right { gap: 4px; } .top .icon { width: 30px; height: 30px; } .daychip, .scorechip, .goalchip, .streakchip { font-size: 11px; padding: 2px 6px; } }
+@media (max-width: 430px) { .top-right { gap: 3px; } .daychip, .scorechip, .goalchip, .streakchip { padding: 2px 5px; } }
+@media (max-width: 380px) { .top h1 { font-size: 13px; } .top-right { gap: 2px; } .top .icon { width: 28px; height: 28px; } .daychip, .scorechip, .goalchip, .streakchip { font-size: 10.5px; padding: 2px 4px; } }
+.career { display: grid; grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 500px) { .career { grid-template-columns: repeat(2, 1fr); } }

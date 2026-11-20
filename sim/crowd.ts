@@ -32,4 +32,4 @@ for (const [id, c] of Object.entries(counts)) {
   out[id] = Object.fromEntries(Object.entries(c).map(([d, n]) => [d, Math.round((100 * (n ?? 0)) / total)]));
 }
 writeFileSync(`src/content/packs/${pack.id}.crowd.json`, JSON.stringify({ simulated: true, terms: N, cards: out }));
-console.log(`preview crowd data for ${Object.keys(out).length} of ${pack.cards.length + pack.campaign.length} cards from ${N} simulated terms`);
+console.log(`preview crowd data for ${Object.keys(out).length} of ${pack.cards.length} cards from ${N} simulated terms`);

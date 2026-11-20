@@ -2,7 +2,7 @@
 //   reduce(state, action, pack, rng) -> new state
 // Each day is a run of cards. A choice can schedule follow-up cards a few cards later; that is how
 // stories build. Pinned day cards are the same for every mayor; the rest depend on your own story.
-import { voteShare } from './election.ts';
+import { nightVote, weakest } from './election.ts';
 import { seededRng, shuffled } from './rng.ts';
 import { TUNING } from './tuning.ts';
 import { DIRS, GROUPS, METERS } from './types.ts';
@@ -11,7 +11,7 @@ import type { Action, Card, Condition, Dir, MeterId, Pack, Rng, State } from './
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
 export function findCard(pack: Pack, id: string): Card {
-  const c = pack.cards.find((x) => x.id === id) ?? pack.campaign.find((x) => x.id === id);
+  const c = pack.cards.find((x) => x.id === id);
   if (!c) throw new Error(`unknown card ${id}`);
   return c;
 }
@@ -45,7 +45,7 @@ function weightedPick<T>(items: T[], weight: (t: T) => number, rand: () => numbe
   return items.find((t) => (r -= weight(t)) < 0) ?? items[items.length - 1];
 }
 
-const isPool = (c: Card) => !c.day && !c.followUp && !c.repeat && !c.sneak;
+const isPool = (c: Card) => !c.day && !c.followUp && !c.repeat && !c.sneak && !c.ribbon;
 
 /**
  * The day's shared running order, the same for every mayor: pinned story openers first, a pinned
@@ -114,25 +114,36 @@ function startCard(s: State, pack: Pack, rng: Rng) {
   s.phase = 'card';
 }
 
+/** Night falls: the town votes. A day that ended early (recall, rare ending) is lost whatever the count. */
 function endDay(s: State) {
   s.current = null;
   s.phase = 'dayEnd';
-  s.polls.push(voteShare(s));
+  const vote = nightVote(s);
+  const early = s.recalledDays.includes(s.day);
+  const won = !early && vote >= TUNING.vote.pass;
+  s.polls.push(vote);
+  s.won.push(won);
+  if (!early && !won) s.endings.push(`out:${weakest(s)}`);
+  if (!won) s.flags.__reset = true;
 }
 
-function finish(s: State, endedEarly: boolean) {
-  const share = voteShare(s);
-  s.result = { share, won: share >= 50 && !endedEarly, endedEarly };
+function finish(s: State) {
+  s.result = { daysWon: s.won.filter(Boolean).length };
   s.current = null;
   s.phase = 'results';
+}
+
+/** A day ends on the spot: a group recalled you, or a choice led somewhere you can't come back from. */
+function endEarly(s: State, ending: string) {
+  s.recalls += 1; s.endings.push(ending); s.recalledDays.push(s.day); s.current = null; s.phase = 'recalled';
 }
 
 export function newTerm(weekId: string, playerSeed: string, pack: Pack, rng: Rng = seededRng): State {
   const m = Object.fromEntries(METERS.map((k) => [k, TUNING.start])) as Record<MeterId, number>;
   const s: State = {
-    v: 10, weekId, playerSeed, day: 1, cardInDay: 0, count: 0, meters: m, flags: {}, queue: [], tomorrow: [], seen: [], current: null,
-    phase: 'card', dayStart: { ...m }, swipes: [], recalls: 0, recallCauses: [], recalledDays: [], objectivesDone: [], campaignVote: 0,
-    profile: null, daveDays: [], polls: [], result: null,
+    v: 11, weekId, playerSeed, day: 1, cardInDay: 0, count: 0, meters: m, flags: {}, queue: [], tomorrow: [], seen: [], current: null,
+    phase: 'card', dayStart: { ...m }, swipes: [], recalls: 0, endings: [], recalledDays: [], objectivesDone: [],
+    profile: null, daveDays: [], polls: [], won: [], result: null,
   };
   startCard(s, pack, rng);
   return s;
@@ -163,6 +174,7 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
     case 'next': {
       if (s.phase === 'recalled') { endDay(s); s.flags.__reset = true; return s; }
       if (s.phase !== 'dayEnd') throw new Error(`illegal next in phase ${s.phase}`);
+      if (s.day >= 7) { finish(s); return s; }
       s.day += 1;
       s.cardInDay = 0;
       if (s.flags.__reset) { for (const k of METERS) s.meters[k] = TUNING.recall.reset; delete s.flags.__reset; }
@@ -170,10 +182,7 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       // yesterday's unfinished business opens the day, one card after another
       s.tomorrow.forEach((id, i) => s.queue.push({ cardId: id, at: s.count + i }));
       s.tomorrow = [];
-      if (s.day >= 7) {
-        const camp = pack.campaign.find((c) => holds(s, c.requires)) ?? pack.campaign[pack.campaign.length - 1]!;
-        s.current = camp.id; s.phase = 'card';
-      } else startCard(s, pack, rng);
+      startCard(s, pack, rng);
       return s;
     }
     case 'swipe': {
@@ -183,21 +192,19 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       if (!ch) throw new Error(`card ${card.id} has no ${action.dir} option`);
       const before = { ...s.meters };
       for (const k of METERS) if (ch.effects[k]) s.meters[k] = clamp(s.meters[k] + ch.effects[k]!, 0, 100);
+      // the week's theme leans on the town a little, every third card (count is this card's number before increment)
+      if (s.count % 3 === 0) for (const k of METERS) if (pack.theme.drift?.[k]) s.meters[k] = clamp(s.meters[k] + pack.theme.drift[k]!, 0, 100);
       for (const f of ch.set ?? []) s.flags[f] = true;
       for (const f of ch.clear ?? []) delete s.flags[f];
       s.count += 1;
       for (const [id, n] of ch.then ?? []) s.queue.push({ cardId: id, at: s.count + Math.max(0, n - 1) });
       // tomorrow's consequences; on the last day there is no tomorrow, so they arrive now
-      for (const id of ch.next ?? []) { if (s.day >= 6) s.queue.push({ cardId: id, at: s.count }); else s.tomorrow.push(id); }
+      for (const id of ch.next ?? []) { if (s.day >= 7) s.queue.push({ cardId: id, at: s.count }); else s.tomorrow.push(id); }
       s.swipes.push({ day: s.day, cardId: card.id, dir: action.dir, before, after: { ...s.meters } });
-      if (s.day >= 7) { s.campaignVote += ch.vote ?? 0; finish(s, false); return s; }
       for (const o of pack.objectives) if (!s.objectivesDone.includes(o.id) && holds(s, o.when)) s.objectivesDone.push(o.id);
+      if (ch.ending) { endEarly(s, ch.ending); return s; }
       const cause = recallCause(s);
-      if (cause) {
-        s.recalls += 1; s.recallCauses.push(cause); s.recalledDays.push(s.day); s.current = null; s.phase = 'recalled';
-        if (s.recalls > TUNING.recall.max) finish(s, true);
-        return s;
-      }
+      if (cause) { endEarly(s, cause); return s; }
       s.cardInDay += 1;
       if (s.cardInDay >= TUNING.cardsPerDay) endDay(s);
       else startCard(s, pack, rng);
@@ -233,16 +240,19 @@ export function coverMissedDays(state: State, pack: Pack, today: number, rng: Rn
   let s = state;
   while (s.phase !== 'results' && s.day < today) {
     if (s.phase === 'card') {
-      const before = { recalls: s.recalls, causes: s.recallCauses.length };
+      const before = { recalls: s.recalls, endings: s.endings.length };
       s = autoplay(s, davePolicy, pack, (st) => st.phase === 'dayEnd' || st.phase === 'recalled', rng);
       if (s.phase === 'results') break;
       s = structuredClone(s);
-      if (s.phase === 'recalled') { s.phase = 'card'; s.current = null; }
-      s.recalls = before.recalls; s.recallCauses = s.recallCauses.slice(0, before.causes); s.recalledDays = s.recalledDays.filter((d) => d !== s.day);
+      // Randy's days don't go in your Scrapbook, and he always scrapes through the vote ("I counted them myself")
+      const wasCut = s.phase === 'recalled';
+      s.recalls = before.recalls; s.endings = s.endings.slice(0, before.endings); s.recalledDays = s.recalledDays.filter((d) => d !== s.day);
+      if (wasCut) { s.phase = 'card'; s.current = null; }
       delete s.flags.__reset;
       for (const k of METERS) s.meters[k] = clamp(s.meters[k], TUNING.handover.floor, TUNING.handover.ceiling);
       s.daveDays.push(s.day);
-      if (s.phase !== 'dayEnd') { s.current = null; s.phase = 'dayEnd'; s.polls.push(voteShare(s)); }
+      if (s.phase !== 'dayEnd') { s.current = null; s.phase = 'dayEnd'; s.polls.push(nightVote(s)); s.won.push(true); }
+      else { s.won[s.won.length - 1] = true; s.polls[s.polls.length - 1] = Math.max(s.polls[s.polls.length - 1]!, TUNING.vote.pass); }
     }
     s = reduce(s, { type: 'next' }, pack, rng);
   }

@@ -5,7 +5,8 @@ import type { Profile, State } from '../engine/types.ts';
 const KEY = 'badtown.save';
 const SCHEMA = 1;
 /** Kept across weeks: what a mayor has seen and done. */
-export interface Career { terms: number; wins: number; best: number; weeks: string[] }
+/** terms = weeks served, wins = nights re-elected, best = best nightly vote, nights = nights you played yourself. */
+export interface Career { terms: number; wins: number; best: number; weeks: string[]; nights: number }
 export interface Save {
   schema: number; state: State | null; playerSeed: string; muted: boolean; introSeen: string; tutorialDone: boolean; dayOffset: number;
   scrapbook: string[]; // ending keys unlocked
@@ -13,12 +14,14 @@ export interface Save {
   deeds: string[];
   onboarded: boolean; // saw the opening sequence
   lastProfile: Profile | null; // offered again at the start of each new term
-  met: string[]; // characters already introduced
+  met: string[]; // oddballs already met
+  streak: { current: number; best: number }; // nights re-elected in a row (Randy's nights pause it)
+  counted: string; // `${weekId}|${nights}`: nights already added to the career and streak
 }
 
 function fresh(): Save {
   const seed = Math.random().toString(36).slice(2) + Date.now().toString(36);
-  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [] }, deeds: [], onboarded: false, lastProfile: null, met: [] };
+  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [], nights: 0 }, deeds: [], onboarded: false, lastProfile: null, met: [], streak: { current: 0, best: 0 }, counted: '' };
 }
 
 /** Bring an older save up to the current schema. Unknown or broken saves start fresh. */
@@ -27,7 +30,8 @@ export function migrate(raw: unknown): Save {
   const s = raw as Partial<Save>;
   if (typeof s.schema !== 'number' || s.schema > SCHEMA || typeof s.playerSeed !== 'string') return fresh();
   // schema 1 is the first; fields added later (scrapbook, career, deeds) default from fresh().
-  return { ...fresh(), ...s, schema: SCHEMA };
+  const f = fresh();
+  return { ...f, ...s, career: { ...f.career, ...s.career }, streak: { ...f.streak, ...s.streak }, schema: SCHEMA };
 }
 
 export function loadSave(): Save {

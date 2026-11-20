@@ -1,6 +1,13 @@
 {
  "id": "week2",
- "title": "Bad Town, week two",
+ "title": "Week 2: The Heatwave",
+ "theme": {
+  "name": "Heatwave",
+  "text": "It's thirty-eight degrees. Fans, ice lollies and Big Carl on full alert. The Treasury melts a little every few cards.",
+  "drift": {
+   "treasury": -1
+  }
+ },
  "cards": [
   {
    "id": "rb2_1",
@@ -4103,32 +4110,754 @@
     }
    },
    "followUp": true
-  }
- ],
- "campaign": [
+  },
   {
-   "id": "wcamp",
-   "who": "randy",
-   "text": "Election day, boss. You against Gary. Gary's out of order. You're... in order? Mostly? Final push: free snacks?",
+   "id": "w2s_1",
+   "who": "bev",
+   "story": "bevswim",
+   "text": "It's hot. I'm ninety-seven. I'm swimming the river. The whole length. In my good hat. Close the river for me?",
    "options": {
     "right": {
-     "label": "Yes. Free snacks.",
+     "label": "Yes. Close the river.",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "River closed. Four hundred people on the banks. Bev's doing backstroke. In the hat.",
+     "then": [
+      [
+       "w2s_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Share with the ducks.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "She's swimming anyway. Between two pedalos. She's overtaken one.",
+     "then": [
+      [
+       "w2s_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 7,
+   "slot": 0
+  },
+  {
+   "id": "w2s_2",
+   "who": "carl",
+   "story": "bevswim",
+   "text": "Big Carl. Bev is in the river. I've trained twelve years for this. It's my moment. Permission to save Bev?",
+   "options": {
+    "right": {
+     "label": "Yes. Go, Carl.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "He dived in. She was fine. He wasn't. Bev towed him to the bank. Two heroes.",
+     "then": [
+      [
+       "w2s_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. She's fine.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's on the bank, whistle in mouth, trembling. She waved. He cried.",
+     "then": [
+      [
+       "w2s_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s_2b",
+   "who": "marge",
+   "story": "bevswim",
+   "text": "Mayor, Bev's been swimming six hours. She's stopped mid-river for a sandwich. Someone has to deliver it. Send a boat?",
+   "options": {
+    "right": {
+     "label": "Yes. Send a boat.",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "The boat brought the sandwich. Bev complained about the crusts. Kept swimming.",
+     "then": [
+      [
+       "w2s_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. She'll manage.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Mr Flaps delivered it. By beak. Wetly. She ate it anyway.",
+     "then": [
+      [
+       "w2s_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s_3",
+   "who": "bev",
+   "story": "bevswim",
+   "text": "I've done it. The whole river. They want to name it after me. 'The Bev'. Is that allowed?",
+   "options": {
+    "right": {
+     "label": "Yes. The River Bev.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "The signs are up. The ducks have moved in. Bev has never been prouder."
+    },
+    "left": {
+     "label": "No. It's the River Bad.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She renamed it herself. Every sign. Marker pen. Still in the good hat."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s_law",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: in a heatwave, ties are banned. Doug is wearing three. Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. Ban ties.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Doug wept. He's drawn a tie on his shirt. In biro. It's very neat."
+    },
+    "left": {
+     "label": "No. Ties stay.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Doug's tie melted. It was polyester. It's part of the shirt now."
+    }
+   },
+   "day": 7,
+   "slot": 7
+  },
+  {
+   "id": "w2s_x",
+   "who": "nora",
+   "story": "softroad",
+   "text": "EMERGENCY. It's so hot the road's gone soft. Reginald is stuck in it. So is a bus. So is Chad's car. Hose down the road?",
+   "options": {
+    "right": {
+     "label": "Yes. Cool it down.",
+     "effects": {
+      "treasury": -10,
+      "people": 5
+     },
+     "reaction": "The road has set. With Reginald in it. He's fine. He's a landmark.",
+     "then": [
+      [
+       "w2s_xa",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Wait for dark.",
+     "effects": {
+      "people": -5,
+      "business": 5
+     },
+     "reaction": "By nightfall the bus had moved four feet. Reginald overtook it.",
+     "then": [
+      [
+       "w2s_xb",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 7,
+   "slot": 11
+  },
+  {
+   "id": "w2s_xa",
+   "who": "reginald",
+   "story": "softroad",
+   "text": "(Reginald is set into the road like a jewel. He looks content. The council wants to dig him out.) Dig him out?",
+   "options": {
+    "right": {
+     "label": "Yes. Carefully.",
      "effects": {
       "people": 5,
       "treasury": -5
      },
-     "reaction": "Turnout's huge. Gary's furious. Snacks are his whole thing.",
-     "vote": 3
+     "reaction": "Out and safe. He walked straight back in. He likes it there."
     },
     "left": {
-     "label": "No. Just shake his button.",
+     "label": "No. He's happy.",
      "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's a roundabout now. Traffic goes round him. Very respectfully."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s_xb",
+   "who": "chad",
+   "story": "softroad",
+   "text": "Mayor. My car is still stuck in your road. It's a limited edition. Limited to one. Pay to tow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Tow it.",
+     "effects": {
+      "business": 10,
+      "treasury": -10
+     },
+     "reaction": "Towed. A slice of road came with it. Chad owns it now. He's charging rent."
+    },
+    "left": {
+     "label": "No. It's art now.",
+     "effects": {
+      "people": 10,
+      "business": -5
+     },
+     "reaction": "'Car in Road'. People love it. Chad is furious. He's on the plinth."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s_rb",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "Big Carl's paddling pool finally opens today. Gerald is waddling at the ribbon, face first. Cut it before he does!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 10,
       "press": 5
      },
-     "reaction": "You shook it. Gary dispensed a Twix. Neck and neck, boss.",
-     "vote": 2
+     "reaction": "A clean cut. Carl blew his whistle in triumph. Then at everyone."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "He cut it with his face. Then got in the pool. He won't get out."
     }
-   }
+   },
+   "day": 7,
+   "slot": 15,
+   "ribbon": true
+  },
+  {
+   "id": "w2r_2",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "Reginald's new crossing opens today. Gerald wants to cut the ribbon. With his face. Get there first!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Cut. Reginald has started across. Expected arrival: Thursday."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Gerald cut it, then stood on the crossing. Reginald is going round him. Slowly."
+    }
+   },
+   "day": 2,
+   "slot": 18,
+   "ribbon": true
+  },
+  {
+   "id": "w2r_4",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "The new snack bar opens today. Gerald is racing to the ribbon, beak first. Snip it before he does!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "business": 10,
+      "people": 5
+     },
+     "reaction": "Open. First customer: Gary. He's just standing there. Humming."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "He cut it, then ate every snack. He's been offered a sponsorship."
+    }
+   },
+   "day": 4,
+   "slot": 18,
+   "ribbon": true
+  },
+  {
+   "id": "w2r_6",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "The wedding arch for Gerald's big day needs opening. Gerald is the groom. He still wants to cut it. Beat the groom!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "You cut it. The swan pedalo was moved to tears. Probably condensation."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "The groom cut his own ribbon. With his face. The pedalo seemed impressed."
+    }
+   },
+   "day": 6,
+   "slot": 18,
+   "ribbon": true
+  },
+  {
+   "id": "w2g_1",
+   "who": "marge",
+   "story": "garysaga",
+   "text": "Gary the vending machine has a new button. Press B4 and he dispenses a free campaign badge. Everyone is pressing B4. Unplug him?",
+   "options": {
+    "right": {
+     "label": "Yes. Unplug him.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Unplugged. He's still dispensing. Nobody knows how.",
+     "next": [
+      "w2g_2a"
+     ]
+    },
+    "left": {
+     "label": "No. Free badges!",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Half the town wears a GARY badge. The other half is pressing B4.",
+     "next": [
+      "w2g_2b"
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 8
+  },
+  {
+   "id": "w2g_2a",
+   "who": "doug",
+   "story": "garysaga",
+   "text": "Mayor, Gary's been unplugged a full day and he's still humming. The power company says he's not on the grid. Investigate?",
+   "options": {
+    "right": {
+     "label": "Yes. Open him up.",
+     "effects": {
+      "law": 5,
+      "treasury": -5
+     },
+     "reaction": "Inside: one crisp, a raffle ticket and a tiny note: 'VOTE GARY'.",
+     "next": [
+      "w2g_3a"
+     ]
+    },
+    "left": {
+     "label": "No. Let him hum.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He hummed all night. It's quite soothing. The town slept better.",
+     "next": [
+      "w2g_3a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_2b",
+   "who": "randy",
+   "story": "garysaga",
+   "text": "Boss, I've got forty Gary badges. In the coat. Not saying I've switched sides. Saying I've got forty. Confiscate them?",
+   "options": {
+    "right": {
+     "label": "Yes. Hand them over.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He handed over thirty-nine. He's keeping one. 'For the memories.'",
+     "next": [
+      "w2g_3a"
+     ]
+    },
+    "left": {
+     "label": "No. Keep them.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Randy's wearing all forty. He clinks when he walks. He seems torn.",
+     "next": [
+      "w2g_3b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_3a",
+   "who": "barb",
+   "story": "garysaga",
+   "text": "Mayor. Gary's been handing out free crisps outside the school. Crisps from 1987. Shut him down?",
+   "options": {
+    "right": {
+     "label": "Yes. Shut him.",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "Shut. The children are devastated. The crisps were 'vintage'.",
+     "next": [
+      "w2g_4a"
+     ]
+    },
+    "left": {
+     "label": "No. Try one.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It tasted of 1987. Of hope. You nearly voted Gary.",
+     "next": [
+      "w2g_4a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_3b",
+   "who": "gary",
+   "story": "garysaga",
+   "text": "(Gary's display flickers: 'DEBATE?'. He's challenging you. Live. On the Bugle's website.) Accept?",
+   "options": {
+    "right": {
+     "label": "Yes. Debate him.",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "He answered every question with 'ITEM UNAVAILABLE'. He won. Comfortably.",
+     "next": [
+      "w2g_4b"
+     ]
+    },
+    "left": {
+     "label": "No. I don't debate snacks.",
+     "effects": {
+      "press": -5,
+      "law": 5
+     },
+     "reaction": "Tomorrow's Bugle: 'MAYOR SCARED OF SNACK MACHINE'.",
+     "next": [
+      "w2g_4a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_4a",
+   "who": "doug",
+   "story": "garysaga",
+   "text": "Mayor, Gary owes the town four years of electricity. He's offered to pay. In crisps. Accept the crisps?",
+   "options": {
+    "right": {
+     "label": "Yes. Crisps it is.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "The treasury is now 40% crisps. Doug is eating the evidence.",
+     "next": [
+      "w2g_5a"
+     ]
+    },
+    "left": {
+     "label": "No. Cash only.",
+     "effects": {
+      "treasury": 10,
+      "business": -5
+     },
+     "reaction": "He paid £4.20. In 5p coins. Every coin he's ever been given.",
+     "next": [
+      "w2g_5a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_4b",
+   "who": "marge",
+   "story": "garysaga",
+   "text": "Mayor, Gary is polling ahead of you. People say he's 'always there for them'. He is. He's bolted down. Respond?",
+   "options": {
+    "right": {
+     "label": "Yes. Always be there.",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "Your desk is on the high street now. You're always there. It's raining.",
+     "next": [
+      "w2g_5a"
+     ]
+    },
+    "left": {
+     "label": "No. Let him have it.",
+     "effects": {
+      "people": -5,
+      "press": 5
+     },
+     "reaction": "GARY SURGES. You are now also behind a fridge.",
+     "next": [
+      "w2g_5b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_5a",
+   "who": "gary",
+   "story": "garysaga",
+   "text": "(Gary's display reads 'SORRY'. He has dispensed you a flower made of crisp packets. It's oddly beautiful.) Accept it?",
+   "options": {
+    "right": {
+     "label": "Yes. Thank you, Gary.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "It's in a vase on your desk. Gary hummed a happy hum.",
+     "next": [
+      "w2g_6a"
+     ]
+    },
+    "left": {
+     "label": "No. I'm allergic.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "His display reads ':(' and then 'OUT OF ORDER'. He's sulking.",
+     "next": [
+      "w2g_6a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_5b",
+   "who": "gary",
+   "story": "garysaga",
+   "text": "(Gary's coin slot is glowing. A sign reads 'INSERT MAYOR'. Randy points out that, side on, you are quite coin-shaped.) Climb in and fix him?",
+   "options": {
+    "right": {
+     "label": "Yes. Climb in.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Something went 'clunk'. You are now item B4.",
+     "ending": "rare:dispensed"
+    },
+    "left": {
+     "label": "No. Absolutely not.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You kept your distance. Gary dispensed a sad crisp. At you.",
+     "next": [
+      "w2g_6b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_6a",
+   "who": "randy",
+   "story": "garysaga",
+   "text": "Boss, Gary's dropping out. He'll endorse you by printing your face on every crisp packet. Accept?",
+   "options": {
+    "right": {
+     "label": "Yes. Crisp face.",
+     "effects": {
+      "press": 10,
+      "business": 5
+     },
+     "reaction": "Your face is on ten thousand packets. Salt and vinegar. You look worried on all of them.",
+     "next": [
+      "w2g_7a"
+     ]
+    },
+    "left": {
+     "label": "No. Dignity.",
+     "effects": {
+      "press": -5,
+      "law": 5
+     },
+     "reaction": "He's used Randy's face instead. Randy is thrilled.",
+     "next": [
+      "w2g_7a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_6b",
+   "who": "marge",
+   "story": "garysaga",
+   "text": "Mayor, Gary has a manifesto. One line: 'FREE SNACKS FOREVER'. People love it. Steal the idea?",
+   "options": {
+    "right": {
+     "label": "Yes. Free snacks.",
+     "effects": {
+      "people": 10,
+      "treasury": -10
+     },
+     "reaction": "Free snacks forever. Doug asked how long forever is. You said 'Tuesday'.",
+     "next": [
+      "w2g_7b"
+     ]
+    },
+    "left": {
+     "label": "No. Snacks aren't policy.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "'MAYOR AGAINST SNACKS'. Pages one, two and four.",
+     "next": [
+      "w2g_7b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_7a",
+   "who": "gary",
+   "story": "garysaga",
+   "text": "(Election night. Gary's lights blink in a friendly pattern. He's offering you the last packet of 1987 crisps.) Open them?",
+   "options": {
+    "right": {
+     "label": "Yes. Open them.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "They taste of 1987 and of friendship. Gary hummed all night."
+    },
+    "left": {
+     "label": "No. Frame them.",
+     "effects": {
+      "press": 5,
+      "law": 5
+     },
+     "reaction": "They're in the museum: 'Gary's Gift'. He visits every day. On a trolley."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2g_7b",
+   "who": "gary",
+   "story": "garysaga",
+   "text": "(Election night. The queue round Gary isn't for snacks. It's for votes. He's offering you a job: his deputy.) Accept?",
+   "options": {
+    "right": {
+     "label": "Yes. Deputy to Gary.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "He dispensed a chain of office. It's a lanyard. It's yours now.",
+     "ending": "rare:gary_mayor"
+    },
+    "left": {
+     "label": "No. Fight on.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "You stood next to him all night. He's very cold. You're very tired."
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [
@@ -4197,21 +4926,13 @@
    "title": "Turned Into a Column",
    "text": "Marge loves you so much she gave you a column. Then a second. Then you were the paper."
   },
-  "term:won": {
-   "title": "Re-elected",
-   "text": "The town has spoken. Mostly in honks. Another week, heaven help everyone."
+  "rare:dispensed": {
+   "title": "Dispensed",
+   "text": "You went into Gary to fix him. You are now item B4, 85p. You've been bought four times. Each time, you came back."
   },
-  "term:landslide": {
-   "title": "Landslide",
-   "text": "Sixty per cent or more. The cone has retired. Gerald sent a card. It says HONK, but warmly."
-  },
-  "term:lost": {
-   "title": "Voted Out",
-   "text": "The traffic cone will be sworn in at noon. It has promised to do nothing. People found that refreshing."
-  },
-  "term:early": {
-   "title": "Recalled for Good",
-   "text": "Three recalls. The town has filed you under Never Again. Randy has put the desk in a bin."
+  "rare:gary_mayor": {
+   "title": "Deputy to a Vending Machine",
+   "text": "Gary is mayor. You are his deputy. Randy is your deputy. Nobody has had a snack since."
   }
  },
  "headlines": {
@@ -4255,7 +4976,11 @@
   "lunch": "GERALD'S SCHOOL DINNERS",
   "bookclub": "THE GHOST BOOK CLUB",
   "taxi": "BEV CABS",
-  "museum": "THE MUSEUM OF BAD TOWN"
+  "museum": "THE MUSEUM OF BAD TOWN",
+  "bevswim": "BEV SWIMS THE RIVER",
+  "softroad": "THE ROAD IS SOUP",
+  "ribbon": "THE RIBBON RACE",
+  "garysaga": "GARY'S COMEBACK"
  },
  "cliffhangers": [
   "Tomorrow: a tortoise is two feet from the kerb.",
@@ -4263,6 +4988,6 @@
   "Tomorrow: your opponent is out of order.",
   "Tomorrow: Bad Town's Got Talent. Nine acts are Bev.",
   "Tomorrow: a goose is in love.",
-  "Tomorrow: the voters decide. Gary has snacks."
+  "Tomorrow: Sunday. Bev has bought a swimming hat."
  ]
 }

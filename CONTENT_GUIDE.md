@@ -19,17 +19,28 @@ A choice can lead somewhere:
 
 Each beat should escalate the one before and mention it. The pond leaks *into the records room*; Randy, having been refused the keys, has *moved City Hall into his coat*.
 
-## What a day is made of (20 cards)
+## What a day is made of (20 cards, Monday to Sunday)
 
 | Slot | What | How it is marked |
 |---|---|---|
-| 1 | The day's main story: five or six cards deep, back to back | `day: n, slot: 0` |
+| 1 | The day's main story: four or five cards deep, back to back | `day: n, slot: 0` |
+| 2 | Yesterday's carry-overs (`next`), including the saga | arrive at the start of the day |
 | 8 | A law you can sign or refuse | `day: n, slot: 7`, `who: "desk"`, story `law` |
-| 12 | The day's one catastrophe, with two beats after it | `day: n, slot: 11` |
-| 16 | The sneak moment (hold, release while they look away) | `day: n, slot: 15`, `sneak: true` |
-| the rest | Side stories from the shared pool, two or three beats each | no `day` |
+| 9 | The saga's first card (Monday only) | `day: 1, slot: 8` |
+| 10 | An oddball's story starter (some weeks) | `day: n, slot: 9` |
+| 12 | The day's one catastrophe, with a beat after it | `day: n, slot: 11` |
+| 16 | The mini-game: sneak (`sneak: true`) or ribbon (`ribbon: true`). Right = success, left = failure | `day: n, slot: 15` |
+| the rest | Side stories from the shared pool, one to three beats each | no `day` |
 
-Pressure cards (`repeat: true` with `requires.min` / `max`) cut in when a meter is very low or very high. Sunday has one election card in `campaign`, whose options carry `vote`.
+Pressure cards (`repeat: true` with `requires.min` / `max`) cut in when a meter is very low or very high. The pack checker (`src/content/schema.ts`) refuses a week without an opener, law and catastrophe at slots 0/7/11 and a mini-game on all seven days.
+
+## The saga and rare endings
+
+Each week has one saga that runs a card a day, Monday to Sunday, using `next`. Write it in two lanes: a calm lane (both choices stay calm) and a strange lane (one choice goes back to calm, the other goes deeper). Only the strange lane can reach a rare ending: a choice with `"ending": "rare:<id>"` whose text is in the pack's `endings`. Keep entry into the strange lane deliberate so the endings stay rare; the simulator prints how often bots find them.
+
+## Keep a week balanced
+
+Effects lean on the meters. Across a week, the average effect per option should stay near week 1's (People +0.6, Law +0.4, Press +0.4 to +0.8, Business about 0, Treasury about −0.3), allowing for the theme's nudge. If too many "yes" answers give +10, every meter drifts above the calm zone and even careful players lose nights. Check with `PACK=weekN npm run sim`.
 
 ## The cast
 

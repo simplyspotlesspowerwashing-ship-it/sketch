@@ -1,6 +1,13 @@
 {
  "id": "week1",
  "title": "Week 1: The Goose Who Would Be Mayor",
+ "theme": {
+  "name": "Goose Migration Week",
+  "text": "Ten thousand geese are passing through. Nobody is obeying anything. The Law slips a little every few cards.",
+  "drift": {
+   "law": -1
+  }
+ },
  "cards": [
   {
    "id": "g1",
@@ -648,7 +655,7 @@
    "id": "c3",
    "who": "marge",
    "story": "cheese",
-   "text": "The cheese is polling at 12% for Sunday. It hasn't said a word. Voters are calling that 'refreshing'. Debate it?",
+   "text": "The cheese is polling at 12% for tonight. It hasn't said a word. Voters are calling that 'refreshing'. Debate it?",
    "options": {
     "right": {
      "label": "Yes, debate the cheese",
@@ -782,7 +789,7 @@
    "id": "k1",
    "who": "marge",
    "story": "cone",
-   "text": "Your opponent on Sunday, a traffic cone, has agreed to a debate. It hasn't agreed. It hasn't moved. We're calling that agreement. Debate it?",
+   "text": "Your opponent tonight, a traffic cone, has agreed to a debate. It hasn't agreed. It hasn't moved. We're calling that agreement. Debate it?",
    "options": {
     "right": {
      "label": "Yes, debate the cone",
@@ -5746,31 +5753,785 @@
     }
    },
    "followUp": true
-  }
- ],
- "campaign": [
+  },
   {
-   "id": "camp",
-   "who": "randy",
-   "text": "Election day, boss. One last push against the cone. We've ordered balloons. So many balloons. Hold a big rally?",
+   "id": "w1s_1",
+   "who": "gerald",
+   "story": "goosemayor",
+   "text": "HONK. (Gerald has printed posters. They just say GERALD. He's running against you tonight. He'd like your endorsement.) Endorse him?",
    "options": {
     "right": {
-     "label": "Yes. Big rally.",
+     "label": "Yes. Best bird wins.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Gerald is stunned. He honked 'thank you'. Then he bit the returning officer.",
+     "then": [
+      [
+       "w1s_2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. It's my job.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's lodged a formal complaint. It's a feather. It's very official.",
+     "then": [
+      [
+       "w1s_2b",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 7,
+   "slot": 0
+  },
+  {
+   "id": "w1s_2",
+   "who": "marge",
+   "story": "goosemayor",
+   "text": "Mayor, Gerald's big promise is 'a pond in every home'. Every home. Indoors. He's polling at 40%. Match his promise?",
+   "options": {
+    "right": {
+     "label": "Yes. Ponds for all.",
+     "effects": {
+      "people": 10,
+      "treasury": -10
+     },
+     "reaction": "Four hundred home ponds ordered. Doug is lying under his desk. Gerald says you stole his idea.",
+     "then": [
+      [
+       "w1s_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Fewer ponds.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "You promised 'fewer ponds'. Brave. The geese have started a chant. It's just honking.",
+     "then": [
+      [
+       "w1s_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1s_2b",
+   "who": "barb",
+   "story": "goosemayor",
+   "text": "Mayor. Gerald's been caught handing out bread for votes. That's bribery. With bread. Arrest a goose?",
+   "options": {
+    "right": {
+     "label": "Yes. Arrest him.",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "Arrested. He ate the warrant. He's running his campaign from the cell. He's up four points.",
+     "then": [
+      [
+       "w1s_3",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. It's only bread.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Now everyone's handing out bread for votes. Sal is handing out tyres.",
+     "then": [
+      [
+       "w1s_3",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1s_3",
+   "who": "coach",
+   "story": "goosemayor",
+   "text": "Tonight's big debate, you against Gerald! I'm moderating! First question: 'Do you honk?' Gerald has answered. Loudly. Honk back?",
+   "options": {
+    "right": {
+     "label": "Yes. Honk.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "You honked. The crowd went wild. Gerald looked at you with something close to respect.",
+     "then": [
+      [
+       "w1s_4",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Use words.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "You gave a thoughtful answer about bins. Gerald honked over all of it. The crowd chanted HONK."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1s_4",
+   "who": "gerald",
+   "story": "goosemayor",
+   "text": "(After the debate Gerald waddles over and offers a wing. A truce: whoever loses tonight becomes the other one's deputy.) Shake on it?",
+   "options": {
+    "right": {
+     "label": "Yes. Shake the wing.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "Deal. Randy has heard. Randy is worried about his job. Randy is reading a book about geese."
+    },
+    "left": {
+     "label": "No. No deals.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "He's walked off. He's honking at the ballot box. Out of habit. Or as a threat."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1s_law",
+   "who": "desk",
+   "story": "law",
+   "text": "Draft law: tonight, all votes must be honked. Gerald wrote it. In mud. On your desk. Sign it?",
+   "options": {
+    "right": {
+     "label": "Yes. Sign it.",
+     "effects": {
+      "people": 5,
+      "law": -10
+     },
+     "reaction": "Turnout's never been higher. Nobody can count honks. Barb is trying. Barb is crying."
+    },
+    "left": {
+     "label": "No. Paper ballots.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Paper ballots it is. The geese ate them. We're counting the crumbs."
+    }
+   },
+   "day": 7,
+   "slot": 7
+  },
+  {
+   "id": "w1s_x",
+   "who": "steve",
+   "story": "migration",
+   "text": "EMERGENCY. Ten thousand migrating geese have landed in Bad Town. On everything. They're asking for Gerald. Let them stay?",
+   "options": {
+    "right": {
+     "label": "Yes. Welcome, geese.",
+     "effects": {
+      "people": 5,
+      "law": -10
+     },
+     "reaction": "The whole town is geese. Gerald is a celebrity. Your car is a nest now.",
+     "then": [
+      [
+       "w1s_xa",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Point them south.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You pointed south. They went north. Into City Hall.",
+     "then": [
+      [
+       "w1s_xb",
+       1
+      ]
+     ]
+    }
+   },
+   "day": 7,
+   "slot": 11
+  },
+  {
+   "id": "w1s_xa",
+   "who": "doug",
+   "story": "migration",
+   "text": "Mayor, the visiting geese want a bread budget. For ten thousand. That's a lot of bread. Pay for it?",
+   "options": {
+    "right": {
+     "label": "Yes. Feed them.",
+     "effects": {
+      "people": 10,
+      "treasury": -10
+     },
+     "reaction": "The bakery is open all night. Sal's selling bread tyres. Please don't ask."
+    },
+    "left": {
+     "label": "No. They can forage.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "They foraged. Your lunch. The council's lunch. A small wedding."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1s_xb",
+   "who": "barb",
+   "story": "migration",
+   "text": "Mayor. The geese have taken the council chamber. They've passed three motions. All three just say 'HONK'. Clear them out?",
+   "options": {
+    "right": {
+     "label": "Yes. Clear them.",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "It took six hours and a leaf blower. The motions still stand. Legally, we honk."
+    },
+    "left": {
+     "label": "No. Let them sit.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Most productive session in years. They abolished Mondays. Nobody objected."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1s_rb",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "The new Goose Bridge opens today. Gerald is waddling towards the ribbon to cut it with his face. Cut it before he does!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "A clean cut. The crowd cheered. Gerald gave the speech anyway. It was a honk."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "He cut it with his face. Four attempts. Front page. He looks great."
+    }
+   },
+   "day": 7,
+   "slot": 15,
+   "ribbon": true
+  },
+  {
+   "id": "w1r_2",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "Grand opening of the Randy Memorial Bin. Randy is alive. Gerald is heading for the ribbon, face first. Beat him to it!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Opened. Randy cried. Then climbed in. 'It's beautiful, boss.'"
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Gerald cut it with his face. Then claimed the bin. Randy is furious."
+    }
+   },
+   "day": 2,
+   "slot": 18,
+   "ribbon": true
+  },
+  {
+   "id": "w1r_4",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "Bev's new speed bump on Elm Street is ready. Gerald is closing in on the ribbon. Fast. Cut it first!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "Cut. Bev hit the bump at forty. She's airborne. She's thrilled."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "Gerald cut it. Then sat on the bump. Bev went round him. On the pavement."
+    }
+   },
+   "day": 4,
+   "slot": 18,
+   "ribbon": true
+  },
+  {
+   "id": "w1r_6",
+   "who": "gerald",
+   "story": "ribbon",
+   "text": "Kevin the pothole gets an official plaque today. Gerald is already sprinting at the ribbon. Get there first!",
+   "options": {
+    "right": {
+     "label": "Snip!",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "Plaque unveiled. 'KEVIN. A HOLE. A LEGEND.' Somebody's put flowers in him."
+    },
+    "left": {
+     "label": "Gerald got there",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Gerald cut it. Then fell in Kevin. They're both in the photo. It's lovely."
+    }
+   },
+   "day": 6,
+   "slot": 18,
+   "ribbon": true
+  },
+  {
+   "id": "w1g_1",
+   "who": "marge",
+   "story": "conesaga",
+   "text": "Clive the traffic cone has opened a campaign office. It's a shop window with a cone in it. There's a queue. Shut it down?",
+   "options": {
+    "right": {
+     "label": "Yes. Shut it.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "Shut. The queue moved to the pavement. They're queuing at a different cone.",
+     "next": [
+      "w1g_2a"
+     ]
+    },
+    "left": {
+     "label": "No. Free country.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The queue goes round the block. Nobody knows what for. Clive isn't saying.",
+     "next": [
+      "w1g_2b"
+     ]
+    }
+   },
+   "day": 1,
+   "slot": 8
+  },
+  {
+   "id": "w1g_2a",
+   "who": "randy",
+   "story": "conesaga",
+   "text": "Boss. Clive's office is shut, but he's been seen at three bus stops this morning. Same cone. I checked the scuff. Follow him?",
+   "options": {
+    "right": {
+     "label": "Yes. Tail the cone.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "We followed him all day. He didn't move once. We were exhausted. He wasn't.",
+     "next": [
+      "w1g_3a"
+     ]
+    },
+    "left": {
+     "label": "No. It's a cone.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "'It's a cone,' you said. Randy wrote that down. He looked worried.",
+     "next": [
+      "w1g_3a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_2b",
+   "who": "marge",
+   "story": "conesaga",
+   "text": "Mayor, Clive has been endorsed. By the bus stop. The bus stop has never endorsed anyone. Respond?",
+   "options": {
+    "right": {
+     "label": "Yes. Get endorsed too.",
+     "effects": {
+      "press": 10,
+      "treasury": -5
+     },
+     "reaction": "You got the bench. A bench is not a bus stop. The Bugle noticed.",
+     "next": [
+      "w1g_3a"
+     ]
+    },
+    "left": {
+     "label": "No. Ignore it.",
+     "effects": {
+      "people": -5,
+      "press": 5
+     },
+     "reaction": "Two lamp posts and a postbox have also come out for Clive. The street furniture is organising.",
+     "next": [
+      "w1g_3b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_3a",
+   "who": "barb",
+   "story": "conesaga",
+   "text": "Mayor, someone moves cones around at night. Every morning there are more outside City Hall. In rows. Stake it out?",
+   "options": {
+    "right": {
+     "label": "Yes. Stake it out.",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "Barb watched all night. Nothing moved. By morning there were more. Barb won't discuss it.",
+     "next": [
+      "w1g_4a"
+     ]
+    },
+    "left": {
+     "label": "No. Count them later.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Forty-one cones. All facing your window. Very still.",
+     "next": [
+      "w1g_4a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_3b",
+   "who": "marge",
+   "story": "conesaga",
+   "text": "Clive has had a makeover. New reflective stripe. The Bugle is calling it 'presidential'. Get one too?",
+   "options": {
+    "right": {
+     "label": "Yes. Get a stripe.",
+     "effects": {
+      "press": 10,
+      "people": -5
+     },
+     "reaction": "You wore high-vis to work. Cars kept stopping for you.",
+     "next": [
+      "w1g_4a"
+     ]
+    },
+    "left": {
+     "label": "No. I'm not a cone.",
+     "effects": {
+      "press": -5,
+      "people": 5
+     },
+     "reaction": "Headline: 'MAYOR: I AM NOT A CONE'. Subheading: 'YET'.",
+     "next": [
+      "w1g_4b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_4a",
+   "who": "doug",
+   "story": "conesaga",
+   "text": "Mayor, Clive's campaign is broke. He's asked us for a loan. He's offering a cone as collateral. Lend him the money?",
+   "options": {
+    "right": {
+     "label": "Yes. Lend to the cone.",
+     "effects": {
+      "treasury": -10,
+      "business": 10
+     },
+     "reaction": "He spent it all on cones. He's an army now. A very still army.",
+     "next": [
+      "w1g_5a"
+     ]
+    },
+    "left": {
+     "label": "No. No loans for cones.",
+     "effects": {
+      "treasury": 5,
+      "business": -5
+     },
+     "reaction": "His campaign is skint. He's still standing. That's all he ever does.",
+     "next": [
+      "w1g_5a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_4b",
+   "who": "randy",
+   "story": "conesaga",
+   "text": "Boss. The cones are marching on City Hall. Well. They're not moving. But they're closer than yesterday. Barricade the door?",
+   "options": {
+    "right": {
+     "label": "Yes. Barricade.",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "We barricaded the door. With cones. Then we realised what we'd done.",
+     "next": [
+      "w1g_5a"
+     ]
+    },
+    "left": {
+     "label": "No. Let them in.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Forty cones in the council chamber. They don't heckle. Best meeting in years.",
+     "next": [
+      "w1g_5b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_5a",
+   "who": "marge",
+   "story": "conesaga",
+   "text": "Mayor, Clive's support has collapsed. Someone hung a bin bag on him. He's lost all credibility. Gloat?",
+   "options": {
+    "right": {
+     "label": "Yes. Gloat.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "You gloated. A traffic cone took it with dignity. You looked small.",
+     "next": [
+      "w1g_6a"
+     ]
+    },
+    "left": {
+     "label": "No. Help him up.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "You took the bin bag off. Clive leaned towards you. Slightly. Gratitude?",
+     "next": [
+      "w1g_6a"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_5b",
+   "who": "clive",
+   "story": "conesaga",
+   "text": "(Clive is in your office. On your chair. Nobody put him there. Under him is a small note: 'STEP ASIDE'.) Step aside?",
+   "options": {
+    "right": {
+     "label": "Yes. Step aside.",
      "effects": {
       "people": 5
      },
-     "reaction": "Three hundred came. 290 were raccoons. The cone drew four hundred. It did nothing.",
-     "vote": 3
+     "reaction": "You stood up. He sat down. Nobody noticed the difference.",
+     "ending": "rare:cone_chair"
     },
     "left": {
-     "label": "No. Just be yourself.",
+     "label": "No. That's my chair.",
      "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You moved him. Gently. He's in the corner now. Watching.",
+     "next": [
+      "w1g_6b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_6a",
+   "who": "randy",
+   "story": "conesaga",
+   "text": "Boss. Clive's dropped out. He's endorsed you. Well, he's facing your poster. That counts. Accept the endorsement?",
+   "options": {
+    "right": {
+     "label": "Yes. Thank the cone.",
+     "effects": {
+      "people": 5,
       "press": 5
      },
-     "reaction": "Risky. We love it. All of us. Me and the coat and the cousins in the coat.",
-     "vote": 1
+     "reaction": "You shook his hand. He hasn't got a hand. You shook the top. Front page.",
+     "next": [
+      "w1g_7a"
+     ]
+    },
+    "left": {
+     "label": "No. I don't need cones.",
+     "effects": {
+      "press": -5,
+      "law": 5
+     },
+     "reaction": "The cones took it personally. One is outside your house now. Just in case.",
+     "next": [
+      "w1g_7a"
+     ]
     }
-   }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_6b",
+   "who": "marge",
+   "story": "conesaga",
+   "text": "Mayor, Clive has a running mate. Your desk lamp. It's been seen leaning his way. Fire the lamp?",
+   "options": {
+    "right": {
+     "label": "Yes. Fire the lamp.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Fired. The lamp went quietly. The dark is less quiet.",
+     "next": [
+      "w1g_7b"
+     ]
+    },
+    "left": {
+     "label": "No. Lamps have rights.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The lamp stayed. It's pointing at Clive. They make a lovely couple.",
+     "next": [
+      "w1g_7b"
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_7a",
+   "who": "clive",
+   "story": "conesaga",
+   "text": "(Election night. Clive has turned up at your party. He's brought a smaller cone. A gift?) Accept the little cone?",
+   "options": {
+    "right": {
+     "label": "Yes. Thank you, Clive.",
+     "effects": {
+      "people": 10,
+      "press": 5
+     },
+     "reaction": "It's on your desk. It's the most supportive thing in City Hall."
+    },
+    "left": {
+     "label": "No. I know your game.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "You gave it back. He's standing very still. Even for him."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1g_7b",
+   "who": "clive",
+   "story": "conesaga",
+   "text": "(Election night. A thousand cones surround City Hall. Clive is at the front, offering a merger. Mayor and cone. One office.) Merge?",
+   "options": {
+    "right": {
+     "label": "Yes. Merge.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The paperwork took one second. The cone took the rest.",
+     "ending": "rare:cone_merge"
+    },
+    "left": {
+     "label": "No. One mayor.",
+     "effects": {
+      "law": 10,
+      "people": -5
+     },
+     "reaction": "They stood there all night. By morning they'd gone. All but one. Clive. Waiting."
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [
@@ -5839,21 +6600,13 @@
    "title": "Turned Into a Column",
    "text": "Marge loves you so much she gave you a column. Then a second. Then you were the paper."
   },
-  "term:won": {
-   "title": "Re-elected",
-   "text": "The town has spoken. Mostly in honks. Another week, heaven help everyone."
+  "rare:cone_chair": {
+   "title": "The Cone Took the Chair",
+   "text": "You stood up for one second. Clive has been mayor ever since. He has done nothing. Approval has never been higher."
   },
-  "term:landslide": {
-   "title": "Landslide",
-   "text": "Sixty per cent or more. The cone has retired. Gerald sent a card. It says HONK, but warmly."
-  },
-  "term:lost": {
-   "title": "Voted Out",
-   "text": "The traffic cone will be sworn in at noon. It has promised to do nothing. People found that refreshing."
-  },
-  "term:early": {
-   "title": "Recalled for Good",
-   "text": "Three recalls. The town has filed you under Never Again. Randy has put the desk in a bin."
+  "rare:cone_merge": {
+   "title": "Merged with a Cone",
+   "text": "Joint mayor with a traffic cone. The cone does the standing. You do the talking. Nobody listens to you."
   }
  },
  "headlines": {
@@ -5900,7 +6653,11 @@
   "typo": "MAYOR IS A GOOSE",
   "pressure": "TROUBLE AT HOME",
   "sneak": "CAUGHT IN THE ACT",
-  "town": "AROUND TOWN"
+  "town": "AROUND TOWN",
+  "goosemayor": "GERALD FOR MAYOR",
+  "migration": "TEN THOUSAND GEESE",
+  "ribbon": "THE RIBBON RACE",
+  "conesaga": "THE CONE CAMPAIGN"
  },
  "cliffhangers": [
   "Tomorrow: Randy still has the keys.",
@@ -5908,6 +6665,6 @@
   "Tomorrow: your opponent agrees to a debate. Sort of.",
   "Tomorrow: Bev has had the scooter looked at.",
   "Tomorrow: a pothole gets a jury summons.",
-  "Tomorrow: the voters decide. So does the cone."
+  "Tomorrow: Sunday. Ten thousand geese are in the air."
  ]
 }
