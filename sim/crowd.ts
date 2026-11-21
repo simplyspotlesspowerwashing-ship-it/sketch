@@ -16,7 +16,8 @@ const typical: Policy = (s, legal, p, rand) => {
   if (s.phase !== 'card') return legal[0]!;
   const card = findCard(p, s.current!);
   const dirs = options(card);
-  const score = (d: Dir) => { const e = card.options[d]!.effects; return METERS.reduce((n, k) => n + (e[k] ?? 0) * (k === 'people' ? 1.4 : 1), 0) + (d === 'right' ? 6 : d === 'left' ? 3 : 0) + (rand() - 0.5) * 30; };
+  const careful = rand() < 0.8; // most players read the warning on a disaster card
+  const score = (d: Dir) => { const e = card.options[d]!.effects; return (card.options[d]!.ending && careful ? -1e6 : 0) + METERS.reduce((n, k) => n + (e[k] ?? 0) * (k === 'people' ? 1.4 : 1), 0) + (d === 'right' ? 6 : d === 'left' ? 3 : 0) + (rand() - 0.5) * 30; };
   return { type: 'swipe', dir: dirs.sort((a, b) => score(b) - score(a))[0]! };
 };
 const chaos: Policy = (_s, legal, _p, rand) => legal[Math.floor(rand() * legal.length)]!;

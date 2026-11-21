@@ -10,10 +10,10 @@ import type { Action, Dir, MeterId, State } from '../src/engine/types.ts';
 
 const start = (seed = 'p1') => newTerm('week1', seed, pack);
 const swipe = (s: State, dir: Dir) => reduce(s, { type: 'swipe', dir }, pack);
-/** The option that keeps every meter nearest the middle: a steady hand. */
+/** The option that keeps every meter nearest the middle, never the one that ends the day: a steady hand that reads the small print. */
 const steady = (s: State): Dir => {
   const c = findCard(pack, s.current!);
-  const cost = (d: Dir) => Object.entries(c.options[d]!.effects).reduce((n, [m, v]) => n + Math.abs(s.meters[m as MeterId] + (v ?? 0) - 50), 0);
+  const cost = (d: Dir) => (c.options[d]!.ending ? 1e6 : 0) + Object.entries(c.options[d]!.effects).reduce((n, [m, v]) => n + Math.abs(s.meters[m as MeterId] + (v ?? 0) - 50), 0);
   return options(c).sort((x, y) => cost(x) - cost(y))[0]!;
 };
 const play = (s: State, n: number) => { for (let i = 0; i < n && s.phase === 'card'; i++) s = swipe(s, steady(s)); return s; };
@@ -188,6 +188,26 @@ describe('every night is a re-election', () => {
     expect(s.endings).toEqual([key]);
     expect(pack.endings[key]).toBeTruthy();
     expect(reduce(reduce(s, { type: 'next' }, pack), { type: 'next' }, pack).day).toBe(2);
+  });
+  for (const p of PACKS) it(`${p.id}: one disaster a day; the fatal answer is yes on some days and no on others; it ends the day on the spot`, () => {
+    const traps = p.cards.filter((c) => Object.values(c.options).some((o) => o!.ending?.startsWith('trap:')));
+    expect(traps.map((c) => c.day).sort()).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    const fatalRight = traps.filter((c) => c.options.right!.ending).length;
+    expect(fatalRight).toBeGreaterThanOrEqual(2);
+    expect(traps.length - fatalRight).toBeGreaterThanOrEqual(2);
+    for (const c of traps) {
+      const dir: Dir = c.options.right!.ending ? 'right' : 'left';
+      const st = reduce({ ...newTerm(p.id, 'trap', p), current: c.id, phase: 'card' }, { type: 'swipe', dir }, p);
+      expect(st.phase, c.id).toBe('recalled');
+      expect(p.endings[st.endings[0]!], c.id).toBeTruthy();
+      const safe = reduce({ ...newTerm(p.id, 'trap', p), current: c.id, phase: 'card' }, { type: 'swipe', dir: dir === 'right' ? 'left' : 'right' }, p);
+      expect(safe.phase, c.id).not.toBe('recalled');
+    }
+  });
+  it('Randy never takes the bait on a disaster card', () => {
+    const s = coverMissedDays(start(), pack, 8);
+    const hits = s.swipes.filter((w) => findCard(pack, w.cardId).options[w.dir]!.ending);
+    expect(hits).toEqual([]);
   });
   for (const p of PACKS) it(`${p.id}: the week's saga runs Monday to Sunday, one card a day, with at least two rare endings`, () => {
     const saga = p.cards.find((c) => c.day === 1 && c.slot === 8)!;

@@ -14,13 +14,15 @@ const OUT = process.argv[3] ?? 'reports/balance.md';
 
 const random: Policy = (s, legal, _p, rand) => legal[Math.floor(rand() * legal.length)]!;
 /** Sees the effects and steers every meter toward the middle, with some noise. Real players can't see effects, so they do worse. */
+/** Sees the effects and reads most warnings: spots a disaster or a strange saga turn 85% of the time. */
 const sensible: Policy = (s, legal, p, rand) => {
   if (s.phase !== 'card') return legal[0]!;
   const card = findCard(p, s.current!);
+  const spotted = rand() < 0.85;
   const risk = (d: Dir) => {
     const ch = card.options[d]!;
     let v = METERS.reduce((n, k) => { const x = s.meters[k] + (ch.effects[k] ?? 0); const dist = Math.abs(x - 50); return n + dist * dist / 50 + (x <= 8 || (k !== 'treasury' && x >= 92) ? 200 : 0); }, 0);
-    return v + (rand() - 0.5) * 18;
+    return v + (ch.ending && spotted ? 1e6 : 0) + (rand() - 0.5) * 18;
   };
   return { type: 'swipe', dir: options(card).sort((a, b) => risk(a) - risk(b))[0]! };
 };

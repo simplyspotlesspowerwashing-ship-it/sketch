@@ -37,6 +37,7 @@ CONTENT_GUIDE.md  how to write cards and stories
 - Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. A recall ends the day on the spot and loses tonight's vote.
 - **The week's theme** (`theme` in each pack) nudges one meter every third card: Goose Migration Week (Law down), Heatwave (Treasury down), Festival Week (Press up), The Big Freeze (Business down).
 - **The week's saga**: one long story, one card a day from Monday (`day: 1, slot: 8`) to Sunday via `next`. Going along with it all the way leads to a **rare ending** (`ending: "rare:..."` on a choice): the day ends on the spot with a special Scrapbook page. Two per week; bots find them in about 3–6% of weeks.
+- **Disasters** (`ending: "trap:..."`): once a day, pinned at a different slot each day, one card has an answer that ends the day on the spot with its own Scrapbook page (28 in all). The card text always carries the warning ('DO NOT FEED', 'THIN ICE. ESPECIALLY MAYORS.'); the fatal answer is yes on some days and no on others, so neither 'always yes' nor 'always no' is safe. Randy never takes the bait.
 - **Mini-games:** the sneak (hold, release while they look away) and the ribbon cut (stop the swinging scissors in the gold zone before Gerald cuts it with his face; three tries).
 - Pressure cards appear when a meter is very low or very high.
 - **Daily score** (`src/engine/score.ts`): points for keeping the town balanced. After every card each of the five meters earns 2 if it is calm (45–55), 1 if uneasy (35–65), 0 if in danger; the treasury only counts if it runs low. Up to 10 per card, 200 a day, +30 for ending a full day with nobody in danger, −100 for a recall. The crowd % is shown but not scored.
@@ -51,7 +52,7 @@ CONTENT_GUIDE.md  how to write cards and stories
 
 Four week packs (`src/content/packs/week1.json` … `week4.json`), about 650 cards in all. Week 1 runs the week of `LAUNCH_MONDAY` (`src/content/index.ts`), week 2 the next, and so on; after week 4 they repeat. Each pack has a theme, seven main stories, seven laws, seven catastrophes, seven mini-games, a saga with two rare endings, oddball debuts, a pool of side stories and its own recall endings. Add a pack by writing `weekN.json`, running `PACK=weekN node sim/crowd.ts`, and listing it in `PACKS`.
 
-Balance (`PACK=weekN npm run sim`, 250 weeks per bot): a careful bot that can see every effect is re-elected on 61–86% of nights depending on the week; random play on 16–35%. Real players sit in between.
+Balance (`PACK=weekN npm run sim`, 250 weeks per bot): a careful bot that sees every effect and spots 85% of disaster warnings is re-elected on 49–77% of nights depending on the week; random play on 10–21%, and walks into a disaster in more than half of all weeks. Real players can't see effects, so they sit below the careful bot.
 
 ## Launch
 

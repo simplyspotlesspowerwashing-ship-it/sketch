@@ -226,11 +226,12 @@ export function autoplay(state: State, policy: Policy, pack: Pack, stop: (s: Sta
   return s;
 }
 
-/** Deputy Randy runs the days you missed: he picks whatever keeps everyone calm-ish, badly. */
+/** Deputy Randy runs the days you missed: he picks whatever keeps everyone calm-ish, badly, and never takes the bait. */
 export const davePolicy: Policy = (s, legal, pack, rand) => {
   if (s.phase !== 'card') return legal[0]!;
   const card = findCard(pack, s.current!);
-  const score = (d: Dir) => METERS.reduce((n, k) => n + Math.abs(s.meters[k] + (card.options[d]!.effects[k] ?? 0) - 50), 0) + rand() * 30;
+  // Randy reads the small print: he never walks into a disaster or a rare ending
+  const score = (d: Dir) => (card.options[d]!.ending ? 1e6 : 0) + METERS.reduce((n, k) => n + Math.abs(s.meters[k] + (card.options[d]!.effects[k] ?? 0) - 50), 0) + rand() * 30;
   const dirs = options(card).sort((a, b) => score(a) - score(b));
   return { type: 'swipe', dir: dirs[0]! };
 };

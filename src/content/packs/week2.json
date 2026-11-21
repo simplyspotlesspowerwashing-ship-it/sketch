@@ -4858,6 +4858,188 @@
     }
    },
    "followUp": true
+  },
+  {
+   "id": "t2_1",
+   "who": "chad",
+   "story": "disaster",
+   "text": "Mayor, I've bought a giant magnifying glass to cool things down in the heatwave. That's how they work, right? Point it at City Hall?",
+   "options": {
+    "right": {
+     "label": "Yes. Cool us down.",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "It does not cool things down.",
+     "ending": "trap:magnifier"
+    },
+    "left": {
+     "label": "No. Point it away.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "He pointed it at his own pool. It boiled. He's calling it a spa."
+    }
+   },
+   "day": 1,
+   "slot": 12
+  },
+  {
+   "id": "t2_2",
+   "who": "carl",
+   "story": "disaster",
+   "text": "Big Carl. It's 38 degrees. I've filled the council chamber with water. For safety. Meeting's in ten minutes. Drain it first?",
+   "options": {
+    "right": {
+     "label": "Yes. Drain it.",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "Drained. Carl wept. He'd fitted a diving board."
+    },
+    "left": {
+     "label": "No. We'll manage.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The meeting went ahead. Underwater. You signed something with a snorkel.",
+     "ending": "trap:flooded_council"
+    }
+   },
+   "day": 2,
+   "slot": 17
+  },
+  {
+   "id": "t2_3",
+   "who": "sal",
+   "story": "disaster",
+   "text": "Mayor. My ice cream's melting. I've stored it in the town's electricity substation. It's cold in there. Leave it overnight?",
+   "options": {
+    "right": {
+     "label": "Yes. Leave it.",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "The ice cream melted the substation. The substation melted the ice cream.",
+     "ending": "trap:blackout"
+    },
+    "left": {
+     "label": "No. Move it now.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Moved to the library freezer. Linda is shushing it."
+    }
+   },
+   "day": 3,
+   "slot": 14
+  },
+  {
+   "id": "t2_4",
+   "who": "randy",
+   "story": "disaster",
+   "text": "Boss. The cousins want to cool off in the town's drinking-water reservoir. Four hundred of them. Ban them from the reservoir?",
+   "options": {
+    "right": {
+     "label": "Yes. Ban them.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Banned. They're in a paddling pool. All four hundred. It's mostly raccoon now."
+    },
+    "left": {
+     "label": "No. Quick dip.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Four hundred raccoons. One reservoir. The whole town's water tastes of coat.",
+     "ending": "trap:reservoir"
+    }
+   },
+   "day": 4,
+   "slot": 16
+  },
+  {
+   "id": "t2_5",
+   "who": "gary",
+   "story": "disaster",
+   "text": "(Gary the vending machine is overheating. His display reads 'PLEASE DO NOT KICK'. Randy says the trick is to kick him. On camera.) Kick him?",
+   "options": {
+    "right": {
+     "label": "Yes. Give him a kick.",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "You kicked your opponent. On camera. He dispensed a sad crisp.",
+     "ending": "trap:kicked_gary"
+    },
+    "left": {
+     "label": "No. Let him cool.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "He cooled down. He dispensed a cold drink. For you. A thank you."
+    }
+   },
+   "day": 5,
+   "slot": 10
+  },
+  {
+   "id": "t2_6",
+   "who": "gerald",
+   "story": "disaster",
+   "text": "(Gerald's wedding. The vicar asks if anyone objects. Everyone looks at you. Gerald is holding the cake knife. For the cake.) Hold your peace?",
+   "options": {
+    "right": {
+     "label": "Yes. Say nothing.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "You held your peace. Gerald nodded at you. The cake was delicious."
+    },
+    "left": {
+     "label": "No. I object.",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "The whole wedding turned round. The pedalo burst into tears.",
+     "ending": "trap:objected"
+    }
+   },
+   "day": 6,
+   "slot": 19
+  },
+  {
+   "id": "t2_7",
+   "who": "bev",
+   "story": "disaster",
+   "text": "Mayor, I've swum the river. Now I'm swimming up the waterfall. Backwards. Will you swim it with me? Or hold my hat?",
+   "options": {
+    "right": {
+     "label": "Yes. I'll swim it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Bev made it up the waterfall. You went down it. Quite a long way down.",
+     "ending": "trap:waterfall"
+    },
+    "left": {
+     "label": "No. I'll hold the hat.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "You held the hat. She made it. She waved from the top. You waved the hat."
+    }
+   },
+   "day": 7,
+   "slot": 12
   }
  ],
  "objectives": [
@@ -4933,6 +5115,34 @@
   "rare:gary_mayor": {
    "title": "Deputy to a Vending Machine",
    "text": "Gary is mayor. You are his deputy. Randy is your deputy. Nobody has had a snack since."
+  },
+  "trap:magnifier": {
+   "title": "Lightly Toasted",
+   "text": "Magnifying glasses do not cool things down. City Hall is golden brown. So are you. The town voted for someone less crispy."
+  },
+  "trap:flooded_council": {
+   "title": "Drowned in Procedure",
+   "text": "The meeting went ahead underwater. You signed your resignation with a snorkel by mistake. Big Carl rescued the minutes. Not you."
+  },
+  "trap:blackout": {
+   "title": "The Great Melt",
+   "text": "The ice cream melted the substation. The whole town went dark for a week. The Bugle printed by candlelight: 'YOUR FAULT'. Fair."
+  },
+  "trap:reservoir": {
+   "title": "Raccoon Water",
+   "text": "Four hundred raccoons in the reservoir. Every tap in town tastes of coat. Nobody will drink to your health ever again."
+  },
+  "trap:kicked_gary": {
+   "title": "Kicked a Candidate",
+   "text": "You kicked your opponent on camera. He dispensed one sad crisp. The town will never forgive you. Gary already has."
+  },
+  "trap:objected": {
+   "title": "The Objection",
+   "text": "You objected at a goose wedding. The pedalo cried. Gerald honked for an hour. The guests voted you out from the pews."
+  },
+  "trap:waterfall": {
+   "title": "Down the Waterfall",
+   "text": "Bev swam up it. You went down it. A long way down. You washed up in the next county. They made you mayor there instead."
   }
  },
  "headlines": {
@@ -4980,7 +5190,8 @@
   "bevswim": "BEV SWIMS THE RIVER",
   "softroad": "THE ROAD IS SOUP",
   "ribbon": "THE RIBBON RACE",
-  "garysaga": "GARY'S COMEBACK"
+  "garysaga": "GARY'S COMEBACK",
+  "disaster": "ONE WRONG ANSWER"
  },
  "cliffhangers": [
   "Tomorrow: a tortoise is two feet from the kerb.",

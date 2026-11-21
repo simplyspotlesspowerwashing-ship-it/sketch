@@ -38,6 +38,15 @@ Pressure cards (`repeat: true` with `requires.min` / `max`) cut in when a meter 
 
 Each week has one saga that runs a card a day, Monday to Sunday, using `next`. Write it in two lanes: a calm lane (both choices stay calm) and a strange lane (one choice goes back to calm, the other goes deeper). Only the strange lane can reach a rare ending: a choice with `"ending": "rare:<id>"` whose text is in the pack's `endings`. Keep entry into the strange lane deliberate so the endings stay rare; the simulator prints how often bots find them.
 
+## Disasters (one a day)
+
+Each day has exactly one disaster card (`day: n`, any free slot from 10 up, never 0–9 so it can't cut into the main story). One answer has `"ending": "trap:<id>"`; the other is safe. Rules, enforced by the pack checker:
+
+- The text must give the warning away to anyone who reads it: a sign, a label, a 'probably fine'. Unfair traps are no fun.
+- The fatal answer should be the reckless one, and it must be yes on some days and no on others (at least two of each per week).
+- The fatal option's label should look ordinary. The ending text goes in the pack's `endings` (title 40 characters, text 160).
+- Don't make the disaster card look different from other cards: noticing is the game.
+
 ## Keep a week balanced
 
 Effects lean on the meters. Across a week, the average effect per option should stay near week 1's (People +0.6, Law +0.4, Press +0.4 to +0.8, Business about 0, Treasury about −0.3), allowing for the theme's nudge. If too many "yes" answers give +10, every meter drifts above the calm zone and even careful players lose nights. Check with `PACK=weekN npm run sim`.

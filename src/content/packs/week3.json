@@ -4176,6 +4176,188 @@
     }
    },
    "followUp": true
+  },
+  {
+   "id": "t3_1",
+   "who": "brayden",
+   "story": "disaster",
+   "text": "Mayor! The Bang app needs permission to 'access everything'. Including the treasury. And the rockets. Just tap allow?",
+   "options": {
+    "right": {
+     "label": "Yes. Allow.",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "The app said 'thank you'. Then it said 'launching everything'.",
+     "ending": "trap:allow_all"
+    },
+    "left": {
+     "label": "No. Deny.",
+     "effects": {
+      "treasury": 5,
+      "business": -5
+     },
+     "reaction": "Denied. The app sulked. It launched one small, sad rocket."
+    }
+   },
+   "day": 1,
+   "slot": 12
+  },
+  {
+   "id": "t3_2",
+   "who": "randy",
+   "story": "disaster",
+   "text": "Boss. The Bin Lids want to stage-dive from the clock tower. Into the crowd. The crowd hasn't been told. Ban stage diving?",
+   "options": {
+    "right": {
+     "label": "Yes. Ban it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Banned. Randy dived anyway. Into a bin. A perfect landing."
+    },
+    "left": {
+     "label": "No. I'll dive first.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You dived. The crowd parted. Politely.",
+     "ending": "trap:stage_dive"
+    }
+   },
+   "day": 2,
+   "slot": 17
+  },
+  {
+   "id": "t3_3",
+   "who": "bev",
+   "story": "disaster",
+   "text": "Mayor, taste my pie. The secret ingredient came with a label saying 'DO NOT EAT'. I've taken the label off. Taste?",
+   "options": {
+    "right": {
+     "label": "Yes. A big bite.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It was delicious. Then it was Thursday.",
+     "ending": "trap:the_pie"
+    },
+    "left": {
+     "label": "No. I'm full.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Bev fed it to Gerald. He's still asleep. Peacefully. Snoring."
+    }
+   },
+   "day": 3,
+   "slot": 14
+  },
+  {
+   "id": "t3_4",
+   "who": "timmy",
+   "story": "disaster",
+   "text": "Dear Mayor. I made a big firework. It says DO NOT HOLD on the side. Can you hold it while I light it? Please?",
+   "options": {
+    "right": {
+     "label": "Yes. I'll hold it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You held it. You saw the whole festival from above. Then the next town.",
+     "ending": "trap:held_rocket"
+    },
+    "left": {
+     "label": "No. Put it down.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Nora lit it. From very far away. It spelled TIMMY in the sky. Then SORRY."
+    }
+   },
+   "day": 4,
+   "slot": 16
+  },
+  {
+   "id": "t3_5",
+   "who": "chad",
+   "story": "disaster",
+   "text": "Mayor! Ride on the very top of my parade yacht! It's eighty feet tall. The bridge ahead is forty. It's fine, I think. Climb up?",
+   "options": {
+    "right": {
+     "label": "Yes. Climb up.",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "The yacht fitted under the bridge. You did not.",
+     "ending": "trap:bridge"
+    },
+    "left": {
+     "label": "No. I'll walk.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "You walked. The top of the yacht stayed at the bridge. With Chad on it."
+    }
+   },
+   "day": 5,
+   "slot": 10
+  },
+  {
+   "id": "t3_6",
+   "who": "wendy",
+   "story": "disaster",
+   "text": "Wooo. Mayor. The other ghosts want you to stay the night. In the room marked 'FOREVER'. Or you could go home. Go home?",
+   "options": {
+    "right": {
+     "label": "Yes. Go home.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "You went home. The door marked FOREVER closed itself. Quietly. Disappointed."
+    },
+    "left": {
+     "label": "No. One night.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It said forever. It meant forever.",
+     "ending": "trap:forever"
+    }
+   },
+   "day": 6,
+   "slot": 19
+  },
+  {
+   "id": "t3_7",
+   "who": "barb",
+   "story": "disaster",
+   "text": "Mayor. Pebbles has eaten tonight's ballot box. All the votes are inside her. Re-run the vote by hand? Or wait for the goat to... return them.",
+   "options": {
+    "right": {
+     "label": "Yes. Re-run it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Re-run by hand. Pebbles watched. Hungrily. Nobody turned their back."
+    },
+    "left": {
+     "label": "No. Wait for the goat.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You waited. The ballots came back. The readable ones all said GOAT.",
+     "ending": "trap:goat_ballots"
+    }
+   },
+   "day": 7,
+   "slot": 12
   }
  ],
  "objectives": [
@@ -4260,6 +4442,34 @@
   "rare:the_end": {
    "title": "The End",
    "text": "Randy wrote THE END. You live in the book now, as the hero. The town reads you at bedtime. Randy does the voices."
+  },
+  "trap:allow_all": {
+   "title": "Allowed Everything",
+   "text": "You tapped allow. The app spent the whole treasury on fireworks and launched them at once. It was beautiful. You're fired."
+  },
+  "trap:stage_dive": {
+   "title": "Stage Dive",
+   "text": "You dived from the clock tower. The crowd parted, politely. You landed in Kevin. Kevin is fine. Your career is not."
+  },
+  "trap:the_pie": {
+   "title": "The Pie",
+   "text": "You ate the pie. You woke up on Thursday, in a hedge, wearing Bev's hat. You missed your own election. Bev voted for herself."
+  },
+  "trap:held_rocket": {
+   "title": "Held the Rocket",
+   "text": "You held it. You saw the festival from above, then the next town, then a field. A cow elected you there. Not here."
+  },
+  "trap:bridge": {
+   "title": "Under the Bridge",
+   "text": "The yacht fitted under the bridge. You didn't. You're on the bridge now, waving. The parade went on without you. So did the town."
+  },
+  "trap:forever": {
+   "title": "Behind the Door Marked Forever",
+   "text": "It said forever. It meant forever. You're a ghost now. Wendy shows you round. The pension is excellent."
+  },
+  "trap:goat_ballots": {
+   "title": "Counted by Goat",
+   "text": "You waited for the ballots to come back. Every readable one said GOAT. Pebbles is mayor. She has eaten the chain of office."
   }
  },
  "headlines": {
@@ -4314,7 +4524,8 @@
   "sack": "THE SACK RACE",
   "lorraine4": "SEAGULLS V. ICE CREAM",
   "timmy4": "THE DINOSAUR BALLOON",
-  "wendy4": "THE GHOST HUNTER"
+  "wendy4": "THE GHOST HUNTER",
+  "disaster": "ONE WRONG ANSWER"
  },
  "cliffhangers": [
   "Tomorrow: the Bin Lids have been rehearsing. Badly.",

@@ -27,7 +27,7 @@ export interface Choice {
   then?: [string, number][];
   /** Cards this choice brings back tomorrow morning: yesterday's decisions carry over. */
   next?: string[];
-  /** A rare ending: this choice ends the day on the spot (you're out) with this Scrapbook ending, e.g. 'rare:cone'. */
+  /** Ends the day on the spot (you're out) with this Scrapbook ending: 'rare:<id>' (end of a saga) or 'trap:<id>' (a daily disaster). */
   ending?: string;
 }
 
@@ -62,7 +62,7 @@ export interface Pack {
   /** The week's theme: shown each morning; `drift` nudges meters after every card (e.g. a heatwave drains the treasury). */
   theme: { name: string; text: string; drift?: Effects };
   objectives: Objective[];
-  endings: Record<string, Ending>; // low:<meter>, high:<group>, rare:<id> (this week's long-plot endings)
+  endings: Record<string, Ending>; // low:<meter>, high:<group>, rare:<id> (saga endings), trap:<id> (daily disasters)
   headlines: Record<string, string>; // story id -> headline for the day's review
   cliffhangers: string[];
 }

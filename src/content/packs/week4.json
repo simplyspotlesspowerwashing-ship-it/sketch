@@ -4048,6 +4048,188 @@
      "business": 75
     }
    }
+  },
+  {
+   "id": "t4_1",
+   "who": "coach",
+   "story": "disaster",
+   "text": "Mayor! The ice has a sign: 'THIN ICE. ESPECIALLY MAYORS.' That's probably about the old mayor. Skate out to the middle with me?",
+   "options": {
+    "right": {
+     "label": "Yes. Let's skate.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It was about you.",
+     "ending": "trap:thin_ice"
+    },
+    "left": {
+     "label": "No. I'll watch.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Coach went alone. He went through. Carl saved him. Again."
+    }
+   },
+   "day": 1,
+   "slot": 12
+  },
+  {
+   "id": "t4_2",
+   "who": "timmy",
+   "story": "disaster",
+   "text": "Dear Mayor. Mr Frost would like to swap places with you tonight. You stand outside in the snow. He sits in your office. Please?",
+   "options": {
+    "right": {
+     "label": "Yes. Swap.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You stood out in the snow all night. Very still. Like a professional.",
+     "ending": "trap:frost_swap"
+    },
+    "left": {
+     "label": "No. Sorry, Mr Frost.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Mr Frost said nothing. Timmy said a lot. Then forgave you. For a biscuit."
+    }
+   },
+   "day": 2,
+   "slot": 17
+  },
+  {
+   "id": "t4_3",
+   "who": "randy",
+   "story": "disaster",
+   "text": "Boss. Still snowed in. Wait for Bev's plough? Or there's a shortcut. Through the cheese vault. The cheese is awake.",
+   "options": {
+    "right": {
+     "label": "Yes. Wait for Bev.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Bev ploughed the door open. The vault stayed shut. Something in there sighed."
+    },
+    "left": {
+     "label": "No. Take the shortcut.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The cheese let you in. It did not let you out.",
+     "ending": "trap:through_vault"
+    }
+   },
+   "day": 3,
+   "slot": 14
+  },
+  {
+   "id": "t4_4",
+   "who": "gerald",
+   "story": "disaster",
+   "text": "HONK. (Gerald offers you his grit. All of it. He'll bring it up for you, right now, on live television. You know how.) Accept on camera?",
+   "options": {
+    "right": {
+     "label": "Yes. Live on air.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You accepted. On live television.",
+     "ending": "trap:grit_gift"
+    },
+    "left": {
+     "label": "No, thank you.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "He's very relieved. So is everyone. So is the camera."
+    }
+   },
+   "day": 4,
+   "slot": 16
+  },
+  {
+   "id": "t4_5",
+   "who": "nora",
+   "story": "disaster",
+   "text": "Mayor, the heat ray is stuck on full. I'll just pull the plug, shall I? Or someone could press the off switch. It's on the front.",
+   "options": {
+    "right": {
+     "label": "Yes. Pull the plug.",
+     "effects": {
+      "treasury": -5,
+      "law": 5
+     },
+     "reaction": "Pulled. The ray died. Spring paused. Nora sulked."
+    },
+    "left": {
+     "label": "No. I'll press the switch.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You pressed the switch. The ray pressed back.",
+     "ending": "trap:heat_ray"
+    }
+   },
+   "day": 5,
+   "slot": 10
+  },
+  {
+   "id": "t4_6",
+   "who": "carl",
+   "story": "disaster",
+   "text": "Big Carl. The ice pool's thawing. Test the depth with a stick? Or someone could go in. Feet first. In the dark.",
+   "options": {
+    "right": {
+     "label": "Yes. Use a stick.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The stick went all the way down. Carl is very excited about it."
+    },
+    "left": {
+     "label": "No. I'll go in.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It was deeper than it looked. Much deeper.",
+     "ending": "trap:depth_test"
+    }
+   },
+   "day": 6,
+   "slot": 19
+  },
+  {
+   "id": "t4_7",
+   "who": "cheese",
+   "story": "disaster",
+   "text": "(The Winter Ball. The cheese, in a bow tie, would like the first dance. With you. Alone. In the vault. With the door shut.) Dance?",
+   "options": {
+    "right": {
+     "label": "Yes. One dance.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The door closed. The music kept playing.",
+     "ending": "trap:last_dance"
+    },
+    "left": {
+     "label": "No. Group dance.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "A group dance. The cheese sat it out. Watching. Humming."
+    }
+   },
+   "day": 7,
+   "slot": 12
   }
  ],
  "objectives": [
@@ -4123,6 +4305,34 @@
   "rare:fondue": {
    "title": "Fondue",
    "text": "You stepped into the fondue. Nobody is quite sure what happened next. There's a statue of you in the square now. It's cheese. It smiles."
+  },
+  "trap:thin_ice": {
+   "title": "Through the Ice",
+   "text": "The sign was about you. You went straight through. Big Carl rescued you. It took four hours. You missed the election."
+  },
+  "trap:frost_swap": {
+   "title": "Swapped with a Snowman",
+   "text": "You stood in the snow all night. Mr Frost sat in your office. By morning he'd been elected and you'd become a snowman."
+  },
+  "trap:through_vault": {
+   "title": "The Shortcut",
+   "text": "You took the shortcut through the cheese vault. The cheese let you in. You've been 'in a meeting' ever since."
+  },
+  "trap:grit_gift": {
+   "title": "The Grit Incident",
+   "text": "You accepted Gerald's gift on live television. Nobody will ever look at you the same way again. Approval: grit."
+  },
+  "trap:heat_ray": {
+   "title": "Defrosted",
+   "text": "You pressed the switch on the front. You glow now. Permanently. The town uses you as a streetlight. It's a job."
+  },
+  "trap:depth_test": {
+   "title": "Depth Tested",
+   "text": "It was deeper than it looked. Carl rescued you, then himself, then you again. You've retired to a towel."
+  },
+  "trap:last_dance": {
+   "title": "Last Dance with the Cheese",
+   "text": "You danced with the cheese in the vault. The door closed. The music kept playing. The cheese leads. It always leads."
   }
  },
  "headlines": {
@@ -4177,7 +4387,8 @@
   "snow2": "PINK SNOW",
   "fountain2": "THE FROZEN COIN",
   "flaps5": "SNOWBALL WAR",
-  "pebbles5": "THE AGENDA, EATEN"
+  "pebbles5": "THE AGENDA, EATEN",
+  "disaster": "ONE WRONG ANSWER"
  },
  "cliffhangers": [
   "Tomorrow: a snowman wants your job.",

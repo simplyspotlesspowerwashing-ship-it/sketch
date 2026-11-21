@@ -6532,6 +6532,188 @@
     }
    },
    "followUp": true
+  },
+  {
+   "id": "t1_1",
+   "who": "randy",
+   "story": "disaster",
+   "text": "Boss. Sign this. Don't read it. It's a normal paper. Very normal. Nothing about who owns the town. Sign?",
+   "options": {
+    "right": {
+     "label": "Yes. Sign it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You signed. Randy rolled it up very fast.",
+     "ending": "trap:deed"
+    },
+    "left": {
+     "label": "No. I'll read it.",
+     "effects": {
+      "law": 5,
+      "press": 5
+     },
+     "reaction": "It was the deed to Bad Town. Made out to Randy. He says it was 'a draft'."
+    }
+   },
+   "day": 1,
+   "slot": 12
+  },
+  {
+   "id": "t1_2",
+   "who": "nora",
+   "story": "disaster",
+   "text": "Mayor, my weather machine's big switch says 'NEVER SWITCH TO GOOSE'. A goose is asking me to switch it. Should I?",
+   "options": {
+    "right": {
+     "label": "Yes. Switch it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The sky went very quiet. Then it honked.",
+     "ending": "trap:goose_weather"
+    },
+    "left": {
+     "label": "No. Leave it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The switch stays. The goose is sulking. Tomorrow's forecast: mild, no geese."
+    }
+   },
+   "day": 2,
+   "slot": 17
+  },
+  {
+   "id": "t1_3",
+   "who": "doug",
+   "story": "disaster",
+   "text": "Mayor, the cheese vault says 'DO NOT FEED'. Randy is about to feed it a sandwich. Through the keyhole. Stop him?",
+   "options": {
+    "right": {
+     "label": "Yes. Stop him.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Stopped. He ate the sandwich himself. The vault made a disappointed noise."
+    },
+    "left": {
+     "label": "No. It's one sandwich.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The vault went quiet. Then it went 'crunch'.",
+     "ending": "trap:fed_cheese"
+    }
+   },
+   "day": 3,
+   "slot": 14
+  },
+  {
+   "id": "t1_4",
+   "who": "marge",
+   "story": "disaster",
+   "text": "Mayor, live interview. Our last guest said 'off the record' and we printed it anyway. Want to say something off the record?",
+   "options": {
+    "right": {
+     "label": "Yes. Off the record...",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "You leaned in and said what you really think of Gerald.",
+     "ending": "trap:off_record"
+    },
+    "left": {
+     "label": "No. On the record only.",
+     "effects": {
+      "press": 5,
+      "law": 5
+     },
+     "reaction": "A dull interview. Marge is disappointed. Your career is intact."
+    }
+   },
+   "day": 4,
+   "slot": 16
+  },
+  {
+   "id": "t1_5",
+   "who": "bev",
+   "story": "disaster",
+   "text": "Mayor! Brakes have gone! I'm doing fifty, heading straight for the fireworks shop! Shall I swerve into the duck pond?",
+   "options": {
+    "right": {
+     "label": "Yes. Into the pond!",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "She hit the pond at fifty. The ducks applauded. She's fine. So is the shop."
+    },
+    "left": {
+     "label": "No. Hold your course!",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "She held her course. It was very brave. It was very loud.",
+     "ending": "trap:bev_fireworks"
+    }
+   },
+   "day": 5,
+   "slot": 10
+  },
+  {
+   "id": "t1_6",
+   "who": "gerald",
+   "story": "disaster",
+   "text": "(Gerald offers a wing to shake. His other wing is behind his back, holding a pen and a contract that says 'MAYOR: GERALD'.) Shake?",
+   "options": {
+    "right": {
+     "label": "Yes. Shake on it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The pen moved on its own. Gerald smiled. Geese can smile.",
+     "ending": "trap:goose_contract"
+    },
+    "left": {
+     "label": "No. Show me the other wing.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He showed you. Empty. He'd eaten the contract. Smooth."
+    }
+   },
+   "day": 6,
+   "slot": 19
+  },
+  {
+   "id": "t1_7",
+   "who": "randy",
+   "story": "disaster",
+   "text": "Boss, a bus is coming and Clive the cone is in the middle of the road. Move him? He's 'got this', he says. Well, I say he says.",
+   "options": {
+    "right": {
+     "label": "Yes. Move the cone.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You moved him. The bus went past. Clive seems annoyed. Or grateful. Cones are hard to read."
+    },
+    "left": {
+     "label": "No. He's got this.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The bus swerved round Clive. Into City Hall. Into your office.",
+     "ending": "trap:cone_bus"
+    }
+   },
+   "day": 7,
+   "slot": 12
   }
  ],
  "objectives": [
@@ -6607,6 +6789,34 @@
   "rare:cone_merge": {
    "title": "Merged with a Cone",
    "text": "Joint mayor with a traffic cone. The cone does the standing. You do the talking. Nobody listens to you."
+  },
+  "trap:deed": {
+   "title": "Signed Away the Town",
+   "text": "You didn't read it. It was the deed to Bad Town. Randy owns it now. He charges you rent for your own office. In crisps."
+  },
+  "trap:goose_weather": {
+   "title": "It Rained Geese",
+   "text": "Nora flicked the switch. It rained geese for a week. Every one of them registered to vote. None for you."
+  },
+  "trap:fed_cheese": {
+   "title": "Fed the Cheese",
+   "text": "Randy fed it a sandwich. It doubled in size. Then again. City Hall is now a cheese with windows. You work in the rind."
+  },
+  "trap:off_record": {
+   "title": "Off the Record",
+   "text": "You said what you really think of Gerald. It was on the front page by six. Gerald can read. Gerald can also organise."
+  },
+  "trap:bev_fireworks": {
+   "title": "Bev Through the Fireworks Shop",
+   "text": "Bev went straight through the fireworks shop at fifty. The display was the best in town history. Your career went up with it."
+  },
+  "trap:goose_contract": {
+   "title": "Out-Honked",
+   "text": "You shook the wing. The contract signed itself. Gerald is mayor. His first law: honk. His second law: also honk."
+  },
+  "trap:cone_bus": {
+   "title": "Run Over by Democracy",
+   "text": "The bus swerved round Clive and through your office. Clive didn't move. The town said he looked 'very mayoral'. He was elected by lunch."
   }
  },
  "headlines": {
@@ -6657,7 +6867,8 @@
   "goosemayor": "GERALD FOR MAYOR",
   "migration": "TEN THOUSAND GEESE",
   "ribbon": "THE RIBBON RACE",
-  "conesaga": "THE CONE CAMPAIGN"
+  "conesaga": "THE CONE CAMPAIGN",
+  "disaster": "ONE WRONG ANSWER"
  },
  "cliffhangers": [
   "Tomorrow: Randy still has the keys.",

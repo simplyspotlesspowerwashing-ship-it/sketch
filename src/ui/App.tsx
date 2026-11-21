@@ -290,8 +290,10 @@ function DayReview({ s, streak, fresh, onNext, nextLabel, wait, sub }: { s: Stat
   const won = !!s.won[s.day - 1];
   const early = s.recalledDays.includes(s.day);
   const randy = s.daveDays.includes(s.day);
-  const twist = early && !!s.endings[s.endings.length - 1]?.startsWith('rare:');
-  const verdict = won ? 'RE-ELECTED' : twist ? 'PLOT TWIST' : early ? 'RECALLED' : 'VOTED OUT';
+  const last = early ? s.endings[s.endings.length - 1] ?? '' : '';
+  const twist = last.startsWith('rare:');
+  const disaster = last.startsWith('trap:');
+  const verdict = won ? 'RE-ELECTED' : twist ? 'PLOT TWIST' : disaster ? 'DISASTER' : early ? 'RECALLED' : 'VOTED OUT';
   const parts = voteParts(s, s.day);
   const out = !won && !early ? s.endings[s.endings.length - 1] : undefined;
   const share = `Mayor of Bad Town · ${DAY_NAMES[s.day - 1]} · ${verdict} ${vote}%${won && streak > 1 ? ` · 🔥 ${streak}` : ''}\n${sc.total} pts · ${tier.name}\n${rows.join('\n')}`;
@@ -300,7 +302,7 @@ function DayReview({ s, streak, fresh, onNext, nextLabel, wait, sub }: { s: Stat
   return (
     <div class="review dayend">
       <div class="bugle"><div class="masthead"><span>THE BUGLE</span><small>{DAY_NAMES[s.day - 1]} night</small></div>
-        <div class="poll-row"><span class="bigpoll">{vote}%</span><span><b class={`verdict-tag ${won ? 'won' : 'lost'}`}>{verdict}</b><small>{twist ? 'The story went somewhere you couldn\'t come back from. Not tonight, anyway.' : early ? 'You were gone before the polls even opened.' : randy ? 'Randy counted the votes himself. He says you won.' : `${Math.round(parts.day)}% from today's score${parts.goals ? `, +${parts.goals}% for goals met` : ''}. You need ${TUNING.vote.pass}%.`}</small></span></div>
+        <div class="poll-row"><span class="bigpoll">{vote}%</span><span><b class={`verdict-tag ${won ? 'won' : 'lost'}`}>{verdict}</b><small>{twist ? 'The story went somewhere you couldn\'t come back from. Not tonight, anyway.' : disaster ? 'One wrong answer. It was in the small print.' : early ? 'You were gone before the polls even opened.' : randy ? 'Randy counted the votes himself. He says you won.' : `${Math.round(parts.day)}% from today's score${parts.goals ? `, +${parts.goals}% for goals met` : ''}. You need ${TUNING.vote.pass}%.`}</small></span></div>
         <p class="streakline">{won ? (streak > 0 ? `🔥 Re-elected ${streak} night${streak > 1 ? 's' : ''} in a row` : 'Re-elected.') : "Streak over. You'll run again tomorrow. Everything restarts at " + TUNING.recall.reset + '.'}</p>
       </div>
       {out && <EndingCard k={out} isNew={fresh.includes(out)} />}
@@ -324,6 +326,8 @@ function DayReview({ s, streak, fresh, onNext, nextLabel, wait, sub }: { s: Stat
 // ---------- scrapbook ----------
 /** Every rare ending across all weeks, in week order. */
 const RARE_ORDER = PACKS.flatMap((p) => Object.keys(p.endings).filter((k) => k.startsWith('rare:')).map((k) => [k, p.theme.name] as const));
+/** Every daily disaster across all weeks. */
+const TRAP_ORDER = PACKS.flatMap((p) => Object.keys(p.endings).filter((k) => k.startsWith('trap:')).map((k) => [k, p.theme.name] as const));
 const endingText = (k: string) => pack.endings[k] ?? COMMON_ENDINGS[k] ?? PACKS.find((p) => p.endings[k])?.endings[k] ?? { title: 'An ending', text: '' };
 const mine = (s: State, i: number) => !s.daveDays.includes(i + 1);
 interface Deed { id: string; name: string; how: string; test: (s: State, save: Save) => boolean }
@@ -335,6 +339,9 @@ const DEEDS: Deed[] = [
   { id: 'streak7', name: 'Seven in a Row', how: 'Get re-elected seven nights running', test: (_s, save) => save.streak.best >= 7 },
   { id: 'unsinkable', name: 'Unsinkable', how: 'Win all seven nights of a week', test: (s) => !!s.result && s.won.length === 7 && s.won.every(Boolean) },
   { id: 'twist', name: 'Plot Twist', how: 'Find a rare ending', test: (_s, save) => save.scrapbook.some((k) => k.startsWith('rare:')) },
+  { id: 'disaster', name: 'Should Have Read It', how: 'Walk into a disaster', test: (_s, save) => save.scrapbook.some((k) => k.startsWith('trap:')) },
+  { id: 'careful', name: 'Reads the Small Print', how: 'Play a whole week yourself without a single disaster', test: (s) => !!s.result && s.daveDays.length === 0 && !s.endings.some((k) => k.startsWith('trap:')) },
+  { id: 'disasters10', name: 'Accident-Prone', how: 'Collect ten disasters', test: (_s, save) => save.scrapbook.filter((k) => k.startsWith('trap:')).length >= 10 },
   { id: 'pond', name: 'Pond Life', how: 'Open the pond in your office', test: (s) => !!s.flags['built:pond'] },
   { id: 'cone', name: 'Fair Play', how: 'Give the stolen cone back', test: (s) => !!s.flags.cone_back },
   { id: 'cheese', name: 'Treasurer Cheese', how: 'Give the cheese Doug\'s job', test: (s) => !!s.flags.cheese_job },
@@ -382,6 +389,8 @@ function Scrapbook({ save, onClose, onRename }: { save: Save; onClose: () => voi
       <div class="career"><span><b>{c.wins}</b>nights re-elected</span><span><b>🔥 {save.streak.current}</b>streak now</span><span><b>{save.streak.best}</b>best streak</span><span><b>{c.terms}</b>weeks served</span></div>
       <h3 class="subhead">Rare endings <small>{count(RARE_ORDER.map(([k]) => k))} of {RARE_ORDER.length}</small></h3>
       <div class="endings">{RARE_ORDER.map(([k, week]) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`${week}: follow the long story all the way`} />)}</div>
+      <h3 class="subhead">Disasters <small>{count(TRAP_ORDER.map(([k]) => k))} of {TRAP_ORDER.length}</small></h3>
+      <div class="endings">{TRAP_ORDER.map(([k, week]) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`${week}: one wrong answer`} />)}</div>
       <h3 class="subhead">Voted out <small>{count(OUT_ORDER)} of {OUT_ORDER.length}</small></h3>
       <div class="endings">{OUT_ORDER.map((k) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`Lose a night with ${METER_NAME[k.split(':')[1] as MeterId]} unhappiest`} />)}</div>
       <h3 class="subhead">Recalled <small>{count(RECALL_ORDER)} of {RECALL_ORDER.length}</small></h3>
@@ -469,6 +478,7 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
       <p>You score points after every card for keeping every group calm: inside the striped box on each bar. Let anyone get too angry or too happy and the points dry up. Every mayor gets the same problems, so you'll see how many made the same call.</p>
       <p><b>Every night is an election.</b> Keep everyone calm and you'll get your 50%. Lose, and you're back the next morning with a story for the Scrapbook.</p>
       <p>Each week has a theme, three goals (the ★ at the top) and one long story. Follow it far enough and things get strange.</p>
+      <p><b>Read the cards.</b> Once a day, one answer is a disaster.</p>
     </div>,
     <div class="op-slide" key="5">
       <h2 class="op-title">Sign here, please.</h2>
@@ -498,6 +508,7 @@ function nickname(s: State): string {
   const nights = s.won.filter(Boolean).length;
   if (s.won.length === 7 && nights === 7) return 'the Unsinkable';
   if (s.endings.some((k) => k.startsWith('rare:'))) return 'the Plot-Twisted';
+  if (s.endings.filter((k) => k.startsWith('trap:')).length >= 3) return 'the Accident-Prone';
   const special: [string, string][] = [['built:pond', 'of the Indoor Pond'], ['kevin_saved', 'Friend of Kevin'], ['reg_road', 'the Tortoise-Friendly'], ['gary_help', "Gary's Mate"], ['cheese_job', 'the Cheese-Appointer'], ['bev_f1', 'the Fast and Furious']];
   for (const [f, n] of special) if (s.flags[f]) return n;
   if (nights <= 1) return 'the Briefly Employed';
@@ -527,8 +538,9 @@ function WeekRecap({ s, streak, fresh, onNewWeek }: { s: State; streak: number; 
         <p class="recap-sub">{pack.theme.name}. Re-elected <b>{nights} of 7</b> nights.{streak > 1 ? ` 🔥 ${streak} in a row.` : ''}</p>
         <ol class="recap-days">{played.map((x) => <li key={x.d} class={x.vote === undefined ? '' : x.won ? 'won' : 'lost'}><span>{x.d}</span><b>{x.vote === undefined ? '–' : `${x.vote}%`}</b><small>{x.randy ? 'Randy' : x.vote === undefined ? '' : x.won ? 'won' : 'lost'}</small></li>)}</ol>
       </div>
+      <p class="recap-line"><b>Disasters:</b> {(() => { const hit = s.endings.filter((k) => k.startsWith('trap:')).length; const met = s.swipes.filter((w) => !s.daveDays.includes(w.day) && Object.values(findCard(pack, w.cardId).options).some((o) => o!.ending?.startsWith('trap:'))).length; return met === 0 ? 'none came your way.' : `dodged ${met - hit} of ${met}.`; })()}</p>
       {best && <p class="recap-line"><b>Best day:</b> {best.d}, {best.pts} pts ({tierOf(best.pts).name}).</p>}
-      {odd && oddCard && <div class="recap-odd"><b>Your oddest call</b><Portrait who={oddCard.who} size={48} mood="neutral" /><span>“{fill(oddCard.text).slice(0, 90)}{oddCard.text.length > 90 ? '…' : ''}” You said <i>{fill(oddCard.options[odd.dir]!.label)}</i>. Only {crowd[odd.cardId]![odd.dir]}% of mayors agreed.</span></div>}
+      {odd && oddCard && <div class="recap-odd"><b>Your oddest call</b><Portrait who={oddCard.who} size={48} mood="neutral" /><span>“{fill(oddCard.text).slice(0, 90)}{oddCard.text.length > 90 ? '…' : ''}” You said <i>{fill(oddCard.options[odd.dir]!.label).replace(/[.!?]+$/, '')}</i>. Only {crowd[odd.cardId]![odd.dir]}% of mayors agreed.</span></div>}
       {met.length > 0 && <div class="recap-met"><b>Oddballs you dealt with</b><span>{met.map((w) => <Portrait key={w} who={w} size={40} mood="pleased" />)}</span></div>}
       {endings.length > 0 && <><h3 class="subhead">Endings this week</h3><div class="endings">{endings.map((k) => <EndingCard key={k} k={k} isNew={fresh.endings.includes(k)} />)}</div></>}
       {fresh.deeds.map((id) => <p key={id} class="bonus"><b>Deed: {DEEDS.find((d) => d.id === id)!.name}.</b> {DEEDS.find((d) => d.id === id)!.how}.</p>)}
@@ -671,7 +683,7 @@ export function App() {
           {s.phase === 'card' && <div class="progress" aria-label={`Card ${s.cardInDay + 1} of ${TUNING.cardsPerDay} today`}>{Array.from({ length: TUNING.cardsPerDay }, (_, i) => <i key={i} class={i < s.cardInDay ? 'done' : i === s.cardInDay ? 'now' : ''} />)}</div>}
           {s.phase === 'recalled' && !reveal && (
             <div class="panel recall">
-              <div class="stamp denied big">{s.endings[s.endings.length - 1]?.startsWith('rare:') ? 'PLOT TWIST' : 'RECALLED'}</div>
+              <div class="stamp denied big">{s.endings[s.endings.length - 1]?.startsWith('rare:') ? 'PLOT TWIST' : s.endings[s.endings.length - 1]?.startsWith('trap:') ? 'DISASTER' : 'RECALLED'}</div>
               <EndingCard k={s.endings[s.endings.length - 1]!} isNew={fresh.endings.includes(s.endings[s.endings.length - 1]!)} />
               <p class="hint warn">Today's over, and so is tonight's vote. Tomorrow you run again: everything restarts at {TUNING.recall.reset}.</p>
               <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>See tonight's result</button>
