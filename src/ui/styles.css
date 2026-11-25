@@ -1039,17 +1039,6 @@ h1 span { white-space: nowrap; }
 @media (max-width: 500px) { .career { grid-template-columns: repeat(2, 1fr); } }
 .ending.trap { background: #F7D3CB; border-color: #8E2A2A; }
 
-/* ---------- full preview: what each answer does ---------- */
-.edge-chip .lbl { display: flex; flex-direction: column; gap: 3px; align-items: inherit; }
-.fx { display: flex; flex-wrap: wrap; gap: 3px 6px; justify-content: inherit; }
-.edge-chip.no .fx { justify-content: flex-start; } .edge-chip.yes .fx { justify-content: flex-end; }
-.fx-i { display: inline-flex; align-items: center; gap: 1px; font-size: 10px; line-height: 1; }
-.fx-i .portrait { width: 18px; height: 18px; }
-.fx-i.up b { color: #2C6B41; } .fx-i.down b { color: var(--alert); }
-.fx-coin { display: inline-grid; width: 18px; height: 18px; place-items: center; }
-.hbar .proj { position: absolute; top: -2px; bottom: -2px; width: 3px; margin-left: -1.5px; z-index: 2; background: var(--ink); box-shadow: 0 0 0 1.5px #fff; animation: popin .15s both; }
-.hint-arrow { position: absolute; top: -9px; left: 26px; font-style: normal; font-size: 9px; font-weight: 800; letter-spacing: -1px; padding: 0 3px; border-radius: 6px; background: #fff; border: 1.5px solid var(--ink); animation: popin .15s both; }
-.hint-arrow.up { color: #2C6B41; } .hint-arrow.down { color: var(--alert); }
 .linkbtn.defer { display: block; margin: 6px auto 0; font-size: 13px; }
 .linkbtn.defer small { color: var(--soft); }
 .linkbtn.defer[disabled] { opacity: .45; cursor: default; }

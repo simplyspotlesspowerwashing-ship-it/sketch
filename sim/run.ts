@@ -45,7 +45,17 @@ const expert: Policy = (s, legal, p, rand) => {
   return cost(after) - cost(s.meters) > DEFER_AT ? { type: 'defer' } : a;
 };
 const DEFER_AT = Number(process.env.DEFER_AT ?? 8);
-const POLICIES: Record<string, Policy> = { random, 'dave-only': davePolicy, sensible, expert };
+/** Plays like a person reading the card: guesses which way each group moves (not how much), misjudges one card in five, spots 85% of warnings. */
+const reader: Policy = (s, legal, p, rand) => {
+  if (s.phase !== 'card') return legal[0]!;
+  const card = findCard(p, s.current!);
+  const dirs = options(card);
+  if (rand() < 0.2) return { type: 'swipe', dir: dirs[Math.floor(rand() * dirs.length)]! };
+  const spotted = rand() < 0.85;
+  const guess = (d: Dir) => { const e = card.options[d]!.effects; const m = { ...s.meters }; for (const k of METERS) if (e[k]) m[k] = m[k] + Math.sign(e[k]!) * 7; return cost(m) + (card.options[d]!.ending && spotted ? 1e6 : 0) + (rand() - 0.5) * 10; };
+  return { type: 'swipe', dir: dirs.sort((a, b) => guess(a) - guess(b))[0]! };
+};
+const POLICIES: Record<string, Policy> = { random, reader, 'dave-only': davePolicy, sensible, expert };
 
 const lines: string[] = [];
 const seenAll = new Set<string>();

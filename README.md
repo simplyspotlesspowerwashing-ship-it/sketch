@@ -30,7 +30,7 @@ CONTENT_GUIDE.md  how to write cards and stories
 
 ## Rules
 
-- **Every card is a yes or a no.** Drag right to approve, left to reject (or tap, or press Y / N). **No hidden dice:** each answer's button shows every group it moves, up ▲ or down ▼ (▲▲ = 10 or more), and dragging or hovering marks on each bar where it will land. Skill is reading the trade-offs, the warnings and the week ahead.
+- **Every card is a yes or a no.** Drag right to approve, left to reject (or tap, or press Y / N). Dragging part-way (or hovering a button) shows a dot on each meter the answer moves, bigger for a big move, but never which way: you work that out from the card and the characters. Effects are fixed, never random.
 - **Not now** (button or D): twice a day, push a card back; it returns three decisions later. Not in the last four cards of the day. A rubber stamp marks the card APPROVED or REJECTED; it then turns over to show the character's face, what they said, the bars that moved and how many mayors chose the same.
 - **20 cards a day, seven days a week**, the same deck for every mayor (`dayDeck`). Each day opens with its main story, has one law to sign or refuse, one catastrophe and one mini-game (sneak or ribbon); side stories fill the rest. See CONTENT_GUIDE.md.
 - **Rabbit holes.** Yes and no lead to different next cards, straight away (`then`), four or five deep in a day's main story. Some consequences come back the next morning (`next`).
@@ -53,7 +53,7 @@ CONTENT_GUIDE.md  how to write cards and stories
 
 Four week packs (`src/content/packs/week1.json` … `week4.json`), about 650 cards in all. Week 1 runs the week of `LAUNCH_MONDAY` (`src/content/index.ts`), week 2 the next, and so on; after week 4 they repeat. Each pack has a theme, seven main stories, seven laws, seven catastrophes, seven mini-games, a saga with two rare endings, oddball debuts, a pool of side stories and its own recall endings. Add a pack by writing `weekN.json`, running `PACK=weekN node sim/crowd.ts`, and listing it in `PACKS`.
 
-Balance (`PACK=weekN npm run sim`, 300 weeks per bot), nights re-elected: random play 4–7%; a careful bot that plays by the preview but misses some warnings 31–65%; an expert bot that also reads every warning, times Not now and chases goals 54–79%. Week 1 is the easiest; week 2 (Heatwave) the hardest.
+Balance (`PACK=weekN npm run sim`, 200–300 weeks per bot), nights re-elected: random play 4–7%; a reader bot that guesses each answer's direction from the text but not its size, misjudges one card in five and spots 85% of warnings 33–51%; bots that can see exact effects (players can't) 30–65% (careful) and 53–78% (expert: every warning, Not now, goals). Week 1 is the easiest; week 2 (Heatwave) the hardest.
 
 Card supply (`npm run supply`): every week fills seven full days of 20 cards; a player who survives every day sees no repeated cards (week 4: 0.08 per week). That is 28 days of unique play at launch; week 5 repeats week 1 (with a new shuffle of side stories).
 

@@ -48,15 +48,6 @@ function MeterIcon({ m }: { m: MeterId }) {
   return m === 'treasury' ? <span class="coinface"><Icon.coin size={30} /></span> : <Portrait who={LEADER[m as GroupId]!} size={34} ring={GROUP_COLOR[m as GroupId]} mood="neutral" />;
 }
 
-/** ▲ for a small move, ▲▲ for a big one (10 or more). */
-const arrows = (d: number) => (d > 0 ? '▲' : '▼').repeat(Math.abs(d) >= 10 ? 2 : 1);
-/** What an answer will do, shown on its button: the leader of each group it moves, and which way. */
-function Effects({ e }: { e: Choice['effects'] }) {
-  const ms = METERS.filter((m) => e[m]);
-  return <span class="fx" aria-hidden="true">{ms.map((m) => <span key={m} class={`fx-i ${e[m]! > 0 ? 'up' : 'down'}`}>{m === 'treasury' ? <span class="fx-coin"><Icon.coin size={16} /></span> : <Portrait who={LEADER[m as GroupId]!} size={18} ring={GROUP_COLOR[m as GroupId]} mood="neutral" />}<b>{arrows(e[m]!)}</b></span>)}</span>;
-}
-const effectsText = (e: Choice['effects']) => METERS.filter((m) => e[m]).map((m) => `${METER_NAME[m]} ${e[m]! > 0 ? 'up' : 'down'}${Math.abs(e[m]!) >= 10 ? ' a lot' : ''}`).join(', ');
-
 function Meters({ s, preview }: { s: State; preview: Choice | null }) {
   return (
     <div class="meters" role="group" aria-label="Your standing">
@@ -67,8 +58,8 @@ function Meters({ s, preview }: { s: State; preview: Choice | null }) {
         return (
           <div key={m} class={`meter ${danger ? 'danger' : ''}`} style={{ '--g': METER_COLOR[m] }} role="meter" aria-label={`${METER_NAME[m]} ${v} of 100`} aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
             <MeterIcon m={m} />
-            <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /><CalmZone m={m} />{hint ? <i class={`proj ${hint > 0 ? 'up' : 'down'}`} style={{ left: `${Math.min(100, Math.max(0, v + hint))}%` }} /> : null}</span>
-            {hint ? <i class={`hint-arrow ${hint > 0 ? 'up' : 'down'}`} aria-label={`${METER_NAME[m]} ${hint > 0 ? 'up' : 'down'} ${Math.abs(hint)}`}>{arrows(hint)}</i> : null}
+            <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /><CalmZone m={m} /></span>
+            {hint ? <i class={`hintdot ${Math.abs(hint) >= 10 ? 'big' : ''}`} aria-label="will change" /> : null}
           </div>
         );
       })}
@@ -266,7 +257,7 @@ function SwipeCard({ card, onPreview, onSwipe, locked, meet, defers, onDefer }: 
       <div class="choices n2">
         {(['left', 'right'] as Dir[]).filter((d) => card.options[d]).map((d) => <button key={d} class={`edge-chip ${d} ${d === 'left' ? 'no' : 'yes'} ${valid === d ? 'on' : ''}`} onClick={() => commit(d)}
           onPointerEnter={(e) => { if (e.pointerType === 'mouse' && !stamped) onPreview(d); }} onPointerLeave={(e) => { if (e.pointerType === 'mouse') onPreview(null); }} onFocus={() => { if (!stamped) onPreview(d); }} onBlur={() => onPreview(null)}
-          aria-label={`${d === 'left' ? 'No' : 'Yes'}: ${fill(card.options[d]!.label)}. ${effectsText(card.options[d]!.effects)}`}><b>{d === 'left' ? '✗' : '✓'}</b><span class="lbl">{fill(card.options[d]!.label)}<Effects e={card.options[d]!.effects} /></span></button>)}
+          aria-label={`${d === 'left' ? 'No' : 'Yes'}: ${fill(card.options[d]!.label)}`}><b>{d === 'left' ? '✗' : '✓'}</b><span>{fill(card.options[d]!.label)}</span></button>)}
       </div>
       {defers !== null && <button class="linkbtn defer" disabled={defers <= 0 || !!stamped} onClick={onDefer}>Not now <small>({defers > 0 ? `${defers} left today` : 'none left today'})</small></button>}
     </div>
@@ -489,7 +480,7 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
     <div class="op-slide" key="4">
       <div class="op-demo"><span class="op-card"><Portrait who="gerald" size={70} mood="annoyed" /><small>The geese would like a pond. In your office.</small></span><span class="op-hand">👆</span></div>
       <h2 class="op-title">20 problems a day. Yes or no.</h2>
-      <p>Drag the card right to approve, left to reject (or tap the buttons). Each answer shows who it will please ▲ or upset ▼ (two arrows: a lot). Drag part-way and the bars show where everyone will land.</p>
+      <p>Drag the card right to approve, left to reject (or tap the buttons). Drag part-way and a dot shows who will be affected. Not which way. That's up to you to work out.</p>
       <p>Twice a day you can say <b>Not now</b>: the card comes back a few cards later, when you might be ready for it.</p>
       <p>You score points after every card for keeping every group calm: inside the striped box on each bar. Let anyone get too angry or too happy and the points dry up. Every mayor gets the same problems, so you'll see how many made the same call.</p>
       <p><b>Every night is an election.</b> Keep everyone calm and you'll get your 50%. Lose, and you're back the next morning with a story for the Scrapbook.</p>
