@@ -140,13 +140,13 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
           })}
         </div>
         <div class={`result-score g-${grade.id}`}>
-          {r.recalled ? <b class="rv-recalled">RECALLED</b> : <><span class="pts">+{pts}<small>/{MAX_CARD}</small></span><span class="grade">{grade.name}</span><span class="why">{pts >= 9 ? 'Everyone is calm.' : pts >= 7 ? 'Mostly calm.' : pts >= 5 ? 'Somebody is getting twitchy.' : 'The town is on edge.'}</span></>}
+          {r.recalled ? <b class="rv-recalled">AN ENDING IS COMING…</b> : <><span class="pts">+{pts}<small>/{MAX_CARD}</small></span><span class="grade">{grade.name}</span><span class="why">{pts >= 9 ? 'Everyone is calm.' : pts >= 7 ? 'Mostly calm.' : pts >= 5 ? 'Somebody is getting twitchy.' : 'The town is on edge.'}</span></>}
         </div>
         {r.goals?.map((g) => <p key={g} class="goal-met"><b>★ Goal met</b> {g} <small>+{TUNING.vote.objective}% at every election this week</small></p>)}
         {r.pct !== undefined && !r.recalled && <p class="result-crowd"><b>{r.pct}%</b> of mayors did the same{isPreview(r.card.id) && <span class="tag">estimate</span>}</p>}
       </div>
       <div class="choices n1">
-        <button class="edge-chip right next" autoFocus onClick={onDone}><b>→</b><span>{r.recalled ? 'Oh no' : 'Next'}</span></button>
+        <button class="edge-chip right next" autoFocus onClick={onDone}><b>→</b><span>{r.recalled ? 'See your ending' : 'Next'}</span></button>
       </div>
     </div>
   );
@@ -286,7 +286,7 @@ function Goals({ s }: { s: State }) {
 }
 
 /** Night falls: the vote, the score that drove it, the streak, and a hook for tomorrow. */
-function DayReview({ s, streak, fresh, onNext, nextLabel, wait, sub }: { s: State; streak: number; fresh: string[]; onNext: () => void; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
+function DayReview({ s, streak, fresh, have, onNext, nextLabel, wait, sub }: { s: State; streak: number; fresh: string[]; have: number; onNext: () => void; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
   const sc = dayScore(s, s.day);
   const tier = tierOf(sc.total);
   const today = s.swipes.filter((w) => w.day === s.day);
@@ -304,14 +304,14 @@ function DayReview({ s, streak, fresh, onNext, nextLabel, wait, sub }: { s: Stat
   const out = !won && !early ? s.endings[s.endings.length - 1] : undefined;
   const share = `Mayor of Bad Town · ${DAY_NAMES[s.day - 1]} · ${verdict} ${vote}%${won && streak > 1 ? ` · 🔥 ${streak}` : ''}\n${sc.total} pts · ${tier.name}\n${rows.join('\n')}`;
   const [copied, setCopied] = useState(false);
-  useEffect(() => { sfx(won ? 'win' : 'lose'); }, []);
+  useEffect(() => { if (won) sfx('win'); }, []);
   return (
     <div class="review dayend">
       <div class="bugle"><div class="masthead"><span>THE BUGLE</span><small>{DAY_NAMES[s.day - 1]} night</small></div>
         <div class="poll-row"><span class="bigpoll">{vote}%</span><span><b class={`verdict-tag ${won ? 'won' : 'lost'}`}>{verdict}</b><small>{twist ? 'The story went somewhere you couldn\'t come back from. Not tonight, anyway.' : disaster ? 'One wrong answer. It was in the small print.' : early ? 'You were gone before the polls even opened.' : randy ? 'Randy counted the votes himself. He says you won.' : `${Math.round(parts.day)}% from today's score${parts.goals ? `, +${parts.goals}% for goals met` : ''}. You need ${TUNING.vote.pass}%.`}</small></span></div>
-        <p class="streakline">{won ? (streak > 0 ? `🔥 Re-elected ${streak} night${streak > 1 ? 's' : ''} in a row` : 'Re-elected.') : "Streak over. You'll run again tomorrow. Everything restarts at " + TUNING.recall.reset + '.'}</p>
+        <p class="streakline">{won ? (streak > 0 ? `🔥 Re-elected ${streak} night${streak > 1 ? 's' : ''} in a row` : 'Re-elected.') : `Back tomorrow, fresh start. ${out ? 'And you got an ending out of it:' : 'And a story for the Scrapbook.'}`}</p>
       </div>
-      {out && <EndingCard k={out} isNew={fresh.includes(out)} />}
+      {out && <EndingPrize k={out} isNew={fresh.includes(out)} have={have} />}
       <div class="dayscore">
         <span class="bigscore">{sc.total}<small>pts</small></span>
         <span><b class="tiername">{tier.name}</b><small>{sc.balance} for keeping the town balanced{sc.bonus ? `, +${sc.bonus} for a steady finish` : ''}{sc.recalled ? `, −${TUNING.score.recall} for ending early` : ''}</small></span>
@@ -334,7 +334,10 @@ function DayReview({ s, streak, fresh, onNext, nextLabel, wait, sub }: { s: Stat
 const RARE_ORDER = PACKS.flatMap((p) => Object.keys(p.endings).filter((k) => k.startsWith('rare:')).map((k) => [k, p.theme.name] as const));
 /** Every daily disaster across all weeks. */
 const TRAP_ORDER = PACKS.flatMap((p) => Object.keys(p.endings).filter((k) => k.startsWith('trap:')).map((k) => [k, p.theme.name] as const));
-const endingText = (k: string) => pack.endings[k] ?? COMMON_ENDINGS[k] ?? PACKS.find((p) => p.endings[k])?.endings[k] ?? { title: 'An ending', text: '' };
+/** Recall endings are per week ('low:people/week2'); the rest are unique keys. */
+const endingText = (k: string) => { const [base, wk] = k.split('/'); const from = PACKS.find((p) => p.id === wk); return (from ?? pack).endings[base!] ?? COMMON_ENDINGS[base!] ?? PACKS.find((p) => p.endings[base!])?.endings[base!] ?? { title: 'An ending', text: '' }; };
+/** Every recall ending, per week. */
+const RECALL_KEYS = PACKS.flatMap((p) => RECALL_ORDER.map((k) => [`${k}/${p.id}`, p.theme.name] as const));
 const mine = (s: State, i: number) => !s.daveDays.includes(i + 1);
 interface Deed { id: string; name: string; how: string; test: (s: State, save: Save) => boolean }
 const DEEDS: Deed[] = [
@@ -379,9 +382,42 @@ function record(save: Save, s: State): { save: Save; endings: string[]; deeds: s
   if (deeds.length) next = { ...next, deeds: [...next.deeds, ...deeds] };
   return { save: next, endings, deeds };
 }
+/** Who's in the picture for an ending: the character whose card caused it, or the group that turned on you. */
+function endingWho(k: string): string {
+  const [kind, rest = ''] = k.split('/')[0]!.split(':');
+  if (kind === 'rare' || kind === 'trap') for (const p of PACKS) for (const c of p.cards) if (Object.values(c.options).some((o) => o!.ending === k)) return c.who;
+  const g = rest.split('_')[0]!;
+  return g === 'treasury' ? 'doug' : LEADER[g as GroupId] ?? 'randy';
+}
+const KIND: Record<string, string> = { rare: '★ Rare ending', trap: 'Disaster ending', out: 'Voted-out ending', low: 'Recall ending', high: 'Recall ending' };
+/** Every collectible ending, in Scrapbook order. */
+const ALL_ENDINGS = (): string[] => [...RARE_ORDER.map(([k]) => k), ...TRAP_ORDER.map(([k]) => k), ...OUT_ORDER, ...RECALL_KEYS.map(([k]) => k)];
 function EndingCard({ k, isNew }: { k: string; isNew?: boolean }) {
   const e = endingText(k);
-  return <div class={`ending ${k.split(':')[0]}`}>{isNew && <span class="newtag">NEW IN YOUR SCRAPBOOK</span>}<b>{e.title}</b><span>{e.text}</span></div>;
+  const kind = k.split(':')[0]!;
+  return (
+    <div class={`ending ${kind}`}>{isNew && <span class="newtag">NEW IN YOUR SCRAPBOOK</span>}
+      <span class="ending-head"><Portrait who={endingWho(k)} size={44} mood="pleased" /><span><small class="ending-kind">{KIND[kind] ?? 'Ending'}</small><b>{e.title}</b></span></span>
+      <span>{e.text}</span>
+    </div>
+  );
+}
+/** The prize for losing: a funny ending, celebrated. */
+function EndingPrize({ k, isNew, have }: { k: string; isNew: boolean; have: number }) {
+  const e = endingText(k);
+  const [copied, setCopied] = useState(false);
+  const total = ALL_ENDINGS().length;
+  useEffect(() => { sfx(isNew ? 'win' : 'paper'); }, []);
+  const share = `I got the ending “${e.title}” in Mayor of Bad Town. ${have} of ${total} collected.`;
+  return (
+    <div class={`prize ${isNew ? 'new' : 'again'}`}>
+      {isNew && <span class="confetti" aria-hidden="true">{Array.from({ length: 22 }, (_, i) => <i key={i} style={{ '--a': `${(i * 360) / 22}deg`, '--d': `${60 + ((i * 37) % 60)}px`, '--c': ['var(--gold)', '#C23B3B', '#3B6FB6', '#3F8F5A', '#fff'][i % 5], '--t': `${(i % 4) * 40}ms` }} />)}</span>}
+      <div class="prize-stamp">{isNew ? 'NEW ENDING UNLOCKED!' : 'A CLASSIC. AGAIN.'}</div>
+      <EndingCard k={k} isNew={false} />
+      <p class="prize-count"><b>{have}</b> of {total} endings collected{isNew ? '. Frame it.' : '. You know how this one goes.'}</p>
+      <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); setCopied(true); } catch { /* clipboard blocked */ } sfx('tap'); }}>{copied ? 'Copied' : 'Share this ending'}</button>
+    </div>
+  );
 }
 const Locked = ({ hint }: { hint: string }) => <div class="ending locked"><b>???</b><span>{hint}</span></div>;
 function Scrapbook({ save, onClose, onRename }: { save: Save; onClose: () => void; onRename?: () => void }) {
@@ -393,14 +429,15 @@ function Scrapbook({ save, onClose, onRename }: { save: Save; onClose: () => voi
       <h2 class="display">The Mayor's Scrapbook</h2>
       {onRename && <p class="book-who">{who.mayor}, mayor of the {who.folk} <button class="linkbtn" onClick={onRename}>Rename</button></p>}
       <div class="career"><span><b>{c.wins}</b>nights re-elected</span><span><b>🔥 {save.streak.current}</b>streak now</span><span><b>{save.streak.best}</b>best streak</span><span><b>{c.terms}</b>weeks served</span></div>
+      <p class="book-total"><b>{save.scrapbook.length}</b> of {ALL_ENDINGS().length} endings collected. Every way to lose is a way to win one.</p>
       <h3 class="subhead">Rare endings <small>{count(RARE_ORDER.map(([k]) => k))} of {RARE_ORDER.length}</small></h3>
       <div class="endings">{RARE_ORDER.map(([k, week]) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`${week}: follow the long story all the way`} />)}</div>
       <h3 class="subhead">Disasters <small>{count(TRAP_ORDER.map(([k]) => k))} of {TRAP_ORDER.length}</small></h3>
       <div class="endings">{TRAP_ORDER.map(([k, week]) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`${week}: one wrong answer`} />)}</div>
       <h3 class="subhead">Voted out <small>{count(OUT_ORDER)} of {OUT_ORDER.length}</small></h3>
-      <div class="endings">{OUT_ORDER.map((k) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`Lose a night with ${METER_NAME[k.split(':')[1] as MeterId]} unhappiest`} />)}</div>
-      <h3 class="subhead">Recalled <small>{count(RECALL_ORDER)} of {RECALL_ORDER.length}</small></h3>
-      <div class="endings">{RECALL_ORDER.map((k) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={k === 'low:treasury' ? 'Run out of money' : `${k.startsWith('low') ? 'Lose' : 'Be far too loved by'} ${METER_NAME[k.split(':')[1] as MeterId]}`} />)}</div>
+      <div class="endings">{OUT_ORDER.map((k) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`Lose a night with ${METER_NAME[k.split(':')[1]!.split('_')[0] as MeterId]} unhappiest`} />)}</div>
+      <h3 class="subhead">Recalled <small>{count(RECALL_KEYS.map(([k]) => k))} of {RECALL_KEYS.length}</small></h3>
+      <div class="endings">{RECALL_KEYS.map(([k, week]) => { const base = k.split('/')[0]!; return have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`${week}: ${base === 'low:treasury' ? 'run out of money' : `${base.startsWith('low') ? 'lose' : 'be far too loved by'} ${METER_NAME[base.split(':')[1] as MeterId]}`}`} />; })}</div>
       <h3 class="subhead">Oddballs met <small>{ODDBALLS.filter((w) => save.met.includes(w)).length} of {ODDBALLS.length}</small></h3>
       <div class="cast">{ODDBALLS.map((w) => save.met.includes(w) ? <span key={w} class="cast-member"><Portrait who={w} size={56} mood="pleased" /><small>{(NAMES[w] ?? w).split(/[,(]/)[0]!.trim()}</small></span> : <span key={w} class="cast-member locked"><span class="cast-q">?</span><small>???</small></span>)}</div>
       <h3 class="subhead">Deeds <small>{save.deeds.length} of {DEEDS.length}</small></h3>
@@ -641,7 +678,6 @@ export function App() {
     sendVote(pack.id, s.weekId, card.id, dir);
     persist(next, ODDBALLS.includes(card.who) && !save.met.includes(card.who) ? { met: [...save.met, card.who] } : {});
     if (card.who === 'gerald') sfx('honk');
-    if (next.phase === 'recalled') sfx('lose');
     setReveal({ key: Date.now(), card, dir, before: s.meters, after: next.meters, pct: crowd[card.id]?.[dir], recalled: next.phase === 'recalled', goals: next.objectivesDone.filter((g) => !s.objectivesDone.includes(g)).map((g) => pack.objectives.find((o) => o.id === g)?.text ?? g) });
   };
 
@@ -690,13 +726,12 @@ export function App() {
           {s.phase === 'card' && <div class="progress" aria-label={`Card ${s.cardInDay + 1} of ${TUNING.cardsPerDay} today`}>{Array.from({ length: TUNING.cardsPerDay }, (_, i) => <i key={i} class={i < s.cardInDay ? 'done' : i === s.cardInDay ? 'now' : ''} />)}</div>}
           {s.phase === 'recalled' && !reveal && (
             <div class="panel recall">
-              <div class="stamp denied big">{s.endings[s.endings.length - 1]?.startsWith('rare:') ? 'PLOT TWIST' : s.endings[s.endings.length - 1]?.startsWith('trap:') ? 'DISASTER' : 'RECALLED'}</div>
-              <EndingCard k={s.endings[s.endings.length - 1]!} isNew={fresh.endings.includes(s.endings[s.endings.length - 1]!)} />
-              <p class="hint warn">Today's over, and so is tonight's vote. Tomorrow you run again: everything restarts at {TUNING.recall.reset}.</p>
-              <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>See tonight's result</button>
+              <EndingPrize k={s.endings[s.endings.length - 1]!} isNew={fresh.endings.includes(s.endings[s.endings.length - 1]!)} have={save.scrapbook.length} />
+              <p class="hint">Tonight's vote is off. Tomorrow you're back, everything at {TUNING.recall.reset}, with a better story than most mayors.</p>
+              <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>On with the evening</button>
             </div>
           )}
-          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} streak={save.streak.current} fresh={fresh.endings} onNext={advance} nextLabel={s.day >= 7 ? 'The week in review' : cal.today > s.day ? `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}` : ''} wait={s.day >= 7 || cal.today > s.day ? null : `${DAY_NAMES[s.day] ?? 'Tomorrow'} opens in ${Math.floor(cal.msToMidnight / 3600000)}h ${Math.floor((cal.msToMidnight % 3600000) / 60000)}m`} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
+          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} streak={save.streak.current} fresh={fresh.endings} have={save.scrapbook.length} onNext={advance} nextLabel={s.day >= 7 ? 'The week in review' : cal.today > s.day ? `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}` : ''} wait={s.day >= 7 || cal.today > s.day ? null : `${DAY_NAMES[s.day] ?? 'Tomorrow'} opens in ${Math.floor(cal.msToMidnight / 3600000)}h ${Math.floor((cal.msToMidnight % 3600000) / 60000)}m`} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
           {s.phase === 'results' && !reveal && <WeekRecap s={s} streak={save.streak.current} fresh={fresh} onNewWeek={() => jump(8 - cal.today)} />}
         </main>
       </div>

@@ -5303,40 +5303,40 @@
  ],
  "endings": {
   "low:people": {
-   "title": "Run Out by the PTA",
-   "text": "Pam read out your record at a meeting. It took four hours. Nobody left. Then everybody came for you, with clipboards."
+   "title": "Melted by the Mob",
+   "text": "It was too hot to riot properly, so the town sat outside your office fanning itself angrily until you left. Took ten minutes."
   },
   "low:business": {
-   "title": "Bought Out",
-   "text": "Chad bought City Hall, the chair you were sitting in, and the chair's opinion of you."
+   "title": "Gone to the Beach",
+   "text": "Every shop shut and hung a sign on you: GONE TO THE BEACH. You had not gone to the beach. You were carried there."
   },
   "low:law": {
-   "title": "Arrested by Barb",
-   "text": "Chief Barb arrested you for general crimes. The judge was Barb. The jury was Barb's helicopter."
+   "title": "Arrested in Shorts",
+   "text": "Barb arrested you in her summer uniform: shorts and mirrored glasses. She read you your rights from inside the ice cream van."
   },
   "low:press": {
-   "title": "Front Page Disgrace",
-   "text": "The Bugle printed your face with the word NO under it. Every day. In bigger letters."
+   "title": "Sun-Bleached",
+   "text": "The Bugle left your photo in the window all week, in the sun. You've faded. Nobody remembers what you look like. Neither do you."
   },
   "low:treasury": {
-   "title": "The Town Is Broke",
-   "text": "The treasury is one button and a moth. Doug has gone to live in a tree."
+   "title": "Spent on Ice",
+   "text": "The whole budget went on ice. The ice melted. Doug is sitting in the puddle that used to be the treasury. It's warm."
   },
   "high:people": {
-   "title": "Carried Off by Fans",
-   "text": "The people love you so much they carried you out of town on their shoulders. They have not put you down."
+   "title": "Made an Ice Cream Flavour",
+   "text": "The town loves you so much Sal named an ice cream after you. Mint and regret. It outsells you. It's mayor now."
   },
   "high:business": {
-   "title": "Acquired",
-   "text": "Chad loves you so much he bought you. You are now a subsidiary. Your title is Mayor (Brand Partner)."
+   "title": "Air-Conditioned",
+   "text": "Chad loves you so much he installed you in his air-conditioned lobby. As a feature. Visitors are invited to look at you."
   },
   "high:law": {
-   "title": "Made Permanent Deputy",
-   "text": "Barb respects you so much she deputised you. For life. You live at the station now. There is a cot."
+   "title": "Lifeguard for Life",
+   "text": "Barb rates you so highly she put you on permanent lifeguard duty with Big Carl. There is no pool. You both watch it."
   },
   "high:press": {
-   "title": "Turned Into a Column",
-   "text": "Marge loves you so much she gave you a column. Then a second. Then you were the paper."
+   "title": "Too Hot to Print",
+   "text": "The Bugle ran you on every page until the presses overheated. The building is a sauna now. Marge interviews you there daily."
   },
   "rare:dispensed": {
    "title": "Dispensed",

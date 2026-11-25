@@ -133,15 +133,15 @@ describe('both ends are dangerous', () => {
   it('a group at 0 recalls you and ends the day', () => {
     const s = swipe(withMeters(start(), { people: 4 }), 'left'); // g1 left costs People 5
     expect(s.phase).toBe('recalled');
-    expect(s.endings).toEqual(['low:people']);
+    expect(s.endings).toEqual(['low:people/week1']);
     expect(s.recalledDays).toEqual([1]);
   });
   it('a group at 100 also recalls you', () => {
     const s = swipe(withMeters(start(), { people: 96 }), 'right'); // g1 right gives People 5
-    expect(s.endings).toEqual(['high:people']);
+    expect(s.endings).toEqual(['high:people/week1']);
   });
   it('an empty treasury recalls you, a full one does not', () => {
-    expect(swipe(withMeters(start(), { treasury: 8 }), 'right').endings).toEqual(['low:treasury']);
+    expect(swipe(withMeters(start(), { treasury: 8 }), 'right').endings).toEqual(['low:treasury/week1']);
     const rich = swipe(withMeters(facing(start(), 'c1'), { treasury: 95 }), 'right');
     expect(rich.phase).toBe('card');
   });
@@ -202,7 +202,7 @@ describe('every night is a re-election', () => {
     s = swipe(s, steady(s));
     expect(s.phase).toBe('dayEnd');
     expect(s.won).toEqual([false]);
-    expect(s.endings.at(-1)).toMatch(/^out:/);
+    expect(s.endings.at(-1)).toMatch(/^out:[a-z]+(_[23])?$/);
     s = reduce(s, { type: 'next' }, pack);
     expect(Object.values(s.meters).every((v) => v === TUNING.recall.reset)).toBe(true);
   });

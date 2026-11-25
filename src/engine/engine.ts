@@ -123,7 +123,8 @@ function endDay(s: State) {
   const won = !early && vote >= TUNING.vote.pass;
   s.polls.push(vote);
   s.won.push(won);
-  if (!early && !won) s.endings.push(`out:${weakest(s)}`);
+  // voted out: blamed on the least happy group, one of three ways depending on the night
+  if (!early && !won) s.endings.push(`out:${weakest(s)}${['', '_2', '_3'][s.day % 3]}`);
   if (!won) s.flags.__reset = true;
 }
 
@@ -216,7 +217,8 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       for (const o of pack.objectives) if (!s.objectivesDone.includes(o.id) && holds(s, o.when)) s.objectivesDone.push(o.id);
       if (ch.ending) { endEarly(s, ch.ending); return s; }
       const cause = recallCause(s);
-      if (cause) { endEarly(s, cause); return s; }
+      // each week's recall endings are their own Scrapbook pages: 'low:people/week2'
+      if (cause) { endEarly(s, `${cause}/${pack.id}`); return s; }
       s.cardInDay += 1;
       if (s.cardInDay >= TUNING.cardsPerDay) endDay(s);
       else startCard(s, pack, rng);
