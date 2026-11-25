@@ -18,7 +18,7 @@ const random: Policy = (s, legal, _p, rand) => legal[Math.floor(rand() * legal.l
 const sensible: Policy = (s, legal, p, rand) => {
   if (s.phase !== 'card') return legal[0]!;
   const card = findCard(p, s.current!);
-  const spotted = rand() < 0.85;
+  const spotted = rand() < READS;
   const risk = (d: Dir) => {
     const ch = card.options[d]!;
     let v = METERS.reduce((n, k) => { const x = s.meters[k] + (ch.effects[k] ?? 0); const dist = Math.abs(x - 50); return n + dist * dist / 50 + (x <= 8 || (k !== 'treasury' && x >= 92) ? 200 : 0); }, 0);
@@ -26,7 +26,26 @@ const sensible: Policy = (s, legal, p, rand) => {
   };
   return { type: 'swipe', dir: options(card).sort((a, b) => risk(a) - risk(b))[0]! };
 };
-const POLICIES: Record<string, Policy> = { random, 'dave-only': davePolicy, sensible };
+/** How often a careful player spots a disaster warning (expert: always). */
+let READS = 0.85;
+/** Plays by the full preview, reads every warning, and puts a card off when both answers would hurt more than waiting. */
+const cost = (m: Record<string, number>) => METERS.reduce((n, k) => n + ((k === 'treasury' && m[k]! > 50) ? 0 : (m[k]! - 50) ** 2 / 50), 0);
+const expert: Policy = (s, legal, p, rand) => {
+  READS = 1; let a = sensible(s, legal, p, rand); READS = 0.85;
+  // goal-seeker: take the answer that completes one of this week's goals (by flag), unless it ends the day
+  if (s.phase === 'card') {
+    const card = findCard(p, s.current!);
+    const wanted = new Set(p.objectives.filter((o) => !s.objectivesDone.includes(o.id)).flatMap((o) => o.when.flags ?? []));
+    const goal = options(card).find((d) => !card.options[d]!.ending && (card.options[d]!.set ?? []).some((f) => wanted.has(f)));
+    if (goal) return { type: 'swipe', dir: goal };
+  }
+  if (a.type !== 'swipe' || !legal.some((l) => l.type === 'defer')) return a;
+  const ch = findCard(p, s.current!).options[a.dir]!;
+  const after = { ...s.meters }; for (const k of METERS) after[k] = Math.min(100, Math.max(0, after[k] + (ch.effects[k] ?? 0)));
+  return cost(after) - cost(s.meters) > DEFER_AT ? { type: 'defer' } : a;
+};
+const DEFER_AT = Number(process.env.DEFER_AT ?? 8);
+const POLICIES: Record<string, Policy> = { random, 'dave-only': davePolicy, sensible, expert };
 
 const lines: string[] = [];
 const seenAll = new Set<string>();

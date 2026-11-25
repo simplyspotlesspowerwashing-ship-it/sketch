@@ -30,7 +30,8 @@ describe('the run', () => {
   });
   it('every card is a yes or a no', () => {
     const s = start();
-    expect(legalActions(s, pack).map((a) => (a as { dir: Dir }).dir).sort()).toEqual(['left', 'right']);
+    expect(legalActions(s, pack).filter((a) => a.type === 'swipe').map((a) => (a as { dir: Dir }).dir).sort()).toEqual(['left', 'right']);
+    expect(legalActions(s, pack).some((a) => a.type === 'defer')).toBe(true);
     for (const c of pack.cards) expect(Object.keys(c.options).sort(), c.id).toEqual(['left', 'right']);
   });
   it('applies the choice, then the week\'s theme nudge, and records it', () => {
@@ -160,6 +161,32 @@ describe('both ends are dangerous', () => {
     expect(s.phase).toBe('card');
     expect(s.day).toBe(5);
     expect(s.won).toEqual([false, false, false, false]);
+  });
+});
+
+describe("'Not now'", () => {
+  it('puts the card off: nothing changes now, it comes back a few decisions later', () => {
+    const s0 = start();
+    const s1 = reduce(s0, { type: 'defer' }, pack);
+    expect(s1.meters).toEqual(s0.meters);
+    expect(s1.defers).toBe(TUNING.defer.perDay - 1);
+    expect(s1.current).not.toBe('g1');
+    let s = s1; const seen: string[] = [];
+    for (let i = 0; i < TUNING.defer.back + 1 && s.phase === 'card'; i++) { seen.push(s.current!); s = swipe(s, steady(s)); }
+    expect(seen).toContain('g1');
+    expect(seen.indexOf('g1')).toBeLessThanOrEqual(TUNING.defer.back);
+  });
+  it('twice a day, never in the last cards of the day, and it refills each morning', () => {
+    let s = reduce(reduce(start(), { type: 'defer' }, pack), { type: 'defer' }, pack);
+    expect(s.defers).toBe(0);
+    expect(legalActions(s, pack).some((a) => a.type === 'defer')).toBe(false);
+    expect(() => reduce(s, { type: 'defer' }, pack)).toThrow();
+    s = play(s, TUNING.cardsPerDay);
+    expect(s.phase).toBe('dayEnd');
+    s = reduce(s, { type: 'next' }, pack);
+    expect(s.defers).toBe(TUNING.defer.perDay);
+    const late = { ...play(s, TUNING.cardsPerDay - TUNING.defer.lastSlots) };
+    if (late.phase === 'card') expect(legalActions(late, pack).some((a) => a.type === 'defer')).toBe(false);
   });
 });
 

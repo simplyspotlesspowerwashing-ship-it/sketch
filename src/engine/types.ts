@@ -78,11 +78,12 @@ export interface Result { daysWon: number }
 export interface Profile { mayor: string; folk: string; base: GroupId }
 
 export interface State {
-  v: 11;
+  v: 12;
   weekId: string;
   playerSeed: string;
   day: number; // 1 = Monday ... 7 = Sunday; every night is a re-election
   cardInDay: number;
+  defers: number; // 'Not now' left today: push the card back a few cards
   count: number; // cards played this term
   meters: Record<MeterId, number>;
   flags: Record<string, true>;
@@ -108,6 +109,7 @@ export type Action =
   | { type: 'swipe'; dir: Dir }
   | { type: 'next' } // recalled -> dayEnd, dayEnd -> next day
   | { type: 'setup'; profile: Profile }
-  | { type: 'rename'; mayor: string; folk: string };
+  | { type: 'rename'; mayor: string; folk: string }
+  | { type: 'defer' }; // 'Not now': this card comes back a few cards later
 
 export type Rng = (key: string) => () => number;

@@ -30,18 +30,19 @@ CONTENT_GUIDE.md  how to write cards and stories
 
 ## Rules
 
-- **Every card is a yes or a no.** Drag right to approve, left to reject (or tap, or press Y / N). A rubber stamp marks the card APPROVED or REJECTED; it then turns over to show the character's face, what they said, the bars that moved and how many mayors chose the same.
+- **Every card is a yes or a no.** Drag right to approve, left to reject (or tap, or press Y / N). **No hidden dice:** each answer's button shows every group it moves, up ▲ or down ▼ (▲▲ = 10 or more), and dragging or hovering marks on each bar where it will land. Skill is reading the trade-offs, the warnings and the week ahead.
+- **Not now** (button or D): twice a day, push a card back; it returns three decisions later. Not in the last four cards of the day. A rubber stamp marks the card APPROVED or REJECTED; it then turns over to show the character's face, what they said, the bars that moved and how many mayors chose the same.
 - **20 cards a day, seven days a week**, the same deck for every mayor (`dayDeck`). Each day opens with its main story, has one law to sign or refuse, one catastrophe and one mini-game (sneak or ribbon); side stories fill the rest. See CONTENT_GUIDE.md.
 - **Rabbit holes.** Yes and no lead to different next cards, straight away (`then`), four or five deep in a day's main story. Some consequences come back the next morning (`next`).
-- **Every night is a re-election** (`src/engine/election.ts`). Tonight's vote = 20 + 0.2 × today's score + 3 per weekly goal met. 50% keeps the job and adds to your streak (🔥, kept in the save; Randy's covered days pause it). Lose and you get a "voted out" ending for the Scrapbook, blamed on the least happy group; tomorrow you run again with everything at 40.
+- **Every night is a re-election** (`src/engine/election.ts`). Tonight's vote = 13 + 0.2 × today's score + 5 per weekly goal met (so a good day alone isn't enough: you need about 185 points, or fewer with goals). 50% keeps the job and adds to your streak (🔥, kept in the save; Randy's covered days pause it). Lose and you get a "voted out" ending for the Scrapbook, blamed on the least happy group; tomorrow you run again with everything at 40.
 - Five meters from 0 to 100. A group at 0 or 100 recalls you; the treasury only at 0. A recall ends the day on the spot and loses tonight's vote.
 - **The week's theme** (`theme` in each pack) nudges one meter every third card: Goose Migration Week (Law down), Heatwave (Treasury down), Festival Week (Press up), The Big Freeze (Business down).
 - **The week's saga**: one long story, one card a day from Monday (`day: 1, slot: 8`) to Sunday via `next`. Going along with it all the way leads to a **rare ending** (`ending: "rare:..."` on a choice): the day ends on the spot with a special Scrapbook page. Two per week; bots find them in about 3–6% of weeks.
 - **Disasters** (`ending: "trap:..."`): once a day, pinned at a different slot each day, one card has an answer that ends the day on the spot with its own Scrapbook page (28 in all). The card text always carries the warning ('DO NOT FEED', 'THIN ICE. ESPECIALLY MAYORS.'); the fatal answer is yes on some days and no on others, so neither 'always yes' nor 'always no' is safe. Randy never takes the bait.
-- **Mini-games:** the sneak (hold, release while they look away) and the ribbon cut (stop the swinging scissors in the gold zone before Gerald cuts it with his face; three tries).
+- **Mini-games:** the sneak (hold, release while they look away; each card has its own fixed rhythm, the same every attempt, so it can be learned) and the ribbon cut (stop the swinging scissors in the gold zone before Gerald cuts it with his face; three tries).
 - Pressure cards appear when a meter is very low or very high.
 - **Daily score** (`src/engine/score.ts`): points for keeping the town balanced. After every card each of the five meters earns 2 if it is calm (45–55), 1 if uneasy (35–65), 0 if in danger; the treasury only counts if it runs low. Up to 10 per card, 200 a day, +30 for ending a full day with nobody in danger, −100 for a recall. The crowd % is shown but not scored.
-- **Weekly goals:** three per pack (`objectives`), shown in the morning paper, at day end and behind the ★ chip; each one met adds 3% to every night's vote.
+- **Weekly goals:** three per pack (`objectives`), shown in the morning paper, at day end and behind the ★ chip; each one met adds 5% to every night's vote, so chasing them is part of the strategy.
 - **Scrapbook:** rare endings, voted-out endings, recall endings, the oddballs you've met, deeds, nights won and streaks.
 - **The week in review** after Sunday night: a nickname for the week, each night's result, your best day, your oddest call (lowest crowd %), the oddballs you dealt with and the endings you found.
 - You can start any day: Deputy Randy plays the days you missed (he always wins his nights: he counts the votes) and hands back a town with every meter between 35 and 65.
@@ -52,7 +53,9 @@ CONTENT_GUIDE.md  how to write cards and stories
 
 Four week packs (`src/content/packs/week1.json` … `week4.json`), about 650 cards in all. Week 1 runs the week of `LAUNCH_MONDAY` (`src/content/index.ts`), week 2 the next, and so on; after week 4 they repeat. Each pack has a theme, seven main stories, seven laws, seven catastrophes, seven mini-games, a saga with two rare endings, oddball debuts, a pool of side stories and its own recall endings. Add a pack by writing `weekN.json`, running `PACK=weekN node sim/crowd.ts`, and listing it in `PACKS`.
 
-Balance (`PACK=weekN npm run sim`, 250 weeks per bot): a careful bot that sees every effect and spots 85% of disaster warnings is re-elected on 49–77% of nights depending on the week; random play on 10–21%, and walks into a disaster in more than half of all weeks. Real players can't see effects, so they sit below the careful bot.
+Balance (`PACK=weekN npm run sim`, 300 weeks per bot), nights re-elected: random play 4–7%; a careful bot that plays by the preview but misses some warnings 31–65%; an expert bot that also reads every warning, times Not now and chases goals 54–79%. Week 1 is the easiest; week 2 (Heatwave) the hardest.
+
+Card supply (`npm run supply`): every week fills seven full days of 20 cards; a player who survives every day sees no repeated cards (week 4: 0.08 per week). That is 28 days of unique play at launch; week 5 repeats week 1 (with a new shuffle of side stories).
 
 ## Launch
 

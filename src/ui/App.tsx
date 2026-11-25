@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { PACKS, SIMULATED_CROWD, packFor } from '../content/index.ts';
 import { COMMON_ENDINGS, OUT_ORDER, RECALL_ORDER } from '../content/endings.ts';
 import { voteParts } from '../engine/election.ts';
-import { coverMissedDays, findCard, newTerm, reduce } from '../engine/engine.ts';
+import { canDefer, coverMissedDays, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
 import { MAX_CARD, cardPoints, dayScore, gradeOf, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
@@ -38,7 +38,7 @@ function boot(save: Save): State {
 function bootUnsafe(save: Save): State {
   const cal = calendar(save.dayOffset);
   useWeek(cal.weekId);
-  const kept = save.state && save.state.v === 11 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
+  const kept = save.state && save.state.v === 12 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
   return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, pack), pack, cal.today);
 }
 
@@ -47,6 +47,15 @@ function bootUnsafe(save: Save): State {
 function MeterIcon({ m }: { m: MeterId }) {
   return m === 'treasury' ? <span class="coinface"><Icon.coin size={30} /></span> : <Portrait who={LEADER[m as GroupId]!} size={34} ring={GROUP_COLOR[m as GroupId]} mood="neutral" />;
 }
+
+/** ▲ for a small move, ▲▲ for a big one (10 or more). */
+const arrows = (d: number) => (d > 0 ? '▲' : '▼').repeat(Math.abs(d) >= 10 ? 2 : 1);
+/** What an answer will do, shown on its button: the leader of each group it moves, and which way. */
+function Effects({ e }: { e: Choice['effects'] }) {
+  const ms = METERS.filter((m) => e[m]);
+  return <span class="fx" aria-hidden="true">{ms.map((m) => <span key={m} class={`fx-i ${e[m]! > 0 ? 'up' : 'down'}`}>{m === 'treasury' ? <span class="fx-coin"><Icon.coin size={16} /></span> : <Portrait who={LEADER[m as GroupId]!} size={18} ring={GROUP_COLOR[m as GroupId]} mood="neutral" />}<b>{arrows(e[m]!)}</b></span>)}</span>;
+}
+const effectsText = (e: Choice['effects']) => METERS.filter((m) => e[m]).map((m) => `${METER_NAME[m]} ${e[m]! > 0 ? 'up' : 'down'}${Math.abs(e[m]!) >= 10 ? ' a lot' : ''}`).join(', ');
 
 function Meters({ s, preview }: { s: State; preview: Choice | null }) {
   return (
@@ -58,8 +67,8 @@ function Meters({ s, preview }: { s: State; preview: Choice | null }) {
         return (
           <div key={m} class={`meter ${danger ? 'danger' : ''}`} style={{ '--g': METER_COLOR[m] }} role="meter" aria-label={`${METER_NAME[m]} ${v} of 100`} aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
             <MeterIcon m={m} />
-            <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /><CalmZone m={m} /></span>
-            {hint ? <i class={`hintdot ${Math.abs(hint) >= 10 ? 'big' : ''}`} aria-label="will change" /> : null}
+            <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /><CalmZone m={m} />{hint ? <i class={`proj ${hint > 0 ? 'up' : 'down'}`} style={{ left: `${Math.min(100, Math.max(0, v + hint))}%` }} /> : null}</span>
+            {hint ? <i class={`hint-arrow ${hint > 0 ? 'up' : 'down'}`} aria-label={`${METER_NAME[m]} ${hint > 0 ? 'up' : 'down'} ${Math.abs(hint)}`}>{arrows(hint)}</i> : null}
           </div>
         );
       })}
@@ -155,6 +164,9 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
 /** One tense moment a day: hold to wind up, let go while they're not looking. */
 function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) => void; meet?: boolean }) {
   const st = useRef({ t: 0, looking: false, warn: false, next: 1.4, charge: 0, holding: false, heldFull: 0, done: false, idle: 0 });
+  // No luck: every sneak card has its own fixed rhythm of looks, the same for every mayor and every attempt. Learn it.
+  const seq = useRef((() => { let h = 2166136261; for (const c of card.id) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return () => { h = Math.imul(h ^ (h >>> 15), 2246822507) >>> 0; h = Math.imul(h ^ (h >>> 13), 3266489909) >>> 0; return ((h ^= h >>> 16) >>> 0) / 4294967296; }; })());
+  const beat = seq.current;
   const [, setF] = useState(0);
   const finish = (d: Dir) => { const s = st.current; if (s.done) return; s.done = true; sfx(d === 'right' ? 'stamp' : 'lose'); setTimeout(() => onResult(d), 600); };
   const release = () => { const s = st.current; if (!s.holding || s.done) return; s.holding = false; if (s.charge < 0.6) return; finish(s.looking ? 'left' : 'right'); };
@@ -165,7 +177,7 @@ function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) =>
       const s = st.current, dt = Math.min(0.05, (now - last) / 1000); last = now;
       if (s.done) { setF((f) => f + 1); return; }
       s.t += dt;
-      if (s.t >= s.next) { s.looking = !s.looking; s.warn = false; s.next = s.t + (s.looking ? 0.6 + Math.random() * 0.9 : 0.9 + Math.random() * 1.6); }
+      if (s.t >= s.next) { s.looking = !s.looking; s.warn = false; s.next = s.t + (s.looking ? 0.6 + beat() * 0.9 : 0.9 + beat() * 1.6); }
       if (!s.looking && s.next - s.t < 0.3) s.warn = true;
       if (s.holding) { s.charge = Math.min(1, s.charge + dt / 0.8); if (s.charge >= 1) { s.heldFull += dt; if (s.heldFull > 0.7) { s.holding = true; release(); } } }
       else { s.charge = Math.max(0, s.charge - dt * 2); s.idle += dt; if (s.idle > 9) finish('left'); }
@@ -201,7 +213,7 @@ const THRESH = 90;
 /** Every card is a yes or a no: right approves, left rejects. */
 function dirOf(x: number, _y: number): Dir { return x > 0 ? 'right' : 'left'; }
 
-function SwipeCard({ card, onPreview, onSwipe, locked, meet }: { card: Card; onPreview: (d: Dir | null) => void; onSwipe: (d: Dir) => void; locked: boolean; meet?: boolean }) {
+function SwipeCard({ card, onPreview, onSwipe, locked, meet, defers, onDefer }: { card: Card; onPreview: (d: Dir | null) => void; onSwipe: (d: Dir) => void; locked: boolean; meet?: boolean; defers: number | null; onDefer: () => void }) {
   const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
   const [leaving, setLeaving] = useState<Dir | null>(null);
   const [stamped, setStamped] = useState<Dir | null>(null);
@@ -219,7 +231,7 @@ function SwipeCard({ card, onPreview, onSwipe, locked, meet }: { card: Card; onP
     setTimeout(() => onSwipe(d), 1300);
   };
   useEffect(() => {
-    const k = (e: KeyboardEvent) => { const m: Record<string, Dir> = { ArrowLeft: 'left', ArrowRight: 'right', n: 'left', y: 'right' }; const d = m[e.key]; if (d && card.options[d]) { e.preventDefault(); commit(d); } };
+    const k = (e: KeyboardEvent) => { const m: Record<string, Dir> = { ArrowLeft: 'left', ArrowRight: 'right', n: 'left', y: 'right' }; const d = m[e.key]; if (d && card.options[d]) { e.preventDefault(); commit(d); } else if (e.key === 'd' && defers && !stamped && !locked) { e.preventDefault(); onDefer(); } };
     addEventListener('keydown', k); return () => removeEventListener('keydown', k);
   });
   const fly = leaving ? { left: [-700, 60, -30], right: [700, 60, 30], up: [0, -700, 0], down: [0, 700, 0] }[leaving] : null;
@@ -252,8 +264,11 @@ function SwipeCard({ card, onPreview, onSwipe, locked, meet }: { card: Card; onP
         <p class="card-hint">← no · yes →</p>
       </div>
       <div class="choices n2">
-        {(['left', 'right'] as Dir[]).filter((d) => card.options[d]).map((d) => <button key={d} class={`edge-chip ${d} ${d === 'left' ? 'no' : 'yes'} ${valid === d ? 'on' : ''}`} onClick={() => commit(d)} aria-label={`${d === 'left' ? 'No' : 'Yes'}: ${fill(card.options[d]!.label)}`}><b>{d === 'left' ? '✗' : '✓'}</b><span>{fill(card.options[d]!.label)}</span></button>)}
+        {(['left', 'right'] as Dir[]).filter((d) => card.options[d]).map((d) => <button key={d} class={`edge-chip ${d} ${d === 'left' ? 'no' : 'yes'} ${valid === d ? 'on' : ''}`} onClick={() => commit(d)}
+          onPointerEnter={(e) => { if (e.pointerType === 'mouse' && !stamped) onPreview(d); }} onPointerLeave={(e) => { if (e.pointerType === 'mouse') onPreview(null); }} onFocus={() => { if (!stamped) onPreview(d); }} onBlur={() => onPreview(null)}
+          aria-label={`${d === 'left' ? 'No' : 'Yes'}: ${fill(card.options[d]!.label)}. ${effectsText(card.options[d]!.effects)}`}><b>{d === 'left' ? '✗' : '✓'}</b><span class="lbl">{fill(card.options[d]!.label)}<Effects e={card.options[d]!.effects} /></span></button>)}
       </div>
+      {defers !== null && <button class="linkbtn defer" disabled={defers <= 0 || !!stamped} onClick={onDefer}>Not now <small>({defers > 0 ? `${defers} left today` : 'none left today'})</small></button>}
     </div>
   );
 }
@@ -474,7 +489,8 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
     <div class="op-slide" key="4">
       <div class="op-demo"><span class="op-card"><Portrait who="gerald" size={70} mood="annoyed" /><small>The geese would like a pond. In your office.</small></span><span class="op-hand">👆</span></div>
       <h2 class="op-title">20 problems a day. Yes or no.</h2>
-      <p>Drag the card right to approve, left to reject (or tap the buttons). You won't see what it does until you've decided. Then you'll definitely see it.</p>
+      <p>Drag the card right to approve, left to reject (or tap the buttons). Each answer shows who it will please ▲ or upset ▼ (two arrows: a lot). Drag part-way and the bars show where everyone will land.</p>
+      <p>Twice a day you can say <b>Not now</b>: the card comes back a few cards later, when you might be ready for it.</p>
       <p>You score points after every card for keeping every group calm: inside the striped box on each bar. Let anyone get too angry or too happy and the points dry up. Every mayor gets the same problems, so you'll see how many made the same call.</p>
       <p><b>Every night is an election.</b> Keep everyone calm and you'll get your 50%. Lose, and you're back the next morning with a story for the Scrapbook.</p>
       <p>Each week has a theme, three goals (the ★ at the top) and one long story. Follow it far enough and things get strange.</p>
@@ -679,7 +695,7 @@ export function App() {
         <main class="main">
           <Meters s={s} preview={choice} />
           {reveal && <ImpactReveal key={reveal.key} r={reveal} onDone={() => setReveal(null)} />}
-          {card && !showIntro && !needSetup && !reveal && (card.ribbon ? <RibbonCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : card.sneak ? <SneakCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} meet={meet} onPreview={setPreview} onSwipe={swipe} />)}
+          {card && !showIntro && !needSetup && !reveal && (card.ribbon ? <RibbonCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : card.sneak ? <SneakCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} meet={meet} onPreview={setPreview} onSwipe={swipe} defers={canDefer(s) ? s.defers : s.phase === 'card' && s.cardInDay >= TUNING.cardsPerDay - TUNING.defer.lastSlots ? null : 0} onDefer={() => { setPreview(null); persist(reduce(s, { type: 'defer' }, pack)); sfx('paper'); }} />)}
           {s.phase === 'card' && <div class="progress" aria-label={`Card ${s.cardInDay + 1} of ${TUNING.cardsPerDay} today`}>{Array.from({ length: TUNING.cardsPerDay }, (_, i) => <i key={i} class={i < s.cardInDay ? 'done' : i === s.cardInDay ? 'now' : ''} />)}</div>}
           {s.phase === 'recalled' && !reveal && (
             <div class="panel recall">

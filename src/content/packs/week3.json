@@ -4358,6 +4358,878 @@
    },
    "day": 7,
    "slot": 12
+  },
+  {
+   "id": "w3r1",
+   "who": "nutkins",
+   "story": "acornrace",
+   "text": "Mr Nutkins. I'd like to hold a festival race. Squirrels only. The prize is the town's oak tree. Toby has not been consulted. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Squirrel race.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Four hundred squirrels. One tree. Toby has asked for a lawyer.",
+     "then": [
+      [
+       "w3r1b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Toby's not a prize.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Mr Nutkins has offered Toby a loan instead. Toby is thinking about it."
+    }
+   }
+  },
+  {
+   "id": "w3r1b",
+   "who": "toby",
+   "story": "acornrace",
+   "text": "(Toby the oak tree is covered in squirrels. All of them claim to have won. He'd like them off.) Clear the tree?",
+   "options": {
+    "right": {
+     "label": "Yes. Clear him.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Cleared. Toby has shaken himself. Twice. Very dignified."
+    },
+    "left": {
+     "label": "No. Let them settle.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "They've formed a government in his branches. It's very hierarchical."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3r2",
+   "who": "gary",
+   "story": "garyjukebox",
+   "text": "(Gary the vending machine has learned to play music. One song. Over and over. It's quite catchy.) Let him play at the festival?",
+   "options": {
+    "right": {
+     "label": "Yes. DJ Gary.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Four hours of one song. People are dancing. People are crying. Both."
+    },
+    "left": {
+     "label": "No. Unplug the music.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "He's playing it quieter. You can still hear it. You'll hear it in your sleep."
+    }
+   }
+  },
+  {
+   "id": "w3r3",
+   "who": "biscuit",
+   "story": "lostkid",
+   "text": "(Inspector Biscuit has found a lost child at the festival. It's Timmy. He wasn't lost. Biscuit won't let go of his sleeve.) Intervene?",
+   "options": {
+    "right": {
+     "label": "Yes. Free Timmy.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Timmy is free. Biscuit has found him again. Four times. It's a game now.",
+     "then": [
+      [
+       "w3r3b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Biscuit's working.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Biscuit has returned Timmy to his mum. She wasn't lost either. She's been returned too."
+    }
+   }
+  },
+  {
+   "id": "w3r3b",
+   "who": "timmy",
+   "story": "lostkid",
+   "text": "Dear Mayor. The police dog keeps finding me. I'm hiding in the bouncy castle. He's bouncing. Can I be lost on purpose?",
+   "options": {
+    "right": {
+     "label": "Yes. Hide away.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Biscuit found him in eleven seconds. They've been made official festival partners."
+    },
+    "left": {
+     "label": "No. Stay found.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Timmy has been found. Permanently. He has a badge. It says 'FOUND'."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3r4",
+   "who": "marge",
+   "story": "ratings",
+   "text": "Mayor, the Bugle is rating every festival stall out of ten. Sal got a two. Sal is outside with a tyre. Print the ratings?",
+   "options": {
+    "right": {
+     "label": "Yes. Print them.",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "Printed. Sal has eaten his review. Out of protest. And a little hunger.",
+     "then": [
+      [
+       "w3r4b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Be kind.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "Marge printed a 'Kindness Special'. Everything got a seven. Readers are suspicious."
+    }
+   }
+  },
+  {
+   "id": "w3r4b",
+   "who": "sal",
+   "story": "ratings",
+   "text": "Mayor. I got a two from the Bugle. I'd like a recount. Done by someone who's eaten a tyre pie. Arrange it?",
+   "options": {
+    "right": {
+     "label": "Yes. A fair recount.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "Re-rated by Gerald. Ten out of ten. He ate the stall. And the review."
+    },
+    "left": {
+     "label": "No. A two is a two.",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "Sal has renamed his stall 'TWO OUT OF TEN'. It's become a cult hit."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3r5",
+   "who": "lorraine",
+   "story": "gullparade",
+   "text": "(Lorraine the seagull has entered the parade. Forty seagulls. In formation. Each holding a chip. They want the front.) Let them lead?",
+   "options": {
+    "right": {
+     "label": "Yes. Gulls first.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "They led. They dropped every chip on Chad's yacht. Twice. Crowd loved it."
+    },
+    "left": {
+     "label": "No. Back of the parade.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "At the back, they stole the parade's sandwiches. All of them. In formation."
+    }
+   }
+  },
+  {
+   "id": "w3r6",
+   "who": "flaps",
+   "story": "flapsmail",
+   "text": "Mr Flaps. Festival post is very heavy. Four thousand postcards of the giant marrow. I can carry two thousand. Two trips?",
+   "options": {
+    "right": {
+     "label": "Yes. Two trips.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Two trips. Every postcard arrived. Slightly damp. The marrow looks bigger in them.",
+     "then": [
+      [
+       "w3r6b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. One trip.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He swallowed four thousand. He's very round. He's delivering by rolling."
+    }
+   }
+  },
+  {
+   "id": "w3r6b",
+   "who": "flaps",
+   "story": "flapsmail",
+   "text": "Mr Flaps. One of the marrow postcards was addressed to the marrow. From Bev. Shall I deliver it?",
+   "options": {
+    "right": {
+     "label": "Yes. Deliver it.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "He posted it into the marrow. It's been read. Somehow. Bev's marrow seems happier."
+    },
+    "left": {
+     "label": "No. Return to sender.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Returned. Bev has re-sent it. By hand. Into the marrow."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3r7",
+   "who": "reginald",
+   "story": "regstage",
+   "text": "(Reginald the tortoise has wandered onto the main stage during the headline act. He's moving towards the microphone.) Let him?",
+   "options": {
+    "right": {
+     "label": "Yes. His moment.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "He reached the microphone at 2am. He said nothing. Ovation.",
+     "then": [
+      [
+       "w3r7b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Carry him off.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Carried off. He's walking back on. Slowly. Determinedly. He'll arrive on Tuesday."
+    }
+   }
+  },
+  {
+   "id": "w3r7b",
+   "who": "randy",
+   "story": "regstage",
+   "text": "Boss. The Bin Lids want Reginald in the band. On drums. He'd hit one drum per hour. Very steady. Can he join?",
+   "options": {
+    "right": {
+     "label": "Yes. Reginald on drums.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "One beat per hour. The slowest song ever written. It's still going."
+    },
+    "left": {
+     "label": "No. Too slow.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "He's started his own band. Solo. It's very relaxing. He's selling out."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3r8",
+   "who": "pam",
+   "story": "facepaint",
+   "text": "The PTA's face-painting tent has run out of paint. They're using the Bugle's ink. Every child now looks like a headline. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. News faces.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Timmy's face says 'MAYOR IN CRISIS'. He's very proud of it.",
+     "then": [
+      [
+       "w3r8b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Close the tent.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Closed. The children have painted each other with jam. It's worse. It's stickier."
+    }
+   }
+  },
+  {
+   "id": "w3r8b",
+   "who": "marge",
+   "story": "facepaint",
+   "text": "Mayor, a child's face reading 'MAYOR IN CRISIS' has gone viral. It's now the Bugle's best seller. Respond?",
+   "options": {
+    "right": {
+     "label": "Yes. Paint your own.",
+     "effects": {
+      "press": 5,
+      "people": 5
+     },
+     "reaction": "Your face now reads 'NO CRISIS'. It's on page one. It looks like a crisis."
+    },
+    "left": {
+     "label": "No comment.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "'MAYOR NO COMMENT ON FACE' is page one. The face is page two."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3r9",
+   "who": "hoot",
+   "story": "hootfire",
+   "text": "(Professor Hoot has asked to watch the fireworks. From inside the fireworks shed. 'It's quieter.') Let him?",
+   "options": {
+    "right": {
+     "label": "Yes. He's an owl.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He watched. Every firework lit at once. Hoot didn't blink. Hoot never blinks."
+    },
+    "left": {
+     "label": "No. Outside.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He watched from outside. Upside down. From a lamp post. He said it was 'adequate'."
+    }
+   }
+  },
+  {
+   "id": "w3r10",
+   "who": "cheese",
+   "story": "cheesestall",
+   "text": "(The 1987 cheese has been entered into the festival's 'Best Local Produce'. Nobody entered it. It's on the table.) Let it compete?",
+   "options": {
+    "right": {
+     "label": "Yes. Let it compete.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It won. The judges couldn't say why. One judge is still staring at it.",
+     "then": [
+      [
+       "w3r10b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Back to the vault.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "It's back in the vault. The trophy has gone missing. Also into the vault."
+    }
+   }
+  },
+  {
+   "id": "w3r10b",
+   "who": "doug",
+   "story": "cheesestall",
+   "text": "Mayor, the cheese won 'Best Local Produce'. The prize is £50. It wants it paid. Into the vault. Pay the cheese?",
+   "options": {
+    "right": {
+     "label": "Yes. Pay the cheese.",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Paid. The £50 vanished. The vault is warmer. Doug won't go near it."
+    },
+    "left": {
+     "label": "No. Cheese can't earn.",
+     "effects": {
+      "treasury": 5,
+      "law": -5
+     },
+     "reaction": "Doug's office now smells of 1987. Doug is negotiating."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3r11",
+   "who": "marcel",
+   "story": "mimebattle",
+   "text": "(Marcel the mime has challenged Bev to a mime battle. Bev has accepted. She's never mimed before. She's very loud.) Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Mime off.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Bev mimed a scooter crash. With sound effects. Marcel conceded.",
+     "then": [
+      [
+       "w3r11b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Too dangerous.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Marcel mimed being disappointed. Bev mimed not caring. Both very good."
+    }
+   }
+  },
+  {
+   "id": "w3r11b",
+   "who": "marcel",
+   "story": "mimebattle",
+   "text": "(Marcel would like a rematch. He's been practising. He's mimed a gym. And a trainer. And a protein shake.) Rematch?",
+   "options": {
+    "right": {
+     "label": "Yes. Rematch.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Marcel won. Bev mimed a protest. It was very convincing. People joined in."
+    },
+    "left": {
+     "label": "No. It's over.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "He's miming a sulk. He's been miming it for three days. Very committed."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3r12",
+   "who": "clive",
+   "story": "conefest",
+   "text": "(Clive the traffic cone has been placed at the festival entrance. People think he's directing them. He's very good at it.) Make it official?",
+   "options": {
+    "right": {
+     "label": "Yes. Steward Clive.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Best-organised festival in history. Clive hasn't moved. He doesn't need to."
+    },
+    "left": {
+     "label": "No. He's a cone.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Without Clive the queue went in nine directions. Somebody put him back."
+    }
+   }
+  },
+  {
+   "id": "w3s1",
+   "who": "coach",
+   "story": "eggrace",
+   "text": "Mayor! Egg and spoon race! Gerald has entered. With his own egg. He laid it this morning. He says. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Let him race.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He won. He ate the spoon. Nobody checked the egg."
+    },
+    "left": {
+     "label": "No. Shop eggs only.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Gerald has filed a complaint. With his egg. On your desk."
+    }
+   }
+  },
+  {
+   "id": "w3s2",
+   "who": "linda",
+   "story": "bookstall",
+   "text": "Mayor, the library's festival book stall has sold one book. To Randy. It was his own memoir. He's returning it. For a refund. Refund?",
+   "options": {
+    "right": {
+     "label": "Yes. Refund him.",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Refunded. He's bought it again. He likes the transaction."
+    },
+    "left": {
+     "label": "No. No refunds.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He's donated it back. With a signature. The library now owns a signed copy. It's worth 3p."
+    }
+   }
+  },
+  {
+   "id": "w3s3",
+   "who": "steve",
+   "story": "rainfest",
+   "text": "Stormy Steve. I've forecast sun for the festival finale. So, obviously, bring umbrellas. Do I announce that?",
+   "options": {
+    "right": {
+     "label": "Yes. Announce it.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Everyone brought umbrellas. It was sunny. Steve has never been more wrong. Or more popular."
+    },
+    "left": {
+     "label": "No. Say nothing.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "It rained. Nobody had umbrellas. Steve was right by accident. He's in shock."
+    }
+   }
+  },
+  {
+   "id": "w3s4",
+   "who": "brayden",
+   "story": "dronefest",
+   "text": "Mayor! Drone light show! Forty drones! Spelling 'BAD TOWN' in the sky! Approve the launch?",
+   "options": {
+    "right": {
+     "label": "Yes. Launch them.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "They spelled 'BAD TOWM'. Close enough. Gerald attacked three. He won."
+    },
+    "left": {
+     "label": "No. Stars are fine.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Brayden has launched one drone. It spells 'SAD'. It's hovering over your house."
+    }
+   }
+  },
+  {
+   "id": "w3s5",
+   "who": "bev",
+   "story": "bevrides",
+   "text": "Mayor, the festival rides are too slow. I'd like to ride the big wheel standing up. On top. Holding a sandwich. Permission?",
+   "options": {
+    "right": {
+     "label": "Yes. Up you go.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "She did a full rotation. Ate the sandwich at the top. Waved. Big Carl fainted."
+    },
+    "left": {
+     "label": "No. Sit down, Bev.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She sat. On the operator. The wheel went faster. Everyone screamed. Joyfully."
+    }
+   }
+  },
+  {
+   "id": "w3s6",
+   "who": "randy",
+   "story": "raffleprize",
+   "text": "Boss. I've found the festival's lost-property box. There's a trumpet, a wig and a full-size canoe. Can I keep the canoe?",
+   "options": {
+    "right": {
+     "label": "Yes. Keep it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's paddling the canoe down the high street. On wheels. It's very slow."
+    },
+    "left": {
+     "label": "No. Hand it in.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Handed in. It was Bev's. She's furious it was lost. She lost it on purpose."
+    }
+   }
+  },
+  {
+   "id": "w3s7",
+   "who": "chad",
+   "story": "vipzone",
+   "text": "Mayor, I'd like a VIP zone at the festival. Velvet rope. Free champagne. Just for me. Approve it?",
+   "options": {
+    "right": {
+     "label": "Yes. Chad's zone.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "He's alone in it. With champagne. Waving at everyone. Nobody waves back. He's thrilled."
+    },
+    "left": {
+     "label": "No. Everyone's a VIP.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Everyone's a VIP. Chad has made a VVIP zone. It's his car."
+    }
+   }
+  },
+  {
+   "id": "w3s8",
+   "who": "barb",
+   "story": "lostpolice",
+   "text": "Mayor. Lost property has handed in a lost police officer. It's me. I got lost in the hall of mirrors. Can someone come and get me?",
+   "options": {
+    "right": {
+     "label": "Yes. Rescue Barb.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Rescued. She arrested eleven reflections on the way out. All for looking at her."
+    },
+    "left": {
+     "label": "No. Follow the signs.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "She followed the signs. They were mirrors. She's still in there. She's set up an office."
+    }
+   }
+  },
+  {
+   "id": "w3s9",
+   "who": "gerald",
+   "story": "geesefest",
+   "text": "HONK. (Gerald has opened a festival stall. It's called 'BREAD FOR GEESE'. It is a goose standing next to bread. Him.) Allow?",
+   "options": {
+    "right": {
+     "label": "Yes. Bread for geese.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Best-selling stall. Every goose in town is queueing. They're paying in feathers."
+    },
+    "left": {
+     "label": "No. Unlicensed bread.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He has eaten the stock. And the stall. He's now a goose standing next to nothing."
+    }
+   }
+  },
+  {
+   "id": "w3s10",
+   "who": "whiskers",
+   "story": "catfest",
+   "text": "(Mr Whiskers Esq. would like the festival's lost-cat announcement read in full. He is not lost. He'd just like to be announced.) Announce him?",
+   "options": {
+    "right": {
+     "label": "Yes. Announce him.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "'Mr Whiskers, Esquire, is not lost.' Applause. He's been announced four more times."
+    },
+    "left": {
+     "label": "No. Only lost cats.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "He's got himself lost. On purpose. In the VIP zone. Chad is allergic."
+    }
+   }
+  },
+  {
+   "id": "w3s11",
+   "who": "doug",
+   "story": "dougfest",
+   "text": "Mayor. I'd like to enter the festival talent show. I'll be reading the budget. Aloud. With feeling. May I?",
+   "options": {
+    "right": {
+     "label": "Yes. Go on, Doug.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "He cried during the treasury section. So did the audience. He came second. To the cheese."
+    },
+    "left": {
+     "label": "No. Keep it private.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He read it to himself. In a cupboard. With feeling."
+    }
+   }
+  },
+  {
+   "id": "w3s12",
+   "who": "pam",
+   "story": "ptaraffle",
+   "text": "The PTA would like to sell homemade jam at the festival. Every jar is labelled 'JAM (PROBABLY)'. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Probably jam.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "It was jam. Mostly. One jar was soup. It sold out first."
+    },
+    "left": {
+     "label": "No. Label it properly.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "New labels: 'JAM (DEFINITELY, PROBABLY)'. Pam stands by it."
+    }
+   }
+  },
+  {
+   "id": "w3s13",
+   "who": "kevin",
+   "story": "kevinfest",
+   "text": "(Kevin the pothole has been decorated with festival bunting. He looks very festive. People are posing in him.) Charge for photos?",
+   "options": {
+    "right": {
+     "label": "Yes. Photo fee.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "50p a photo. Kevin has made more than the festival. He's still a hole."
+    },
+    "left": {
+     "label": "No. Free Kevin.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Free photos. Four thousand of them. Kevin is the most photographed hole in the county."
+    }
+   }
+  },
+  {
+   "id": "w3s14",
+   "who": "nora",
+   "story": "glowstick",
+   "text": "Mayor, I've made a glow stick that never stops glowing. It also hums. And it's warm. Hand them out at the festival?",
+   "options": {
+    "right": {
+     "label": "Yes. Hand them out.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The whole festival glows. And hums. The cheese has started humming back."
+    },
+    "left": {
+     "label": "No. Lock them up.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Locked in the vault. With the cheese. The vault is glowing now. Doug won't go in."
+    }
+   }
   }
  ],
  "objectives": [
@@ -4381,19 +5253,20 @@
   },
   {
    "id": "calm",
-   "text": "Get every group between 40 and 60 at once",
+   "text": "From Thursday, get every group between 45 and 55 at once",
    "when": {
+    "fromDay": 4,
     "min": {
-     "people": 40,
-     "business": 40,
-     "law": 40,
-     "press": 40
+     "people": 45,
+     "business": 45,
+     "law": 45,
+     "press": 45
     },
     "max": {
-     "people": 60,
-     "business": 60,
-     "law": 60,
-     "press": 60
+     "people": 55,
+     "business": 55,
+     "law": 55,
+     "press": 55
     }
    }
   }
@@ -4525,7 +5398,33 @@
   "lorraine4": "SEAGULLS V. ICE CREAM",
   "timmy4": "THE DINOSAUR BALLOON",
   "wendy4": "THE GHOST HUNTER",
-  "disaster": "ONE WRONG ANSWER"
+  "disaster": "ONE WRONG ANSWER",
+  "acornrace": "THE SQUIRREL RACE",
+  "garyjukebox": "ONE SONG, FOREVER",
+  "lostkid": "FOUND, REPEATEDLY",
+  "ratings": "TWO OUT OF TEN",
+  "gullparade": "THE SEAGULL PARADE",
+  "flapsmail": "POSTCARDS OF A MARROW",
+  "regstage": "REGINALD TAKES THE STAGE",
+  "facepaint": "HEADLINE FACES",
+  "hootfire": "THE OWL IN THE SHED",
+  "cheesestall": "BEST LOCAL PRODUCE",
+  "mimebattle": "MIME BATTLE",
+  "conefest": "STEWARD CLIVE",
+  "eggrace": "AROUND TOWN",
+  "bookstall": "AROUND TOWN",
+  "rainfest": "AROUND TOWN",
+  "dronefest": "AROUND TOWN",
+  "bevrides": "AROUND TOWN",
+  "raffleprize": "AROUND TOWN",
+  "vipzone": "AROUND TOWN",
+  "lostpolice": "AROUND TOWN",
+  "geesefest": "AROUND TOWN",
+  "catfest": "AROUND TOWN",
+  "dougfest": "AROUND TOWN",
+  "ptaraffle": "AROUND TOWN",
+  "kevinfest": "AROUND TOWN",
+  "glowstick": "AROUND TOWN"
  },
  "cliffhangers": [
   "Tomorrow: the Bin Lids have been rehearsing. Badly.",

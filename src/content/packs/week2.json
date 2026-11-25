@@ -5040,6 +5040,236 @@
    },
    "day": 7,
    "slot": 12
+  },
+  {
+   "id": "w2x_1",
+   "who": "carl",
+   "story": "carlheat",
+   "text": "Big Carl. It's so hot the fountain has evaporated. I'm guarding an empty fountain. Still counts. Right?",
+   "options": {
+    "right": {
+     "label": "Yes. Still counts.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's guarding it with total commitment. Children are paddling in his shadow.",
+     "then": [
+      [
+       "w2x_1b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Take a break.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He took a break. In the fountain. It's empty. He's lying in it. Very relaxed."
+    }
+   }
+  },
+  {
+   "id": "w2x_1b",
+   "who": "doug",
+   "story": "carlheat",
+   "text": "Mayor, refilling the fountain will cost £400 in water. Big Carl has offered to fill it himself. With a bucket. Let him?",
+   "options": {
+    "right": {
+     "label": "Yes. Bucket by bucket.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "It took nine hours. It's full. It evaporated at teatime. He's starting again."
+    },
+    "left": {
+     "label": "No. Pay for water.",
+     "effects": {
+      "treasury": -5,
+      "people": 5
+     },
+     "reaction": "Paid. Full fountain. Carl has rescued four people. None of them were in it."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2x_2",
+   "who": "pebbles",
+   "story": "pebbleshade",
+   "text": "(Councillor Pebbles has found the only shade in town. It's under your desk. She won't come out. She's chewing your shoe.) Leave her?",
+   "options": {
+    "right": {
+     "label": "Yes. Leave her.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "She's stayed all week. The council meets under the desk now. It's cosy.",
+     "then": [
+      [
+       "w2x_2b",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Out you get.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She's out. She's taken the shoe. You're working barefoot. It's very hot."
+    }
+   }
+  },
+  {
+   "id": "w2x_2b",
+   "who": "pebbles",
+   "story": "pebbleshade",
+   "text": "(Pebbles has invited the rest of the council under your desk. There are seven of them. And Gerald.) Hold the meeting there?",
+   "options": {
+    "right": {
+     "label": "Yes. Under the desk.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Best meeting ever. Nobody could stand up. Every motion passed."
+    },
+    "left": {
+     "label": "No. Everyone out.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Everyone's out. Pebbles has eaten the desk. Problem solved, she says."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2x_3",
+   "who": "hoot",
+   "story": "hootheat",
+   "text": "(Professor Hoot says it's too hot to teach. He'd like school to happen at night. In the freezer aisle at the supermarket.) Allow?",
+   "options": {
+    "right": {
+     "label": "Yes. Freezer school.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Lessons in the freezer aisle. Attendance is 100%. Everyone's very awake."
+    },
+    "left": {
+     "label": "No. Open the windows.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Windows open. Every pigeon in town has enrolled. Hoot is teaching them."
+    }
+   }
+  },
+  {
+   "id": "w2y1",
+   "who": "sal",
+   "story": "salice",
+   "text": "Mayor. My restaurant's freezer has broken. In a heatwave. Can I store the fish in the town hall? Just the fish. And the tyres.",
+   "options": {
+    "right": {
+     "label": "Yes. Store the fish.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Your office smells of haddock. And rubber. Sal says it's a 'rich bouquet'."
+    },
+    "left": {
+     "label": "No. Buy ice.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Sal has bought ice. From Gary. In crisp packets. It's melting very fast."
+    }
+   }
+  },
+  {
+   "id": "w2y2",
+   "who": "bev",
+   "story": "bevfan",
+   "text": "Mayor, I've strapped a fan to my scooter. For the heat. It goes faster now. Much faster. I'm on the ring road. Is that okay?",
+   "options": {
+    "right": {
+     "label": "Yes. Cool off, Bev.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "She's lapped the town four times. Coolest person in Bad Town. In every sense."
+    },
+    "left": {
+     "label": "No. Slow down.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "She's slowed down. To sixty. The fan is pointing at Barb. Barb is grateful."
+    }
+   }
+  },
+  {
+   "id": "w2y3",
+   "who": "linda",
+   "story": "iceread",
+   "text": "Mayor, the library's air conditioning is the only one working. Four hundred people are here. Nobody's reading. Can I make them read?",
+   "options": {
+    "right": {
+     "label": "Yes. Make them read.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Everyone's reading. In silence. Very cool. Very well-read town by Friday."
+    },
+    "left": {
+     "label": "No. Let them chill.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Let them chill. Somebody's started a disco in Biography."
+    }
+   }
+  },
+  {
+   "id": "w2y4",
+   "who": "gerald",
+   "story": "geeseheat",
+   "text": "HONK. (Gerald would like the fountain reserved for geese during the heatwave. Only geese. He's drawn a sign. It's a goose.) Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Geese only.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Geese only. Gerald patrols it. He's let Big Carl in. As a goose."
+    },
+    "left": {
+     "label": "No. Share it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Shared. Gerald honks at every child. Every child honks back. It's a standoff."
+    }
+   }
   }
  ],
  "objectives": [
@@ -5191,7 +5421,14 @@
   "softroad": "THE ROAD IS SOUP",
   "ribbon": "THE RIBBON RACE",
   "garysaga": "GARY'S COMEBACK",
-  "disaster": "ONE WRONG ANSWER"
+  "disaster": "ONE WRONG ANSWER",
+  "carlheat": "THE EMPTY FOUNTAIN",
+  "pebbleshade": "UNDER THE DESK",
+  "hootheat": "FREEZER SCHOOL",
+  "salice": "AROUND TOWN",
+  "bevfan": "AROUND TOWN",
+  "iceread": "AROUND TOWN",
+  "geeseheat": "AROUND TOWN"
  },
  "cliffhangers": [
   "Tomorrow: a tortoise is two feet from the kerb.",

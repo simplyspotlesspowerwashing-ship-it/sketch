@@ -141,7 +141,7 @@ function endEarly(s: State, ending: string) {
 export function newTerm(weekId: string, playerSeed: string, pack: Pack, rng: Rng = seededRng): State {
   const m = Object.fromEntries(METERS.map((k) => [k, TUNING.start])) as Record<MeterId, number>;
   const s: State = {
-    v: 11, weekId, playerSeed, day: 1, cardInDay: 0, count: 0, meters: m, flags: {}, queue: [], tomorrow: [], seen: [], current: null,
+    v: 12, weekId, playerSeed, day: 1, cardInDay: 0, defers: TUNING.defer.perDay, count: 0, meters: m, flags: {}, queue: [], tomorrow: [], seen: [], current: null,
     phase: 'card', dayStart: { ...m }, swipes: [], recalls: 0, endings: [], recalledDays: [], objectivesDone: [],
     profile: null, daveDays: [], polls: [], won: [], result: null,
   };
@@ -149,8 +149,11 @@ export function newTerm(weekId: string, playerSeed: string, pack: Pack, rng: Rng
   return s;
 }
 
+/** Can the current card be put off? Twice a day, never in the last few cards (it has to come back today). */
+export const canDefer = (s: State) => s.phase === 'card' && !!s.current && s.defers > 0 && s.cardInDay < TUNING.cardsPerDay - TUNING.defer.lastSlots;
+
 export function legalActions(s: State, pack: Pack): Action[] {
-  if (s.phase === 'card' && s.current) return options(findCard(pack, s.current)).map((dir) => ({ type: 'swipe', dir }));
+  if (s.phase === 'card' && s.current) return [...options(findCard(pack, s.current)).map((dir): Action => ({ type: 'swipe', dir })), ...(canDefer(s) ? [{ type: 'defer' } as Action] : [])];
   if (s.phase === 'recalled' || s.phase === 'dayEnd') return [{ type: 'next' }];
   return [];
 }
@@ -177,11 +180,20 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       if (s.day >= 7) { finish(s); return s; }
       s.day += 1;
       s.cardInDay = 0;
+      s.defers = TUNING.defer.perDay;
       if (s.flags.__reset) { for (const k of METERS) s.meters[k] = TUNING.recall.reset; delete s.flags.__reset; }
       s.dayStart = { ...s.meters };
       // yesterday's unfinished business opens the day, one card after another
       s.tomorrow.forEach((id, i) => s.queue.push({ cardId: id, at: s.count + i }));
       s.tomorrow = [];
+      startCard(s, pack, rng);
+      return s;
+    }
+    case 'defer': {
+      if (!canDefer(s)) throw new Error('nothing to put off');
+      // the card goes to the back of the queue and returns a few decisions later; nothing changes now
+      s.queue.push({ cardId: s.current!, at: s.count + TUNING.defer.back });
+      s.defers -= 1;
       startCard(s, pack, rng);
       return s;
     }
