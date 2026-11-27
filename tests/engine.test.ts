@@ -16,6 +16,12 @@ const steady = (s: State): Dir => {
   const cost = (d: Dir) => (c.options[d]!.ending ? 1e6 : 0) + Object.entries(c.options[d]!.effects).reduce((n, [m, v]) => n + Math.abs(s.meters[m as MeterId] + (v ?? 0) - 50), 0);
   return options(c).sort((x, y) => cost(x) - cost(y))[0]!;
 };
+/** steady, for any pack */
+const steadyIn = (pk: typeof pack, s: State): Dir => {
+  const c = findCard(pk, s.current!);
+  const cost = (d: Dir) => (c.options[d]!.ending ? 1e6 : 0) + Object.entries(c.options[d]!.effects).reduce((n, [m, v]) => n + Math.abs(s.meters[m as MeterId] + (v ?? 0) - 50), 0);
+  return options(c).sort((x, y) => cost(x) - cost(y))[0]!;
+};
 const play = (s: State, n: number) => { for (let i = 0; i < n && s.phase === 'card'; i++) s = swipe(s, steady(s)); return s; };
 /** Put a specific card in front of the mayor. */
 const facing = (s: State, id: string): State => ({ ...s, current: id, phase: 'card' });
@@ -329,5 +335,25 @@ describe('content', () => {
   it('illegal actions throw', () => {
     expect(() => reduce(start(), { type: 'swipe', dir: 'up' } as Action, pack)).toThrow();
     expect(() => reduce(start(), { type: 'next' }, pack)).toThrow();
+  });
+});
+
+describe('after hours', () => {
+  it('ten cards from every week, one disaster per round, cycling through all 28; every link resolves', async () => {
+    const { afterHoursPack, ALL_TRAPS, AFTER_HOURS_CARDS } = await import('../src/content/afterHours.ts');
+    expect(ALL_TRAPS).toHaveLength(28);
+    const seenTraps = new Set<string>();
+    for (let round = 0; round < 28; round++) {
+      const ah = afterHoursPack(pack, round);
+      const ids = new Set(ah.cards.map((c) => c.id));
+      for (const c of ah.cards) for (const o of Object.values(c.options)) { expect(o!.next).toBeUndefined(); for (const [t] of o!.then ?? []) expect(ids.has(t), `${c.id} -> ${t}`).toBe(true); }
+      let s = newTerm(`after#${round}`, 'ah', ah);
+      const shown: string[] = [];
+      for (let i = 0; i < AFTER_HOURS_CARDS && s.phase === 'card'; i++) { shown.push(s.current!); s = reduce(s, { type: 'swipe', dir: steadyIn(ah, s) }, ah); }
+      const traps = shown.filter((id) => ALL_TRAPS.some((t) => t.id === id));
+      expect(traps, `round ${round}`).toHaveLength(1);
+      seenTraps.add(traps[0]!);
+    }
+    expect(seenTraps.size).toBe(28);
   });
 });

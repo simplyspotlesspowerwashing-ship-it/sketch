@@ -1107,3 +1107,10 @@ button.scorechip { font: inherit; font-size: 13px; cursor: pointer; color: var(-
 .ending { min-width: 0; overflow-wrap: anywhere; }
 @media (max-width: 380px) { .endings { grid-template-columns: minmax(0, 1fr); } }
 .tabs, .chips, .book-total, .career { flex-shrink: 0; }
+/* after hours */
+.afterhours { display: flex; flex-direction: column; gap: 10px; }
+.ah-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; background: #2F3B5C; color: #FFF4CF; border: 2.5px solid var(--ink); border-radius: 12px; padding: 6px 12px; font-size: 12.5px; }
+.ah-head b { font-size: 15px; }
+.ah-btn { background: #2F3B5C; color: #FFF4CF; }
+.ah-done { text-align: center; }
+.prize-loss { margin: 0; font-weight: 800; font-size: 15px; text-align: center; color: var(--alert); }

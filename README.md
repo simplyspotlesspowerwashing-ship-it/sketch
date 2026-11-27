@@ -48,7 +48,13 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **The week in review** after Sunday night: a nickname for the week, each night's result, your best day, your oddest call (lowest crowd %), the oddballs you dealt with and the endings you found.
 - **Your own week.** A new player starts on Day 1 of week 1 (pack `week1`). The next day opens on a later calendar day than the one you finished the last on; missed days are just a gap, nobody plays them for you. After Day 7 comes the week in review, then the next week (packs rotate 1→4, then round again with a fresh shuffle). Everyone at the same point (say, week 2, Day 3) gets the same deck, so the crowd % still compares like with like.
 - First visit: a short opening, ending with the oath (your mayor's name, what the townsfolk are called, who voted for you).
+- **After Hours** (`src/content/afterHours.ts`): once your day is done (or the week reviewed), play 10 more cards, as many rounds as you like. Each round starts a fresh town at 50, draws side stories from all four weeks and includes exactly one disaster, cycling through all 28, so every disaster ending is reachable any time. Nothing carries into tomorrow or changes tonight's vote; endings you hit go in the Scrapbook.
+- **Your profile is kept:** name, townsfolk and voters are set once (in the opening) and reused every new week; rename from the Scrapbook.
 - **Tap the points** for how they work and roughly how many you need tonight.
+
+## Endings roadmap (for later)
+
+Today: recall and voted-out endings come round every week; disasters are reachable any time through After Hours; the 8 rare endings come from each week's saga, so each is reachable once per four-week round. Next step: give every ending several routes (different cards on different days and weeks can lead to it), keeping the rarity, so a player who plays long enough can collect them all.
 
 ## Weeks
 
