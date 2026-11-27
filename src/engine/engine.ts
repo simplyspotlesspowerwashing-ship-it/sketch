@@ -108,14 +108,14 @@ function drawNext(s: State, pack: Pack, rng: Rng): string | null {
 
 function startCard(s: State, pack: Pack, rng: Rng) {
   const id = drawNext(s, pack, rng);
-  if (!id) { endDay(s); return; }
+  if (!id) { endDay(s, pack); return; }
   s.current = id;
   if (!s.seen.includes(id)) s.seen.push(id);
   s.phase = 'card';
 }
 
 /** Night falls: the town votes. A day that ended early (recall, rare ending) is lost whatever the count. */
-function endDay(s: State) {
+function endDay(s: State, pack: Pack) {
   s.current = null;
   s.phase = 'dayEnd';
   const vote = nightVote(s);
@@ -123,8 +123,11 @@ function endDay(s: State) {
   const won = !early && vote >= TUNING.vote.pass;
   s.polls.push(vote);
   s.won.push(won);
-  // voted out: blamed on the least happy group, one of three ways depending on the night
-  if (!early && !won) s.endings.push(`out:${weakest(s)}${['', '_2', '_3'][s.day % 3]}`);
+  // voted out: blamed on the least happy group. Even nights: this week's own ending; odd nights: one of three general ones.
+  if (!early && !won) {
+    const g = weakest(s);
+    s.endings.push(s.day % 2 === 0 && pack.endings[`outw:${g}`] ? `outw:${g}/${pack.id}` : `out:${g}${['', '_2', '_3'][Math.floor((s.day - 1) / 2) % 3]}`);
+  }
   if (!won) s.flags.__reset = true;
 }
 
@@ -176,7 +179,7 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       return s;
     }
     case 'next': {
-      if (s.phase === 'recalled') { endDay(s); s.flags.__reset = true; return s; }
+      if (s.phase === 'recalled') { endDay(s, pack); s.flags.__reset = true; return s; }
       if (s.phase !== 'dayEnd') throw new Error(`illegal next in phase ${s.phase}`);
       if (s.day >= 7) { finish(s); return s; }
       s.day += 1;
@@ -220,7 +223,7 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       // each week's recall endings are their own Scrapbook pages: 'low:people/week2'
       if (cause) { endEarly(s, `${cause}/${pack.id}`); return s; }
       s.cardInDay += 1;
-      if (s.cardInDay >= TUNING.cardsPerDay) endDay(s);
+      if (s.cardInDay >= TUNING.cardsPerDay) endDay(s, pack);
       else startCard(s, pack, rng);
       return s;
     }

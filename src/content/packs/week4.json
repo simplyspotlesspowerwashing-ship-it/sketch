@@ -190,7 +190,7 @@
     "right": {
      "label": "Yes. Mr Frost stands.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "Mr Frost is on the ballot. He's polling well. He hasn't said anything. Voters love that.",
@@ -228,7 +228,7 @@
     "right": {
      "label": "Yes. Debate a snowman.",
      "effects": {
-      "press": 10,
+      "press": 5,
       "people": -5
      },
      "reaction": "He said nothing. You said lots. He won. He's very good at saying nothing.",
@@ -265,7 +265,6 @@
     "right": {
      "label": "Yes. Sorry, Mr Frost.",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "You apologised to a snowman. On camera. He accepted. His carrot looked moved.",
@@ -339,7 +338,8 @@
     "right": {
      "label": "Yes. Into the freezer.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "Mr Frost is safe. In Sal's freezer. Between the fish. He seems happy. He's re-elected himself.",
      "set": [
@@ -365,7 +365,7 @@
     "right": {
      "label": "Yes. Share it.",
      "effects": {
-      "people": 5
+      "business": -5
      },
      "reaction": "Four bites each. The Cheese didn't eat. Randy ate the Cheese's bite. Morale is high.",
      "then": [
@@ -438,7 +438,6 @@
     "right": {
      "label": "Yes. Give him the crumb.",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "Randy ate the crumb. Slowly. He looked you in the eye the whole time.",
@@ -757,7 +756,8 @@
     "left": {
      "label": "No. Build a new one.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "Mr Frost II is a bit taller. Timmy says he 'has the same eyes'. It's the same coal.",
      "then": [
@@ -854,7 +854,8 @@
      "label": "Yes. Early spring.",
      "effects": {
       "people": 5,
-      "business": 5
+      "business": 5,
+      "treasury": -5
      },
      "reaction": "Daffodils in the snow. The geese are confused. Bev has taken her coat off. A first."
     },
@@ -967,7 +968,8 @@
     "left": {
      "label": "No. Bias.",
      "effects": {
-      "press": 5
+      "press": 5,
+      "law": -5
      },
      "reaction": "Carl has written another letter. Signed 'Not Carl'. It's in his handwriting.",
      "then": [
@@ -1025,8 +1027,7 @@
     "right": {
      "label": "Yes. I'll come.",
      "effects": {
-      "people": 5,
-      "press": 5
+      "business": -5
      },
      "reaction": "You swam. It was freezing. Carl rescued you. You didn't need it. You'll never tell him."
     },
@@ -1088,7 +1089,6 @@
     "right": {
      "label": "Yes. DJ Randy.",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "The bin record was a hit. People danced. Mostly to the lid noises.",
@@ -1103,7 +1103,8 @@
      "label": "No. Bev's DJing.",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "business": -5
      },
      "reaction": "DJ Bev is back. She's played the whistling man again. It's become a tradition.",
      "then": [
@@ -1200,7 +1201,8 @@
      "label": "Yes. Last dance.",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "business": -5
      },
      "reaction": "You danced with Randy. Then Bev. Then Gerald. Then Bev again. Best night of the year."
     },
@@ -1353,7 +1355,7 @@
     "right": {
      "label": "Yes. Carl's law.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "treasury": -5
      },
      "reaction": "Carl is now required by law. He's printed it on his towel. And his whistle."
@@ -1405,7 +1407,7 @@
     "right": {
      "label": "Yes. Send it.",
      "effects": {
-      "people": 5
+      "business": -5
      },
      "reaction": "The snowplough is Bev. She's cleared every street. And one or two gardens.",
      "then": [
@@ -1418,8 +1420,7 @@
     "left": {
      "label": "No. Snow day.",
      "effects": {
-      "people": 5,
-      "business": -5
+      "people": 5
      },
      "reaction": "Snow day. Nobody went to work. Shops shut. Everyone built snowmen. One is running for council.",
      "then": [
@@ -1504,7 +1505,7 @@
     "left": {
      "label": "No. Let them sledge.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "Best day ever. One sledge overshot. Into the fountain. It was Randy. He's fine.",
@@ -1560,7 +1561,8 @@
     "left": {
      "label": "No. Shut it down.",
      "effects": {
-      "law": 5
+      "law": 5,
+      "press": -5
      },
      "reaction": "Shut down. Randy is sulking. He's using it himself. Over and over."
     }
@@ -1795,7 +1797,6 @@
     "left": {
      "label": "No. Let them settle it.",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "They're best friends now. Dennis has joined the Goose Union. The first non-goose. He's treasurer.",
@@ -1815,7 +1816,8 @@
     "right": {
      "label": "Yes. Rehome Dennis.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "Dennis has a pond. With the geese. He's learning to honk. It sounds like a cough.",
      "set": [
@@ -1842,8 +1844,7 @@
     "right": {
      "label": "Yes. Go in.",
      "effects": {
-      "people": 5,
-      "press": 5
+      "law": -5
      },
      "reaction": "Carl dived in. Gerald stood up. Walked off. Carl is in the river. Rescuing himself. Again.",
      "then": [
@@ -1879,7 +1880,8 @@
     "right": {
      "label": "Yes. A medal.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "Medal of Self-Rescue. He's the only holder. He's the only possible holder."
     },
@@ -1903,7 +1905,6 @@
     "right": {
      "label": "Yes. Hear him out.",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "He honked for nine minutes. You nodded. He felt heard. He left a feather."
@@ -1965,7 +1966,8 @@
     "right": {
      "label": "Yes. Both.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "Apology sent. Mop sent. They've sent the mop back. Wetter."
     },
@@ -2024,7 +2026,6 @@
     "left": {
      "label": "No. Let it roam.",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "Doug left the door ajar. By morning the cheese was in the corridor. Facing your office.",
@@ -2107,7 +2108,8 @@
     "right": {
      "label": "Yes. Find out.",
      "effects": {
-      "law": 5
+      "law": 5,
+      "people": -5
      },
      "reaction": "The minutes continue on page 2. Page 2 is missing. There's a cheese stain where it was.",
      "next": [
@@ -2168,7 +2170,8 @@
     "right": {
      "label": "Yes. Four locks.",
      "effects": {
-      "law": 5
+      "law": 5,
+      "press": -5
      },
      "reaction": "Four locks. Doug checks them hourly. Last night all four were warm.",
      "next": [
@@ -2198,8 +2201,7 @@
     "right": {
      "label": "Yes. Let it rest.",
      "effects": {
-      "people": 5,
-      "press": 5
+      "business": -5
      },
      "reaction": "It carried on. It signed nothing. Crime fell. Nobody can explain it.",
      "next": [
@@ -2259,7 +2261,8 @@
     "right": {
      "label": "Yes. Sit behind it.",
      "effects": {
-      "press": 5
+      "press": 5,
+      "people": -5
      },
      "reaction": "You sat behind the cheese. You've been behind it ever since.",
      "ending": "rare:cheese_mayor"
@@ -2287,7 +2290,7 @@
     "right": {
      "label": "Yes. Leave it alone.",
      "effects": {
-      "people": 5
+      "treasury": -5
      },
      "reaction": "You've left it alone. It hums softly. It sounds almost like a lullaby.",
      "next": [
@@ -2343,13 +2346,14 @@
    "id": "w4g_7a",
    "who": "cheese",
    "story": "cheesesaga",
-   "text": "(Sunday. The cheese has sent you a card. It's blank. It smells of cheese. It feels like a thank you.) Keep the card?",
+   "text": "(Last night of the week. The cheese has sent you a card. It's blank. It smells of cheese. It feels like a thank you.) Keep the card?",
    "options": {
     "right": {
      "label": "Yes. Keep it.",
      "effects": {
       "people": 5,
-      "law": 5
+      "law": 5,
+      "treasury": -5
      },
      "reaction": "It's on your desk. Still warm. You feel strangely safe."
     },
@@ -2373,7 +2377,8 @@
     "right": {
      "label": "Yes. Step in.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "It was warm. Very warm. Then it was everything.",
      "ending": "rare:fondue"
@@ -2406,7 +2411,6 @@
     "left": {
      "label": "Caught",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "He caught you holding his skate. 'You want to join the team?' You're on the team now."
@@ -2452,7 +2456,7 @@
     "right": {
      "label": "Got it",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "You've got the sandwich. Half of it. Randy has the other half. In the coat."
@@ -2480,7 +2484,8 @@
      "label": "Snip!",
      "effects": {
       "law": 5,
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "Open. Full of grit. Barb's guarding it. Gerald's guarding Barb."
     },
@@ -2533,7 +2538,8 @@
      "label": "Snip!",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "treasury": -5
      },
      "reaction": "Open. Carl blew his frozen whistle. A tiny icicle came out. He's thrilled."
     },
@@ -2559,7 +2565,8 @@
     "right": {
      "label": "Swapped it",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "It's the Winter Ball again. Chad doesn't know. He's introducing himself as host."
     },
@@ -2632,7 +2639,8 @@
      "label": "No. Winter F it is.",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "law": -5
      },
      "reaction": "'Winter F' was a huge success. Nobody knew what it was. Everybody came."
     }
@@ -2711,7 +2719,7 @@
     "right": {
      "label": "Yes. Hot water bottle.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "treasury": -5
      },
      "reaction": "It fell through her. Into the basement. Wendy says it's the thought that counts.",
@@ -2774,7 +2782,7 @@
     "right": {
      "label": "Yes. Stay, Trevor.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "He lives on your lamp. He watches you work. He's very supportive.",
@@ -2836,7 +2844,8 @@
     "right": {
      "label": "Yes. Snow day.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "No school. The children built Hoot a snow nest. He's asleep in it. Peacefully.",
      "then": [
@@ -2934,7 +2943,8 @@
     "right": {
      "label": "Yes. Two hundred mittens.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "Two hundred mittens. Every squirrel in town lives in one now. Mr Nutkins charges rent."
     },
@@ -2989,8 +2999,8 @@
     "left": {
      "label": "No. It suits him.",
      "effects": {
-      "people": 5,
-      "press": 5
+      "press": 5,
+      "law": -5
      },
      "reaction": "He's been voted 'Best Dressed Cone'. He's the only entrant. He won anyway."
     }
@@ -3042,7 +3052,8 @@
     "left": {
      "label": "No. Divert traffic.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "Traffic goes round him. Very slowly. Out of respect. And caution."
     }
@@ -3096,8 +3107,7 @@
     "left": {
      "label": "No. Dig harder.",
      "effects": {
-      "treasury": 5,
-      "business": -5
+      "treasury": 5
      },
      "reaction": "He's digging up the park. Every hole has an acorn. None of them are his."
     }
@@ -3290,8 +3300,9 @@
     "right": {
      "label": "Yes. Give it to her.",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "press": 5,
+      "business": -5
      },
      "reaction": "She's wearing it. She blew it at a bus. The bus stopped. She's keeping it."
     },
@@ -3339,7 +3350,8 @@
     "right": {
      "label": "Yes. Find that book.",
      "effects": {
-      "press": 5
+      "press": 5,
+      "people": -5
      },
      "reaction": "Found. In the cheese vault. It's warm. The cheese seems to have been reading it.",
      "then": [
@@ -3394,7 +3406,8 @@
      "label": "Yes. Try one.",
      "effects": {
       "people": 5,
-      "business": 10
+      "business": 10,
+      "law": -5
      },
      "reaction": "It's soup. Warm, tyre-y soup. Four thousand sold. The tyres are refillable."
     },
@@ -3418,7 +3431,8 @@
      "label": "Yes. Investigate.",
      "effects": {
       "law": 5,
-      "press": 5
+      "press": 5,
+      "people": -5
      },
      "reaction": "It's rigged. In favour of Mr Frost. Timmy did it. With a crayon. He's eight.",
      "then": [
@@ -3453,7 +3467,6 @@
     "left": {
      "label": "No. Good job.",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "Timmy's been hired by Chad. As a consultant. He's earning more than Doug."
@@ -3570,7 +3583,7 @@
     "right": {
      "label": "Yes. You're due.",
      "effects": {
-      "press": 10,
+      "press": 5,
       "people": -5
      },
      "reaction": "It snowed. He was right. He's in shock. He's handed in his resignation. Doug refused it."
@@ -3578,7 +3591,8 @@
     "left": {
      "label": "No. Stay wrong.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "It was sunny. He was wrong. Everyone was relieved. It's tradition now."
     }
@@ -3593,7 +3607,8 @@
     "right": {
      "label": "Yes. Winter fair.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "Best fair in years. Bev won the coconut shy. Then the coconuts. Then the shy.",
      "then": [
@@ -3622,7 +3637,8 @@
     "right": {
      "label": "Yes. Hot chocolate.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "The fountain is a triumph. The school smells of chocolate. Exam results are up. Somehow."
     },
@@ -3654,7 +3670,7 @@
     "left": {
      "label": "No. It's art.",
      "effects": {
-      "press": 10,
+      "press": 5,
       "people": -5
      },
      "reaction": "It's in the Bugle: 'GIANT SNOW RACCOON'. Randy is shivering in the photo. Proudly."
@@ -3684,7 +3700,7 @@
     "left": {
      "label": "No. It's ninety feet.",
      "effects": {
-      "people": 5
+      "press": -5
      },
      "reaction": "He's built it on his own lawn. Facing the high street. Pointedly."
     }
@@ -3724,7 +3740,8 @@
     "right": {
      "label": "Yes. Farewell, Gerald.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "The party was lovely. He left. He came back an hour later. He'd forgotten his bread.",
      "then": [
@@ -3753,7 +3770,7 @@
     "right": {
      "label": "Yes. One more.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "treasury": -5
      },
      "reaction": "Second party. He left. He came back in the morning. He'd migrated to the next street."
@@ -3778,7 +3795,7 @@
     "right": {
      "label": "Yes. Pink snow.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "The town is pink. Children are eating it. Nora says it's 'probably' fine."
@@ -3803,7 +3820,8 @@
      "label": "Yes. Keep going.",
      "effects": {
       "people": 5,
-      "treasury": 5
+      "treasury": 5,
+      "law": -5
      },
      "reaction": "Nine hours. He got it. It was 2p. He gave it to Doug. Doug cried. Again."
     },
@@ -3839,7 +3857,7 @@
     "left": {
      "label": "No. Throw it back.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "You threw it. It hit the next town's mayor. On television. Snowball war declared."
@@ -3855,7 +3873,8 @@
     "right": {
      "label": "Yes. Snowball war!",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "Bad Town won. Mostly thanks to Bev. And her scooter. And the geese."
     },
@@ -4084,7 +4103,8 @@
     "right": {
      "label": "Yes. Swap.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "You stood out in the snow all night. Very still. Like a professional.",
      "ending": "trap:frost_swap"
@@ -4118,7 +4138,8 @@
     "left": {
      "label": "No. Take the shortcut.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "The cheese let you in. It did not let you out.",
      "ending": "trap:through_vault"
@@ -4145,7 +4166,8 @@
      "label": "No, thank you.",
      "effects": {
       "people": 5,
-      "law": 5
+      "law": 5,
+      "business": -5
      },
      "reaction": "He's very relieved. So is everyone. So is the camera."
     }
@@ -4170,7 +4192,8 @@
     "left": {
      "label": "No. I'll press the switch.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "You pressed the switch. The ray pressed back.",
      "ending": "trap:heat_ray"
@@ -4196,7 +4219,8 @@
     "left": {
      "label": "No. I'll go in.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "It was deeper than it looked. Much deeper.",
      "ending": "trap:depth_test"
@@ -4214,7 +4238,8 @@
     "right": {
      "label": "Yes. One dance.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "press": -5
      },
      "reaction": "The door closed. The music kept playing.",
      "ending": "trap:last_dance"
@@ -4223,7 +4248,8 @@
      "label": "No. Group dance.",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "law": -5
      },
      "reaction": "A group dance. The cheese sat it out. Watching. Humming."
     }
@@ -4254,7 +4280,6 @@
     "left": {
      "label": "No. Walk down.",
      "effects": {
-      "law": 5,
       "people": -5
      },
      "reaction": "He walked down. On the skis. It took two hours."
@@ -4295,8 +4320,7 @@
     "right": {
      "label": "Yes. I'll hold it.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "people": 5
      },
      "reaction": "You held nothing. It was very cold. Wendy said it was the nicest skate she'd had in 135 years."
     },
@@ -4357,8 +4381,7 @@
     "left": {
      "label": "No. Tax amnesty.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "people": 5
      },
      "reaction": "Tax amnesty. The happiest day of the year. Doug is in the river. With a chisel."
     }
@@ -4428,7 +4451,6 @@
     "right": {
      "label": "Yes. Lend the van.",
      "effects": {
-      "business": -5,
       "people": 5
      },
      "reaction": "Lorraine has a van. She's started a chip delivery service. It's faster than Sal's."
@@ -4539,8 +4561,7 @@
     "left": {
      "label": "No. Warm water.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "people": 5
      },
      "reaction": "Warm water worked. She immediately licked it again. Science."
     }
@@ -4556,8 +4577,7 @@
     "right": {
      "label": "Yes. Snow news.",
      "effects": {
-      "press": 5,
-      "treasury": -5
+      "press": 5
      },
      "reaction": "Snow news is a hit. Nobody can remember bad headlines. You've never been more popular."
     },
@@ -4580,7 +4600,6 @@
     "right": {
      "label": "Yes. Move him.",
      "effects": {
-      "law": 5,
       "people": -5
      },
      "reaction": "Moved. He went straight back. He says it's love. Nora says it's 400 degrees."
@@ -4618,7 +4637,6 @@
     "left": {
      "label": "No. Return the files.",
      "effects": {
-      "law": 5,
       "people": -5
      },
      "reaction": "Returned. Timmy has built another sledge. Out of Doug's desk. Doug is still at it."
@@ -4642,7 +4660,6 @@
     "left": {
      "label": "No. Wait for the thaw.",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "The thaw will reveal them. In order. Linda has a map."
@@ -4667,8 +4684,7 @@
     "left": {
      "label": "No. Wait it out.",
      "effects": {
-      "treasury": 5,
-      "business": -5
+      "treasury": 5
      },
      "reaction": "He's waiting. In a scarf. He's knitted the scarf from acorn shells. It's very uncomfortable."
     }
@@ -4683,7 +4699,6 @@
     "right": {
      "label": "Yes. Snowballs!",
      "effects": {
-      "people": 5,
       "law": -5
      },
      "reaction": "The PTA won. Pam threw first. Pam threw hardest. Doug surrendered in a duvet."
@@ -4763,8 +4778,7 @@
     "left": {
      "label": "No. Free sledging.",
      "effects": {
-      "people": 5,
-      "business": -5
+      "people": 5
      },
      "reaction": "Free sledging. Chad's skiing on the free hill. Pretending it's his."
     }
@@ -4803,8 +4817,7 @@
     "right": {
      "label": "Yes. New car.",
      "effects": {
-      "treasury": -5,
-      "law": 5
+      "treasury": -5
      },
      "reaction": "New car. It's frozen too. She's back on the tray. She prefers it."
     },
@@ -4931,8 +4944,7 @@
     "left": {
      "label": "No. Normal fondue.",
      "effects": {
-      "law": 5,
-      "business": -5
+      "law": 5
      },
      "reaction": "Normal fondue. Bread only. Sal is dipping the tyres in secret."
     }
@@ -4971,8 +4983,7 @@
     "right": {
      "label": "Yes. Dig out Clive.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "people": 5
      },
      "reaction": "Dug out. He's facing a different direction. Nobody turned him."
     },
@@ -5003,8 +5014,7 @@
     "left": {
      "label": "No. Use a window.",
      "effects": {
-      "people": 5,
-      "business": -5
+      "people": 5
      },
      "reaction": "Brayden has looked out of the window. He's crying. It's beautiful."
     }
@@ -5112,6 +5122,22 @@
   "trap:last_dance": {
    "title": "Last Dance with the Cheese",
    "text": "You danced with the cheese in the vault. The door closed. The music kept playing. The cheese leads. It always leads."
+  },
+  "outw:people": {
+   "title": "Frozen Out",
+   "text": "The town voted for Mr Frost the snowman. He said nothing all campaign. He was very cool under pressure. Literally."
+  },
+  "outw:business": {
+   "title": "Snowed Under",
+   "text": "Every shop was buried. The only business open was Lorraine's chip van, on the church roof. She bought the election with chips."
+  },
+  "outw:law": {
+   "title": "Put on Ice",
+   "text": "Barb kept you in the walk-in freezer 'for your own safety'. When the door opened the polls had closed. You were a lolly."
+  },
+  "outw:press": {
+   "title": "COLD NEWS",
+   "text": "The Bugle's front page was a photo of you shivering, captioned 'HIM?'. Turnout was huge. All of it was against you."
   }
  },
  "headlines": {
@@ -5201,6 +5227,6 @@
   "Tomorrow: the grit is gone. Gerald is crunchy.",
   "Tomorrow: every pipe in town is frozen.",
   "Tomorrow: Big Carl's pool is ice.",
-  "Tomorrow: Sunday. The Winter Ball. The Cheese has an invitation."
+  "Tomorrow, the last day: the Winter Ball. The Cheese has an invitation."
  ]
 }

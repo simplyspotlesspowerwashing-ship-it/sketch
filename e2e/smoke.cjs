@@ -1,12 +1,12 @@
 // Smoke test: plays from today (plus an optional day offset) through every nightly election to the week in review in a real browser,
 // swiping by dragging the card. Takes screenshots along the way.
-//   npm run build && npx vite preview --port 4173 &   then   node e2e/smoke.cjs <screenshot-dir> [dayOffset] [width]
+//   npm run build:preview && npx vite preview --port 4173 &   then   node e2e/smoke.cjs <screenshot-dir> [week 1-4] [width]
 const { chromium } = require('playwright');
 (async () => {
-  const [out, off = '0', width = '390'] = process.argv.slice(2);
+  const [out, week = '1', width = '390'] = process.argv.slice(2); // week: which of your own weeks (1 = a new player)
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: Number(width), height: Number(width) > 800 ? 900 : 844 }, deviceScaleFactor: 2, reducedMotion: process.env.MOTION ? 'no-preference' : 'reduce' });
-  await ctx.addInitScript((o) => { if (!localStorage.getItem('badtown.save')) localStorage.setItem('badtown.save', JSON.stringify({ schema: 1, state: null, playerSeed: 'smoke', muted: true, introSeen: '', tutorialDone: false, dayOffset: o, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [] }, deeds: [] })); }, Number(off));
+  await ctx.addInitScript((o) => { if (!localStorage.getItem('badtown.save')) localStorage.setItem('badtown.save', JSON.stringify({ schema: 1, state: null, playerSeed: 'smoke', muted: true, introSeen: '', tutorialDone: false, dayOffset: 0, weeksDone: o, dayDoneOn: '', scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [] }, deeds: [] })); }, Number(week) - 1);
   const pg = await ctx.newPage();
   const errs = []; pg.on('pageerror', (e) => errs.push(String(e)));
   await pg.goto(process.env.URL ?? 'http://localhost:4173/');
@@ -75,6 +75,7 @@ const { chromium } = require('playwright');
   const per = {}; for (const w of st.swipes) per[w.day] = (per[w.day] ?? 0) + 1;
   console.log('cards per day', JSON.stringify(per), 'recalled days', JSON.stringify(st.recalledDays), 'dave days', JSON.stringify(st.daveDays));
   const overflow = await pg.evaluate(() => document.documentElement.scrollWidth > innerWidth);
+  if (overflow) console.log('too wide:', await pg.evaluate(() => [...document.querySelectorAll('body *')].filter((e) => e.getBoundingClientRect().right > innerWidth + 1).slice(0, 5).map((e) => `${e.tagName}.${e.className}:${Math.round(e.getBoundingClientRect().right)} "${(e.textContent || '').slice(0, 30)}"`)));
   console.log('swipes', swipes, 'reveals', reveals, 'sneaks', JSON.stringify(sneaks), 'ribbons', JSON.stringify(ribbons), 'nights won', JSON.stringify(st.won), 'days reviewed', days, 'recalls', recalls, 'overflow', overflow, 'errors', errs.slice(0, 5));
   console.log(await pg.locator('.recap-name').textContent());
   await b.close();

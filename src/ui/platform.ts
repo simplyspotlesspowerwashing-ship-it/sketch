@@ -17,11 +17,13 @@ export interface Save {
   met: string[]; // oddballs already met
   streak: { current: number; best: number }; // nights re-elected in a row (Randy's nights pause it)
   counted: string; // `${weekId}|${nights}`: nights already added to the career and streak
+  weeksDone: number; // your own weeks finished: picks this week's pack
+  dayDoneOn: string; // the date you finished the current day ('' while playing): the next day opens after it
 }
 
 function fresh(): Save {
   const seed = Math.random().toString(36).slice(2) + Date.now().toString(36);
-  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [], nights: 0 }, deeds: [], onboarded: false, lastProfile: null, met: [], streak: { current: 0, best: 0 }, counted: '' };
+  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [], nights: 0 }, deeds: [], onboarded: false, lastProfile: null, met: [], streak: { current: 0, best: 0 }, counted: '', weeksDone: 0, dayDoneOn: '' };
 }
 
 /** Bring an older save up to the current schema. Unknown or broken saves start fresh. */
@@ -41,15 +43,15 @@ export function writeSave(save: Save) {
   try { localStorage.setItem(KEY, JSON.stringify(save)); } catch { /* storage unavailable: play on without saving */ }
 }
 
-// ---------- calendar: local time, week starts Monday ----------
-export const DAY_NAMES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+// ---------- calendar: your own days, one a calendar day ----------
+/** Your week starts the day you start. Day 1 to Day 7, then the next week. */
+export const DAY_NAMES = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'];
+/** Today's local date (YYYY-MM-DD), shifted by the testing offset, and how long until the next day opens. */
 export function calendar(dayOffset: number, now = new Date()) {
   const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + dayOffset);
-  const today = ((d.getDay() + 6) % 7) + 1; // 1 = Monday ... 7 = Sunday
-  const monday = new Date(d.getFullYear(), d.getMonth(), d.getDate() - (today - 1));
-  const weekId = `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, '0')}-${String(monday.getDate()).padStart(2, '0')}`;
+  const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
   const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime() - now.getTime();
-  return { today, weekId, msToMidnight: midnight };
+  return { dateKey, msToMidnight: midnight };
 }
 
 // ---------- sound: synthesised with Web Audio, no files ----------

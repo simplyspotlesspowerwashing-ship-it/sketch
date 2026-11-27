@@ -18,7 +18,7 @@
     "right": {
      "label": "Yes, build the pond",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "people": 5
      },
      "reaction": "HONK. (Gratitude. Probably.)",
@@ -70,7 +70,7 @@
     "left": {
      "label": "No, hire humans",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "business": 5
      },
      "reaction": "The geese are picketing the humans. The humans are scared. The pond got built at night.",
@@ -93,7 +93,7 @@
     "right": {
      "label": "Fine. Pond.",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "people": 5
      },
      "reaction": "Victory honk. The flag stays.",
@@ -130,7 +130,6 @@
     "right": {
      "label": "Grand opening!",
      "effects": {
-      "press": 10,
       "people": 5,
       "treasury": -5
      },
@@ -174,7 +173,7 @@
     "right": {
      "label": "Yes, fix it",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "law": 5
      },
      "reaction": "Dry again. 1987 will smell of pond forever.",
@@ -279,7 +278,6 @@
     "right": {
      "label": "Yes, it's lucky",
      "effects": {
-      "press": 10,
       "people": -5
      },
      "reaction": "It's front page. People are queueing to stand under geese. Randy's selling tickets."
@@ -287,7 +285,7 @@
     "left": {
      "label": "No, hire cleaners",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "people": 5
      },
      "reaction": "Clean! For about an hour. Then Gerald found out. He took it personally. And fibrously."
@@ -342,7 +340,7 @@
     "right": {
      "label": "Yes, shut it down",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -5
      },
      "reaction": "They've moved to the recycling. Technically a different building.",
@@ -356,7 +354,6 @@
     "left": {
      "label": "No, I'll attend",
      "effects": {
-      "press": 10,
       "law": -5
      },
      "reaction": "They voted you Bin Treasurer. You already owe them eleven crisps.",
@@ -394,7 +391,6 @@
      "label": "No, I'll work in the coat",
      "effects": {
       "people": 5,
-      "press": 10,
       "business": -5
      },
      "reaction": "Cosy. Bit dark. Something in the left pocket bit Doug.",
@@ -417,7 +413,6 @@
     "right": {
      "label": "Yes, put them up",
      "effects": {
-      "press": 10,
       "people": -5
      },
      "reaction": "Everyone now suspects you might be a raccoon. Randy calls this 'buzz'.",
@@ -455,7 +450,6 @@
      "label": "Yes, I'll speak",
      "effects": {
       "people": 5,
-      "press": 5,
       "law": -5
      },
      "reaction": "They hissed for twenty minutes. In raccoon, that's a standing ovation.",
@@ -524,7 +518,7 @@
     "right": {
      "label": "Yes, recognise them",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "First demand: bins open Sundays. Second demand: also Sundays. They'd only prepared one."
@@ -638,7 +632,8 @@
      "label": "No, let it read",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "law": -5
      },
      "reaction": "It's on chapter four, 'Winning Hearts'. It is winning hearts.",
      "then": [
@@ -660,7 +655,7 @@
     "right": {
      "label": "Yes, debate the cheese",
      "effects": {
-      "press": 10,
+      "press": 5,
       "people": -5
      },
      "reaction": "It said nothing for an hour. The Bugle called it 'statesmanlike'.",
@@ -738,7 +733,7 @@
     "right": {
      "label": "Yes, settle",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "law": 5
      },
      "reaction": "Forty tons of crackers. My fee is the crumbs. All of the crumbs.",
@@ -749,8 +744,7 @@
     "left": {
      "label": "No, see you in court",
      "effects": {
-      "law": -5,
-      "press": 10
+      "law": -5
      },
      "reaction": "Excellent. I'll be the one in the box. The cardboard one.",
      "next": [
@@ -778,7 +772,7 @@
      "label": "No, let them be",
      "effects": {
       "people": 5,
-      "press": 5
+      "law": -5
      },
      "reaction": "They're polling at 31% together. Their slogan is silence, and a hum."
     }
@@ -832,7 +826,6 @@
     "right": {
      "label": "Yes, rematch",
      "effects": {
-      "press": 5,
       "people": -5
      },
      "reaction": "You lost again. The cone has 'gravitas'. It's a word Marge used nine times.",
@@ -868,7 +861,7 @@
     "right": {
      "label": "Yes, go on TV",
      "effects": {
-      "press": 10,
+      "press": 5,
       "people": -5
      },
      "reaction": "You were on with Stormy Steve. A seagull stole your notes. You did the weather instead.",
@@ -905,7 +898,7 @@
     "right": {
      "label": "Yes, leak it",
      "effects": {
-      "press": 10,
+      "press": 5,
       "law": -10
      },
      "reaction": "'CONE'S SECRET PAST.' Kevin's given an interview. He said nothing. Loyal to the end.",
@@ -919,7 +912,7 @@
     "left": {
      "label": "No, we stay clean",
      "effects": {
-      "law": 10,
+      "law": 5,
       "press": -5
      },
      "reaction": "Randy's disappointed. He'd made a little folder. With a ribbon.",
@@ -980,7 +973,7 @@
     "right": {
      "label": "Yes, give it back",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": 5
      },
      "reaction": "Randy handed it over. Slowly. He'd named it Clive. He cried.",
@@ -1014,8 +1007,9 @@
     "right": {
      "label": "Yes, visit the cone",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "press": 5,
+      "business": -5
      },
      "reaction": "You stood beside it for a photo. It's taller than it looks. You both looked very dignified."
     },
@@ -1077,7 +1071,6 @@
     "right": {
      "label": "Yes, let them race",
      "effects": {
-      "press": 10,
       "law": -5
      },
      "reaction": "Bev won. She lapped the car. She stopped for a scone halfway.",
@@ -1091,7 +1084,7 @@
     "left": {
      "label": "No. Impound the scooter.",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -10
      },
      "reaction": "She's walking now. She walks faster than the scooter. It's worse.",
@@ -1152,7 +1145,7 @@
      "label": "Yes, host the Grand Prix",
      "effects": {
       "treasury": 10,
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "Bev came first, second and sixth. She's banned from podiums now.",
@@ -1189,8 +1182,8 @@
     "right": {
      "label": "Yes, flames",
      "effects": {
-      "treasury": -10,
-      "people": 10
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "She looks magnificent. I look magnificent. I've never felt so fast.",
      "then": [
@@ -1226,8 +1219,9 @@
     "right": {
      "label": "Yes. Go, Bev.",
      "effects": {
-      "people": 10,
-      "press": 10
+      "people": 5,
+      "press": 5,
+      "law": -5
      },
      "reaction": "She's gone. She took the scooter. And Doug. He was still attached.",
      "set": [
@@ -1260,8 +1254,8 @@
     "right": {
      "label": "Yes, pay it",
      "effects": {
-      "treasury": -10,
-      "people": 10
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "Thank you, dear. I'll make it up to you. I'll win it back. I know a horse."
     },
@@ -1285,7 +1279,7 @@
     "right": {
      "label": "Yes, fill him in",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "business": 5,
       "people": -10
      },
@@ -1381,8 +1375,8 @@
     "left": {
      "label": "No. Kevin's car now.",
      "effects": {
-      "people": 10,
-      "business": -10
+      "people": 5,
+      "business": -5
      },
      "reaction": "Kevin has a car. Kevin can't drive. Kevin has never looked happier.",
      "then": [
@@ -1404,7 +1398,7 @@
     "right": {
      "label": "Yes. The Kevin anthem.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "press": 5,
       "business": -5
      },
@@ -1457,7 +1451,8 @@
      "label": "Denied. Kevin serves.",
      "effects": {
       "law": 10,
-      "press": 5
+      "press": 5,
+      "treasury": -5
      },
      "reaction": "The court sat round him. In the road. He found the defendant not guilty by silence.",
      "then": [
@@ -1543,8 +1538,8 @@
     "right": {
      "label": "Yes, more bread",
      "effects": {
-      "treasury": -10,
-      "people": 10
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "Gerald delivered it. Gerald ate half of it. Gerald wants paying for all of it.",
      "then": [
@@ -1580,7 +1575,7 @@
     "right": {
      "label": "Yes, stop Bev",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -10
      },
      "reaction": "She got a 9.5 for the dismount. The crowd booed you. With bread in their mouths.",
@@ -1594,7 +1589,7 @@
     "left": {
      "label": "No, let her ski",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -10
      },
      "reaction": "She did a jump over Kevin. Kevin's full of soup. Kevin's a tureen now.",
@@ -1680,7 +1675,7 @@
     "right": {
      "label": "Yes. Receptacles.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "treasury": -5
      },
      "reaction": "The lids are open. One of them winked. I may have imagined that. I did not imagine that.",
@@ -1717,7 +1712,7 @@
     "right": {
      "label": "Yes, clear it",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "people": -5
      },
      "reaction": "Cleared. The children are in mourning. One of them had named it.",
@@ -1731,7 +1726,7 @@
     "left": {
      "label": "No, leave the hill",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -10
      },
      "reaction": "It's on the brochure. 'Mount Rubbish.' There's a café at the top. It's Sal's.",
@@ -1817,7 +1812,7 @@
     "right": {
      "label": "Yes, curfew",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -10
      },
      "reaction": "Everyone's home by nine. Bev was home by 8:59 and forty seconds. From the next county.",
@@ -1868,8 +1863,8 @@
     "left": {
      "label": "No, let them be nice",
      "effects": {
-      "people": 10,
-      "business": -10
+      "people": 5,
+      "business": -5
      },
      "reaction": "Nothing has been bought or sold in two days. Everyone's insisting the other person has it.",
      "then": [
@@ -1916,7 +1911,7 @@
     "right": {
      "label": "Yes. Emergency.",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "law": 5
      },
      "reaction": "The cleaners are on their way. They've already sneezed. It's in the van.",
@@ -2005,7 +2000,7 @@
     "left": {
      "label": "No, filter it",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "people": 5
      },
      "reaction": "Filtered. The filter's the most beautiful thing in town. People visit it.",
@@ -2067,7 +2062,7 @@
     "left": {
      "label": "No, let it work",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "It's holding surgeries. The waiting list is two weeks. Yours was two people. One was Randy.",
@@ -2205,7 +2200,6 @@
     "left": {
      "label": "No, it's educational",
      "effects": {
-      "press": 10,
       "people": -10
      },
      "reaction": "It's won first prize. Timmy came second with a potato. Timmy is plotting something.",
@@ -2243,7 +2237,7 @@
     "left": {
      "label": "No, put it out",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "law": 5
      },
      "reaction": "Nora put it out with the soup machine. The gym is a bowl now.",
@@ -2311,7 +2305,7 @@
     "left": {
      "label": "No, it's free",
      "effects": {
-      "people": 10,
+      "people": 5,
       "treasury": -5
      },
      "reaction": "Elm Street is tropical. Bev has a palm tree. She's put a hammock on the scooter."
@@ -2357,7 +2351,7 @@
     "right": {
      "label": "Yes, sign it",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -5
      },
      "reaction": "Bev has been arrested. She says she was 'reversing'.",
@@ -2387,7 +2381,7 @@
      "label": "Yes, sign it",
      "effects": {
       "treasury": 10,
-      "business": -10
+      "business": -5
      },
      "reaction": "Everyone's slouching. Chad walks on his knees now. Revenue is strong.",
      "set": [
@@ -2415,8 +2409,8 @@
     "right": {
      "label": "Yes, ban Mondays",
      "effects": {
-      "people": 10,
-      "business": -10
+      "people": 5,
+      "business": -5
      },
      "reaction": "The week starts on Tuesday now. Tuesday is furious. It's the new Monday.",
      "set": [
@@ -2444,7 +2438,7 @@
     "right": {
      "label": "Yes, sign it",
      "effects": {
-      "people": 10,
+      "people": 5,
       "business": -5
      },
      "reaction": "Kevin is the town animal. He's on the crest. The crest is mostly hole now.",
@@ -2503,7 +2497,7 @@
     "right": {
      "label": "Yes, settle",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "law": 5
      },
      "reaction": "My client accepts. In tuna. Unopened. His paws are delicate.",
@@ -2539,7 +2533,7 @@
     "right": {
      "label": "Yes, hire the cat",
      "effects": {
-      "law": 10,
+      "law": 5,
       "treasury": -5
      },
      "reaction": "He billed us for a four-hour nap. 'Research.' He was very thorough."
@@ -2619,7 +2613,7 @@
     "right": {
      "label": "Yes. Laminate it.",
      "effects": {
-      "law": 10,
+      "law": 5,
       "treasury": -5
      },
      "reaction": "He ate the laminate. He says it was 'crunchy but fair'. He accepts the verdict."
@@ -2645,7 +2639,8 @@
      "label": "Yes, search it",
      "effects": {
       "law": 10,
-      "press": 5
+      "press": 5,
+      "business": -5
      },
      "reaction": "Barb's putting gloves on. The coat has started humming. Casually. Like a coat would.",
      "then": [
@@ -2674,7 +2669,7 @@
     "right": {
      "label": "Yes, charge him",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -5
      },
      "reaction": "He's hired Mr Whiskers. Mr Whiskers was also in the coat."
@@ -2743,7 +2738,7 @@
     "left": {
      "label": "No. Hands off Doug.",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "law": 5
      },
      "reaction": "Mr Nutkins has docked Doug's pay. In acorns. Doug didn't know he was paid in acorns."
@@ -2822,8 +2817,8 @@
     "right": {
      "label": "Yes, fund the pigeons",
      "effects": {
-      "treasury": -10,
-      "people": 10
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "Bread for everyone. Mostly crumbs. Gerald calls it 'a start'."
     },
@@ -2872,8 +2867,9 @@
     "right": {
      "label": "Yes, let it",
      "effects": {
-      "press": 10,
-      "people": 5
+      "press": 5,
+      "people": 5,
+      "business": -5
      },
      "reaction": "'Chips. Later, chips.' Accurate, actually.",
      "then": [
@@ -2908,7 +2904,6 @@
     "right": {
      "label": "Yes. Sorry, Steve.",
      "effects": {
-      "press": 10,
       "people": -5
      },
      "reaction": "Steve is its assistant. He holds the chips. He's 'thrilled', he says, through his teeth."
@@ -2969,7 +2964,7 @@
     "right": {
      "label": "Yes, comfort it",
      "effects": {
-      "people": 10,
+      "people": 5,
       "business": -5
      },
      "reaction": "It hugged Doug. Doug hugged it. They share a desk now. And a tissue box."
@@ -3080,7 +3075,7 @@
     "right": {
      "label": "Yes, turn it back",
      "effects": {
-      "law": 10,
+      "law": 5,
       "treasury": -5
      },
      "reaction": "It's a station again. It still ribbits when you shut the door."
@@ -3088,7 +3083,7 @@
     "left": {
      "label": "No, keep the frog",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "Crime is down. Nobody wants to be put in the frog."
@@ -3105,7 +3100,7 @@
     "right": {
      "label": "Yes, a seat",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "It sits quietly. Smells strongly. Votes sensibly.",
@@ -3190,7 +3185,7 @@
     "right": {
      "label": "Yes, recognise it",
      "effects": {
-      "press": 10,
+      "press": 5,
       "law": -10
      },
      "reaction": "They've declared independence. Seat 14 is the capital. Randy's claimed asylum on the back seat.",
@@ -3204,7 +3199,7 @@
     "left": {
      "label": "No. Add a stop.",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "people": 5
      },
      "reaction": "They got off. Some got back on. They miss it.",
@@ -3276,7 +3271,6 @@
     "right": {
      "label": "Yes, plant it",
      "effects": {
-      "press": 10,
       "treasury": -5
      },
      "reaction": "It's ours. Don't look at it without a permit. Randy's selling permits. They're beer mats.",
@@ -3321,7 +3315,8 @@
      "label": "No. See it in court.",
      "effects": {
       "law": 5,
-      "press": 10
+      "press": 5,
+      "people": -5
      },
      "reaction": "The moon didn't show. It was daytime. Adjourned until dusk."
     }
@@ -3363,7 +3358,7 @@
      "label": "Yes, a party",
      "effects": {
       "treasury": -5,
-      "people": 10
+      "people": 5
      },
      "reaction": "They loved it. They cried at the bunting. They've never had bunting. They've asked to be adopted.",
      "then": [
@@ -3376,8 +3371,9 @@
     "left": {
      "label": "No. Show them Kevin.",
      "effects": {
-      "press": 10,
-      "treasury": 5
+      "press": 5,
+      "treasury": 5,
+      "business": -5
      },
      "reaction": "Their mayor stared into Kevin for an hour. Then he wept. 'It's bigger than ours,' he said.",
      "then": [
@@ -3398,8 +3394,8 @@
     "right": {
      "label": "Yes, they can stay",
      "effects": {
-      "treasury": -10,
-      "people": 10
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "They cried. They'd never seen a second traffic light before."
     },
@@ -3423,8 +3419,8 @@
     "right": {
      "label": "Yes, send Kevin",
      "effects": {
-      "press": 10,
-      "people": 5
+      "people": 5,
+      "business": -5
      },
      "reaction": "Kevin got a standing ovation. He can't stand. That made it more moving."
     },
@@ -3492,7 +3488,7 @@
     "left": {
      "label": "No. The tyre earned it.",
      "effects": {
-      "press": 10,
+      "press": 5,
       "business": -5
      },
      "reaction": "The tyre won. Its speech was one slow leak. Not a dry eye in the house."
@@ -3579,7 +3575,7 @@
      "label": "No. He stays.",
      "effects": {
       "law": 5,
-      "press": 5
+      "business": -5
      },
      "reaction": "I mimed a judge. He mimed a lawyer. It's been hours. We're both enjoying it."
     }
@@ -3595,8 +3591,9 @@
     "right": {
      "label": "Yes. Here's a key.",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "press": 5,
+      "law": -5
      },
      "reaction": "You mimed it perfectly. Marcel wept. Silently, obviously."
     },
@@ -3682,8 +3679,8 @@
     "right": {
      "label": "Yes, subscribe",
      "effects": {
-      "press": 5,
-      "business": 5
+      "business": 5,
+      "people": -5
      },
      "reaction": "You're his only subscriber. He sent a welcome hamper. It's an invoice."
     },
@@ -3743,7 +3740,7 @@
     "right": {
      "label": "Yes, take lessons",
      "effects": {
-      "people": 10,
+      "people": 5,
       "press": -5
      },
      "reaction": "You stood in a field all day saying nothing. Approval went up four points."
@@ -3837,7 +3834,7 @@
     "left": {
      "label": "No. Sit.",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -5
      },
      "reaction": "He sat. He's sitting on the evidence. All of it. He's not moving."
@@ -3854,7 +3851,6 @@
     "right": {
      "label": "Yes, commission it",
      "effects": {
-      "press": 10,
       "business": -5
      },
      "reaction": "'Gerald's Kitchen' is a smash. Episode two: 'Your Sandwich.' Watch your sandwich.",
@@ -3898,8 +3894,8 @@
     "left": {
      "label": "No. Renew it.",
      "effects": {
-      "press": 10,
-      "business": -10
+      "press": 5,
+      "business": -5
      },
      "reaction": "Season two: 'Your Cake.' The bakeries have boarded their windows."
     }
@@ -3916,7 +3912,7 @@
      "label": "Yes, fund the art",
      "effects": {
       "treasury": -5,
-      "people": 10
+      "people": 5
      },
      "reaction": "It's beautiful. The scone has a tiny skull on it too. Detail.",
      "then": [
@@ -3960,7 +3956,8 @@
      "label": "No. Art is art.",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "business": -5
      },
      "reaction": "Then it's war. We're arm-wrestling Thursday. Tickets are a fiver. It's sold out."
     }
@@ -3991,7 +3988,7 @@
     "left": {
      "label": "No. It's Wednesday.",
      "effects": {
-      "business": -10,
+      "business": -5,
       "people": 5
      },
      "reaction": "Then I'll buy Thursday. Thursday's cheaper. Nobody likes Thursday."
@@ -4016,8 +4013,8 @@
     "left": {
      "label": "No. Stop it, Chad.",
      "effects": {
-      "people": 10,
-      "business": -10
+      "people": 5,
+      "business": -5
      },
      "reaction": "He's sulking. He's renamed his yacht 'Wednesday'. It was already called that."
     }
@@ -4047,7 +4044,7 @@
     "left": {
      "label": "No. Undo it.",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "law": 5
      },
      "reaction": "Undone. One Doug left. He's not sure which one. Neither are we."
@@ -4063,8 +4060,8 @@
     "right": {
      "label": "Yes, two salaries",
      "effects": {
-      "treasury": -10,
-      "people": 10
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "The Dougs are thrilled. They've high-fived. They missed. They're trying again."
     },
@@ -4103,7 +4100,7 @@
     "left": {
      "label": "No statues",
      "effects": {
-      "business": -10,
+      "business": -5,
       "people": 5
      },
      "reaction": "Then I'll put it just outside town. Facing in. Winking."
@@ -4159,7 +4156,8 @@
      "label": "No. The fine stands.",
      "effects": {
       "treasury": 10,
-      "press": 5
+      "press": 5,
+      "people": -5
      },
      "reaction": "It paid in very old coins. One of them is haunted. Doug is crying again."
     }
@@ -4182,7 +4180,7 @@
     "left": {
      "label": "No. Amnesty.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "treasury": -5
      },
      "reaction": "The ghosts are so grateful they've joined the book club. They never like the ending."
@@ -4199,8 +4197,8 @@
     "right": {
      "label": "Yes. Mayor Timmy.",
      "effects": {
-      "people": 10,
-      "business": -10,
+      "people": 5,
+      "business": -5,
       "law": -5
      },
      "reaction": "Everyone has a dog. Tuesday's cancelled. Nobody knows what day it is.",
@@ -4254,8 +4252,9 @@
     "right": {
      "label": "Yes, unveil it",
      "effects": {
-      "press": 10,
-      "people": 5
+      "press": 5,
+      "people": 5,
+      "business": -5
      },
      "reaction": "It was unveiled. Then eaten. By raccoons. A short tribute.",
      "then": [
@@ -4290,8 +4289,8 @@
     "right": {
      "label": "Yes, fund the statue",
      "effects": {
-      "treasury": -10,
-      "people": 10
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "It's forty feet of bin bag. It rustles in the wind. Tourists salute it. So do flies."
     },
@@ -4315,8 +4314,8 @@
     "right": {
      "label": "Yes, light it",
      "effects": {
-      "treasury": -10,
-      "people": 10
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "Bev won the 100 metres. Randy won the bins. The queue is still going.",
      "then": [
@@ -4351,14 +4350,14 @@
      "label": "Yes, play the hiss",
      "effects": {
       "people": 5,
-      "press": 5
+      "law": -5
      },
      "reaction": "Everyone stood. Some wept. It was, honestly, quite moving."
     },
     "left": {
      "label": "No. Disqualify Randy.",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -5
      },
      "reaction": "He's appealing. To Mr Whiskers. That's going to go badly for you."
@@ -4376,15 +4375,14 @@
      "label": "Yes. One biscuit.",
      "effects": {
       "treasury": -5,
-      "people": 10
+      "people": 5
      },
      "reaction": "You put a biscuit at the front. One biscuit. The queue is THRILLED."
     },
     "left": {
      "label": "No. Cut in line.",
      "effects": {
-      "people": -10,
-      "press": 10
+      "people": -10
      },
      "reaction": "'MAYOR JUMPS QUEUE.' Front page. With a diagram."
     }
@@ -4414,8 +4412,8 @@
     "left": {
      "label": "No. It lives there now.",
      "effects": {
-      "people": 10,
-      "business": -10
+      "people": 5,
+      "business": -5
      },
      "reaction": "Tourists love the fountain yacht. Chad is furious. Gerald's the captain."
     }
@@ -4469,7 +4467,6 @@
     "left": {
      "label": "No. Lean into it.",
      "effects": {
-      "press": 10,
       "people": 5,
       "law": -5
      },
@@ -4517,8 +4514,9 @@
     "right": {
      "label": "Yes, I'll attend",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "press": 5,
+      "business": -5
      },
      "reaction": "You stood in a pond for two hours. You've been elected Secretary. Your trousers are ruined."
     },
@@ -4875,7 +4873,7 @@
     "right": {
      "label": "Snatched it",
      "effects": {
-      "law": 10
+      "law": 5
      },
      "reaction": "Boss! I was... dusting it. With my mouth."
     },
@@ -4909,7 +4907,6 @@
     "left": {
      "label": "Flash!",
      "effects": {
-      "press": 10,
       "people": -10
      },
      "reaction": "'MAYOR'S SHOPPING LIST: TWELVE CHEESES.' Lovely."
@@ -4936,7 +4933,7 @@
     "left": {
      "label": "Ticketed",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "law": 5
      },
      "reaction": "That's a fine. And a fine for the fine."
@@ -4955,7 +4952,7 @@
     "right": {
      "label": "Wiped clean",
      "effects": {
-      "press": 5
+      "people": -5
      },
      "reaction": "Noooo. It was a good moustache."
     },
@@ -5019,7 +5016,7 @@
     "right": {
      "label": "Yes. MEH is law.",
      "effects": {
-      "press": 10,
+      "press": 5,
       "law": -5
      },
      "reaction": "Nobody knows what MEH requires. Everyone's doing it anyway. Crime's down. Confusion's up.",
@@ -5047,7 +5044,7 @@
     "right": {
      "label": "Yes. Madam Chair.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "business": -5
      },
      "reaction": "Shortest meeting ever. She ate the minutes. Everyone went home happy.",
@@ -5075,7 +5072,7 @@
     "right": {
      "label": "Yes. Vote goat.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "Randy's smear campaign is one poster. It just says 'GOAT'. It's working on nobody."
@@ -5163,7 +5160,7 @@
     "right": {
      "label": "Yes. Gently squeeze.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "Out came 4,000 letters, two parcels and a trombone. Bev got her card. She cried.",
@@ -5175,7 +5172,7 @@
      "label": "No. Undignified.",
      "effects": {
       "people": -10,
-      "press": 10
+      "press": 5
      },
      "reaction": "Today's Bugle: 'MAYOR REFUSES TO SQUEEZE'. Best-selling issue ever.",
      "next": [
@@ -5257,7 +5254,7 @@
     "right": {
      "label": "Yes. Halloween off.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "business": -5
      },
      "reaction": "A very quiet Halloween. Timmy knocked on every door. Nobody spooky answered. He wants a refund.",
@@ -5338,8 +5335,8 @@
     "right": {
      "label": "Yes. Build a pool.",
      "effects": {
-      "people": 10,
-      "treasury": -10
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "Building it. Carl's guarding the hole. He's whistled at four diggers. They respect him.",
      "then": [
@@ -5376,8 +5373,8 @@
     "right": {
      "label": "Yes. Grand opening.",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "law": -5
      },
      "reaction": "One swimmer at a time. The queue goes round the block. Carl has never been happier."
     },
@@ -5426,7 +5423,7 @@
     "right": {
      "label": "Yes. Party in Kevin.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "Thirty people in a pothole. Cake. Balloons. A small band. Kevin has never looked deeper."
@@ -5575,7 +5572,7 @@
      "label": "Yes. Night school.",
      "effects": {
       "people": -10,
-      "press": 10
+      "press": 5
      },
      "reaction": "The children are asleep at their desks. Hoot is wide awake. He has never been happier.",
      "then": [
@@ -5637,7 +5634,7 @@
     "right": {
      "label": "Yes. Bless them.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "treasury": -5
      },
      "reaction": "A lovely service. The lamp wore a veil. Trevor wept. Gerald gave a speech. It was mostly honking.",
@@ -5763,7 +5760,7 @@
     "right": {
      "label": "Yes. Best bird wins.",
      "effects": {
-      "people": 10,
+      "people": 5,
       "law": -5
      },
      "reaction": "Gerald is stunned. He honked 'thank you'. Then he bit the returning officer.",
@@ -5801,8 +5798,8 @@
     "right": {
      "label": "Yes. Ponds for all.",
      "effects": {
-      "people": 10,
-      "treasury": -10
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "Four hundred home ponds ordered. Doug is lying under his desk. Gerald says you stole his idea.",
      "then": [
@@ -5875,8 +5872,9 @@
     "right": {
      "label": "Yes. Honk.",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "press": 5,
+      "law": -5
      },
      "reaction": "You honked. The crowd went wild. Gerald looked at you with something close to respect.",
      "then": [
@@ -5914,7 +5912,6 @@
     "left": {
      "label": "No. No deals.",
      "effects": {
-      "press": 5,
       "people": -5
      },
      "reaction": "He's walked off. He's honking at the ballot box. Out of habit. Or as a threat."
@@ -5995,8 +5992,8 @@
     "right": {
      "label": "Yes. Feed them.",
      "effects": {
-      "people": 10,
-      "treasury": -10
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "The bakery is open all night. Sal's selling bread tyres. Please don't ask."
     },
@@ -6045,15 +6042,15 @@
     "right": {
      "label": "Snip!",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "business": -5
      },
      "reaction": "A clean cut. The crowd cheered. Gerald gave the speech anyway. It was a honk."
     },
     "left": {
      "label": "Gerald got there",
      "effects": {
-      "press": 10,
+      "press": 5,
       "people": -5
      },
      "reaction": "He cut it with his face. Four attempts. Front page. He looks great."
@@ -6073,14 +6070,14 @@
      "label": "Snip!",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "law": -5
      },
      "reaction": "Opened. Randy cried. Then climbed in. 'It's beautiful, boss.'"
     },
     "left": {
      "label": "Gerald got there",
      "effects": {
-      "press": 5,
       "people": -5
      },
      "reaction": "Gerald cut it with his face. Then claimed the bin. Randy is furious."
@@ -6126,8 +6123,8 @@
     "right": {
      "label": "Snip!",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "Plaque unveiled. 'KEVIN. A HOLE. A LEGEND.' Somebody's put flowers in him."
     },
@@ -6216,7 +6213,7 @@
     "right": {
      "label": "Yes. Get endorsed too.",
      "effects": {
-      "press": 10,
+      "press": 5,
       "treasury": -5
      },
      "reaction": "You got the bench. A bench is not a bus stop. The Bugle noticed.",
@@ -6227,8 +6224,7 @@
     "left": {
      "label": "No. Ignore it.",
      "effects": {
-      "people": -5,
-      "press": 5
+      "people": -5
      },
      "reaction": "Two lamp posts and a postbox have also come out for Clive. The street furniture is organising.",
      "next": [
@@ -6278,7 +6274,6 @@
     "right": {
      "label": "Yes. Get a stripe.",
      "effects": {
-      "press": 10,
       "people": -5
      },
      "reaction": "You wore high-vis to work. Cars kept stopping for you.",
@@ -6309,7 +6304,7 @@
     "right": {
      "label": "Yes. Lend to the cone.",
      "effects": {
-      "treasury": -10,
+      "treasury": -5,
       "business": 10
      },
      "reaction": "He spent it all on cones. He's an army now. A very still army.",
@@ -6382,8 +6377,8 @@
     "left": {
      "label": "No. Help him up.",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "You took the bin bag off. Clive leaned towards you. Slightly. Gratitude?",
      "next": [
@@ -6431,7 +6426,8 @@
      "label": "Yes. Thank the cone.",
      "effects": {
       "people": 5,
-      "press": 5
+      "press": 5,
+      "law": -5
      },
      "reaction": "You shook his hand. He hasn't got a hand. You shook the top. Front page.",
      "next": [
@@ -6492,8 +6488,8 @@
     "right": {
      "label": "Yes. Thank you, Clive.",
      "effects": {
-      "people": 10,
-      "press": 5
+      "people": 5,
+      "business": -5
      },
      "reaction": "It's on your desk. It's the most supportive thing in City Hall."
     },
@@ -6525,7 +6521,7 @@
     "left": {
      "label": "No. One mayor.",
      "effects": {
-      "law": 10,
+      "law": 5,
       "people": -5
      },
      "reaction": "They stood there all night. By morning they'd gone. All but one. Clive. Waiting."
@@ -6551,7 +6547,7 @@
      "label": "No. I'll read it.",
      "effects": {
       "law": 5,
-      "press": 5
+      "people": -5
      },
      "reaction": "It was the deed to Bad Town. Made out to Randy. He says it was 'a draft'."
     }
@@ -6620,7 +6616,7 @@
     "right": {
      "label": "Yes. Off the record...",
      "effects": {
-      "press": 5
+      "people": -5
      },
      "reaction": "You leaned in and said what you really think of Gerald.",
      "ending": "trap:off_record"
@@ -6629,7 +6625,8 @@
      "label": "No. On the record only.",
      "effects": {
       "press": 5,
-      "law": 5
+      "law": 5,
+      "people": -5
      },
      "reaction": "A dull interview. Marge is disappointed. Your career is intact."
     }
@@ -6817,6 +6814,22 @@
   "trap:cone_bus": {
    "title": "Run Over by Democracy",
    "text": "The bus swerved round Clive and through your office. Clive didn't move. The town said he looked 'very mayoral'. He was elected by lunch."
+  },
+  "outw:people": {
+   "title": "Replaced by Gerald's Cousin",
+   "text": "The people elected a goose called Brian. Nobody knows where he came from. He honks at every meeting. Approval is 94%."
+  },
+  "outw:business": {
+   "title": "Sold for Bread",
+   "text": "Chad tried to buy the election. Gerald outbid him in bread. You were sold, in a bag, to the geese. They use you as a nest."
+  },
+  "outw:law": {
+   "title": "Arrested for Honking",
+   "text": "Barb found you guilty of honking in a built-up area. You didn't honk. Gerald honked near you. That's enough in this town."
+  },
+  "outw:press": {
+   "title": "GOOSE WOULD BE BETTER",
+   "text": "The Bugle ran one headline all week: GOOSE WOULD BE BETTER. The town agreed. It was a big goose. It was better."
   }
  },
  "headlines": {
@@ -6876,6 +6889,6 @@
   "Tomorrow: your opponent agrees to a debate. Sort of.",
   "Tomorrow: Bev has had the scooter looked at.",
   "Tomorrow: a pothole gets a jury summons.",
-  "Tomorrow: Sunday. Ten thousand geese are in the air."
+  "Tomorrow, the last day: ten thousand geese are in the air."
  ]
 }

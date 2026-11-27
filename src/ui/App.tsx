@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { PACKS, SIMULATED_CROWD, packFor } from '../content/index.ts';
+import { PACKS, SIMULATED_CROWD, packFor, packForWeek, weekIdFor } from '../content/index.ts';
 import { COMMON_ENDINGS, OUT_ORDER, RECALL_ORDER } from '../content/endings.ts';
+import { RANDY_SAYS } from '../content/randy.ts';
 import { voteParts } from '../engine/election.ts';
-import { canDefer, coverMissedDays, findCard, newTerm, reduce } from '../engine/engine.ts';
+import { canDefer, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
-import { MAX_CARD, cardPoints, dayScore, gradeOf, tierOf } from '../engine/score.ts';
+import { dayScore, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
@@ -15,7 +16,7 @@ import type { Save } from './platform.ts';
 
 /** Preview crowd data: simulated until real players exist; always labelled as such. */
 /** This week's pack and crowd shares. Set when the game boots for a week (see bootUnsafe). */
-let pack = packFor(calendar(0).weekId);
+let pack = packForWeek(0);
 /** Real shares (from the stats service) where enough mayors have played a card, simulated ones otherwise. */
 let live: Crowd = {};
 let crowd: Crowd = { ...SIMULATED_CROWD[pack.id] };
@@ -36,10 +37,11 @@ function boot(save: Save): State {
   try { return bootUnsafe(save); } catch { return bootUnsafe({ ...save, state: null }); }
 }
 function bootUnsafe(save: Save): State {
-  const cal = calendar(save.dayOffset);
-  useWeek(cal.weekId);
-  const kept = save.state && save.state.v === 12 && save.state.weekId === cal.weekId && save.state.day <= cal.today ? save.state : null;
-  return coverMissedDays(kept ?? newTerm(cal.weekId, save.playerSeed, pack), pack, cal.today);
+  // your own week: kept as long as it lasts; no calendar weeks, nobody plays days for you
+  const kept = save.state && save.state.v === 12 && save.state.weekId.includes('#') ? save.state : null;
+  const weekId = kept?.weekId ?? weekIdFor(save.weeksDone);
+  useWeek(weekId);
+  return kept ?? newTerm(weekId, save.playerSeed, pack);
 }
 
 
@@ -57,8 +59,9 @@ function Meters({ s, preview }: { s: State; preview: Choice | null }) {
         const hint = preview?.effects[m];
         return (
           <div key={m} class={`meter ${danger ? 'danger' : ''}`} style={{ '--g': METER_COLOR[m] }} role="meter" aria-label={`${METER_NAME[m]} ${v} of 100`} aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
-            <MeterIcon m={m} />
+            <span class="m-top"><MeterIcon m={m} /><b class="m-val">{v}</b></span>
             <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /><CalmZone m={m} /></span>
+            <span class="m-name">{METER_NAME[m]}</span>
             {hint ? <i class={`hintdot ${Math.abs(hint) >= 10 ? 'big' : ''}`} aria-label="will change" /> : null}
           </div>
         );
@@ -107,8 +110,6 @@ function SlideBar({ m, from, to }: { m: MeterId; from: number; to: number }) {
 function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
   const ch = r.card.options[r.dir]!;
   const ms = METERS.filter((m) => r.after[m] !== r.before[m]).sort((a, b) => Math.abs(r.after[b] - r.before[b]) - Math.abs(r.after[a] - r.before[a]));
-  const pts = cardPoints(r.after);
-  const grade = gradeOf(pts);
   const net = ms.reduce((n, m) => n + r.after[m] - r.before[m], 0);
   const [bars, setBars] = useState(reduced());
   useEffect(() => { const t = setTimeout(() => { setBars(true); sfx(ms.length === 0 ? 'tap' : net >= 0 ? 'win' : 'warn'); }, 380); return () => clearTimeout(t); }, []);
@@ -139,9 +140,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
             );
           })}
         </div>
-        <div class={`result-score g-${grade.id}`}>
-          {r.recalled ? <b class="rv-recalled">AN ENDING IS COMING…</b> : <><span class="pts">+{pts}<small>/{MAX_CARD}</small></span><span class="grade">{grade.name}</span><span class="why">{pts >= 9 ? 'Everyone is calm.' : pts >= 7 ? 'Mostly calm.' : pts >= 5 ? 'Somebody is getting twitchy.' : 'The town is on edge.'}</span></>}
-        </div>
+        {r.recalled && <b class="rv-recalled">AN ENDING IS COMING…</b>}
         {r.goals?.map((g) => <p key={g} class="goal-met"><b>★ Goal met</b> {g} <small>+{TUNING.vote.objective}% at every election this week</small></p>)}
         {r.pct !== undefined && !r.recalled && <p class="result-crowd"><b>{r.pct}%</b> of mayors did the same{isPreview(r.card.id) && <span class="tag">estimate</span>}</p>}
       </div>
@@ -276,6 +275,27 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
   );
 }
 
+/** Tap the points: what they are, how you earn them, and what they mean for tonight's vote. */
+function PointsHelp({ s }: { s: State }) {
+  const sc = dayScore(s, s.day);
+  const vote = Math.round(TUNING.vote.base + TUNING.vote.perPoint * sc.total + TUNING.vote.objective * s.objectivesDone.length);
+  const need = Math.max(0, Math.ceil((TUNING.vote.pass - TUNING.vote.base - TUNING.vote.objective * s.objectivesDone.length) / TUNING.vote.perPoint));
+  return (
+    <div class="points-help">
+      <h2 class="display">How points work</h2>
+      <p class="ph-now">Today so far: <b>{sc.total} pts</b>. If the polls closed now you'd get about <b>{Math.min(TUNING.vote.max, Math.max(TUNING.vote.min, vote))}%</b>. You need {TUNING.vote.pass}%, so roughly <b>{need} pts</b> by tonight.</p>
+      <ul>
+        <li><b>After every card</b>, each group scores: <b>2</b> if it's calm (inside the striped box on its bar, 45 to 55), <b>1</b> if uneasy (35 to 65), <b>0</b> if it's too unhappy or too happy. The Treasury only loses points when it runs low.</li>
+        <li><b>Up to 10 a card</b>, so up to 200 a day.</li>
+        <li><b>+{TUNING.score.steadyFinish}</b> if you finish all 20 cards with nobody in danger.</li>
+        <li><b>−{TUNING.score.recall}</b> if the day ends early (a recall, a disaster, a plot twist).</li>
+        <li><b>Tonight's vote</b> = {TUNING.vote.base}% + a fifth of your points + {TUNING.vote.objective}% for each weekly goal met (★). 50% keeps the job.</li>
+      </ul>
+      <p class="ph-tip">Too happy is as bad as too angry. Keep everyone in the middle.</p>
+    </div>
+  );
+}
+
 /** This week's goals (shown up front, like a to-do list). Each one met adds to every night's vote. */
 function Goals({ s }: { s: State }) {
   return (
@@ -286,7 +306,7 @@ function Goals({ s }: { s: State }) {
 }
 
 /** Night falls: the vote, the score that drove it, the streak, and a hook for tomorrow. */
-function DayReview({ s, streak, fresh, have, onNext, nextLabel, wait, sub }: { s: State; streak: number; fresh: string[]; have: number; onNext: () => void; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
+function DayReview({ s, streak, fresh, have, onNext, onSkip, nextLabel, wait, sub }: { s: State; streak: number; fresh: string[]; have: number; onNext: () => void; onSkip: () => void; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
   const sc = dayScore(s, s.day);
   const tier = tierOf(sc.total);
   const today = s.swipes.filter((w) => w.day === s.day);
@@ -318,13 +338,12 @@ function DayReview({ s, streak, fresh, have, onNext, nextLabel, wait, sub }: { s
       </div>
       <ul class="levels" aria-label="Where everyone ended the day">{rows.map((r) => <li key={r}>{r}</li>)}</ul>
       <Goals s={s} />
-      {s.tomorrow.length > 0 && <p class="carry"><b>Waiting for you tomorrow:</b> {[...new Set(s.tomorrow.map((id) => pack.headlines[findCard(pack, id).story ?? 'town'] ?? 'Unfinished business'))].join(' · ')}</p>}
       {sub}
       <div class="dayend-btns">
         <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); setCopied(true); } catch { /* clipboard blocked */ } sfx('tap'); }}>{copied ? 'Copied' : 'Copy result'}</button>
         {wait ? <button class="btn primary" disabled>{wait}</button> : <button class="btn primary" onClick={onNext} autoFocus>{nextLabel}</button>}
       </div>
-      {wait && PREVIEW && <button class="linkbtn" onClick={onNext}>Testing: skip to the next day</button>}
+      {wait && PREVIEW && <button class="linkbtn" onClick={onSkip}>Testing: skip to the next day</button>}
     </div>
   );
 }
@@ -338,6 +357,10 @@ const TRAP_ORDER = PACKS.flatMap((p) => Object.keys(p.endings).filter((k) => k.s
 const endingText = (k: string) => { const [base, wk] = k.split('/'); const from = PACKS.find((p) => p.id === wk); return (from ?? pack).endings[base!] ?? COMMON_ENDINGS[base!] ?? PACKS.find((p) => p.endings[base!])?.endings[base!] ?? { title: 'An ending', text: '' }; };
 /** Every recall ending, per week. */
 const RECALL_KEYS = PACKS.flatMap((p) => RECALL_ORDER.map((k) => [`${k}/${p.id}`, p.theme.name] as const));
+/** Every voted-out ending: the general ones, then each week's own. */
+const OUT_KEYS = [...OUT_ORDER, ...PACKS.flatMap((p) => Object.keys(p.endings).filter((k) => k.startsWith('outw:')).map((k) => `${k}/${p.id}`))];
+/** Randy's line for an ending ('outw:people/week2' looks up 'outw:people@week2'; recall endings share one per kind). */
+const randySays = (k: string) => { const [b, w] = k.split('/'); return RANDY_SAYS[`${b}@${w}`] ?? RANDY_SAYS[b!]; };
 const mine = (s: State, i: number) => !s.daveDays.includes(i + 1);
 interface Deed { id: string; name: string; how: string; test: (s: State, save: Save) => boolean }
 const DEEDS: Deed[] = [
@@ -389,9 +412,9 @@ function endingWho(k: string): string {
   const g = rest.split('_')[0]!;
   return g === 'treasury' ? 'doug' : LEADER[g as GroupId] ?? 'randy';
 }
-const KIND: Record<string, string> = { rare: '★ Rare ending', trap: 'Disaster ending', out: 'Voted-out ending', low: 'Recall ending', high: 'Recall ending' };
+const KIND: Record<string, string> = { rare: '★ Rare ending', trap: 'Disaster ending', out: 'Voted-out ending', outw: 'Voted-out ending', low: 'Recall ending', high: 'Recall ending' };
 /** Every collectible ending, in Scrapbook order. */
-const ALL_ENDINGS = (): string[] => [...RARE_ORDER.map(([k]) => k), ...TRAP_ORDER.map(([k]) => k), ...OUT_ORDER, ...RECALL_KEYS.map(([k]) => k)];
+const ALL_ENDINGS = (): string[] => [...RARE_ORDER.map(([k]) => k), ...TRAP_ORDER.map(([k]) => k), ...OUT_KEYS, ...RECALL_KEYS.map(([k]) => k)];
 function EndingCard({ k, isNew }: { k: string; isNew?: boolean }) {
   const e = endingText(k);
   const kind = k.split(':')[0]!;
@@ -399,16 +422,56 @@ function EndingCard({ k, isNew }: { k: string; isNew?: boolean }) {
     <div class={`ending ${kind}`}>{isNew && <span class="newtag">NEW IN YOUR SCRAPBOOK</span>}
       <span class="ending-head"><Portrait who={endingWho(k)} size={44} mood="pleased" /><span><small class="ending-kind">{KIND[kind] ?? 'Ending'}</small><b>{e.title}</b></span></span>
       <span>{e.text}</span>
+      {randySays(k) && <span class="randy-says"><Portrait who="randy" size={28} mood="pleased" /><i>“{randySays(k)}”</i></span>}
     </div>
   );
 }
+/** A five-second show for an ending: who did it, the gag, then the headline. Tap to skip. */
+function EndingShow({ k, onDone }: { k: string; onDone: () => void }) {
+  const e = endingText(k);
+  const base = k.split('/')[0]!;
+  const kind = base.split(':')[0]!;
+  const g = base.split(':')[1]?.split('_')[0] ?? 'people';
+  const culprit = endingWho(k);
+  const gag = kind === 'rare' ? 'rare' : kind === 'trap' ? 'trap' : kind === 'high' ? 'high' : kind === 'low' ? 'low' : 'out';
+  useEffect(() => {
+    sfx('drum');
+    const hit = setTimeout(() => sfx(gag === 'rare' ? 'win' : gag === 'high' ? 'coin' : gag === 'trap' ? 'stamp' : 'honk'), 1500);
+    const head = setTimeout(() => sfx('stamp'), 3700);
+    const end = setTimeout(onDone, 5200);
+    return () => { clearTimeout(hit); clearTimeout(head); clearTimeout(end); };
+  }, []);
+  const crowd = (n: number) => Array.from({ length: n }, (_, i) => <span key={i} class="es-crowd" style={{ '--i': i, '--x': `${(i - (n - 1) / 2) * 52}px` }}><Portrait who={culprit} size={52} mood={gag === 'high' ? 'pleased' : 'annoyed'} /></span>);
+  return (
+    <button class={`ending-show es-${gag}`} onClick={onDone} aria-label={`${e.title}. Tap to continue`}>
+      <span class="es-spot" aria-hidden="true" />
+      <span class="es-stage" aria-hidden="true">
+        {gag === 'rare' && <span class="es-rays" />}
+        <span class="es-mayor"><Portrait who="mayor" size={110} mood={gag === 'high' || gag === 'rare' ? 'pleased' : 'annoyed'} /></span>
+        {(gag === 'trap' || gag === 'rare') && <span class="es-culprit"><Portrait who={culprit} size={110} mood="pleased" /></span>}
+        {gag === 'low' && crowd(5)}
+        {gag === 'high' && <>{crowd(5)}{Array.from({ length: 6 }, (_, i) => <b key={i} class="es-heart" style={{ '--i': i }}>♥</b>)}</>}
+        {gag === 'out' && <>{Array.from({ length: 14 }, (_, i) => <i key={i} class="es-ballot" style={{ '--i': i, '--x': `${((i * 53) % 100) - 50}%` }}>✗</i>)}<b class="es-x">✗</b></>}
+        {gag === 'trap' && <><span class="es-flash" /><b class="es-boom">💥</b></>}
+        {gag === 'rare' && Array.from({ length: 12 }, (_, i) => <i key={i} class="es-star" style={{ '--a': `${i * 30}deg` }}>✦</i>)}
+      </span>
+      <span class="es-head" aria-hidden="true"><small>THE BUGLE · {KIND[kind] ?? 'Ending'}</small><b>{e.title.toUpperCase()}</b></span>
+      <span class="es-skip">Tap to skip</span>
+      <span class="es-who" aria-hidden="true">{gag === 'low' || gag === 'high' ? (g === 'treasury' ? 'The Treasury' : METER_NAME[g as MeterId]) : (NAMES[culprit] ?? culprit).replace(/^Deputy /, '').split(/[,(]/)[0]!.trim()}</span>
+    </button>
+  );
+}
+
 /** The prize for losing: a funny ending, celebrated. */
 function EndingPrize({ k, isNew, have }: { k: string; isNew: boolean; have: number }) {
   const e = endingText(k);
   const [copied, setCopied] = useState(false);
   const total = ALL_ENDINGS().length;
-  useEffect(() => { sfx(isNew ? 'win' : 'paper'); }, []);
-  const share = `I got the ending “${e.title}” in Mayor of Bad Town. ${have} of ${total} collected.`;
+  const [show, setShow] = useState(!reduced());
+  useEffect(() => { if (!show) sfx(isNew ? 'win' : 'paper'); }, [show]);
+  const quip = randySays(k);
+  if (show) return <EndingShow k={k} onDone={() => setShow(false)} />;
+  const share = `I got the ending “${e.title}” in Mayor of Bad Town. ${have} of ${total} collected.${quip ? ` Randy says: “${quip}”` : ''}`;
   return (
     <div class={`prize ${isNew ? 'new' : 'again'}`}>
       {isNew && <span class="confetti" aria-hidden="true">{Array.from({ length: 22 }, (_, i) => <i key={i} style={{ '--a': `${(i * 360) / 22}deg`, '--d': `${60 + ((i * 37) % 60)}px`, '--c': ['var(--gold)', '#C23B3B', '#3B6FB6', '#3F8F5A', '#fff'][i % 5], '--t': `${(i % 4) * 40}ms` }} />)}</span>}
@@ -424,24 +487,34 @@ function Scrapbook({ save, onClose, onRename }: { save: Save; onClose: () => voi
   const c = save.career;
   const have = (k: string) => save.scrapbook.includes(k);
   const count = (ks: readonly string[]) => ks.filter(have).length;
+  const [tab, setTab] = useState<'endings' | 'cast' | 'deeds' | 'record'>('endings');
+  const [kind, setKind] = useState<'rare' | 'trap' | 'out' | 'recall'>('rare');
+  const groups = {
+    rare: { name: 'Rare', keys: RARE_ORDER.map(([k]) => k), hint: (k: string) => `${RARE_ORDER.find(([x]) => x === k)![1]}: follow the long story all the way` },
+    trap: { name: 'Disasters', keys: TRAP_ORDER.map(([k]) => k), hint: (k: string) => `${TRAP_ORDER.find(([x]) => x === k)![1]}: one wrong answer` },
+    out: { name: 'Voted out', keys: OUT_KEYS, hint: (k: string) => { const [b, wk] = k.split('/'); const w = PACKS.find((p) => p.id === wk)?.theme.name; return `${w ? `${w}: lose` : 'Lose'} a night with ${METER_NAME[b!.split(':')[1]!.split('_')[0] as MeterId]} unhappiest`; } },
+    recall: { name: 'Recalled', keys: RECALL_KEYS.map(([k]) => k), hint: (k: string) => { const [base, wk] = k.split('/'); const w = PACKS.find((p) => p.id === wk)?.theme.name ?? ''; return `${w}: ${base === 'low:treasury' ? 'run out of money' : `${base!.startsWith('low') ? 'lose' : 'be far too loved by'} ${METER_NAME[base!.split(':')[1] as MeterId]}`}`; } },
+  } as const;
+  const g = groups[kind];
   return (
     <Sheet label="Scrapbook" onClose={onClose}>
       <h2 class="display">The Mayor's Scrapbook</h2>
       {onRename && <p class="book-who">{who.mayor}, mayor of the {who.folk} <button class="linkbtn" onClick={onRename}>Rename</button></p>}
-      <div class="career"><span><b>{c.wins}</b>nights re-elected</span><span><b>🔥 {save.streak.current}</b>streak now</span><span><b>{save.streak.best}</b>best streak</span><span><b>{c.terms}</b>weeks served</span></div>
-      <p class="book-total"><b>{save.scrapbook.length}</b> of {ALL_ENDINGS().length} endings collected. Every way to lose is a way to win one.</p>
-      <h3 class="subhead">Rare endings <small>{count(RARE_ORDER.map(([k]) => k))} of {RARE_ORDER.length}</small></h3>
-      <div class="endings">{RARE_ORDER.map(([k, week]) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`${week}: follow the long story all the way`} />)}</div>
-      <h3 class="subhead">Disasters <small>{count(TRAP_ORDER.map(([k]) => k))} of {TRAP_ORDER.length}</small></h3>
-      <div class="endings">{TRAP_ORDER.map(([k, week]) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`${week}: one wrong answer`} />)}</div>
-      <h3 class="subhead">Voted out <small>{count(OUT_ORDER)} of {OUT_ORDER.length}</small></h3>
-      <div class="endings">{OUT_ORDER.map((k) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`Lose a night with ${METER_NAME[k.split(':')[1]!.split('_')[0] as MeterId]} unhappiest`} />)}</div>
-      <h3 class="subhead">Recalled <small>{count(RECALL_KEYS.map(([k]) => k))} of {RECALL_KEYS.length}</small></h3>
-      <div class="endings">{RECALL_KEYS.map(([k, week]) => { const base = k.split('/')[0]!; return have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={`${week}: ${base === 'low:treasury' ? 'run out of money' : `${base.startsWith('low') ? 'lose' : 'be far too loved by'} ${METER_NAME[base.split(':')[1] as MeterId]}`}`} />; })}</div>
-      <h3 class="subhead">Oddballs met <small>{ODDBALLS.filter((w) => save.met.includes(w)).length} of {ODDBALLS.length}</small></h3>
-      <div class="cast">{ODDBALLS.map((w) => save.met.includes(w) ? <span key={w} class="cast-member"><Portrait who={w} size={56} mood="pleased" /><small>{(NAMES[w] ?? w).split(/[,(]/)[0]!.trim()}</small></span> : <span key={w} class="cast-member locked"><span class="cast-q">?</span><small>???</small></span>)}</div>
-      <h3 class="subhead">Deeds <small>{save.deeds.length} of {DEEDS.length}</small></h3>
-      <ul class="deeds">{DEEDS.map((d) => <li key={d.id} class={save.deeds.includes(d.id) ? 'done' : ''}><span class="seal">{save.deeds.includes(d.id) ? '★' : '·'}</span><b>{d.name}</b><small>{d.how}</small></li>)}</ul>
+      <div class="tabs" role="tablist">{([['endings', `Endings ${save.scrapbook.length}/${ALL_ENDINGS().length}`], ['cast', 'Oddballs'], ['deeds', 'Deeds'], ['record', 'Record']] as const).map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} class={`tab ${tab === id ? 'on' : ''}`} onClick={() => { setTab(id); sfx('tap'); }}>{label}</button>)}</div>
+      {tab === 'endings' && <>
+        <p class="book-total">Every way to lose is a way to win one.</p>
+        <div class="chips">{(Object.keys(groups) as (keyof typeof groups)[]).map((k) => <button key={k} class={`chip ${kind === k ? 'on' : ''}`} onClick={() => setKind(k)}>{groups[k].name} <small>{count(groups[k].keys)}/{groups[k].keys.length}</small></button>)}</div>
+        <div class="endings">{g.keys.map((k) => have(k) ? <EndingCard key={k} k={k} /> : <Locked key={k} hint={g.hint(k)} />)}</div>
+      </>}
+      {tab === 'cast' && <>
+        <p class="book-total"><b>{ODDBALLS.filter((w) => save.met.includes(w)).length}</b> of {ODDBALLS.length} oddballs met.</p>
+        <div class="cast">{ODDBALLS.map((w) => save.met.includes(w) ? <span key={w} class="cast-member"><Portrait who={w} size={56} mood="pleased" /><small>{(NAMES[w] ?? w).split(/[,(]/)[0]!.trim()}</small></span> : <span key={w} class="cast-member locked"><span class="cast-q">?</span><small>???</small></span>)}</div>
+      </>}
+      {tab === 'deeds' && <>
+        <p class="book-total"><b>{save.deeds.length}</b> of {DEEDS.length} deeds.</p>
+        <ul class="deeds">{DEEDS.map((d) => <li key={d.id} class={save.deeds.includes(d.id) ? 'done' : ''}><span class="seal">{save.deeds.includes(d.id) ? '★' : '·'}</span><b>{d.name}</b><small>{d.how}</small></li>)}</ul>
+      </>}
+      {tab === 'record' && <div class="career"><span><b>{c.wins}</b>nights re-elected</span><span><b>🔥 {save.streak.current}</b>streak now</span><span><b>{save.streak.best}</b>best streak</span><span><b>{c.terms}</b>weeks served</span><span><b>{c.best ? `${c.best}%` : '–'}</b>best night</span><span><b>{save.scrapbook.length}</b>endings</span></div>}
     </Sheet>
   );
 }
@@ -546,7 +619,7 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
   );
 }
 
-// ---------- the week in review (after Sunday night) ----------
+// ---------- the week in review (after the seventh night) ----------
 /** A nickname for the week, from what you actually did. */
 function nickname(s: State): string {
   const nights = s.won.filter(Boolean).length;
@@ -563,7 +636,7 @@ function nickname(s: State): string {
   const top = [...GROUPS].sort((a, b) => avg(b) - avg(a))[0]!;
   return { people: "the People's Champion", business: 'the Sponsored', law: 'the Strict', press: 'the Photogenic' }[top];
 }
-function WeekRecap({ s, streak, fresh, onNewWeek }: { s: State; streak: number; fresh: { endings: string[]; deeds: string[] }; onNewWeek: () => void }) {
+function WeekRecap({ s, streak, fresh, next, onNewWeek, onSkip }: { s: State; streak: number; fresh: { endings: string[]; deeds: string[] }; next: string | null; onNewWeek: () => void; onSkip: () => void }) {
   const nights = s.won.filter(Boolean).length;
   const played = DAY_NAMES.map((d, i) => ({ d, i, vote: s.polls[i], won: !!s.won[i], randy: s.daveDays.includes(i + 1) }));
   const mineDays = played.filter((x) => !x.randy && x.vote !== undefined);
@@ -590,9 +663,9 @@ function WeekRecap({ s, streak, fresh, onNewWeek }: { s: State; streak: number; 
       {fresh.deeds.map((id) => <p key={id} class="bonus"><b>Deed: {DEEDS.find((d) => d.id === id)!.name}.</b> {DEEDS.find((d) => d.id === id)!.how}.</p>)}
       <div class="dayend-btns">
         <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(text); } catch { /* clipboard blocked */ } sfx('tap'); }}>Copy the week</button>
-        <button class="btn primary" disabled>A new week starts Monday</button>
+        {next ? <button class="btn primary" disabled>{next}</button> : <button class="btn primary" onClick={onNewWeek}>Start next week</button>}
       </div>
-      {PREVIEW && <button class="linkbtn" onClick={onNewWeek}>Testing: start the next week now</button>}
+      {next && PREVIEW && <button class="linkbtn" onClick={onSkip}>Testing: skip to tomorrow</button>}
     </div>
   );
 }
@@ -651,13 +724,16 @@ export function App() {
   const [preview, setPreview] = useState<Dir | null>(null);
   const [reveal, setReveal] = useState<RevealData | null>(null);
   const [fresh, setFresh] = useState<{ endings: string[]; deeds: string[] }>({ endings: [], deeds: [] });
-  const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | 'goals' | null>(null);
+  const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | 'goals' | 'points' | null>(null);
   const taps = useRef<number[]>([]);
   const cal = useMemo(() => calendar(save.dayOffset), [save.dayOffset]);
   const introKey = `${s.weekId}:${s.day}`;
   const showIntro = save.introSeen !== introKey && s.phase === 'card' && !(s.day === 1 && s.cardInDay === 0 && !s.daveDays.length && save.introSeen === '');
 
   const persist = (next: State, patch: Partial<Save> = {}) => {
+    // the next day opens on a later calendar day than the one you finished this one on
+    if ((next.phase === 'dayEnd' || next.phase === 'results') && s.phase !== next.phase && !(s.phase === 'dayEnd' && next.phase === 'results')) patch = { ...patch, dayDoneOn: cal.dateKey };
+    if (next.phase === 'card' && s.phase === 'dayEnd') patch = { ...patch, dayDoneOn: '' };
     const rec = record({ ...save, ...patch }, next);
     if (rec.endings.length || rec.deeds.length) setFresh((f) => ({ endings: [...f.endings, ...rec.endings], deeds: [...f.deeds, ...rec.deeds] }));
     const sv = { ...rec.save, state: next };
@@ -668,27 +744,34 @@ export function App() {
   const [, setCrowdVersion] = useState(0);
   useEffect(() => {
     let alive = true;
-    void fetchCrowd(pack.id, s.weekId).then((c) => { if (alive && c) { live = c; useWeek(s.weekId); setCrowdVersion((v) => v + 1); } });
+    void fetchCrowd(pack.id, s.weekId.split('#')[1] ?? 'r0').then((c) => { if (alive && c) { live = c; useWeek(s.weekId); setCrowdVersion((v) => v + 1); } });
     return () => { alive = false; };
   }, [s.weekId, s.day]);
 
   const swipe = (dir: Dir) => {
     const card = findCard(pack, s.current!);
     const next = reduce(s, { type: 'swipe', dir }, pack);
-    sendVote(pack.id, s.weekId, card.id, dir);
+    sendVote(pack.id, s.weekId.split('#')[1] ?? 'r0', card.id, dir);
     persist(next, ODDBALLS.includes(card.who) && !save.met.includes(card.who) ? { met: [...save.met, card.who] } : {});
     if (card.who === 'gerald') sfx('honk');
     setReveal({ key: Date.now(), card, dir, before: s.meters, after: next.meters, pct: crowd[card.id]?.[dir], recalled: next.phase === 'recalled', goals: next.objectivesDone.filter((g) => !s.objectivesDone.includes(g)).map((g) => pack.objectives.find((o) => o.id === g)?.text ?? g) });
   };
 
-  const jump = (days: number) => {
-    const sv = { ...save, dayOffset: save.dayOffset + days, state: s };
-    const next = boot(sv);
-    setSave({ ...sv, state: next }); setS(next); writeSave({ ...sv, state: next }); setOverlay(null);
-  };
+  /** Testing only: move the clock forward. */
+  const jump = (days: number) => { const sv = { ...save, dayOffset: save.dayOffset + days, state: s }; setSave(sv); writeSave(sv); setOverlay(null); };
+  const open = !save.dayDoneOn || cal.dateKey > save.dayDoneOn;
+  const waitText = (what: string) => `${what} opens in ${Math.floor(cal.msToMidnight / 3600000)}h ${Math.floor((cal.msToMidnight % 3600000) / 60000)}m`;
   const advance = () => {
-    if (cal.today > s.day || s.day >= 7 || s.phase === 'recalled') { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }
-    else jump(1);
+    if (open || s.day >= 7 || s.phase === 'recalled') { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }
+  };
+  /** After the week in review: the next week, once a new day has come round. */
+  const newWeek = () => {
+    if (!open) return;
+    const weeksDone = save.weeksDone + 1;
+    const sv: Save = { ...save, weeksDone, dayDoneOn: '', state: null };
+    const next = boot(sv);
+    const rec = record(sv, next);
+    setSave({ ...rec.save, state: next }); setS(next); writeSave({ ...rec.save, state: next }); setFresh({ endings: [], deeds: [] }); sfx('paper');
   };
   const titleTap = () => { if (!PREVIEW) return;
     const now = Date.now(); taps.current = [...taps.current.filter((t) => now - t < 700), now]; if (taps.current.length >= 3) { taps.current = []; setOverlay('dev'); } };
@@ -707,8 +790,8 @@ export function App() {
       <header class="top">
         <h1 onClick={titleTap} aria-label="Mayor of Bad Town"><i class="pre">Mayor of </i><span>Bad Town</span></h1>
         <div class="top-right">
-          <span class="daychip">{dayName}{s.phase === 'card' ? <span class="dc-n"> {s.cardInDay + 1}/{TUNING.cardsPerDay}</span> : ''}</span>
-          <span class="scorechip" aria-label={`Today's score ${today.total}`}><b>{today.total}</b><span class="pts-word"> pts</span></span>
+          <span class="daychip">{dayName}{s.phase === 'card' ? <span class="dc-n"> · {s.cardInDay + 1}/{TUNING.cardsPerDay}</span> : ''}</span>
+          <button class="scorechip" aria-label={`Today's score ${today.total}. How points work`} onClick={() => { setOverlay('points'); sfx('paper'); }}><b>{today.total}</b><span class="pts-word"> pts</span></button>
           <span class="streakchip" aria-label={`Re-elected ${save.streak.current} nights in a row`}>🔥 {save.streak.current}</span>
           {<button class="goalchip" aria-label={`This week's goals: ${s.objectivesDone.length} of ${pack.objectives.length} done`} onClick={() => { setOverlay('goals'); sfx('paper'); }}>★ {s.objectivesDone.length}/{pack.objectives.length}</button>}
           <button class="icon" aria-label="Open the scrapbook" onClick={() => { setOverlay('book'); sfx('paper'); }}><Icon.book /></button>
@@ -716,9 +799,6 @@ export function App() {
         </div>
       </header>
       <div class="layout">
-        <aside class="side">
-          <ol class="timeline" aria-label="The week">{DAY_NAMES.map((d, i) => <li key={d} class={`${i + 1 === s.day ? 'now' : i + 1 < s.day ? 'past' : ''} ${s.won[i] === undefined ? '' : s.won[i] ? 'won' : 'lost'}`}><span>{d}</span><b>{s.polls[i] !== undefined ? `${s.won[i] ? '✓' : '✗'} ${s.polls[i]}%` : ''}</b>{s.daveDays.includes(i + 1) && <i>Randy</i>}</li>)}</ol>
-        </aside>
         <main class="main">
           <Meters s={s} preview={choice} />
           {reveal && <ImpactReveal key={reveal.key} r={reveal} onDone={() => setReveal(null)} />}
@@ -731,8 +811,8 @@ export function App() {
               <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>On with the evening</button>
             </div>
           )}
-          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} streak={save.streak.current} fresh={fresh.endings} have={save.scrapbook.length} onNext={advance} nextLabel={s.day >= 7 ? 'The week in review' : cal.today > s.day ? `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}` : ''} wait={s.day >= 7 || cal.today > s.day ? null : `${DAY_NAMES[s.day] ?? 'Tomorrow'} opens in ${Math.floor(cal.msToMidnight / 3600000)}h ${Math.floor((cal.msToMidnight % 3600000) / 60000)}m`} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
-          {s.phase === 'results' && !reveal && <WeekRecap s={s} streak={save.streak.current} fresh={fresh} onNewWeek={() => jump(8 - cal.today)} />}
+          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} streak={save.streak.current} fresh={fresh.endings} have={save.scrapbook.length} onNext={advance} onSkip={() => jump(1)} nextLabel={s.day >= 7 ? 'The week in review' : `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}`} wait={s.day >= 7 || open ? null : waitText(DAY_NAMES[s.day] ?? 'Tomorrow')} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
+          {s.phase === 'results' && !reveal && <WeekRecap s={s} streak={save.streak.current} fresh={fresh} next={open ? null : waitText('Next week')} onNewWeek={newWeek} onSkip={() => jump(1)} />}
         </main>
       </div>
 
@@ -751,13 +831,14 @@ export function App() {
       {needSetup && (save.onboarded ? <Setup title={`A new term, ${save.lastProfile?.mayor ?? 'Mayor'}. Same again?`} initial={save.lastProfile} onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack), { lastProfile: profile }); sfx('win'); }} />
         : <Opening onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack), { onboarded: true, lastProfile: profile, introSeen: introKey }); }} />)}
       {overlay === 'names' && s.profile && <Setup title="Rename things" rename initial={s.profile} onDone={(p) => { persist(reduce(s, { type: 'rename', mayor: p.mayor, folk: p.folk }, pack), { lastProfile: { ...p, base: s.profile!.base } }); setOverlay(null); }} />}
+      {overlay === 'points' && <Sheet label="How points work" onClose={() => setOverlay(null)}><PointsHelp s={s} /><button class="btn primary" onClick={() => setOverlay(null)}>Got it</button></Sheet>}
       {overlay === 'goals' && <Sheet label="This week's goals" onClose={() => setOverlay(null)}><Goals s={s} /><button class="btn primary" onClick={() => setOverlay(null)}>Back to work</button></Sheet>}
       {overlay === 'book' && <Scrapbook save={save} onClose={() => setOverlay(null)} onRename={s.profile ? () => setOverlay('names') : undefined} />}
       {overlay === 'dev' && (
         <Sheet label="Dev panel" onClose={() => setOverlay(null)}>
           <h2 class="display">Dev panel</h2>
           <button class="btn" onClick={() => jump(1)}>Jump to the next day</button>
-          <button class="btn" onClick={() => { const sv: Save = { ...save, state: null, introSeen: '', dayOffset: 0 }; const n = boot(sv); setSave({ ...sv, state: n }); setS(n); writeSave({ ...sv, state: n }); setOverlay(null); }}>Reset everything</button>
+          <button class="btn" onClick={() => { const sv: Save = { ...save, state: null, introSeen: '', dayOffset: 0, weeksDone: 0, dayDoneOn: '' }; const n = boot(sv); setSave({ ...sv, state: n }); setS(n); writeSave({ ...sv, state: n }); setOverlay(null); }}>Reset everything</button>
         </Sheet>
       )}
     </div>

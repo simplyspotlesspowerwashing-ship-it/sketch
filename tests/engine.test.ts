@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PACKS, LAUNCH_MONDAY, packFor, week1Pack as pack } from '../src/content/index.ts';
+import { PACKS, packFor, packForWeek, weekIdFor, week1Pack as pack } from '../src/content/index.ts';
 import { loadPack } from '../src/content/schema.ts';
 import week1 from '../src/content/packs/week1.json' with { type: 'json' };
 import { nightVote } from '../src/engine/election.ts';
@@ -116,12 +116,12 @@ describe('the shared day', () => {
       for (const o of Object.values(c.options)) for (const t of [...(o!.then ?? []).map(([id]) => id), ...(o!.next ?? [])]) expect(ids.has(t), `${c.id} -> ${t}`).toBe(true);
     }
   });
-  it('the weeks rotate: launch week is week 1, the next is week 2, then round again', () => {
-    expect(packFor(LAUNCH_MONDAY).id).toBe('week1');
-    expect(packFor('2026-11-23').id).toBe('week2');
-    expect(packFor('2026-11-30').id).toBe(PACKS[2 % PACKS.length]!.id);
-    expect(packFor('2026-12-14').id).toBe(PACKS[4 % PACKS.length]!.id);
-    expect(packFor('2026-11-09').id).toBe(PACKS[PACKS.length - 1]!.id);
+  it('your own weeks rotate: your first week is week 1, then 2, 3, 4, then round again with a new deck', () => {
+    expect([0, 1, 2, 3, 4].map((n) => packForWeek(n).id)).toEqual(['week1', 'week2', 'week3', 'week4', 'week1']);
+    expect(weekIdFor(0)).toBe('week1#r0');
+    expect(weekIdFor(4)).toBe('week1#r1');
+    expect(packFor(weekIdFor(5)).id).toBe('week2');
+    expect(dayDeck(pack, weekIdFor(0), 1)).not.toEqual(dayDeck(pack, weekIdFor(4), 1));
   });
   it('two mayors making the same choices see the same cards', () => {
     const run = (seed: string) => { let s = start(seed); const seen: string[] = []; for (let i = 0; i < 20 && s.phase === 'card'; i++) { seen.push(s.current!); s = swipe(s, 'right'); } return seen; };
@@ -141,7 +141,9 @@ describe('both ends are dangerous', () => {
     expect(s.endings).toEqual(['high:people/week1']);
   });
   it('an empty treasury recalls you, a full one does not', () => {
-    expect(swipe(withMeters(start(), { treasury: 8 }), 'right').endings).toEqual(['low:treasury/week1']);
+    const spend = pack.cards.find((c) => !c.day && !c.followUp && (c.options.right!.effects.treasury ?? 0) < 0 && !c.options.right!.ending)!;
+    const cost = -spend.options.right!.effects.treasury!;
+    expect(swipe(withMeters(facing(start(), spend.id), { treasury: cost }), 'right').endings).toEqual(['low:treasury/week1']);
     const rich = swipe(withMeters(facing(start(), 'c1'), { treasury: 95 }), 'right');
     expect(rich.phase).toBe('card');
   });
@@ -202,7 +204,7 @@ describe('every night is a re-election', () => {
     s = swipe(s, steady(s));
     expect(s.phase).toBe('dayEnd');
     expect(s.won).toEqual([false]);
-    expect(s.endings.at(-1)).toMatch(/^out:[a-z]+(_[23])?$/);
+    expect(s.endings.at(-1)).toMatch(/^out(:[a-z]+(_[23])?|w:[a-z]+\/week1)$/);
     s = reduce(s, { type: 'next' }, pack);
     expect(Object.values(s.meters).every((v) => v === TUNING.recall.reset)).toBe(true);
   });

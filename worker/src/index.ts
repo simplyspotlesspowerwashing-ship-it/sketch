@@ -10,7 +10,7 @@ export interface D1 {
 export interface Env { DB: D1; ALLOWED_ORIGIN?: string }
 
 const ID = /^[A-Za-z0-9_-]{1,40}$/;
-const WEEK = /^\d{4}-\d{2}-\d{2}$/;
+const WEEK = /^(\d{4}-\d{2}-\d{2}|r\d{1,3})$/; // a calendar week, or a round of the four weekly packs (r0 = everyone's first time through)
 
 function cors(env: Env, req: Request): Record<string, string> {
   const allowed = (env.ALLOWED_ORIGIN ?? '*').split(',').map((s) => s.trim());

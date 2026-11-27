@@ -16,10 +16,9 @@ export const PACKS: Pack[] = [week1Pack, loadPack(week2), loadPack(week3), loadP
 /** Simulated crowd shares per pack: used until enough real mayors have played a card. */
 export const SIMULATED_CROWD: Record<string, Crowd> = { week1: crowd1.cards as Crowd, week2: crowd2.cards as Crowd, week3: crowd3.cards as Crowd, week4: crowd4.cards as Crowd };
 
-/** The Monday the game launches. Week 1 runs that week, week 2 the next, and so on: four weeks, then round again. */
-export const LAUNCH_MONDAY = '2026-11-16';
-export function packFor(weekId: string): Pack {
-  const weeks = Math.round((Date.parse(weekId) - Date.parse(LAUNCH_MONDAY)) / (7 * 864e5));
-  return PACKS[((weeks % PACKS.length) + PACKS.length) % PACKS.length]!;
-}
+/** Your Nth week (0 = your first) plays pack N, round and round the four. Everyone at the same point gets the same deck. */
+export const packForWeek = (n: number): Pack => PACKS[((n % PACKS.length) + PACKS.length) % PACKS.length]!;
+export const weekIdFor = (n: number): string => `${packForWeek(n).id}#r${Math.floor(n / PACKS.length)}`;
 export const packById = (id: string): Pack => PACKS.find((p) => p.id === id) ?? week1Pack;
+/** The pack a week id belongs to ('week2#r0' -> week2). */
+export const packFor = (weekId: string): Pack => packById(weekId.split('#')[0]!);

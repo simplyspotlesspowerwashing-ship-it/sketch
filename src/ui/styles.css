@@ -1060,3 +1060,106 @@ h1 span { white-space: nowrap; }
 .panel.recall .stamp { color: var(--ink); border-color: var(--ink); background: #fff; }
 .book-total { margin: 0 0 4px; font-size: 14px; }
 .endings .ending-head .portrait { width: 32px; height: 32px; }
+
+/* ---------- bigger meters: face, number, bar, name (where the week strip was) ---------- */
+.meters { grid-template-columns: repeat(5, 1fr); gap: 6px 8px; padding: 8px 10px 6px; border-radius: 14px; border-width: 2.5px; }
+.meter { flex-direction: column; align-items: stretch; gap: 3px; min-width: 0; }
+.m-top { display: flex; align-items: center; justify-content: space-between; gap: 3px; }
+.meter .portrait, .meter .coinface svg { width: 28px !important; height: 28px !important; }
+.meter .coinface { width: 28px; height: 28px; }
+.m-val { font-family: var(--display); font-size: 18px; line-height: 1; font-variant-numeric: tabular-nums; }
+.meter.danger .m-val { color: var(--alert); }
+.hbar.small { flex: none; height: 10px; }
+.m-name { font-size: 10.5px; font-weight: 700; text-align: center; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meter .hintdot { top: -5px; left: 20px; width: 9px; height: 9px; }
+.meter .hintdot.big { width: 13px; height: 13px; top: -7px; }
+@media (min-width: 900px) { .m-val { font-size: 21px; } .meter .portrait, .meter .coinface svg { width: 34px !important; height: 34px !important; } .meter .coinface { width: 34px; height: 34px; } .hbar.small { height: 12px; } .m-name { font-size: 12px; } }
+@media (max-width: 380px) { .meters { gap: 4px 5px; padding: 6px 6px 5px; } .meter .portrait, .meter .coinface svg { width: 22px !important; height: 22px !important; } .meter .coinface { width: 22px; height: 22px; } .m-val { font-size: 15px; } .m-name { font-size: 9.5px; } }
+/* desktop: a wider table, bigger card */
+@media (min-width: 900px) {
+  .app { max-width: 760px; padding: 16px 24px 20px; }
+  .main > .stage, .main > .review, .main > .panel { max-width: 600px; width: 100%; margin-inline: auto; }
+  .card-text { font-size: 21px; }
+  .card-who .portrait { width: 128px !important; height: 128px !important; }
+}
+/* points help */
+.points-help ul { margin: 6px 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; line-height: 1.4; text-align: left; }
+.ph-now { margin: 4px 0; font-size: 15px; background: #FFF4CF; border: 2px dashed var(--ink); border-radius: 10px; padding: 6px 10px; }
+.ph-tip { margin: 6px 0 0; font-size: 14px; font-weight: 700; }
+button.scorechip { font: inherit; font-size: 13px; cursor: pointer; color: var(--ink); }
+/* scrapbook tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 2.5px solid var(--ink); margin: 4px 0 8px; overflow-x: auto; }
+.tab { font: inherit; font-size: 13px; font-weight: 700; padding: 6px 10px; border: 2.5px solid var(--ink); border-bottom: none; border-radius: 10px 10px 0 0; background: #EFE7D6; color: var(--soft); cursor: pointer; white-space: nowrap; margin-bottom: -2.5px; }
+.tab.on { background: var(--paper); color: var(--ink); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip { font: inherit; font-size: 12.5px; font-weight: 700; padding: 3px 10px; border: 2px solid var(--ink); border-radius: 99px; background: #fff; cursor: pointer; }
+.chip.on { background: var(--gold); }
+.chip small { font-weight: 600; color: var(--soft); }
+.career { grid-template-columns: repeat(3, 1fr) !important; }
+@media (max-width: 500px) { .career { grid-template-columns: repeat(2, 1fr) !important; } }
+.randy-says { display: flex; gap: 8px; align-items: center; margin-top: 4px; padding: 6px 8px; background: rgba(255, 255, 255, .6); border: 2px dashed var(--ink); border-radius: 10px; font-size: 13px; line-height: 1.3; text-align: left; }
+.randy-says .portrait { flex-shrink: 0; }
+.randy-says i { font-style: normal; font-weight: 600; }
+.endings .randy-says { font-size: 12px; }
+.ending.outw { background: #F9E3C9; }
+
+/* ---------- the ending show: five seconds, tap to skip ---------- */
+.ending-show { position: fixed; inset: 0; z-index: 60; border: 0; padding: 0; margin: 0; cursor: pointer; background: #1E1A26; color: #fff; display: grid; place-items: center; overflow: hidden; font: inherit; animation: es-in .3s both; }
+@keyframes es-in { from { opacity: 0; } }
+.es-spot { position: absolute; inset: 0; background: radial-gradient(circle at 50% 46%, rgba(255, 233, 168, .55) 0 18%, rgba(255, 233, 168, .12) 34%, transparent 60%); animation: es-spot 1s .1s both; }
+@keyframes es-spot { from { opacity: 0; transform: scale(.4); } }
+.es-stage { position: relative; width: min(92vw, 420px); height: min(92vw, 420px); }
+.es-stage > * { position: absolute; left: 50%; top: 50%; translate: -50% -50%; }
+.es-mayor { animation: es-mayor-in .6s .2s cubic-bezier(.2, 1.5, .4, 1) both; z-index: 2; }
+@keyframes es-mayor-in { from { scale: .2; opacity: 0; } }
+.es-who { position: absolute; top: 9%; left: 50%; translate: -50% 0; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; font-size: 13px; color: var(--gold); animation: es-fade .4s .4s both; }
+.es-skip { position: absolute; bottom: 14px; left: 50%; translate: -50% 0; font-size: 12px; opacity: .55; }
+@keyframes es-fade { from { opacity: 0; } }
+/* headline slams in at the end */
+.es-head { position: absolute; left: 50%; top: 72%; translate: -50% -50%; width: min(88vw, 460px); background: #FBF7EE; color: var(--ink); border: 4px solid var(--ink); border-radius: 8px; padding: 10px 14px 12px; text-align: center; box-shadow: 0 8px 0 rgba(0,0,0,.35); z-index: 5; animation: es-head .5s 3.6s cubic-bezier(.2, 1.6, .4, 1) both; rotate: -2deg; }
+.es-head small { display: block; font-size: 11px; letter-spacing: .14em; font-weight: 800; color: var(--soft); border-bottom: 2px solid var(--ink); padding-bottom: 4px; margin-bottom: 6px; }
+.es-head b { display: block; font-family: var(--serif); font-weight: 400; font-size: clamp(24px, 7vw, 38px); line-height: 1.02; }
+@keyframes es-head { from { scale: 3; opacity: 0; } 60% { opacity: 1; } }
+/* low: the group marches in and shoves you off */
+.es-crowd { z-index: 3; animation: es-march 1.4s calc(.6s + var(--i) * .08s) cubic-bezier(.3, .9, .4, 1) both; translate: calc(-50% + var(--x)) 90px; }
+@keyframes es-march { from { translate: calc(-50% + var(--x) * 5) 90px; } }
+.es-low .es-mayor { animation: es-mayor-in .6s .2s cubic-bezier(.2, 1.5, .4, 1) both, es-shoved .9s 1.6s cubic-bezier(.5, 0, .7, .4) forwards; }
+@keyframes es-shoved { to { translate: 140% -160%; rotate: 540deg; scale: .4; } }
+/* high: the crowd lifts you away */
+.es-high .es-crowd { animation: es-march 1.2s calc(.5s + var(--i) * .08s) both, es-bob .4s calc(1.7s + var(--i) * .05s) ease-in-out infinite alternate; }
+@keyframes es-bob { to { translate: calc(-50% + var(--x)) 78px; } }
+.es-high .es-mayor { animation: es-mayor-in .6s .2s both, es-lift 2s 1.6s cubic-bezier(.4, 0, .6, 1) forwards; }
+@keyframes es-lift { 30% { translate: -50% -70%; } to { translate: -50% -260%; scale: .5; } }
+.es-heart { color: #FF6B8B; font-size: 28px; animation: es-heart 1.6s calc(1.7s + var(--i) * .15s) ease-out both; z-index: 4; }
+@keyframes es-heart { from { opacity: 0; translate: calc(-50% + (var(--i) - 2.5) * 30px) 40px; } 30% { opacity: 1; } to { opacity: 0; translate: calc(-50% + (var(--i) - 2.5) * 40px) -220px; } }
+/* out: ballots rain, a giant X stamps down */
+.es-ballot { font-style: normal; width: 34px; height: 24px; display: grid; place-items: center; background: #fff; color: #C23B3B; border: 2px solid var(--ink); border-radius: 3px; font-weight: 800; z-index: 4; animation: es-rain 1.6s calc(.5s + var(--i) * .1s) cubic-bezier(.4, 0, .9, .8) both; }
+@keyframes es-rain { from { translate: calc(-50% + var(--x) * 3) -340px; rotate: 0deg; } to { translate: calc(-50% + var(--x) * 3) 260px; rotate: 340deg; } }
+.es-x { font-size: 190px; line-height: 1; color: #C23B3B; -webkit-text-stroke: 5px var(--ink); z-index: 5; animation: es-stamp .45s 2.3s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes es-stamp { from { scale: 4; opacity: 0; } }
+.es-out .es-mayor { animation: es-mayor-in .6s .2s both, es-shrink .6s 2.6s ease-in forwards; }
+@keyframes es-shrink { to { scale: .55; filter: grayscale(1); } }
+/* trap: flash, shake, you spin off, the culprit grins */
+.es-flash { inset: 0; translate: none; left: 0; top: 0; width: 100%; height: 100%; background: #fff; border-radius: 50%; z-index: 6; animation: es-flash .5s 1.4s both; opacity: 0; }
+@keyframes es-flash { 0% { opacity: 0; } 15% { opacity: 1; } 100% { opacity: 0; } }
+.es-trap .es-stage { animation: es-shake .5s 1.45s both; }
+@keyframes es-shake { 20% { transform: translate(-12px, 6px) rotate(-2deg); } 40% { transform: translate(10px, -8px) rotate(2deg); } 60% { transform: translate(-8px, 4px); } 80% { transform: translate(6px, -2px); } }
+.es-trap .es-mayor { animation: es-mayor-in .6s .2s both, es-spin 1s 1.6s cubic-bezier(.4, 0, .8, .5) forwards; }
+@keyframes es-spin { to { translate: -260% -200%; rotate: -900deg; scale: .3; } }
+.es-boom { font-size: 120px; line-height: 1; z-index: 5; animation: es-boom .7s 1.45s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes es-boom { from { scale: 0; } 70% { opacity: 1; } to { opacity: 0; scale: 1.6; } }
+.es-culprit { z-index: 2; animation: es-culprit .6s 2.3s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes es-culprit { from { scale: 0; rotate: -20deg; } }
+/* rare: golden rays, you turn into the character responsible */
+.es-rays { width: 520px; height: 520px; border-radius: 50%; background: repeating-conic-gradient(rgba(232, 197, 90, .35) 0 10deg, transparent 10deg 20deg); animation: es-rays 6s linear both, es-fade .8s both; }
+@keyframes es-rays { to { rotate: 120deg; } }
+.es-rare .es-mayor { animation: es-mayor-in .6s .2s both, es-morph 1s 1.6s ease-in forwards; }
+@keyframes es-morph { to { opacity: 0; scale: 1.3; filter: brightness(3); } }
+.es-rare .es-culprit { animation: es-culprit .8s 2.2s cubic-bezier(.2, 1.6, .4, 1) both; filter: drop-shadow(0 0 18px #FFE9A8); }
+.es-star { font-style: normal; color: var(--gold); font-size: 26px; z-index: 4; animation: es-star 1.4s 1.9s ease-out both; }
+@keyframes es-star { from { opacity: 0; transform: rotate(var(--a)) translateY(0); } 30% { opacity: 1; } to { opacity: 0; transform: rotate(var(--a)) translateY(-180px); } }
+@media (prefers-reduced-motion: reduce) { .ending-show { display: none; } }
+.endings { grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); }
+.ending { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 380px) { .endings { grid-template-columns: minmax(0, 1fr); } }
+.tabs, .chips, .book-total, .career { flex-shrink: 0; }
