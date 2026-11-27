@@ -1139,3 +1139,5 @@ button.scorechip { font: inherit; font-size: 13px; cursor: pointer; color: var(-
 .grand .prize-stamp { margin-top: 8px; }
 .prize-stamp.again { background: #fff; }
 @media (prefers-reduced-motion: reduce) { .grand, .grand-end, .grand-face, .grand-title, .rv-recalled { animation: none; } .grand-rays { animation: none; } }
+.grand .prize-stamp { color: var(--ink); }
+.grand-again { font-size: 12px; font-weight: 700; color: #CFC6E0; }

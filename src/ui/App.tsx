@@ -488,6 +488,7 @@ function EndingPrize({ k, isNew, have }: { k: string; isNew: boolean; have: numb
         <p class="grand-text">{e.text}</p>
         {quip && <p class="grand-randy"><Portrait who="randy" size={34} mood="pleased" /><span>“{quip}”</span></p>}
         <span class={`prize-stamp ${isNew ? '' : 'again'}`}>{isNew ? 'NEW ENDING UNLOCKED!' : 'A CLASSIC. AGAIN.'}</span>
+        {!isNew && <small class="grand-again">Already in your Scrapbook</small>}
       </div>
       <p class="prize-count"><b>{have}</b> of {total} endings collected{isNew ? '. Frame it.' : '. You know how this one goes.'}</p>
       <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); setCopied(true); } catch { /* clipboard blocked */ } sfx('tap'); }}>{copied ? 'Copied' : 'Share this ending'}</button>
