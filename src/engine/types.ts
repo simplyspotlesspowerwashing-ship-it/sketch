@@ -103,6 +103,7 @@ export interface State {
   polls: number[]; // each night's vote share
   won: boolean[]; // each night: re-elected?
   result: Result | null;
+  overnight?: Partial<Record<MeterId, number>>; // After Hours: applied to the meters when the next day starts
 }
 
 export type Action =
@@ -110,6 +111,7 @@ export type Action =
   | { type: 'next' } // recalled -> dayEnd, dayEnd -> next day
   | { type: 'setup'; profile: Profile }
   | { type: 'rename'; mayor: string; folk: string }
-  | { type: 'defer' }; // 'Not now': this card comes back a few cards later
+  | { type: 'defer' }
+  | { type: 'overnight'; effects: Partial<Record<MeterId, number>> }; // After Hours result, set at night, used next morning // 'Not now': this card comes back a few cards later
 
 export type Rng = (key: string) => () => number;

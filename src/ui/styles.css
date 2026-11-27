@@ -1141,3 +1141,9 @@ button.scorechip { font: inherit; font-size: 13px; cursor: pointer; color: var(-
 @media (prefers-reduced-motion: reduce) { .grand, .grand-end, .grand-face, .grand-title, .rv-recalled { animation: none; } .grand-rays { animation: none; } }
 .grand .prize-stamp { color: var(--ink); }
 .grand-again { font-size: 12px; font-weight: 700; color: #CFC6E0; }
+.ah-btn:disabled { opacity: .55; cursor: default; }
+.ah-cap { display: block; color: var(--soft); font-size: 12px; margin-bottom: 10px; }
+.ah-done .levels { margin: 8px 0; text-align: center; font-weight: 700; }
+.afterhours .panel .dayend-btns { grid-template-columns: 1fr; }
+.afterhours .dayend-btns { align-self: stretch; }
+.afterhours .dayend-btns .btn { width: 100%; }

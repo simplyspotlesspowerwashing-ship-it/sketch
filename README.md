@@ -48,13 +48,13 @@ CONTENT_GUIDE.md  how to write cards and stories
 - **The week in review** after Sunday night: a nickname for the week, each night's result, your best day, your oddest call (lowest crowd %), the oddballs you dealt with and the endings you found.
 - **Your own week.** A new player starts on Day 1 of week 1 (pack `week1`). The next day opens on a later calendar day than the one you finished the last on; missed days are just a gap, nobody plays them for you. After Day 7 comes the week in review, then the next week (packs rotate 1→4, then round again with a fresh shuffle). Everyone at the same point (say, week 2, Day 3) gets the same deck, so the crowd % still compares like with like.
 - First visit: a short opening, ending with the oath (your mayor's name, what the townsfolk are called, who voted for you).
-- **After Hours** (`src/content/afterHours.ts`): once your day is done (or the week reviewed), play 10 more cards, as many rounds as you like. Each round starts a fresh town at 50, draws side stories from all four weeks and includes exactly one disaster, cycling through all 28, so every disaster ending is reachable any time. Nothing carries into tomorrow or changes tonight's vote; endings you hit go in the Scrapbook.
+- **After Hours** (`src/content/afterHours.ts`, cards in `src/content/afterhours.json`): once a night, after your day is done (or the week reviewed), 10 more cards if you want. Its own 70 cards, never the dailies: each round is 3 draft laws for tomorrow, 3 projects for tomorrow, 3 late-night visits and 1 After Hours disaster (7 of them, each with its own ending). A week of nights never repeats a card. The round starts from tonight's meters (40s if you lost tonight), and its net change, capped at ±10 per group, is how tomorrow starts (engine action `overnight`, applied on `next`). Tonight's vote is never touched. A disaster or recall ends the round with its ending and carries nothing. On Day 7 nothing carries, since the next week starts fresh. Check it with `node e2e/afterhours.cjs <dir> <left|right> [width]`.
 - **Your profile is kept:** name, townsfolk and voters are set once (in the opening) and reused every new week; rename from the Scrapbook.
 - **Tap the points** for how they work and roughly how many you need tonight.
 
 ## Endings roadmap (for later)
 
-Today: recall and voted-out endings come round every week; disasters are reachable any time through After Hours; the 8 rare endings come from each week's saga, so each is reachable once per four-week round. Next step: give every ending several routes (different cards on different days and weeks can lead to it), keeping the rarity, so a player who plays long enough can collect them all.
+Today: recall and voted-out endings come round every week; daily disasters come round with their week, and the 7 After Hours disasters come round once a week; the 8 rare endings come from each week's saga, so each is reachable once per four-week round. Next step: give every ending several routes (different cards on different days and weeks can lead to it), keeping the rarity, so a player who plays long enough can collect them all.
 
 ## Weeks
 

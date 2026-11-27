@@ -78,4 +78,12 @@ export const RANDY_SAYS: Record<string, string> = {
   'high:business': "You're a brand now, boss. I'd buy you. On sale. In a bin.",
   'high:law': "Barb likes you more than me. I'm not upset. I'm in a bin. Upset.",
   'high:press': "Too famous for Bad Town. I've been there. Not famous. Just there.",
+  // After Hours disasters
+  'trap:ah_lights': "I only pressed it the once, boss. The second time was you.",
+  'trap:ah_bus': "Good news: I've got a boat. Bad news: it's the bus.",
+  'trap:ah_sleep': "You looked peaceful, boss. I took your chair. And your lunch. All seven.",
+  'trap:ah_bread': "Never touch the bread, boss. I've got the scars. And a goose for a landlord.",
+  'trap:ah_tower': "It said DO NOT CLIMB. I read it out to you. Twice. Loudly.",
+  'trap:ah_cheese': "I've joined the fan club too. The badges are lovely. Bit smelly.",
+  'trap:ah_napkin': "I'd have signed it too, boss. I'd have signed it in crisps.",
 };

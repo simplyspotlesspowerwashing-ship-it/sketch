@@ -19,12 +19,13 @@ export interface Save {
   counted: string; // `${weekId}|${nights}`: nights already added to the career and streak
   weeksDone: number; // your own weeks finished: picks this week's pack
   dayDoneOn: string; // the date you finished the current day ('' while playing): the next day opens after it
-  afterRounds: number; // After Hours rounds played: picks which disaster turns up next
+  afterRounds: number; // After Hours rounds played: picks tonight's cards
+  afterDoneOn: string; // `${weekId}:${day}` of the last night After Hours was played (once a night)
 }
 
 function fresh(): Save {
   const seed = Math.random().toString(36).slice(2) + Date.now().toString(36);
-  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [], nights: 0 }, deeds: [], onboarded: false, lastProfile: null, met: [], streak: { current: 0, best: 0 }, counted: '', weeksDone: 0, dayDoneOn: '', afterRounds: 0 };
+  return { schema: SCHEMA, state: null, playerSeed: seed, muted: false, introSeen: '', tutorialDone: false, dayOffset: 0, scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [], nights: 0 }, deeds: [], onboarded: false, lastProfile: null, met: [], streak: { current: 0, best: 0 }, counted: '', weeksDone: 0, dayDoneOn: '', afterRounds: 0, afterDoneOn: '' };
 }
 
 /** Bring an older save up to the current schema. Unknown or broken saves start fresh. */

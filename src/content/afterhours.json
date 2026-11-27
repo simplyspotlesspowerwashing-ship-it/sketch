@@ -1,0 +1,1714 @@
+{
+ "cards": [
+  {
+   "id": "ahl1",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: every goose gets one vote. Gerald has drafted it in mud. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Pass it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Passed. Turnout tomorrow: four hundred geese. Gerald voted forty times."
+    },
+    "left": {
+     "label": "No. Scrap it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Scrapped. Gerald has eaten the scrap. And the bin."
+    }
+   }
+  },
+  {
+   "id": "ahl2",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: lunch lasts until Doug finishes his sandwich. Doug eats very slowly. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Long lunches.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Lunch is two hours now. Productivity is down. Doug is radiant."
+    },
+    "left": {
+     "label": "No. Thirty minutes.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Doug is eating faster. He's not enjoying it. He wants that noted."
+    }
+   }
+  },
+  {
+   "id": "ahl3",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: every pothole must be named before it's filled. Kevin chairs the naming committee. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Name them.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Tomorrow's potholes: Kevin II, Kevina and Steve. Nobody can bear to fill them."
+    },
+    "left": {
+     "label": "No. Just fill them.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Filled, unnamed. Kevin watched. Relieved or jealous, it's hard to say."
+    }
+   }
+  },
+  {
+   "id": "ahl4",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: shops shut at eight so the town gets some sleep. Chad calls it 'a crime against shops'. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Early nights.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "The town slept. Chad didn't. He stood outside his shop all night, open."
+    },
+    "left": {
+     "label": "No. Open late.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Shops open till three. Randy has bought nine torches. Nobody knows why."
+    }
+   }
+  },
+  {
+   "id": "ahl5",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: the Bugle may only print good news on Mondays. Marge has fainted. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Good news only.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Monday's headline: 'NICE WEATHER, PROBABLY'. Marge is in recovery."
+    },
+    "left": {
+     "label": "No. Print it all.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Marge has revived. She's printing the news that you nearly passed it."
+    }
+   }
+  },
+  {
+   "id": "ahl6",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: Randy may not enter the treasury alone. Randy says he'll be 'with his coat'. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Escorted only.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Randy stayed out. His cousins did not. Doug is counting the cousins."
+    },
+    "left": {
+     "label": "No. Trust Randy.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Randy is touched. The treasury is lighter. Randy is heavier."
+    }
+   }
+  },
+  {
+   "id": "ahl7",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: every council meeting ends with a song. Coach has written it. It's eleven minutes. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Sing it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Tomorrow's meeting was all song. Two motions passed in harmony."
+    },
+    "left": {
+     "label": "No. Just meet.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Coach is singing it anyway. In the corridor. Alone. Beautifully."
+    }
+   }
+  },
+  {
+   "id": "ahl8",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: no more than forty traffic cones on any one street. Clive has no comment. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Forty max.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "By morning, exactly forty cones on every street. Clive counted."
+    },
+    "left": {
+     "label": "No. Unlimited cones.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "Fifty cones on Main Street by dawn. Clive's people have mobilised."
+    }
+   }
+  },
+  {
+   "id": "ahl9",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: a fine for loud honking after midnight. Gerald has already hired Mr Whiskers. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Fine the honk.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The first fine went to Gerald. He paid in bread. Then honked about it."
+    },
+    "left": {
+     "label": "No. Honk freely.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Gerald honked his thanks. All night. Under your window."
+    }
+   }
+  },
+  {
+   "id": "ahl10",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: one free sandwich a week for every resident. Doug did the maths and went very pale. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Free sandwiches.",
+     "effects": {
+      "people": 10,
+      "treasury": -10
+     },
+     "reaction": "The happiest town in the county. Doug is eating his feelings. In sandwich form."
+    },
+    "left": {
+     "label": "No. Buy your own.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Bev has started a sandwich black market. It's very well run."
+    }
+   }
+  },
+  {
+   "id": "ahl11",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: a pothole tax on big businesses. Chad says Kevin is not his fault. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Tax them.",
+     "effects": {
+      "treasury": 5,
+      "business": -5
+     },
+     "reaction": "Chad paid. Under protest. In coins. He threw them into Kevin."
+    },
+    "left": {
+     "label": "No. Leave Chad be.",
+     "effects": {
+      "business": 5,
+      "treasury": -5
+     },
+     "reaction": "Chad has thanked you with a plaque. It's for himself."
+    }
+   }
+  },
+  {
+   "id": "ahl12",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: Wendy the ghost gets a vote. She's been asking since 1890. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Wendy votes.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Wendy voted. Her ballot floated into the box on its own. A first."
+    },
+    "left": {
+     "label": "No. Not yet.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Wendy is disappointed. The lights flickered all night. Pointedly."
+    }
+   }
+  },
+  {
+   "id": "ahl13",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: the library stays open all night. Linda would like to know who'll run it. It's Linda. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Open all night.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Four night readers and an owl. Linda has never been happier. Or more tired."
+    },
+    "left": {
+     "label": "No. Normal hours.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Linda has gone home. Hoot is reading through the window."
+    }
+   }
+  },
+  {
+   "id": "ahl14",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: all billboards must tell the truth. Chad's says 'CHAD: PROBABLY FINE'. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Truth only.",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "Chad's new billboard: 'CHAD: OKAY'. Sales are down. Honesty is up."
+    },
+    "left": {
+     "label": "No. Advertise freely.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "Chad's billboard now says 'CHAD: BEST MAYOR'. He isn't mayor."
+    }
+   }
+  },
+  {
+   "id": "ahl15",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: Barb's helicopter may not land on the school. Barb says it's 'the only flat bit'. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Not the school.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Barb landed on the library instead. Linda shushed the helicopter."
+    },
+    "left": {
+     "label": "No. It's flat.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Helicopter on the school roof by nine. Lessons are loud. Very loud."
+    }
+   }
+  },
+  {
+   "id": "ahl16",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: every new building must include a pond. Gerald wrote it. In bread. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Ponds for all.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "The new bakery has a pond. The bread is damp. The geese are delighted."
+    },
+    "left": {
+     "label": "No. Dry buildings.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Gerald has dug a pond in protest. In your car park. It's lovely."
+    }
+   }
+  },
+  {
+   "id": "ahl17",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: the mayor's salary is paid in crisps. Gary has offered to supply them. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Pay me in crisps.",
+     "effects": {
+      "treasury": 5,
+      "press": -5
+     },
+     "reaction": "The treasury saves a fortune. The Bugle calls you 'Mayor Crisps'."
+    },
+    "left": {
+     "label": "No. Pay me in money.",
+     "effects": {
+      "press": 5,
+      "treasury": -5
+     },
+     "reaction": "Gary is hurt. He's dispensed a single sad crisp. For you."
+    }
+   }
+  },
+  {
+   "id": "ahl18",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: nobody may be mayor of Bad Town and also a traffic cone. Clive's lawyer is a smaller cone. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. No cone mayors.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Passed. Clive has moved one inch to the left. It feels like a threat."
+    },
+    "left": {
+     "label": "No. Cones welcome.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Clive has a campaign office again. It's the same window."
+    }
+   }
+  },
+  {
+   "id": "ahl19",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: forecasts must be wrong on purpose, so Steve can be right. Steve is in tears. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Help Steve.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "Steve forecast rain to get sun. It rained. He's devastated. And right."
+    },
+    "left": {
+     "label": "No. Let Steve be Steve.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "Steve forecast sun. It snowed. Order is restored."
+    }
+   }
+  },
+  {
+   "id": "ahl20",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: once a week, the whole town says thank you to Doug. Doug drafted it. He's very nervous. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. Thank Doug.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Four thousand thank-yous. Doug cried at every one. It took all day."
+    },
+    "left": {
+     "label": "No. He knows.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Doug says it's fine. It is not fine. He's in the stationery cupboard."
+    }
+   }
+  },
+  {
+   "id": "ahl21",
+   "who": "desk",
+   "story": "ahlaw",
+   "text": "Draft law for tomorrow: the town motto changes from 'Well, We Tried' to 'Well, We'll Try'. Bev calls it ambitious. Pass it?",
+   "options": {
+    "right": {
+     "label": "Yes. We'll try.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "New signs by morning. Several people have actually tried. It was unsettling."
+    },
+    "left": {
+     "label": "No. We tried.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "The old motto stays. Everyone is quietly relieved."
+    }
+   }
+  },
+  {
+   "id": "ahp1",
+   "who": "randy",
+   "story": "ahproj",
+   "text": "Boss. Project for tomorrow: I repaint every bin in town. Gold. 'Premium bins'. Approve it?",
+   "options": {
+    "right": {
+     "label": "Yes. Gold bins.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Every bin is gold by morning. People put rubbish in very carefully. Proudly."
+    },
+    "left": {
+     "label": "No. Normal bins.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Randy has painted one bin gold anyway. He lives in it now."
+    }
+   }
+  },
+  {
+   "id": "ahp2",
+   "who": "doug",
+   "story": "ahproj",
+   "text": "Mayor. Project for tomorrow: fix the leak in the treasury roof. Coins drip into the river. The ducks have noticed. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Fix the leak.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Fixed. The ducks are furious. They'd been saving up."
+    },
+    "left": {
+     "label": "No. Leave it.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "The ducks are now the richest residents of Bad Town."
+    }
+   }
+  },
+  {
+   "id": "ahp3",
+   "who": "carl",
+   "story": "ahproj",
+   "text": "Big Carl. Project for tomorrow: I dig a pool. Myself. With a spoon. I've started. Can I carry on?",
+   "options": {
+    "right": {
+     "label": "Yes. Dig, Carl.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's dug a hole the size of a bath. He's guarding it. It's his best day."
+    },
+    "left": {
+     "label": "No. Put the spoon down.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's put it down. He's looking at it. Longingly."
+    }
+   }
+  },
+  {
+   "id": "ahp4",
+   "who": "nora",
+   "story": "ahproj",
+   "text": "Mayor, project for tomorrow: solar panels on City Hall. Experimental. They run on moonlight. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Moon power.",
+     "effects": {
+      "business": 5,
+      "treasury": -5
+     },
+     "reaction": "They work. Only at night. City Hall is very bright at 3am."
+    },
+    "left": {
+     "label": "No. Normal power.",
+     "effects": {
+      "treasury": 5,
+      "business": -5
+     },
+     "reaction": "Nora has installed them on her own shed. It glows. Gerald visits."
+    }
+   }
+  },
+  {
+   "id": "ahp5",
+   "who": "pam",
+   "story": "ahproj",
+   "text": "The PTA would like to plant a hundred trees tomorrow. Toby has offered to supervise. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Plant them.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "A hundred new trees. Toby rustled with pride. They're all named after him."
+    },
+    "left": {
+     "label": "No. Not this year.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Pam has planted one tree. In your office. Toby is watching through the window."
+    }
+   }
+  },
+  {
+   "id": "ahp6",
+   "who": "chad",
+   "story": "ahproj",
+   "text": "Mayor. Project for tomorrow: a shopping centre. On the roundabout. Reginald is the roundabout. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Build it.",
+     "effects": {
+      "business": 10,
+      "people": -10
+     },
+     "reaction": "Built round Reginald. He's the centrepiece. He hasn't noticed."
+    },
+    "left": {
+     "label": "No. Leave Reginald.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Chad has built a smaller one. On the next roundabout. Also Reginald, later."
+    }
+   }
+  },
+  {
+   "id": "ahp7",
+   "who": "marge",
+   "story": "ahproj",
+   "text": "Mayor, project for tomorrow: a 'Meet the Mayor' day. You, in a booth, all day, answering anything. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Ask me anything.",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "Four hundred questions. Two hundred were about Kevin. You did your best."
+    },
+    "left": {
+     "label": "No booth.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "Marge put a cardboard cut-out of you in the booth. It's doing well."
+    }
+   }
+  },
+  {
+   "id": "ahp8",
+   "who": "barb",
+   "story": "ahproj",
+   "text": "Mayor. Project for tomorrow: a police open day. Anyone can try the helicopter. Anyone. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Open day.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Bev flew the helicopter. Twice round the clock tower. Upside down once."
+    },
+    "left": {
+     "label": "No. Not anyone.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Barb has opened the helicopter to Biscuit only. He's a natural."
+    }
+   }
+  },
+  {
+   "id": "ahp9",
+   "who": "gerald",
+   "story": "ahproj",
+   "text": "HONK. (Gerald's plans for tomorrow: a bridge for geese. It goes nowhere. It's very beautiful.) Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Build the bridge.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "The bridge to nowhere is finished. The geese stand on it at sunset. It's moving."
+    },
+    "left": {
+     "label": "No bridge.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Gerald has built it anyway. Out of bread. It lasted until lunch."
+    }
+   }
+  },
+  {
+   "id": "ahp10",
+   "who": "linda",
+   "story": "ahproj",
+   "text": "Mayor, project for tomorrow: a book club for the whole town. The first book is the phone book. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Book club.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Four hundred members. Nobody finished. Everyone has opinions about the Smiths."
+    },
+    "left": {
+     "label": "No. Read alone.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Linda has started the book club anyway. It's her and Hoot. Hoot likes the Ps."
+    }
+   }
+  },
+  {
+   "id": "ahp11",
+   "who": "flaps",
+   "story": "ahproj",
+   "text": "Mr Flaps. Project for tomorrow: two-beak delivery. Me and a seagull. It's Lorraine. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Two beaks.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Twice as fast. Half the post arrived. The other half was eaten. Lorraine."
+    },
+    "left": {
+     "label": "No. One beak.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Lorraine is delivering on her own. Only chips. Only to herself."
+    }
+   }
+  },
+  {
+   "id": "ahp12",
+   "who": "bev",
+   "story": "ahproj",
+   "text": "Mayor, project for tomorrow: driving lessons for everyone. On my scooter. Top speed only. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Teach them.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Forty pupils. All passed. All very shaken. One is still going."
+    },
+    "left": {
+     "label": "No lessons.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Bev is giving lessons anyway. To Gerald. He's terrifying on a scooter."
+    }
+   }
+  },
+  {
+   "id": "ahp13",
+   "who": "sal",
+   "story": "ahproj",
+   "text": "Mayor. Project for tomorrow: my second restaurant. Tyres only. No food. A tyre restaurant. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Open it.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Fully booked. Nobody ate. Everyone left with a tyre. Five stars."
+    },
+    "left": {
+     "label": "No. One is enough.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Sal is serving tyres at the first restaurant now. Same thing, really."
+    }
+   }
+  },
+  {
+   "id": "ahp14",
+   "who": "coach",
+   "story": "ahproj",
+   "text": "Mayor! Project for tomorrow: a town fun run! Everyone! Even Reginald! He started yesterday! Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Everyone runs.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Everyone ran. Shops shut. Reginald is still on mile one. Cheering section intact."
+    },
+    "left": {
+     "label": "No running.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Coach is running round the town alone. Shouting 'GOOD PACE' at himself."
+    }
+   }
+  },
+  {
+   "id": "ahp15",
+   "who": "hoot",
+   "story": "ahproj",
+   "text": "(Professor Hoot proposes moving tomorrow's school day to tonight. The children are asleep. He'd wake them.) Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Night school.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "The children were very confused. They learned owls. All of them."
+    },
+    "left": {
+     "label": "No. Let them sleep.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Hoot taught the lesson anyway. To an empty classroom. It went well."
+    }
+   }
+  },
+  {
+   "id": "ahp16",
+   "who": "brayden",
+   "story": "ahproj",
+   "text": "Mayor! Project for tomorrow: the town app! It's a button. It says 'Bad Town'. That's all it does. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Launch it.",
+     "effects": {
+      "business": 5,
+      "treasury": -5
+     },
+     "reaction": "Four thousand downloads. Everyone pressed the button. Nothing happened. Five stars."
+    },
+    "left": {
+     "label": "No app.",
+     "effects": {
+      "treasury": 5,
+      "business": -5
+     },
+     "reaction": "Brayden has launched it anyway. Just on his phone. He presses it a lot."
+    }
+   }
+  },
+  {
+   "id": "ahp17",
+   "who": "timmy",
+   "story": "ahproj",
+   "text": "Dear Mayor. Can tomorrow be volcano day? I built a volcano in the park. It's mostly vinegar. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Volcano day.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It erupted at noon. Everything smells of vinegar. Timmy is a hero."
+    },
+    "left": {
+     "label": "No volcanoes.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Timmy erupted it anyway. In his bedroom. His mum has written to you."
+    }
+   }
+  },
+  {
+   "id": "ahp18",
+   "who": "nutkins",
+   "story": "ahproj",
+   "text": "Mr Nutkins. Project for tomorrow: a Squirrel Bank branch inside City Hall. Very convenient. For me. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Open a branch.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Interest rates are terrible. The tellers are squirrels. Doug has opened an account."
+    },
+    "left": {
+     "label": "No branch.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Mr Nutkins has opened one in the tree outside. It looks in through your window."
+    }
+   }
+  },
+  {
+   "id": "ahp19",
+   "who": "wendy",
+   "story": "ahproj",
+   "text": "Wooo. Project for tomorrow: haunted tours of City Hall for schools. Gently haunted. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Gentle haunting.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "The children loved it. Wendy said 'boo' very softly. One child said it back."
+    },
+    "left": {
+     "label": "No tours.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "Wendy is giving the tour anyway. To the cleaners. They're unbothered."
+    }
+   }
+  },
+  {
+   "id": "ahp20",
+   "who": "steve",
+   "story": "ahproj",
+   "text": "Stormy Steve. Project for tomorrow: I deliver the forecast in person. On every doorstep. It'll take all day. Approve?",
+   "options": {
+    "right": {
+     "label": "Yes. Door to door.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "He told four hundred people it would rain. It was sunny. They were charmed."
+    },
+    "left": {
+     "label": "No. Use the radio.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Radio forecast: rain. It rained. Steve doesn't know how to feel."
+    }
+   }
+  },
+  {
+   "id": "ahp21",
+   "who": "cheese",
+   "story": "ahproj",
+   "text": "(A note under the vault door reads TOMORROW: CHEESE FAIR. Nobody wrote it. The cheese seems keen.) Approve the fair?",
+   "options": {
+    "right": {
+     "label": "Yes. Cheese fair.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Very popular. The cheese did not move. The cheese did not need to."
+    },
+    "left": {
+     "label": "No fair.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The note has been replaced: TOMORROW: CHEESE FAIR ANYWAY."
+    }
+   }
+  },
+  {
+   "id": "ahv1",
+   "who": "trevor",
+   "story": "ahvisit",
+   "text": "(It's late. Trevor the moth is at your window. He'd like to come in and sit on your lamp. Just for tonight.) Let him in?",
+   "options": {
+    "right": {
+     "label": "Yes. Come in, Trevor.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He sat on the lamp until dawn. He said it was the best night of his life."
+    },
+    "left": {
+     "label": "No. Goodnight, Trevor.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's on the streetlight outside. Looking in. Lovingly. All night."
+    }
+   }
+  },
+  {
+   "id": "ahv2",
+   "who": "lorraine",
+   "story": "ahvisit",
+   "text": "(Lorraine the seagull lands on your desk at midnight. She has a chip. She'd like to talk business.) Hear her out?",
+   "options": {
+    "right": {
+     "label": "Yes. Talk business.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "She's offered to run the seafront. For chips. You've agreed to nothing. Somehow."
+    },
+    "left": {
+     "label": "No. Out.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "She left the chip. It's a business card, apparently."
+    }
+   }
+  },
+  {
+   "id": "ahv3",
+   "who": "randy",
+   "story": "ahvisit",
+   "text": "Boss. Can't sleep. Can we talk? It's about the bins. It's always about the bins. Five minutes?",
+   "options": {
+    "right": {
+     "label": "Yes. Five minutes.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "It was forty minutes. You know a great deal about bins now. You feel closer."
+    },
+    "left": {
+     "label": "No. Bed, Randy.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He's gone to bed. In a bin. He's talking to it instead."
+    }
+   }
+  },
+  {
+   "id": "ahv4",
+   "who": "wendy",
+   "story": "ahvisit",
+   "text": "Wooo. Mayor. It's midnight. My favourite time. Fancy a cup of tea? I can't drink it. I just like making it.",
+   "options": {
+    "right": {
+     "label": "Yes. Tea with Wendy.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Lovely tea. She told you about 1890. It sounded awful. She misses it."
+    },
+    "left": {
+     "label": "No thanks.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "She made it anyway. It's on your desk. Steaming. Forever."
+    }
+   }
+  },
+  {
+   "id": "ahv5",
+   "who": "hoot",
+   "story": "ahvisit",
+   "text": "(Professor Hoot is awake. Of course he is. He'd like to discuss the school budget. Now. In the dark.) Discuss?",
+   "options": {
+    "right": {
+     "label": "Yes. Discuss.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "You agreed a budget at 3am. Mostly for mice. You're not sure how."
+    },
+    "left": {
+     "label": "No. Office hours.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "He's left a note. It says 'who'. That's the whole note."
+    }
+   }
+  },
+  {
+   "id": "ahv6",
+   "who": "gerald",
+   "story": "ahvisit",
+   "text": "HONK. (Gerald is outside City Hall at 1am. He'd like to come in. He's brought eleven friends.) Let them in?",
+   "options": {
+    "right": {
+     "label": "Yes. Come in.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Twelve geese in the council chamber. They've chosen their seats. Permanently."
+    },
+    "left": {
+     "label": "No. Closed.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "They honked until dawn. In shifts. Very organised."
+    }
+   }
+  },
+  {
+   "id": "ahv7",
+   "who": "cheese",
+   "story": "ahvisit",
+   "text": "(At 2am, you hear humming from the vault. It's quite a nice tune. It's getting louder.) Hum along?",
+   "options": {
+    "right": {
+     "label": "Yes. Hum along.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "You hummed a duet with the cheese. It was beautiful. You'll never tell anyone."
+    },
+    "left": {
+     "label": "No. Earplugs.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "The humming stopped the moment you put them in. It knows."
+    }
+   }
+  },
+  {
+   "id": "ahv8",
+   "who": "pebbles",
+   "story": "ahvisit",
+   "text": "(Councillor Pebbles is in your office at midnight. He's eating tomorrow's agenda. Slowly. Making eye contact.) Stop him?",
+   "options": {
+    "right": {
+     "label": "Yes. Stop him.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You saved half the agenda. The other half is Pebbles now."
+    },
+    "left": {
+     "label": "No. Let him eat.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Tomorrow's meeting has no agenda. It's the best meeting in months."
+    }
+   }
+  },
+  {
+   "id": "ahv9",
+   "who": "toby",
+   "story": "ahvisit",
+   "text": "(Toby the oak tree is tapping on your window with a branch. He can't sleep either. He'd like company.) Keep him company?",
+   "options": {
+    "right": {
+     "label": "Yes. Sit with Toby.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "You sat under Toby until sunrise. A squirrel brought you a nut. It was nice."
+    },
+    "left": {
+     "label": "No. Curtains.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "He's tapping more quietly now. Sadly. In morse code. It says 'oh'."
+    }
+   }
+  },
+  {
+   "id": "ahv10",
+   "who": "gary",
+   "story": "ahvisit",
+   "text": "(Gary the vending machine is the only light on the high street. He's dispensed you a hot chocolate. Unasked.) Drink it?",
+   "options": {
+    "right": {
+     "label": "Yes. Drink it.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "It was 1987 hot chocolate. It was perfect. Gary hummed with joy."
+    },
+    "left": {
+     "label": "No thanks.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Gary has dispensed a sad biscuit. As an apology. For nothing."
+    }
+   }
+  },
+  {
+   "id": "ahv11",
+   "who": "flaps",
+   "story": "ahvisit",
+   "text": "Mr Flaps. Night post. I have a letter addressed to 'The Mayor, Tomorrow'. Shall I give it to you now?",
+   "options": {
+    "right": {
+     "label": "Yes. Open it now.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "It's from you. Tomorrow's you. It says 'don't'. It doesn't say what."
+    },
+    "left": {
+     "label": "No. Tomorrow.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "He'll deliver it tomorrow. He's holding it in his beak. He can't sleep either."
+    }
+   }
+  },
+  {
+   "id": "ahv12",
+   "who": "kevin",
+   "story": "ahvisit",
+   "text": "(Kevin the pothole looks different at night. Deeper. Thoughtful. People have left candles in him.) Leave the candles?",
+   "options": {
+    "right": {
+     "label": "Yes. Leave them.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Kevin glowed all night. Someone wrote a song about it. It's mostly the word 'Kevin'."
+    },
+    "left": {
+     "label": "No. Fire risk.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Barb blew them out. One at a time. She said sorry to Kevin each time."
+    }
+   }
+  },
+  {
+   "id": "ahv13",
+   "who": "biscuit",
+   "story": "ahvisit",
+   "text": "(Inspector Biscuit is on night patrol. He has arrested a shadow. It's yours.) Turn yourself in?",
+   "options": {
+    "right": {
+     "label": "Yes. Fair cop.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You spent ten minutes in a cell. Biscuit gave you a biscuit. Justice was done."
+    },
+    "left": {
+     "label": "No. Run.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You ran. Biscuit chased your shadow round the square. He's still chasing it."
+    }
+   }
+  },
+  {
+   "id": "ahv14",
+   "who": "marcel",
+   "story": "ahvisit",
+   "text": "(Marcel the mime is outside your window, miming 'goodnight'. It's taking a very long time.) Mime it back?",
+   "options": {
+    "right": {
+     "label": "Yes. Mime goodnight.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "You mimed goodnight. He mimed 'you're welcome'. It's been an hour."
+    },
+    "left": {
+     "label": "No. Close the curtains.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "He's mimed a window. Inside your curtains. Somehow."
+    }
+   }
+  },
+  {
+   "id": "aht1",
+   "who": "randy",
+   "story": "ahtrap",
+   "text": "Boss. I found the big red button that turns off every streetlight. The label says DO NOT PRESS AT NIGHT. It's night. Press it?",
+   "options": {
+    "right": {
+     "label": "Yes. Press it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Click. Very dark. Very quiet. Then a lot of honking.",
+     "ending": "trap:ah_lights"
+    },
+    "left": {
+     "label": "No. Leave it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You left it. Randy pressed it once. Just to check. You turned it back on."
+    }
+   }
+  },
+  {
+   "id": "aht2",
+   "who": "doug",
+   "story": "ahtrap",
+   "text": "Mayor, the night bus driver has fallen asleep at the wheel. Doug says if nobody takes over, the bus goes into the river. Take the wheel?",
+   "options": {
+    "right": {
+     "label": "Yes. Take the wheel.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You drove the night bus home. Four passengers. All asleep. All safe."
+    },
+    "left": {
+     "label": "No. Someone else will.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Nobody else did.",
+     "ending": "trap:ah_bus"
+    }
+   }
+  },
+  {
+   "id": "aht3",
+   "who": "nora",
+   "story": "ahtrap",
+   "text": "Mayor, my sleep machine works! Warning on the side: ANYONE WHO PRESSES GO SLEEPS FOR A WEEK. Want to try it?",
+   "options": {
+    "right": {
+     "label": "Yes. Press GO.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You pressed GO. Mmm.",
+     "ending": "trap:ah_sleep"
+    },
+    "left": {
+     "label": "No thanks.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Nora tested it on Gerald. Blissful week. For everyone."
+    }
+   }
+  },
+  {
+   "id": "aht4",
+   "who": "gerald",
+   "story": "ahtrap",
+   "text": "HONK. (Gerald offers you his midnight bread. The bag reads: PROPERTY OF 400 GEESE. TOUCH AND SEE.) Take a slice?",
+   "options": {
+    "right": {
+     "label": "Yes. Just one slice.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "You took a slice. Four hundred heads turned.",
+     "ending": "trap:ah_bread"
+    },
+    "left": {
+     "label": "No thank you.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Gerald looked relieved. So did the four hundred geese behind him."
+    }
+   }
+  },
+  {
+   "id": "aht5",
+   "who": "wendy",
+   "story": "ahtrap",
+   "text": "Wooo. The clock tower stairs are rotten. The sign says DO NOT CLIMB. I'd like to show you the view from the top. Climb?",
+   "options": {
+    "right": {
+     "label": "Yes. Climb it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Lovely view. For about four steps.",
+     "ending": "trap:ah_tower"
+    },
+    "left": {
+     "label": "No. Describe it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Wendy floated up and described it. It sounded lovely. Mostly roofs."
+    }
+   }
+  },
+  {
+   "id": "aht6",
+   "who": "barb",
+   "story": "ahtrap",
+   "text": "Mayor. The vault must be locked before midnight or the cheese gets out. That's the rule. It's 11:59. Lock it?",
+   "options": {
+    "right": {
+     "label": "Yes. Lock it now.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Locked at 11:59 and 50 seconds. Something inside sighed. You slept well."
+    },
+    "left": {
+     "label": "No. It'll keep.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It did not keep.",
+     "ending": "trap:ah_cheese"
+    }
+   }
+  },
+  {
+   "id": "aht7",
+   "who": "chad",
+   "story": "ahtrap",
+   "text": "Mayor! Late-night deal. Sign this napkin and the town is mine 'for one night only'. Small print: forever. Sign?",
+   "options": {
+    "right": {
+     "label": "Yes. One night only.",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "You signed. Chad read the small print aloud. Slowly. Twice.",
+     "ending": "trap:ah_napkin"
+    },
+    "left": {
+     "label": "No. I read the small print.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Chad has eaten the napkin. He says it was 'a joke napkin'."
+    }
+   }
+  },
+  {
+   "id": "ahv15",
+   "who": "whiskers",
+   "story": "ahvisit",
+   "text": "(Mr Whiskers Esq. is on your desk at midnight. He has knocked your pen to the floor. He's eyeing the stapler.) Move the stapler?",
+   "options": {
+    "right": {
+     "label": "Yes. Save the stapler.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "You saved the stapler. He knocked over your tea instead. He held eye contact throughout."
+    },
+    "left": {
+     "label": "No. Let fate decide.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The stapler is on the floor. So is the lamp. Mr Whiskers is asleep. Case closed."
+    }
+   }
+  },
+  {
+   "id": "ahv16",
+   "who": "reginald",
+   "story": "ahvisit",
+   "text": "(Reginald the tortoise has reached your door. He set off at lunchtime. He'd like to say hello.) Say hello back?",
+   "options": {
+    "right": {
+     "label": "Yes. Hello, Reginald.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "He's started back home, delighted. He'll be there by Thursday."
+    },
+    "left": {
+     "label": "No. It's very late.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "He's turned round. Slowly. It'll be the slowest sulk in history."
+    }
+   }
+  },
+  {
+   "id": "ahv17",
+   "who": "clive",
+   "story": "ahvisit",
+   "text": "(A traffic cone has appeared outside your bedroom window. It's Clive. Nobody saw him arrive. Nobody ever does.) Move him?",
+   "options": {
+    "right": {
+     "label": "Yes. Move Clive.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "You moved him to the kerb. In the morning he was back. Closer."
+    },
+    "left": {
+     "label": "No. Leave him be.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "The Bugle has a photo: 'MAYOR AND CONE: THE TRUTH'. There is no truth. It's a cone."
+    }
+   }
+  },
+  {
+   "id": "ahv18",
+   "who": "nutkins",
+   "story": "ahvisit",
+   "text": "(Mr Nutkins is on your windowsill with a tiny briefcase. He'd like to discuss your overdraft. At the Squirrel Bank.) Let him in?",
+   "options": {
+    "right": {
+     "label": "Yes. Discuss it.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "You now owe four acorns. With interest. He's very pleased."
+    },
+    "left": {
+     "label": "No. Office hours.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "He's left a statement on the sill. It's a leaf. You're in the red."
+    }
+   }
+  },
+  {
+   "id": "ahv19",
+   "who": "carl",
+   "story": "ahvisit",
+   "text": "Big Carl. Can't sleep. I'm guarding the town. From the night. Can I guard it from your office? It's warmer.",
+   "options": {
+    "right": {
+     "label": "Yes. Guard away.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Carl guarded your office all night. Nothing got in. Not even morning, almost."
+    },
+    "left": {
+     "label": "No. Go home, Carl.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's guarding your doorstep. Shivering. Heroically."
+    }
+   }
+  },
+  {
+   "id": "ahv20",
+   "who": "biscuit",
+   "story": "ahvisit",
+   "text": "(Inspector Biscuit is at your door with a sausage. Evidence, apparently. He'd like you to hold it while he thinks.) Hold it?",
+   "options": {
+    "right": {
+     "label": "Yes. Hold the evidence.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He thought for an hour. Then ate the evidence. Case closed."
+    },
+    "left": {
+     "label": "No. Not the sausage.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's holding it himself. Badly. It's half gone. The investigation continues."
+    }
+   }
+  },
+  {
+   "id": "ahv21",
+   "who": "marge",
+   "story": "ahvisit",
+   "text": "Mayor, it's Marge. Late edition. One quick quote for tomorrow's front page? Anything. Anything at all.",
+   "options": {
+    "right": {
+     "label": "Yes. One quote.",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "You said 'goodnight'. Tomorrow's headline: 'MAYOR SAYS GOODNIGHT: WHAT DID THEY MEAN?'"
+    },
+    "left": {
+     "label": "No comment.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "Tomorrow's headline: 'NO COMMENT'. Somehow it sold out."
+    }
+   }
+  }
+ ],
+ "endings": {
+  "trap:ah_lights": {
+   "title": "Lights Out",
+   "text": "Every streetlight off at once. The geese took the town by midnight. You are now mayor of the bit under your desk."
+  },
+  "trap:ah_bus": {
+   "title": "Last Stop: River",
+   "text": "The night bus went into the river. Everyone swam out. The bus is a reef now. The ducks charge admission."
+  },
+  "trap:ah_sleep": {
+   "title": "Sleeping on the Job",
+   "text": "You slept for a week. The town ran itself. It was fine. That's the worst part. It was completely fine."
+  },
+  "trap:ah_bread": {
+   "title": "Breadwinner",
+   "text": "Four hundred geese took the slice back. Then your shoes. Then your office. Gerald is mayor now. He's very good."
+  },
+  "trap:ah_tower": {
+   "title": "Down the Clock Tower",
+   "text": "You made it four steps, then went through all of them. You're fine. The clock now strikes 'ow' on the hour."
+  },
+  "trap:ah_cheese": {
+   "title": "The Cheese Is Out",
+   "text": "At midnight the vault door creaked. By one it was running the council. By two, it had a fan club. You are in it."
+  },
+  "trap:ah_napkin": {
+   "title": "Signed Away",
+   "text": "You signed the napkin. Bad Town is now Chadtown, forever. The welcome sign is his face. It winks."
+  }
+ }
+}

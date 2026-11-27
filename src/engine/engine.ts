@@ -68,7 +68,7 @@ export function dayDeck(pack: Pack, weekId: string, day: number, rng: Rng = seed
   const used = (day - 1) * DAY_STEP;
   const spares = order.length;
   const free = deck.filter((x) => !x).length + spares;
-  const deal = Array.from({ length: free }, (_, k) => order[(used + k) % order.length]!);
+  const deal = Array.from({ length: order.length ? free : 0 }, (_, k) => order[(used + k) % order.length]!);
   // everyone should meet a storyline early: bring up to four story starters to the front of today's deal
   const today = free - spares;
   const starts = (id: string) => Object.values(findCard(pack, id).options).some((o) => o!.then?.length || o!.next?.length);
@@ -78,7 +78,7 @@ export function dayDeck(pack: Pack, weekId: string, day: number, rng: Rng = seed
   const mixed: string[] = []; while (front.length || rest.length) { if (front.length && mixed.length % 2 === 0) mixed.push(front.shift()!); else if (rest.length) mixed.push(rest.shift()!); else mixed.push(front.shift()!); }
   deal.splice(0, today, ...mixed);
   let k = 0;
-  return [...deck.map((x) => x ?? deal[k++]!), ...deal.slice(k)];
+  return [...deck.map((x) => x ?? deal[k++] ?? null), ...deal.slice(k)].filter((x): x is string => !!x);
 }
 
 /** The next card: the day's pinned card for this position, a due follow-up, then a pressure card if things are dire, then the shared deck. */
@@ -186,11 +186,19 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       s.cardInDay = 0;
       s.defers = TUNING.defer.perDay;
       if (s.flags.__reset) { for (const k of METERS) s.meters[k] = TUNING.recall.reset; delete s.flags.__reset; }
+      if (s.overnight) { for (const k of METERS) if (s.overnight[k]) s.meters[k] = clamp(s.meters[k] + s.overnight[k]!, 10, 90); delete s.overnight; }
       s.dayStart = { ...s.meters };
       // yesterday's unfinished business opens the day, one card after another
       s.tomorrow.forEach((id, i) => s.queue.push({ cardId: id, at: s.count + i }));
       s.tomorrow = [];
       startCard(s, pack, rng);
+      return s;
+    }
+    case 'overnight': {
+      if (s.phase !== 'dayEnd' || s.day >= 7) throw new Error('After Hours only carries into a next day');
+      const e: Partial<Record<MeterId, number>> = {};
+      for (const k of METERS) { const v = Math.round(action.effects[k] ?? 0); if (v) e[k] = clamp(v, -10, 10); }
+      s.overnight = e;
       return s;
     }
     case 'defer': {

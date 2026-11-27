@@ -1,28 +1,44 @@
-// After Hours: ten more cards once your day is done, as often as you like.
-// Side stories from all four weeks, plus exactly one disaster per round, cycling through all of them,
-// so every disaster ending can be won at any time (not just on its own day once every four weeks).
-// Nothing here changes tonight's vote or tomorrow's town; endings you hit do go in the Scrapbook.
-import type { Card, Choice, Pack } from '../engine/types.ts';
-import { PACKS } from './index.ts';
+// After Hours: ten extra cards, once a night, after your day is done. Its own cards, never the dailies:
+// three draft laws for tomorrow, three projects for tomorrow, three late-night visits and one After Hours disaster.
+// Whatever the round does to the meters is how tomorrow starts (capped per meter). Tonight's vote is already counted.
+// A disaster ends the round with its ending and nothing carries over.
+import type { Card, Ending, MeterId, Pack } from '../engine/types.ts';
+import data from './afterhours.json' with { type: 'json' };
 
 export const AFTER_HOURS_CARDS = 10;
-const isTrap = (c: Card) => Object.values(c.options).some((o) => o!.ending?.startsWith('trap:'));
-/** Every disaster card across the weeks, in a fixed order. */
-export const ALL_TRAPS: Card[] = PACKS.flatMap((p) => p.cards.filter(isTrap));
+/** The most After Hours can move any one meter for tomorrow. */
+export const OVERNIGHT_CAP = 10;
+const all = data.cards as unknown as Card[];
+const byStory = (s: string) => all.filter((c) => c.story === s);
+export const AH_LAWS = byStory('ahlaw');
+export const AH_PROJECTS = byStory('ahproj');
+export const AH_VISITS = byStory('ahvisit');
+export const AH_TRAPS = byStory('ahtrap');
+export const AH_CARDS = all;
+export const AH_ENDINGS = data.endings as Record<string, Ending>;
+
+const pick = (list: Card[], r: number, i: number) => list[(((3 * r + i) % list.length) + list.length) % list.length]!;
+
+/** The ten cards for night `round` (0, 1, 2...): a week of nights never repeats a card. */
+export function afterHoursCards(round: number): Card[] {
+  const out: Card[] = [];
+  for (let i = 0; i < 3; i++) out.push(pick(AH_VISITS, round, i), pick(AH_LAWS, round, i), pick(AH_PROJECTS, round, i));
+  const trap = AH_TRAPS[((round % AH_TRAPS.length) + AH_TRAPS.length) % AH_TRAPS.length]!;
+  out.splice(3 + (((round % 5) + 5) % 5), 0, trap);
+  return out;
+}
 
 export function afterHoursPack(base: Pack, round: number): Pack {
-  const trap = ALL_TRAPS[((round % ALL_TRAPS.length) + ALL_TRAPS.length) % ALL_TRAPS.length]!;
-  const keep = PACKS.flatMap((p) => p.cards.filter((c) => !c.day && !c.repeat && !c.sneak && !c.ribbon));
-  const ids = new Set([...keep.map((c) => c.id), trap.id]);
-  // no tomorrow after hours: next-day consequences come back two cards later instead; links to cards not here are dropped
-  const relink = (o: Choice): Choice => {
-    const then = [...(o.then ?? []), ...(o.next ?? []).map((id): [string, number] => [id, 2])].filter(([id]) => ids.has(id));
-    const { next: _n, ...rest } = o;
-    return { ...rest, ...(then.length ? { then } : {}) };
-  };
-  const copy = (c: Card, extra: Partial<Card> = {}): Card => ({ ...c, ...extra, options: Object.fromEntries(Object.entries(c.options).map(([d, o]) => [d, relink(o!)])) });
-  const cards = [...keep.map((c) => { const { day: _d, slot: _s, ...rest } = copy(c); return rest as Card; }), copy(trap, { day: 1, slot: 2 + (round % 6) })];
-  const endings = Object.assign({}, ...PACKS.map((p) => Object.fromEntries(Object.entries(p.endings).filter(([k]) => k.startsWith('trap:')))), base.endings);
-  const headlines = Object.assign({}, ...PACKS.map((p) => p.headlines));
-  return { id: base.id, title: 'After Hours', theme: { name: 'After Hours', text: 'Ten more cards. The night is decided; the town will be back to normal tomorrow.' }, cards, objectives: [], endings, headlines, cliffhangers: base.cliffhangers };
+  const cards = afterHoursCards(round).map((c, slot): Card => ({ ...c, day: 1, slot }));
+  return { id: base.id, title: 'After Hours', theme: { name: 'After Hours', text: 'Tonight\'s laws and plans shape tomorrow\'s town.' }, cards, objectives: [], endings: { ...base.endings, ...AH_ENDINGS }, headlines: base.headlines, cliffhangers: base.cliffhangers };
+}
+
+/** What After Hours hands to tomorrow: the round's net change per meter, capped. */
+export function overnightFrom(start: Record<MeterId, number>, end: Record<MeterId, number>): Partial<Record<MeterId, number>> {
+  const out: Partial<Record<MeterId, number>> = {};
+  for (const k of Object.keys(start) as MeterId[]) {
+    const d = Math.max(-OVERNIGHT_CAP, Math.min(OVERNIGHT_CAP, end[k] - start[k]));
+    if (d) out[k] = d;
+  }
+  return out;
 }

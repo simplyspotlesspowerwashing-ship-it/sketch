@@ -339,21 +339,64 @@ describe('content', () => {
 });
 
 describe('after hours', () => {
-  it('ten cards from every week, one disaster per round, cycling through all 28; every link resolves', async () => {
-    const { afterHoursPack, ALL_TRAPS, AFTER_HOURS_CARDS } = await import('../src/content/afterHours.ts');
-    expect(ALL_TRAPS).toHaveLength(28);
+  it('its own cards: 3 laws, 3 projects, 3 visits and 1 disaster a round; no daily cards; a week never repeats; every disaster cycles', async () => {
+    const { afterHoursPack, afterHoursCards, AH_TRAPS, AH_CARDS, AH_ENDINGS, AFTER_HOURS_CARDS } = await import('../src/content/afterHours.ts');
+    const daily = new Set(PACKS.flatMap((p) => p.cards.map((c) => c.id)));
+    for (const c of AH_CARDS) expect(daily.has(c.id), c.id).toBe(false);
+    for (const t of AH_TRAPS) {
+      const fatal = Object.values(t.options).filter((o) => o!.ending);
+      expect(fatal, t.id).toHaveLength(1);
+      expect(AH_ENDINGS[fatal[0]!.ending!], t.id).toBeDefined();
+    }
     const seenTraps = new Set<string>();
-    for (let round = 0; round < 28; round++) {
+    const week: string[] = [];
+    for (let round = 0; round < 14; round++) {
+      const cards = afterHoursCards(round);
+      expect(cards).toHaveLength(AFTER_HOURS_CARDS);
+      const by = (st: string) => cards.filter((c) => c.story === st).length;
+      expect([by('ahlaw'), by('ahproj'), by('ahvisit'), by('ahtrap')], `round ${round}`).toEqual([3, 3, 3, 1]);
+      if (round < 7) week.push(...cards.map((c) => c.id));
+      // played through: exactly these ten, in order
       const ah = afterHoursPack(pack, round);
-      const ids = new Set(ah.cards.map((c) => c.id));
-      for (const c of ah.cards) for (const o of Object.values(c.options)) { expect(o!.next).toBeUndefined(); for (const [t] of o!.then ?? []) expect(ids.has(t), `${c.id} -> ${t}`).toBe(true); }
       let s = newTerm(`after#${round}`, 'ah', ah);
       const shown: string[] = [];
       for (let i = 0; i < AFTER_HOURS_CARDS && s.phase === 'card'; i++) { shown.push(s.current!); s = reduce(s, { type: 'swipe', dir: steadyIn(ah, s) }, ah); }
-      const traps = shown.filter((id) => ALL_TRAPS.some((t) => t.id === id));
-      expect(traps, `round ${round}`).toHaveLength(1);
-      seenTraps.add(traps[0]!);
+      expect(shown).toEqual(cards.map((c) => c.id));
+      seenTraps.add(cards.find((c) => c.story === 'ahtrap')!.id);
     }
-    expect(seenTraps.size).toBe(28);
+    expect(new Set(week.filter((id) => !id.startsWith('aht'))).size, 'no repeats in a week').toBe(week.length - 7);
+    expect(seenTraps.size).toBe(AH_TRAPS.length);
+  });
+  it('the disaster answer ends the round with its ending', async () => {
+    const { afterHoursPack, afterHoursCards } = await import('../src/content/afterHours.ts');
+    const ah = afterHoursPack(pack, 0);
+    let s = newTerm('after#0', 'ah', ah);
+    const trap = afterHoursCards(0).find((c) => c.story === 'ahtrap')!;
+    while (s.current !== trap.id) s = reduce(s, { type: 'swipe', dir: steadyIn(ah, s) }, ah);
+    const dir = (Object.keys(trap.options) as Dir[]).find((d) => trap.options[d]!.ending)!;
+    s = reduce(s, { type: 'swipe', dir }, ah);
+    expect(s.phase).toBe('recalled');
+    expect(s.endings.at(-1)).toBe(trap.options[dir]!.ending);
+  });
+  it('carries a capped overnight change into the next morning only', async () => {
+    const { overnightFrom, OVERNIGHT_CAP } = await import('../src/content/afterHours.ts');
+    const base = { people: 50, business: 50, law: 50, press: 50, treasury: 50 };
+    expect(overnightFrom(base, { ...base, people: 75, law: 45 })).toEqual({ people: OVERNIGHT_CAP, law: -5 });
+    let s = start();
+    while (s.phase === 'card') s = reduce(s, { type: 'swipe', dir: steadyIn(pack, s) }, pack);
+    if (s.phase === 'recalled') s = reduce(s, { type: 'next' }, pack);
+    expect(s.phase).toBe('dayEnd');
+    const tonight = { ...s.meters };
+    const vote = s.polls.at(-1);
+    s = reduce(s, { type: 'overnight', effects: { people: 8, press: -40 } }, pack);
+    expect(s.meters).toEqual(tonight);
+    expect(s.polls.at(-1)).toBe(vote);
+    const reset = !!s.flags.__reset;
+    s = reduce(s, { type: 'next' }, pack);
+    const from = (k: MeterId) => (reset ? TUNING.recall.reset : tonight[k]);
+    expect(s.dayStart.people).toBe(Math.min(90, Math.max(10, from('people') + 8)));
+    expect(s.dayStart.press).toBe(Math.min(90, Math.max(10, from('press') - 10)));
+    expect(s.dayStart.law).toBe(from('law'));
+    expect(s.overnight).toBeUndefined();
   });
 });
