@@ -1121,7 +1121,7 @@
    "id": "w3m7_2",
    "who": "pebbles",
    "story": "mascot",
-   "text": "(Pebbles has eaten every ballot paper with Kevin's name on. She looks very pleased.) Recount the votes?",
+   "text": "(Pebbles has eaten every ballot paper with Kevin's name on. He looks very pleased.) Recount the votes?",
    "options": {
     "right": {
      "label": "Yes. Recount.",
@@ -3041,15 +3041,15 @@
    "id": "w3p2",
    "who": "pebbles",
    "story": "pebbles3",
-   "text": "(Pebbles is judging the festival flower show. She has eaten three entries. She says they were below standard.) Remove her?",
+   "text": "(Pebbles is judging the festival flower show. He has eaten three entries. He says they were below standard.) Remove him?",
    "options": {
     "right": {
-     "label": "Yes. Remove her.",
+     "label": "Yes. Remove him.",
      "effects": {
       "law": 5,
       "people": -5
      },
-     "reaction": "Removed. She's eaten the 'Judges Only' sign on her way out.",
+     "reaction": "Removed. He's eaten the 'Judges Only' sign on his way out.",
      "then": [
       [
        "w3p2b",
@@ -3058,7 +3058,7 @@
      ]
     },
     "left": {
-     "label": "No. She has taste.",
+     "label": "No. He has taste.",
      "effects": {
       "people": 5,
       "business": -5
@@ -3079,7 +3079,7 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "The new trophy is made of metal. Pebbles has looked at it. She's thinking."
+     "reaction": "The new trophy is made of metal. Pebbles has looked at it. He's thinking."
     },
     "left": {
      "label": "No. It's a goat.",
@@ -4354,7 +4354,7 @@
    "id": "t3_7",
    "who": "barb",
    "story": "disaster",
-   "text": "Mayor. Pebbles has eaten tonight's ballot box. All the votes are inside her. Re-run the vote by hand? Or wait for the goat to... return them.",
+   "text": "Mayor. Pebbles has eaten tonight's ballot box. If we don't re-run the vote, his result stands, and the goat only ever votes for the goat. Re-run it?",
    "options": {
     "right": {
      "label": "Yes. Re-run it.",
@@ -5353,7 +5353,7 @@
   },
   "trap:goat_ballots": {
    "title": "Counted by Goat",
-   "text": "You waited for the ballots to come back. Every readable one said GOAT. Pebbles is mayor. She has eaten the chain of office."
+   "text": "You waited for the ballots to come back. Every readable one said GOAT. Pebbles is mayor. He has eaten the chain of office."
   },
   "outw:people": {
    "title": "Out-Voted by a Marrow",

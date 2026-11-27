@@ -3582,7 +3582,7 @@
    "id": "wpb1",
    "who": "pebbles",
    "story": "goat2",
-   "text": "(Councillor Pebbles has tabled a motion. It's a turnip. She's put it on the table. She's staring at you.) Second the turnip?",
+   "text": "(Councillor Pebbles has tabled a motion. It's a turnip. He's put it on the table. He's staring at you.) Second the turnip?",
    "options": {
     "right": {
      "label": "Yes. I second it.",
@@ -3620,7 +3620,7 @@
    "id": "wpb2",
    "who": "marge",
    "story": "goat2",
-   "text": "Mayor, Pebbles has gone viral. #GoatVotes is trending. A lawnmower company wants to sponsor her. Allow it?",
+   "text": "Mayor, Pebbles has gone viral. #GoatVotes is trending. A lawnmower company wants to sponsor him. Allow it?",
    "options": {
     "right": {
      "label": "Yes. Get that sponsor.",
@@ -3629,15 +3629,15 @@
       "press": 5,
       "law": -5
      },
-     "reaction": "In the advert, she eats the lawnmower. Sales are up 400%. Nobody understands why."
+     "reaction": "In the advert, he eats the lawnmower. Sales are up 400%. Nobody understands why."
     },
     "left": {
-     "label": "No. She's a councillor.",
+     "label": "No. He's a councillor.",
      "effects": {
       "press": -5,
       "law": 5
      },
-     "reaction": "She's furious. She ate the offer letter. And the envelope. And Mr Flaps's hat."
+     "reaction": "He's furious. He ate the offer letter. And the envelope. And Mr Flaps's hat."
     }
    },
    "followUp": true
@@ -4852,7 +4852,7 @@
    "id": "t2_1",
    "who": "chad",
    "story": "disaster",
-   "text": "Mayor, I've bought a giant magnifying glass to cool things down in the heatwave. That's how they work, right? Point it at City Hall?",
+   "text": "Mayor, I bought a giant magnifying glass to cool City Hall down. Doug says magnifying glasses set things on fire. Point it at City Hall?",
    "options": {
     "right": {
      "label": "Yes. Cool us down.",
@@ -4902,7 +4902,7 @@
    "id": "t2_3",
    "who": "sal",
    "story": "disaster",
-   "text": "Mayor. My ice cream's melting. I've stored it in the town's electricity substation. It's cold in there. Leave it overnight?",
+   "text": "Mayor. My ice cream is in the electricity substation. Nora says melting ice cream plus electricity means a town-wide blackout. Leave it in?",
    "options": {
     "right": {
      "label": "Yes. Leave it.",
@@ -4981,7 +4981,7 @@
    "id": "t2_6",
    "who": "gerald",
    "story": "disaster",
-   "text": "(Gerald's wedding. The vicar asks if anyone objects. Everyone looks at you. Gerald is holding the cake knife. For the cake.) Hold your peace?",
+   "text": "(Gerald's wedding. The vicar asks if anyone objects. Barb whispers: 'Object and four hundred geese will riot.') Say nothing?",
    "options": {
     "right": {
      "label": "Yes. Say nothing.",
@@ -5009,7 +5009,7 @@
    "id": "t2_7",
    "who": "bev",
    "story": "disaster",
-   "text": "Mayor, I've swum the river. Now I'm swimming up the waterfall. Backwards. Will you swim it with me? Or hold my hat?",
+   "text": "Mayor, I'm swimming UP the ninety-foot waterfall. Big Carl says nobody has ever survived going down it. Swim it with me? Or hold my hat?",
    "options": {
     "right": {
      "label": "Yes. I'll swim it.",
@@ -5091,15 +5091,15 @@
    "id": "w2x_2",
    "who": "pebbles",
    "story": "pebbleshade",
-   "text": "(Councillor Pebbles has found the only shade in town. It's under your desk. She won't come out. She's chewing your shoe.) Leave her?",
+   "text": "(Councillor Pebbles has found the only shade in town. It's under your desk. He won't come out. He's chewing your shoe.) Leave him?",
    "options": {
     "right": {
-     "label": "Yes. Leave her.",
+     "label": "Yes. Leave him.",
      "effects": {
       "people": 5,
       "law": -5
      },
-     "reaction": "She's stayed all week. The council meets under the desk now. It's cosy.",
+     "reaction": "He's stayed all week. The council meets under the desk now. It's cosy.",
      "then": [
       [
        "w2x_2b",
@@ -5113,7 +5113,7 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "She's out. She's taken the shoe. You're working barefoot. It's very hot."
+     "reaction": "He's out. He's taken the shoe. You're working barefoot. It's very hot."
     }
    }
   },
@@ -5136,7 +5136,7 @@
       "business": 5,
       "people": -5
      },
-     "reaction": "Everyone's out. Pebbles has eaten the desk. Problem solved, she says."
+     "reaction": "Everyone's out. Pebbles has eaten the desk. Problem solved, he says."
     }
    },
    "followUp": true

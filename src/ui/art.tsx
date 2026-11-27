@@ -155,10 +155,21 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
       collar={<><path d="M22 84 q28 18 56 0" fill="none" stroke={INK} stroke-width="5" /><circle cx="22" cy="84" r="7" fill="#3A322C" {...S} /><circle cx="78" cy="84" r="7" fill="#3A322C" {...S} /></>} />
   ),
   nora: (m) => (
-    <Bust top="#F2F0EC" skin="#C68C5E" mood={m}
-      hair={<path d="M20 50 l-6 -20 l12 6 l-2 -18 l12 10 l6 -16 l8 14 l8 -14 l6 16 l12 -10 l-2 18 l12 -6 l-6 20z" fill="#9AA6B8" {...S} />}
-      over={<><rect x="27" y="26" width="46" height="10" rx="5" fill="#3A322C" {...S} /><circle cx="40" cy="31" r="6" fill="#7FB7D9" {...S} /><circle cx="60" cy="31" r="6" fill="#7FB7D9" {...S} /><path d="M66 60 q4 -2 6 2" stroke="#3A322C" stroke-width="2" fill="none" /><circle cx="70" cy="64" r="2" fill="#6B6257" /></>}
-      collar={<><path d="M36 76 l14 24 l14 -24" fill="#9DBF8A" {...S} /><path d="M66 86 h10 v10 h-10z" fill="#fff" {...S} /><path d="M69 84 v-6 M73 84 v-8" stroke="#C23B3B" stroke-width="2" /></>} />
+    <Bust top="#F7F5F0" skin="#C68C5E" mood={m}
+      hair={<><circle cx="30" cy="30" r="13" fill="#6A4C93" {...S} /><circle cx="50" cy="20" r="15" fill="#6A4C93" {...S} /><circle cx="70" cy="30" r="13" fill="#6A4C93" {...S} /><circle cx="24" cy="48" r="9" fill="#6A4C93" {...S} /><circle cx="76" cy="48" r="9" fill="#6A4C93" {...S} /><rect x="66" y="2" width="5" height="22" rx="1.5" fill="#E8C55A" transform="rotate(28 68 13)" {...S} stroke-width="1.6" /></>}
+      over={<>
+        <path d="M27 27 q23 -8 46 0" fill="none" stroke="#3A322C" stroke-width="4" stroke-linecap="round" />
+        <circle cx="40" cy="26" r="6" fill="#F2B544" {...S} stroke-width="2" /><circle cx="60" cy="26" r="6" fill="#F2B544" {...S} stroke-width="2" />
+        <circle cx="40" cy="45" r="8.5" fill="rgba(255,255,255,.25)" {...S} stroke-width="2.2" /><circle cx="60" cy="45" r="8.5" fill="rgba(255,255,255,.25)" {...S} stroke-width="2.2" /><path d="M48.5 45 h3" stroke={INK} stroke-width="2.2" />
+        <ellipse cx="66" cy="57" rx="3.5" ry="2" fill="#6B6257" opacity=".55" />
+      </>}
+      collar={<>
+        <path d="M38 76 l12 20 l12 -20" fill="#3B8C8C" {...S} />
+        <path d="M30 80 l12 -4 l8 24 z M70 80 l-12 -4 l-8 24 z" fill="#E9E6DF" {...S} stroke-width="2" />
+        <rect x="64" y="86" width="14" height="12" rx="2" fill="#E9E6DF" {...S} stroke-width="1.8" />
+        <rect x="66" y="78" width="3.5" height="12" rx="1.5" fill="#9DE0A8" {...S} stroke-width="1.3" /><rect x="71.5" y="80" width="3.5" height="10" rx="1.5" fill="#F7A1C4" {...S} stroke-width="1.3" />
+        <path d="M20 104 v-8 l5 -8 v-5 h6 v5 l5 8 v8z" fill="#9DE0A8" {...S} stroke-width="2" /><circle cx="26" cy="80" r="2" fill="#fff" {...S} stroke-width="1" /><circle cx="31" cy="76" r="1.5" fill="#fff" {...S} stroke-width="1" />
+      </>} />
   ),
   whiskers: (m) => (
     <>

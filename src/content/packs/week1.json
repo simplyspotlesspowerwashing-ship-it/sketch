@@ -4973,7 +4973,7 @@
    "id": "pb1",
    "who": "pebbles",
    "story": "goat",
-   "text": "(Councillor Pebbles has eaten today's agenda. All of it. She looks very pleased with herself.) Pass whatever she ate?",
+   "text": "(Councillor Pebbles has eaten today's agenda. All of it. He looks very pleased with himself.) Pass whatever he ate?",
    "options": {
     "right": {
      "label": "Yes. Pass it.",
@@ -4995,7 +4995,7 @@
       "law": 5,
       "treasury": -5
      },
-     "reaction": "Reprinted. She ate the reprint. And the printer's manual. The printer is scared.",
+     "reaction": "Reprinted. He ate the reprint. And the printer's manual. The printer is scared.",
      "then": [
       [
        "pb2f",
@@ -5039,15 +5039,15 @@
    "id": "pb2f",
    "who": "pebbles",
    "story": "goat",
-   "text": "(Pebbles has climbed onto the council table. She is standing on your chair. She is not getting down.) Let her chair the meeting?",
+   "text": "(Pebbles has climbed onto the council table. He is standing on your chair. He is not getting down.) Let him chair the meeting?",
    "options": {
     "right": {
-     "label": "Yes. Madam Chair.",
+     "label": "Yes. Mister Chair.",
      "effects": {
       "people": 5,
       "business": -5
      },
-     "reaction": "Shortest meeting ever. She ate the minutes. Everyone went home happy.",
+     "reaction": "Shortest meeting ever. He ate the minutes. Everyone went home happy.",
      "next": [
       "pb3"
      ]
@@ -5058,7 +5058,7 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "She got down. Onto your car. It's a convertible now."
+     "reaction": "He got down. Onto your car. It's a convertible now."
     }
    },
    "followUp": true
@@ -5067,7 +5067,7 @@
    "id": "pb3",
    "who": "pebbles",
    "story": "goat",
-   "text": "(Pebbles has a rosette. Pebbles has a slogan. It's 'MEH'. She's running for Deputy. Randy is terrified.) Endorse the goat?",
+   "text": "(Pebbles has a rosette. Pebbles has a slogan. It's 'MEH'. He's running for Deputy. Randy is terrified.) Endorse the goat?",
    "options": {
     "right": {
      "label": "Yes. Vote goat.",
@@ -6559,7 +6559,7 @@
    "id": "t1_2",
    "who": "nora",
    "story": "disaster",
-   "text": "Mayor, my weather machine's big switch says 'NEVER SWITCH TO GOOSE'. A goose is asking me to switch it. Should I?",
+   "text": "Mayor, my weather machine has one rule, written on it in red: NEVER SET TO GOOSE. Gerald is asking me to set it to GOOSE. Do it?",
    "options": {
     "right": {
      "label": "Yes. Switch it.",
@@ -6585,7 +6585,7 @@
    "id": "t1_3",
    "who": "doug",
    "story": "disaster",
-   "text": "Mayor, the cheese vault says 'DO NOT FEED'. Randy is about to feed it a sandwich. Through the keyhole. Stop him?",
+   "text": "Mayor, the cheese vault says DO NOT FEED. Doug says if it eats, it grows. Randy is posting a sandwich through the keyhole. Stop him?",
    "options": {
     "right": {
      "label": "Yes. Stop him.",
@@ -6611,7 +6611,7 @@
    "id": "t1_4",
    "who": "marge",
    "story": "disaster",
-   "text": "Mayor, live interview. Our last guest said 'off the record' and we printed it anyway. Want to say something off the record?",
+   "text": "Mayor, live interview. Fair warning: the last guest said 'off the record' and we printed every word. Want to say something off the record?",
    "options": {
     "right": {
      "label": "Yes. Off the record...",
@@ -6664,7 +6664,7 @@
    "id": "t1_6",
    "who": "gerald",
    "story": "disaster",
-   "text": "(Gerald offers a wing to shake. His other wing is behind his back, holding a pen and a contract that says 'MAYOR: GERALD'.) Shake?",
+   "text": "(Gerald offers a wing to shake. Behind his back, in plain view, he's holding a contract that says 'MAYOR: GERALD'.) Shake on it?",
    "options": {
     "right": {
      "label": "Yes. Shake on it.",

@@ -30,7 +30,7 @@ export const RANDY_SAYS: Record<string, string> = {
   'trap:held_rocket': "The cow's doing well in the polls. Better than you did. No offence.",
   'trap:bridge': "You looked very regal up there. Very still. Like Clive. Clive was impressed.",
   'trap:forever': "Wendy says you're settling in. Good pension. I'm thinking about it myself.",
-  'trap:goat_ballots': "Pebbles is mayor now. She's eaten my desk. I've never felt so seen.",
+  'trap:goat_ballots': "Pebbles is mayor now. He's eaten my desk. I've never felt so seen.",
   'trap:thin_ice': "The sign said ESPECIALLY MAYORS, boss. I read it to you. Twice. In a voice.",
   'trap:frost_swap': "Mr Frost's doing a lovely job. Very cool head. Bit melty on Tuesdays.",
   'trap:through_vault': "If you hear humming, that's not the cheese. That's you now, a bit.",

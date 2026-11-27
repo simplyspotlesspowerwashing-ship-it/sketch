@@ -2651,15 +2651,15 @@
    "id": "w4o2",
    "who": "pebbles",
    "story": "pebbles4",
-   "text": "(Pebbles is eating the snowmen. Only the carrots. Every snowman in town looks very surprised.) Stop her?",
+   "text": "(Pebbles is eating the snowmen. Only the carrots. Every snowman in town looks very surprised.) Stop him?",
    "options": {
     "right": {
-     "label": "Yes. Stop her.",
+     "label": "Yes. Stop him.",
      "effects": {
       "law": 5,
       "people": -5
      },
-     "reaction": "Stopped. She's eaten the 'Stop' sign on her way past.",
+     "reaction": "Stopped. He's eaten the 'Stop' sign on his way past.",
      "then": [
       [
        "w4o2b",
@@ -2668,7 +2668,7 @@
      ]
     },
     "left": {
-     "label": "No. She needs vitamins.",
+     "label": "No. He needs vitamins.",
      "effects": {
       "people": 5,
       "law": -5
@@ -3893,7 +3893,7 @@
    "id": "w4p26",
    "who": "pebbles",
    "story": "pebbles5",
-   "text": "(Councillor Pebbles is sitting in your seat at the council meeting. She's chewing something. It's the agenda. Again.) Start without it?",
+   "text": "(Councillor Pebbles is sitting in your seat at the council meeting. He's chewing something. It's the agenda. Again.) Start without it?",
    "options": {
     "right": {
      "label": "Yes. Wing it.",
@@ -3901,7 +3901,7 @@
       "people": 5,
       "law": -5
      },
-     "reaction": "You winged it. It was the best meeting in years. Pebbles abstained. With her mouth full."
+     "reaction": "You winged it. It was the best meeting in years. Pebbles abstained. With his mouth full."
     },
     "left": {
      "label": "No. Reprint the agenda.",
@@ -3909,7 +3909,7 @@
       "law": 5,
       "treasury": -5
      },
-     "reaction": "Reprinted. She ate that too. The printer has fled."
+     "reaction": "Reprinted. He ate that too. The printer has fled."
     }
    }
   },
@@ -4098,7 +4098,7 @@
    "id": "t4_2",
    "who": "timmy",
    "story": "disaster",
-   "text": "Dear Mayor. Mr Frost would like to swap places with you tonight. You stand outside in the snow. He sits in your office. Please?",
+   "text": "Dear Mayor. Mr Frost wants to swap places tonight: he sits in your office, you stand outside. It's minus twenty tonight. Swap?",
    "options": {
     "right": {
      "label": "Yes. Swap.",
@@ -4125,7 +4125,7 @@
    "id": "t4_3",
    "who": "randy",
    "story": "disaster",
-   "text": "Boss. Still snowed in. Wait for Bev's plough? Or there's a shortcut. Through the cheese vault. The cheese is awake.",
+   "text": "Boss. Still snowed in. Wait for Bev's plough? Or take the shortcut through the cheese vault. Doug says nobody who goes in comes out.",
    "options": {
     "right": {
      "label": "Yes. Wait for Bev.",
@@ -4179,7 +4179,7 @@
    "id": "t4_5",
    "who": "nora",
    "story": "disaster",
-   "text": "Mayor, the heat ray is stuck on full. I'll just pull the plug, shall I? Or someone could press the off switch. It's on the front.",
+   "text": "Mayor, the heat ray is stuck on full. Shall I just pull the plug? Or someone could press the off switch. It's on the front. Where the ray comes out.",
    "options": {
     "right": {
      "label": "Yes. Pull the plug.",
@@ -4206,7 +4206,7 @@
    "id": "t4_6",
    "who": "carl",
    "story": "disaster",
-   "text": "Big Carl. The ice pool's thawing. Test the depth with a stick? Or someone could go in. Feet first. In the dark.",
+   "text": "Big Carl. The ice pool's thawing. The sign says DANGER: VERY DEEP. Test it with a stick? Or someone could go in. Feet first. In the dark.",
    "options": {
     "right": {
      "label": "Yes. Use a stick.",
@@ -4233,7 +4233,7 @@
    "id": "t4_7",
    "who": "cheese",
    "story": "disaster",
-   "text": "(The Winter Ball. The cheese, in a bow tie, would like the first dance. With you. Alone. In the vault. With the door shut.) Dance?",
+   "text": "(The cheese, in a bow tie, wants the first dance. Alone. In the vault. With the door shut. Doug's rule: never be alone with the cheese.) Dance?",
    "options": {
     "right": {
      "label": "Yes. One dance.",
@@ -4526,7 +4526,7 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "A new one. In metal. She's licked it. Her tongue's stuck. She looks proud anyway.",
+     "reaction": "A new one. In metal. He's licked it. His tongue's stuck. He looks proud anyway.",
      "then": [
       [
        "w4r8b",
@@ -4540,7 +4540,7 @@
       "treasury": 5,
       "people": -5
      },
-     "reaction": "No sculpture. She's standing where it was. Very still. Like a sculpture."
+     "reaction": "No sculpture. He's standing where it was. Very still. Like a sculpture."
     }
    }
   },
@@ -4548,7 +4548,7 @@
    "id": "w4r8b",
    "who": "nora",
    "story": "pebblesice",
-   "text": "Mayor, Pebbles's tongue is stuck to the metal sculpture. I can free her with the heat ray. Very low setting. Do it?",
+   "text": "Mayor, Pebbles's tongue is stuck to the metal sculpture. I can free him with the heat ray. Very low setting. Do it?",
    "options": {
     "right": {
      "label": "Yes. Low setting.",
@@ -4563,7 +4563,7 @@
      "effects": {
       "people": 5
      },
-     "reaction": "Warm water worked. She immediately licked it again. Science."
+     "reaction": "Warm water worked. He immediately licked it again. Science."
     }
    },
    "followUp": true

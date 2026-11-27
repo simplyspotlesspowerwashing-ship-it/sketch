@@ -42,7 +42,7 @@ Each week has one saga that runs a card a day, Monday to Sunday, using `next`. W
 
 Each day has exactly one disaster card (`day: n`, any free slot from 10 up, never 0–9 so it can't cut into the main story). One answer has `"ending": "trap:<id>"`; the other is safe. Rules, enforced by the pack checker:
 
-- The text must give the warning away to anyone who reads it: a sign, a label, a 'probably fine'. Unfair traps are no fun.
+- **State the danger plainly** in the card text: a sign ('THIN ICE. ESPECIALLY MAYORS.'), a label ('DO NOT FEED'), or someone saying what will happen ('Doug says nobody who goes in comes out'). A reader must be able to tell which answer is the disaster. No twist outcomes the text didn't warn about; the comedy is in the ending, not in a surprise.
 - The fatal answer should be the reckless one, and it must be yes on some days and no on others (at least two of each per week).
 - The fatal option's label should look ordinary. The ending text goes in the pack's `endings` (title 40 characters, text 160).
 - Don't make the disaster card look different from other cards: noticing is the game.

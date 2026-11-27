@@ -46,8 +46,8 @@ function bootUnsafe(save: Save): State {
 
 
 // ---------- meters ----------
-function MeterIcon({ m }: { m: MeterId }) {
-  return m === 'treasury' ? <span class="coinface"><Icon.coin size={30} /></span> : <Portrait who={LEADER[m as GroupId]!} size={34} ring={GROUP_COLOR[m as GroupId]} mood="neutral" />;
+function MeterIcon({ m, mood = 'neutral' }: { m: MeterId; mood?: Mood }) {
+  return m === 'treasury' ? <span class="coinface"><Icon.coin size={30} /></span> : <Portrait who={LEADER[m as GroupId]!} size={34} ring={GROUP_COLOR[m as GroupId]} mood={mood} />;
 }
 
 function Meters({ s, preview }: { s: State; preview: Choice | null }) {
@@ -59,7 +59,7 @@ function Meters({ s, preview }: { s: State; preview: Choice | null }) {
         const hint = preview?.effects[m];
         return (
           <div key={m} class={`meter ${danger ? 'danger' : ''}`} style={{ '--g': METER_COLOR[m] }} role="meter" aria-label={`${METER_NAME[m]} ${v} of 100`} aria-valuenow={v} aria-valuemin={0} aria-valuemax={100}>
-            <span class="m-top"><MeterIcon m={m} /><b class="m-val">{v}</b></span>
+            <span class="m-top"><MeterIcon m={m} mood={v <= 35 ? 'annoyed' : v >= 65 ? 'pleased' : 'neutral'} /><b class="m-val">{v}</b></span>
             <span class="hbar small"><i class="now" style={{ width: `${v}%` }} /><CalmZone m={m} /></span>
             <span class="m-name">{METER_NAME[m]}</span>
             {hint ? <i class={`hintdot ${Math.abs(hint) >= 10 ? 'big' : ''}`} aria-label="will change" /> : null}
@@ -117,8 +117,12 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
     const k = (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); onDone(); } };
     addEventListener('keydown', k); return () => removeEventListener('keydown', k);
   }, []);
-  // whoever asked is pleased by a yes and put out by a no
-  const mood: Mood = r.dir === 'right' ? 'pleased' : 'annoyed';
+  // Faces follow what actually happened. A group's leader (Pam, Chad, Barb, Marge, Doug) shows how their group fared;
+  // anyone else is pleased by a yes and put out by a no.
+  const led = (METERS as readonly MeterId[]).find((m) => (m === 'treasury' ? 'doug' : LEADER[m as GroupId]) === r.card.who);
+  const delta = led ? r.after[led] - r.before[led] : 0;
+  const mood: Mood = led && delta !== 0 ? (delta > 0 ? 'pleased' : 'annoyed') : r.dir === 'right' ? 'pleased' : 'annoyed';
+  const faceFor = (d: number): Mood => (d > 0 ? 'pleased' : 'annoyed');
   return (
     <div class="stage">
       <div class={`card result ${mood} ${r.recalled ? 'recalled' : ''}`} style={{ '--g': mood === 'pleased' ? '#3F8F5A' : mood === 'annoyed' ? '#C23B3B' : '#8C8577' }}>
@@ -132,7 +136,7 @@ function ImpactReveal({ r, onDone }: { r: RevealData; onDone: () => void }) {
             const edge = r.after[m] <= TUNING.low || (m !== 'treasury' && r.after[m] >= TUNING.high);
             return (
               <span key={m} class={`rv-barrow ${up ? 'up' : 'down'} ${bars ? 'in' : ''}`} style={{ '--g': METER_COLOR[m], '--d': `${i * 110}ms` }}>
-                <MeterIcon m={m} />
+                <MeterIcon m={m} mood={faceFor(d)} />
                 <span class="rv-barname">{METER_NAME[m]}{edge && bars ? <em>{r.after[m] <= TUNING.low ? ' · danger' : ' · too high'}</em> : null}</span>
                 <span class="rv-barnum">{up ? '▲' : '▼'}{bars ? <CountUp to={Math.abs(d)} bare /> : Math.abs(d)}</span>
                 <SlideBar m={m} from={r.before[m]} to={bars ? r.after[m] : r.before[m]} />
@@ -420,57 +424,19 @@ function EndingCard({ k, isNew }: { k: string; isNew?: boolean }) {
   const kind = k.split(':')[0]!;
   return (
     <div class={`ending ${kind}`}>{isNew && <span class="newtag">NEW IN YOUR SCRAPBOOK</span>}
-      <span class="ending-head"><Portrait who={endingWho(k)} size={44} mood="pleased" /><span><small class="ending-kind">{KIND[kind] ?? 'Ending'}</small><b>{e.title}</b></span></span>
+      <span class="ending-head"><Portrait who={endingWho(k)} size={44} mood={kind === 'low' || kind === 'out' || kind === 'outw' ? 'annoyed' : 'pleased'} /><span><small class="ending-kind">{KIND[kind] ?? 'Ending'}</small><b>{e.title}</b></span></span>
       <span>{e.text}</span>
       {randySays(k) && <span class="randy-says"><Portrait who="randy" size={28} mood="pleased" /><i>“{randySays(k)}”</i></span>}
     </div>
   );
 }
-/** A five-second show for an ending: who did it, the gag, then the headline. Tap to skip. */
-function EndingShow({ k, onDone }: { k: string; onDone: () => void }) {
-  const e = endingText(k);
-  const base = k.split('/')[0]!;
-  const kind = base.split(':')[0]!;
-  const g = base.split(':')[1]?.split('_')[0] ?? 'people';
-  const culprit = endingWho(k);
-  const gag = kind === 'rare' ? 'rare' : kind === 'trap' ? 'trap' : kind === 'high' ? 'high' : kind === 'low' ? 'low' : 'out';
-  useEffect(() => {
-    sfx('drum');
-    const hit = setTimeout(() => sfx(gag === 'rare' ? 'win' : gag === 'high' ? 'coin' : gag === 'trap' ? 'stamp' : 'honk'), 1500);
-    const head = setTimeout(() => sfx('stamp'), 3700);
-    const end = setTimeout(onDone, 5200);
-    return () => { clearTimeout(hit); clearTimeout(head); clearTimeout(end); };
-  }, []);
-  const crowd = (n: number) => Array.from({ length: n }, (_, i) => <span key={i} class="es-crowd" style={{ '--i': i, '--x': `${(i - (n - 1) / 2) * 52}px` }}><Portrait who={culprit} size={52} mood={gag === 'high' ? 'pleased' : 'annoyed'} /></span>);
-  return (
-    <button class={`ending-show es-${gag}`} onClick={onDone} aria-label={`${e.title}. Tap to continue`}>
-      <span class="es-spot" aria-hidden="true" />
-      <span class="es-stage" aria-hidden="true">
-        {gag === 'rare' && <span class="es-rays" />}
-        <span class="es-mayor"><Portrait who="mayor" size={110} mood={gag === 'high' || gag === 'rare' ? 'pleased' : 'annoyed'} /></span>
-        {(gag === 'trap' || gag === 'rare') && <span class="es-culprit"><Portrait who={culprit} size={110} mood="pleased" /></span>}
-        {gag === 'low' && crowd(5)}
-        {gag === 'high' && <>{crowd(5)}{Array.from({ length: 6 }, (_, i) => <b key={i} class="es-heart" style={{ '--i': i }}>♥</b>)}</>}
-        {gag === 'out' && <>{Array.from({ length: 14 }, (_, i) => <i key={i} class="es-ballot" style={{ '--i': i, '--x': `${((i * 53) % 100) - 50}%` }}>✗</i>)}<b class="es-x">✗</b></>}
-        {gag === 'trap' && <><span class="es-flash" /><b class="es-boom">💥</b></>}
-        {gag === 'rare' && Array.from({ length: 12 }, (_, i) => <i key={i} class="es-star" style={{ '--a': `${i * 30}deg` }}>✦</i>)}
-      </span>
-      <span class="es-head" aria-hidden="true"><small>THE BUGLE · {KIND[kind] ?? 'Ending'}</small><b>{e.title.toUpperCase()}</b></span>
-      <span class="es-skip">Tap to skip</span>
-      <span class="es-who" aria-hidden="true">{gag === 'low' || gag === 'high' ? (g === 'treasury' ? 'The Treasury' : METER_NAME[g as MeterId]) : (NAMES[culprit] ?? culprit).replace(/^Deputy /, '').split(/[,(]/)[0]!.trim()}</span>
-    </button>
-  );
-}
-
 /** The prize for losing: a funny ending, celebrated. */
 function EndingPrize({ k, isNew, have }: { k: string; isNew: boolean; have: number }) {
   const e = endingText(k);
   const [copied, setCopied] = useState(false);
   const total = ALL_ENDINGS().length;
-  const [show, setShow] = useState(!reduced());
-  useEffect(() => { if (!show) sfx(isNew ? 'win' : 'paper'); }, [show]);
+  useEffect(() => { sfx(isNew ? 'win' : 'paper'); }, []);
   const quip = randySays(k);
-  if (show) return <EndingShow k={k} onDone={() => setShow(false)} />;
   const share = `I got the ending “${e.title}” in Mayor of Bad Town. ${have} of ${total} collected.${quip ? ` Randy says: “${quip}”` : ''}`;
   return (
     <div class={`prize ${isNew ? 'new' : 'again'}`}>
