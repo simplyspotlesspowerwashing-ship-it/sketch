@@ -93,6 +93,7 @@
     "right": {
      "label": "Yes. Bring him in.",
      "effects": {
+      "law": 5,
       "people": -5
      },
      "reaction": "We brought him in. He's wrapped in a blanket. He's given the blanket a team talk.",
@@ -242,8 +243,8 @@
     "left": {
      "label": "No. Ignore him.",
      "effects": {
-      "people": -5,
-      "press": 5
+      "law": 5,
+      "press": -5
      },
      "reaction": "Ignoring him has made him more popular. He's mysterious now.",
      "then": [
@@ -395,9 +396,9 @@
   },
   {
    "id": "w4m3_2",
-   "who": "doug",
+   "who": "randy",
    "story": "snowedin",
-   "text": "Mayor. We're still snowed in. Randy says he can dig us out. With a spoon. It might take a month. Let him dig?",
+   "text": "Boss. We're snowed in. I can dig us out. With a spoon. Might take a month. Let me dig?",
    "options": {
     "right": {
      "label": "Yes. Dig, Randy.",
@@ -636,9 +637,9 @@
   },
   {
    "id": "w4m4_3",
-   "who": "barb",
+   "who": "biscuit",
    "story": "grit",
-   "text": "Mayor. Because of the ice, everyone is sliding to work. Chief Biscuit wants to give out speeding tickets. To sliders. Allow it?",
+   "text": "(Everyone is sliding to work on the ice. Chief Biscuit would like to give out speeding tickets. To sliders. He's practising his stern face.) Allow it?",
    "options": {
     "right": {
      "label": "Yes. Ticket them.",
@@ -968,8 +969,8 @@
     "left": {
      "label": "No. Bias.",
      "effects": {
-      "press": 5,
-      "law": -5
+      "law": 5,
+      "press": -5
      },
      "reaction": "Carl has written another letter. Signed 'Not Carl'. It's in his handwriting.",
      "then": [
@@ -1578,7 +1579,8 @@
     "right": {
      "label": "Yes. Fix it.",
      "effects": {
-      "people": 5
+      "treasury": 5,
+      "business": -5
      },
      "reaction": "The heating's fixed. It's now forty degrees. Everyone's in shorts. Doug is wearing a spreadsheet.",
      "then": [
@@ -1591,8 +1593,8 @@
     "left": {
      "label": "No. Wear jumpers.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "business": 5,
+      "treasury": -5
      },
      "reaction": "Everyone's in jumpers. Doug knitted one for the Cheese. The Cheese seems warmer.",
      "then": [
@@ -1816,8 +1818,8 @@
     "right": {
      "label": "Yes. Rehome Dennis.",
      "effects": {
-      "people": 5,
-      "law": -5
+      "law": 5,
+      "business": -5
      },
      "reaction": "Dennis has a pond. With the geese. He's learning to honk. It sounds like a cough.",
      "set": [
@@ -2015,7 +2017,7 @@
     "right": {
      "label": "Yes. Lock it.",
      "effects": {
-      "law": 5,
+      "treasury": 5,
       "people": -5
      },
      "reaction": "Locked. You heard a small sound behind the door. Like cheese settling. Or waiting.",
@@ -2170,7 +2172,7 @@
     "right": {
      "label": "Yes. Four locks.",
      "effects": {
-      "law": 5,
+      "treasury": 5,
       "press": -5
      },
      "reaction": "Four locks. Doug checks them hourly. Last night all four were warm.",
@@ -2181,8 +2183,8 @@
     "left": {
      "label": "No. Three is plenty.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "Three locks. The cheese seems to accept this. For now.",
      "next": [
@@ -2313,9 +2315,9 @@
   },
   {
    "id": "w4g_6b",
-   "who": "doug",
+   "who": "cheese",
    "story": "cheesesaga",
-   "text": "Mayor, the cheese has proposed a fondue. For the whole town. At the Winter Ball. You're the guest of honour. In the middle. Of the fondue. Agree?",
+   "text": "(The cheese has proposed a fondue. For the whole town. At the Winter Ball. You're guest of honour. In the middle. Of the fondue.) Agree?",
    "options": {
     "right": {
      "label": "Yes. Fondue it is.",
@@ -2630,17 +2632,16 @@
     "right": {
      "label": "Yes. Reprint.",
      "effects": {
-      "treasury": -5,
-      "law": 5
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "Reprinted. Sent by Mr Flaps. Arrived damp. Now say 'NTER FAI'. Progress."
     },
     "left": {
      "label": "No. Winter F it is.",
      "effects": {
-      "people": 5,
       "press": 5,
-      "law": -5
+      "people": -5
      },
      "reaction": "'Winter F' was a huge success. Nobody knew what it was. Everybody came."
     }
@@ -2882,15 +2883,17 @@
     "right": {
      "label": "Yes. A day deputy.",
      "effects": {
-      "law": 5
+      "people": 5,
+      "law": 5,
+      "treasury": -5
      },
      "reaction": "The new deputy is Bev. She's been a deputy head before. In 1952. She's very strict."
     },
     "left": {
      "label": "No. Owls are owls.",
      "effects": {
-      "people": 5,
-      "law": -5
+      "business": 5,
+      "people": -5
      },
      "reaction": "The school is run at night now. Officially. The children are nocturnal. Parents are tired."
     }
@@ -3061,9 +3064,9 @@
   },
   {
    "id": "w4p4b",
-   "who": "barb",
+   "who": "biscuit",
    "story": "reginald4",
-   "text": "Mayor. Reginald is back in the road. Sleeping. Chief Biscuit wants to give him a parking ticket. Allow it?",
+   "text": "(Reginald is back in the road. Sleeping. Chief Biscuit would like to give him a parking ticket. He's already written it.) Allow it?",
    "options": {
     "right": {
      "label": "Yes. Ticket him.",
@@ -3930,8 +3933,8 @@
     "left": {
      "label": "No. Do your best.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "treasury": 5,
+      "law": -5
      },
      "reaction": "Barb's on carrot watch. Alone. With a flask. She's seen things."
     }
@@ -4047,8 +4050,8 @@
      "label": "Yes. Sell the snow.",
      "effects": {
       "treasury": 15,
-      "business": -10,
-      "people": -10
+      "business": 5,
+      "people": -15
      },
      "reaction": "Chad owns the snow. It's £2 a snowball. Children are furious."
     },
@@ -4817,6 +4820,7 @@
     "right": {
      "label": "Yes. New car.",
      "effects": {
+      "law": 5,
       "treasury": -5
      },
      "reaction": "New car. It's frozen too. She's back on the tray. She prefers it."
@@ -4954,23 +4958,23 @@
    "id": "w4s12",
    "who": "pam",
    "story": "ptacoats",
-   "text": "The PTA would like to run a coat drive. They've collected four hundred coats. All of them are Randy's. Return them?",
+   "text": "The PTA would like to run a coat drive. They've collected four hundred coats. All of them are Randy's. They'd like to donate them. Allow it?",
    "options": {
     "right": {
-     "label": "Yes. Return them.",
-     "effects": {
-      "law": 5,
-      "people": -5
-     },
-     "reaction": "Returned. Randy is wearing all four hundred. He's spherical."
-    },
-    "left": {
-     "label": "No. Donate them.",
+     "label": "Yes. Donate them.",
      "effects": {
       "people": 5,
       "law": -5
      },
      "reaction": "Donated. Four hundred people in Randy's coats. The cousins are very confused."
+    },
+    "left": {
+     "label": "No. Return them.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Returned. Randy is wearing all four hundred. He's spherical."
     }
    }
   },
@@ -5341,7 +5345,7 @@
     "right": {
      "label": "Yes. Back in the vault.",
      "effects": {
-      "law": 5,
+      "treasury": 5,
       "people": -5
      },
      "reaction": "It rolled back. It took a while. It felt like a choice.",

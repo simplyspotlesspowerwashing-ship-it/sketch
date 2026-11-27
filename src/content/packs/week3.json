@@ -123,14 +123,15 @@
   },
   {
    "id": "w3m1_3",
-   "who": "doug",
+   "who": "chad",
    "story": "marrow",
-   "text": "Mayor, the marrow is blocking the high street. Chad wants to buy it. He'll pay a fortune. It would fix the budget. Sell it?",
+   "text": "Mayor, the marrow is blocking the high street. I'd like to buy it. I'll pay a fortune. It would fix your budget. Sell it?",
    "options": {
     "right": {
      "label": "Yes. Sell the marrow.",
      "effects": {
-      "treasury": 15,
+      "treasury": 10,
+      "business": 5,
       "people": -10
      },
      "reaction": "Sold. Chad's had it moved to his garden. It's moved itself back.",
@@ -308,7 +309,7 @@
     "right": {
      "label": "Yes. The Bin Lids.",
      "effects": {
-      "people": 5,
+      "press": 5,
       "business": -5
      },
      "reaction": "Randy wept. The Bin Lids have a record deal. The record is a bin lid.",
@@ -322,8 +323,8 @@
     "left": {
      "label": "No. Call it a draw.",
      "effects": {
-      "press": 5,
-      "people": -5
+      "people": 5,
+      "press": -5
      },
      "reaction": "'MAYOR DODGES MUSIC' — the Bugle. Both bands are now furious with you. They've formed a supergroup.",
      "then": [
@@ -858,7 +859,7 @@
     "right": {
      "label": "Yes. Move the yacht.",
      "effects": {
-      "people": 5,
+      "law": 5,
       "business": -5
      },
      "reaction": "The yacht backed up four miles. Reginald didn't notice. He's fine. He's a legend.",
@@ -873,7 +874,7 @@
      "label": "No. Wait for Reginald.",
      "effects": {
       "business": 5,
-      "people": -5
+      "law": -5
      },
      "reaction": "The yacht waited eleven hours. Chad's crew mutinied. They're having a picnic.",
      "then": [
@@ -895,6 +896,7 @@
     "right": {
      "label": "Yes. Launch it.",
      "effects": {
+      "business": 5,
       "treasury": -5
      },
      "reaction": "It floated for nine seconds. Then it was a submarine. The ducks are delighted. They live there now."
@@ -950,9 +952,9 @@
   },
   {
    "id": "w3m6_2",
-   "who": "doug",
+   "who": "wendy",
    "story": "haunt",
-   "text": "Mayor. The haunted house is the town's most profitable venture in forty years. Wendy wants a share. Of the profits. She can't hold money. Pay her?",
+   "text": "Wooo. The haunted house is the town's best earner in forty years. I'd like a share. I can't hold money. I'd still like it. Pay me?",
    "options": {
     "right": {
      "label": "Yes. Pay Wendy.",
@@ -994,6 +996,7 @@
     "right": {
      "label": "Yes. Scare them.",
      "effects": {
+      "press": 5,
       "people": -5
      },
      "reaction": "You hid in a wardrobe and jumped out. Bev hit you with her bag. Best review in years.",
@@ -1089,6 +1092,7 @@
     "right": {
      "label": "Yes. Bugle runs it.",
      "effects": {
+      "press": 5,
       "law": -5
      },
      "reaction": "The Bugle has run the vote. It's been rigged. In favour of the Bugle. The Bugle isn't running.",
@@ -1469,9 +1473,9 @@
   },
   {
    "id": "w3x1a",
-   "who": "doug",
+   "who": "desk",
    "story": "stilts",
-   "text": "Mayor, the stilt walkers are suing. They say the marrow ride was 'undignified'. They want compensation. In height. Pay it?",
+   "text": "A legal letter. The stilt walkers are suing. They say the marrow ride was 'undignified'. They want compensation. In height. Pay it?",
    "options": {
     "right": {
      "label": "Yes. Pay them.",
@@ -2191,9 +2195,9 @@
   },
   {
    "id": "w3g_4a",
-   "who": "doug",
+   "who": "randy",
    "story": "memoir",
-   "text": "Mayor, the memoir has sold eleven copies. Randy bought ten. He'd like a book launch. At City Hall. With canapés. Allow it?",
+   "text": "Boss. My memoir's sold eleven copies. I bought ten. I'd like a book launch. At City Hall. With canapés. Allow it?",
    "options": {
     "right": {
      "label": "Yes. Launch it.",
@@ -2650,9 +2654,9 @@
   },
   {
    "id": "w3o1b",
-   "who": "doug",
+   "who": "cheese",
    "story": "cheese3",
-   "text": "Mayor, the Cheese's fans want it on tour. Every town. On a trolley. They've made T-shirts. Allow a cheese tour?",
+   "text": "(The cheese's fans want it on tour. Every town. On a trolley. They've made T-shirts. The cheese seems keen.) Allow a cheese tour?",
    "options": {
     "right": {
      "label": "Yes. Cheese tour.",
@@ -2774,9 +2778,9 @@
   },
   {
    "id": "w3o3b",
-   "who": "barb",
+   "who": "biscuit",
    "story": "biscuit3",
-   "text": "Mayor. Inspector Biscuit has asked for a promotion. To Chief. My job. He's a dog. He has more arrests than me. Promote him?",
+   "text": "(Inspector Biscuit has asked for a promotion. To Chief. Barb's job. He has more arrests than her. He's brought a biscuit.) Promote him?",
    "options": {
     "right": {
      "label": "Yes. Chief Biscuit.",
@@ -3132,7 +3136,7 @@
     "right": {
      "label": "Yes. Faces for cones.",
      "effects": {
-      "people": 5,
+      "press": 5,
       "law": -5
      },
      "reaction": "Every cone in town has a face. They're all smiling. Driving is unsettling now."
@@ -3289,6 +3293,7 @@
     "right": {
      "label": "Yes. Arrest him.",
      "effects": {
+      "law": 5,
       "people": -5
      },
      "reaction": "Arrested. He's mimed a cell. He's in it. He's mimed the cell being very small."
@@ -3616,8 +3621,8 @@
     "left": {
      "label": "No. Do your best.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "treasury": 5,
+      "law": -5
      },
      "reaction": "Barb is guarding the bunting personally. With a deck chair. And a flask."
     }
@@ -3702,8 +3707,8 @@
      "label": "Yes. ChadFest.",
      "effects": {
       "treasury": 15,
-      "business": -10,
-      "people": -10
+      "business": 5,
+      "people": -15
      },
      "reaction": "ChadFest. Tickets are £400. Chad is the only one inside. He's having a great time."
     },
@@ -4010,16 +4015,16 @@
     "right": {
      "label": "Yes. You earned it.",
      "effects": {
-      "treasury": -5,
-      "people": 5
+      "treasury": 5,
+      "business": -5
      },
      "reaction": "Doug bought a sandwich. He ate it slowly. It was the best day of his life."
     },
     "left": {
      "label": "No. Budget's tight.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "He's put the £2 back in the budget. He visits it."
     }
@@ -4707,8 +4712,8 @@
     "right": {
      "label": "Yes. News faces.",
      "effects": {
-      "press": 5,
-      "people": -5
+      "people": 5,
+      "press": -5
      },
      "reaction": "Timmy's face says 'MAYOR IN CRISIS'. He's very proud of it.",
      "then": [
@@ -4721,8 +4726,8 @@
     "left": {
      "label": "No. Close the tent.",
      "effects": {
-      "people": 5,
-      "press": -5
+      "press": 5,
+      "people": -5
      },
      "reaction": "Closed. The children have painted each other with jam. It's worse. It's stickier."
     }
@@ -4810,9 +4815,9 @@
   },
   {
    "id": "w3r10b",
-   "who": "doug",
+   "who": "cheese",
    "story": "cheesestall",
-   "text": "Mayor, the cheese won 'Best Local Produce'. The prize is £50. It wants it paid. Into the vault. Pay the cheese?",
+   "text": "(The cheese won 'Best Local Produce'. The prize is £50. A note under the vault door says PAY ME. INTO THE VAULT.) Pay the cheese?",
    "options": {
     "right": {
      "label": "Yes. Pay the cheese.",
@@ -5155,16 +5160,16 @@
     "right": {
      "label": "Yes. Go on, Doug.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "treasury": 5,
+      "business": -5
      },
      "reaction": "He cried during the treasury section. So did the audience. He came second. To the cheese."
     },
     "left": {
      "label": "No. Keep it private.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "He read it to himself. In a cupboard. With feeling."
     }
@@ -5179,7 +5184,7 @@
     "right": {
      "label": "Yes. Probably jam.",
      "effects": {
-      "business": 5,
+      "people": 5,
       "law": -5
      },
      "reaction": "It was jam. Mostly. One jar was soup. It sold out first."
@@ -5188,7 +5193,7 @@
      "label": "No. Label it properly.",
      "effects": {
       "law": 5,
-      "business": -5
+      "people": -5
      },
      "reaction": "New labels: 'JAM (DEFINITELY, PROBABLY)'. Pam stands by it."
     }

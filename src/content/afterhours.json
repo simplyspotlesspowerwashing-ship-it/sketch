@@ -681,7 +681,7 @@
     "right": {
      "label": "Yes. Open day.",
      "effects": {
-      "people": 5,
+      "law": 5,
       "treasury": -5
      },
      "reaction": "Bev flew the helicopter. Twice round the clock tower. Upside down once."
@@ -689,8 +689,8 @@
     "left": {
      "label": "No. Not anyone.",
      "effects": {
-      "people": -5,
-      "treasury": 5
+      "treasury": 5,
+      "law": -5
      },
      "reaction": "Barb has opened the helicopter to Biscuit only. He's a natural."
     }
@@ -1372,7 +1372,7 @@
    "id": "aht2",
    "who": "doug",
    "story": "ahtrap",
-   "text": "Mayor, the night bus driver has fallen asleep at the wheel. Doug says if nobody takes over, the bus goes into the river. Take the wheel?",
+   "text": "Mayor, the night bus driver has fallen asleep at the wheel. If nobody takes over, the bus goes into the river. Take the wheel?",
    "options": {
     "right": {
      "label": "Yes. Take the wheel.",

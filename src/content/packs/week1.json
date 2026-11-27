@@ -271,13 +271,14 @@
   },
   {
    "id": "g6",
-   "who": "pam",
+   "who": "marge",
    "story": "goose",
-   "text": "Goose poop. On every floor of City Hall. Including the roof. Marge wants to print that it's 'good luck'. Let her?",
+   "text": "Goose poop. On every floor of City Hall. Including the roof. The Bugle would like to print that it's 'good luck'. Can we?",
    "options": {
     "right": {
      "label": "Yes, it's lucky",
      "effects": {
+      "press": 5,
       "people": -5
      },
      "reaction": "It's front page. People are queueing to stand under geese. Randy's selling tickets."
@@ -406,9 +407,9 @@
   },
   {
    "id": "r3",
-   "who": "marge",
+   "who": "randy",
    "story": "randy",
-   "text": "Randy has made your campaign posters without asking. They say 'VOTE {mayor}: NOT A RACCOON'. He's very proud. Put them up?",
+   "text": "Boss. I made your campaign posters. Didn't ask. They say 'VOTE {mayor}: NOT A RACCOON'. I'm very proud. Put them up?",
    "options": {
     "right": {
      "label": "Yes, put them up",
@@ -1064,9 +1065,9 @@
   },
   {
    "id": "b2a",
-   "who": "barb",
+   "who": "bev",
    "story": "bev",
-   "text": "Bev just did Elm Street in eleven seconds. Wheelie at the end. Now she's challenged my police car to a race. Allow the race?",
+   "text": "I just did Elm Street in eleven seconds. Wheelie at the end. Now I've challenged Barb's police car to a race. Allow it?",
    "options": {
     "right": {
      "label": "Yes, let them race",
@@ -1175,9 +1176,9 @@
   },
   {
    "id": "b4",
-   "who": "doug",
+   "who": "bev",
    "story": "bev",
-   "text": "Bev wants the town to sponsor her. She'd like flames painted on the scooter. And on Doug. I'm Doug. Pay for the flames?",
+   "text": "I'd like the town to sponsor me. Flames painted on the scooter. And on Doug. He doesn't know yet. Pay for the flames?",
    "options": {
     "right": {
      "label": "Yes, flames",
@@ -1185,7 +1186,7 @@
       "treasury": -5,
       "people": 5
      },
-     "reaction": "She looks magnificent. I look magnificent. I've never felt so fast.",
+     "reaction": "I look magnificent. Doug looks magnificent. He's never felt so fast.",
      "then": [
       [
        "b5",
@@ -1774,8 +1775,8 @@
     "right": {
      "label": "Yes, lights off",
      "effects": {
-      "law": -5,
-      "business": 5
+      "law": 5,
+      "people": -5
      },
      "reaction": "No lights at all now. Barb's directing traffic with two baguettes. Gerald keeps eating the stop one.",
      "then": [
@@ -1879,9 +1880,9 @@
   },
   {
    "id": "x3c",
-   "who": "doug",
+   "who": "desk",
    "story": "lights",
-   "text": "The traffic jam reached the next town. They've sent us the bill. And a sandwich, because they've caught the politeness too. Pay the bill?",
+   "text": "A letter from the next town. Our traffic jam reached them. They've sent the bill. And a sandwich: they've caught the politeness. Pay it?",
    "options": {
     "right": {
      "label": "Yes, pay it",
@@ -1942,9 +1943,9 @@
   },
   {
    "id": "x4a",
-   "who": "doug",
+   "who": "desk",
    "story": "glitter",
-   "text": "The cleaners are glittery now. And their van. And the road the van drove on. The bill is enormous and it sparkles. Keep paying?",
+   "text": "An invoice from the cleaners. They're glittery now. So is their van. And the road. The bill is enormous and it sparkles. Keep paying?",
    "options": {
     "right": {
      "label": "Yes, keep going",
@@ -2086,9 +2087,9 @@
     "right": {
      "label": "Yes, wrestle the bear",
      "effects": {
-      "press": 15,
-      "people": 5,
-      "law": -5
+      "press": 10,
+      "law": 5,
+      "people": -5
      },
      "reaction": "You lost. Obviously. But you lost bravely. It's shaken your hand. Gently, for a bear.",
      "then": [
@@ -2748,9 +2749,9 @@
   },
   {
    "id": "nt2f",
-   "who": "doug",
+   "who": "nutkins",
    "story": "nutkins",
-   "text": "Word's out that I forgive loans. There's a queue. A badger. Two foxes. A hedgehog with a business plan. It's a good plan. Fund the hedgehog?",
+   "text": "Mr Nutkins. Word's out that I forgive loans. There's a queue. A badger. Two foxes. A hedgehog with a business plan. It's good. Fund it?",
    "options": {
     "right": {
      "label": "Yes, back the hedgehog",
@@ -2810,9 +2811,9 @@
   },
   {
    "id": "pg2",
-   "who": "marge",
+   "who": "desk",
    "story": "pigeon",
-   "text": "The pigeon wants an office with a ledge. And a press secretary. Also a pigeon. They've announced a policy on bread. Approve the budget?",
+   "text": "A pigeon has declared itself a candidate. It wants an office with a ledge. And a press secretary. Also a pigeon. Approve the budget?",
    "options": {
     "right": {
      "label": "Yes, fund the pigeons",
@@ -2964,7 +2965,7 @@
     "right": {
      "label": "Yes, comfort it",
      "effects": {
-      "people": 5,
+      "treasury": 5,
       "business": -5
      },
      "reaction": "It hugged Doug. Doug hugged it. They share a desk now. And a tissue box."
@@ -3412,9 +3413,9 @@
   },
   {
    "id": "ws2n",
-   "who": "pam",
+   "who": "desk",
    "story": "worse",
-   "text": "Worse Town's mayor won't stop crying about our pothole. He's asked if Kevin can visit theirs. As a guest speaker. Send Kevin?",
+   "text": "A letter from Worse Town's mayor. He won't stop crying about our pothole. He'd like Kevin to visit theirs. As a guest speaker. Send Kevin?",
    "options": {
     "right": {
      "label": "Yes, send Kevin",
@@ -3566,8 +3567,9 @@
     "right": {
      "label": "Yes, release him",
      "effects": {
-      "people": 10,
-      "law": -5
+      "people": 5,
+      "law": 5,
+      "business": -5
      },
      "reaction": "He mimed gratitude. Then he mimed locking ME in. I was in there forty minutes."
     },
@@ -3591,7 +3593,7 @@
     "right": {
      "label": "Yes. Here's a key.",
      "effects": {
-      "people": 5,
+      "treasury": 5,
       "press": 5,
       "law": -5
      },
@@ -3879,9 +3881,9 @@
   },
   {
    "id": "gt2",
-   "who": "marge",
+   "who": "sal",
    "story": "goosetv",
-   "text": "Gerald's show is the most watched thing in Bad Town. Nobody has any bread left. The bakeries are begging you. Cancel the show?",
+   "text": "Sal. Gerald's show is the most watched thing in town. Nobody has any bread left. The bakeries are begging. Cancel the show?",
    "options": {
     "right": {
      "label": "Yes, cancel it",
@@ -4060,16 +4062,16 @@
     "right": {
      "label": "Yes, two salaries",
      "effects": {
-      "treasury": -5,
-      "people": 5
+      "treasury": 5,
+      "business": -5
      },
      "reaction": "The Dougs are thrilled. They've high-fived. They missed. They're trying again."
     },
     "left": {
      "label": "No. One salary.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "people": 5,
+      "treasury": -5
      },
      "reaction": "They've split it. They've split everything. Half a sandwich each. It's so sad. It's so fair."
     }
@@ -4547,8 +4549,8 @@
     "left": {
      "label": "No. Blame Worse Town.",
      "effects": {
-      "law": 5,
-      "press": -5
+      "press": 5,
+      "law": -5
      },
      "reaction": "Classic them. Worse Town has denied it. Worse Town has a new Welcome sign. It says BAD TOWN."
     }
@@ -4725,8 +4727,8 @@
      "label": "Yes. Chad Street.",
      "effects": {
       "treasury": 15,
-      "business": -10,
-      "people": -10
+      "business": 5,
+      "people": -15
      },
      "reaction": "Welcome to Chad Street. Tolls start Monday."
     },
@@ -5609,16 +5611,16 @@
     "right": {
      "label": "Yes. A stern word.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "people": 5,
+      "law": -5
      },
      "reaction": "You had a stern word. He turned his head all the way round. You left. Nobody blames you."
     },
     "left": {
      "label": "No. It's nature.",
      "effects": {
-      "people": 5,
-      "press": -5
+      "press": 5,
+      "people": -5
      },
      "reaction": "It's now on the science curriculum. Hoot's lesson plan is just 'mouse'. Attendance has doubled."
     }
@@ -5985,9 +5987,9 @@
   },
   {
    "id": "w1s_xa",
-   "who": "doug",
+   "who": "gerald",
    "story": "migration",
-   "text": "Mayor, the visiting geese want a bread budget. For ten thousand. That's a lot of bread. Pay for it?",
+   "text": "HONK. (Gerald's visiting cousins would like a bread budget. For ten thousand geese. He's presented it in bread.) Pay for it?",
    "options": {
     "right": {
      "label": "Yes. Feed them.",
@@ -6297,9 +6299,9 @@
   },
   {
    "id": "w1g_4a",
-   "who": "doug",
+   "who": "clive",
    "story": "conesaga",
-   "text": "Mayor, Clive's campaign is broke. He's asked us for a loan. He's offering a cone as collateral. Lend him the money?",
+   "text": "(Clive the traffic cone's campaign is broke. He's applied for a loan. His collateral is a slightly smaller cone.) Lend him the money?",
    "options": {
     "right": {
      "label": "Yes. Lend to the cone.",
@@ -6585,12 +6587,12 @@
    "id": "t1_3",
    "who": "doug",
    "story": "disaster",
-   "text": "Mayor, the cheese vault says DO NOT FEED. Doug says if it eats, it grows. Randy is posting a sandwich through the keyhole. Stop him?",
+   "text": "Mayor, the cheese vault says DO NOT FEED. If it eats, it grows. Randy is posting a sandwich through the keyhole. Stop him?",
    "options": {
     "right": {
      "label": "Yes. Stop him.",
      "effects": {
-      "law": 5,
+      "treasury": 5,
       "people": -5
      },
      "reaction": "Stopped. He ate the sandwich himself. The vault made a disappointed noise."

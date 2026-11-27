@@ -26,3 +26,21 @@ describe('the cast', () => {
     for (const [k, v] of Object.entries(RANDY_SAYS)) expect(v.length, k).toBeLessThanOrEqual(100);
   });
 });
+
+describe('faction faces', () => {
+  const FACE: Record<string, string> = { pam: 'people', chad: 'business', barb: 'law', marge: 'press', doug: 'treasury' };
+  const ASK = /\b(I'd like|I would like|Can I|May I|We want|we'd like|The PTA would like|The PTA wants|The Bugle wants|The Bugle would like|Readers want)\b/i;
+  it('granting a face\'s own request makes their group happier; refusing never does', async () => {
+    const { AH_CARDS } = await import('../src/content/afterHours.ts');
+    const cards = [...PACKS.flatMap((p) => p.cards), ...AH_CARDS];
+    let n = 0;
+    for (const c of cards) {
+      const g = FACE[c.who];
+      if (!g || !ASK.test(c.text) || !c.options.right || !c.options.left || c.sneak || c.ribbon) continue;
+      n++;
+      expect(c.options.right.effects?.[g as 'people'] ?? 0, `${c.id} yes`).toBeGreaterThan(0);
+      expect(c.options.left.effects?.[g as 'people'] ?? 0, `${c.id} no`).toBeLessThanOrEqual(0);
+    }
+    expect(n).toBeGreaterThan(20);
+  });
+});

@@ -121,9 +121,9 @@
   },
   {
    "id": "rb2_3",
-   "who": "doug",
+   "who": "randy",
    "story": "rbday",
-   "text": "Randy's birthday cake has arrived. It is shaped like a bin. It is a real bin. It is full of cake. The bill is enormous. Pay it?",
+   "text": "Boss. My birthday cake's arrived. It's shaped like a bin. It IS a bin. Full of cake. The bill's enormous. Pay it?",
    "options": {
     "right": {
      "label": "Yes, pay for the cake",
@@ -542,7 +542,8 @@
     "right": {
      "label": "Yes, investigate",
      "effects": {
-      "treasury": -5
+      "treasury": 5,
+      "business": -5
      },
      "reaction": "Dr Nora says the cheese is 'a bit quantum'. It's in the vault and on your desk. Both are humming.",
      "then": [
@@ -1305,7 +1306,7 @@
     "right": {
      "label": "Yes. Go home, Doug.",
      "effects": {
-      "people": 5,
+      "treasury": 5,
       "business": -5
      },
      "reaction": "He went home. He hiccupped all the way. Rhythmically. A small crowd followed. They danced."
@@ -1313,8 +1314,8 @@
     "left": {
      "label": "No. Hiccup at your desk.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "business": 5,
+      "treasury": -5
      },
      "reaction": "He did the budget hiccupping. Every figure's doubled. We're accidentally rich."
     }
@@ -1433,9 +1434,9 @@
   },
   {
    "id": "wx2c",
-   "who": "doug",
+   "who": "desk",
    "story": "duck",
-   "text": "The carnival wants their duck back. Or forty thousand pounds. It's the only duck they have. Pay them?",
+   "text": "A letter from the carnival. They want their duck back. Or forty thousand pounds. It's the only duck they have. Pay them?",
    "options": {
     "right": {
      "label": "Yes. Pay for the duck.",
@@ -1503,7 +1504,9 @@
     "right": {
      "label": "Yes. Town sock swap.",
      "effects": {
-      "people": 5
+      "people": 5,
+      "law": 5,
+      "treasury": -5
      },
      "reaction": "The swap took nine hours. In the gym. It was emotional. Some socks found their way home.",
      "then": [
@@ -1676,7 +1679,7 @@
     "right": {
      "label": "Yes. Skip Tuesday.",
      "effects": {
-      "people": 5,
+      "treasury": 5,
       "press": -5
      },
      "reaction": "You skipped it. It's Thursday. Wednesday is missing. Randy says he 'doesn't have it'.",
@@ -1690,8 +1693,8 @@
     "left": {
      "label": "No. Do it again.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "business": 5,
+      "treasury": -5
      },
      "reaction": "Seventh time. Doug made one change. He drew a smiley face. It's the best budget he's ever done.",
      "then": [
@@ -1838,9 +1841,9 @@
   },
   {
    "id": "wx5c",
-   "who": "doug",
+   "who": "desk",
    "story": "ice",
-   "text": "The van has run out of petrol. Silence. Beautiful silence. The ice cream man wants compensation for 'emotional strain'. Pay him?",
+   "text": "The ice cream van ran out of petrol. Beautiful silence. The ice cream man has written in. He wants compensation for 'emotional strain'. Pay him?",
    "options": {
     "right": {
      "label": "Yes. Pay him.",
@@ -1906,7 +1909,7 @@
     "right": {
      "label": "Yes. Evacuate Doug.",
      "effects": {
-      "people": 5,
+      "treasury": 5,
       "law": -5
      },
      "reaction": "Doug's safe. The cheese has taken his desk. It's doing his job. It's doing it better.",
@@ -1920,8 +1923,8 @@
     "left": {
      "label": "No. Stand firm.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "law": 5,
+      "treasury": -5
      },
      "reaction": "Doug stood firm. The cheese stood firmer. They've come to an arrangement. Doug won't say what.",
      "then": [
@@ -2356,16 +2359,16 @@
     "right": {
      "label": "Yes. Have the horse.",
      "effects": {
-      "people": 5,
-      "law": -5
+      "law": 5,
+      "treasury": -5
      },
      "reaction": "Barb rides to work now. Arrests are down. Hugs are up. The horse is called Sergeant Hay."
     },
     "left": {
      "label": "No. Rules are rules.",
      "effects": {
-      "law": 5,
-      "people": -10
+      "business": 5,
+      "law": -5
      },
      "reaction": "Barb has filed the horse as 'lost'. Then found it. It's hers now, legally. She checked."
     }
@@ -2433,9 +2436,9 @@
   },
   {
    "id": "ws_mt2",
-   "who": "doug",
+   "who": "nutkins",
    "story": "mint",
-   "text": "Mr Nutkins has offered to swap Bad Town Bucks for acorns. One Buck, one acorn. Chad says that's 'an insult'. Accept the rate?",
+   "text": "Mr Nutkins. I'll swap your Bad Town Bucks for acorns. One Buck, one acorn. Chad calls it 'an insult'. Accept my rate?",
    "options": {
     "right": {
      "label": "Yes. Acorns it is.",
@@ -2778,7 +2781,9 @@
     "right": {
      "label": "Yes, reprint",
      "effects": {
-      "law": 5
+      "people": 5,
+      "law": 5,
+      "treasury": -5
      },
      "reaction": "Reprinted. They say 'BAD TOWN'. So does the school. And the bank. The printer's stuck.",
      "then": [
@@ -2791,7 +2796,6 @@
     "left": {
      "label": "No. Keep them.",
      "effects": {
-      "people": 5,
       "treasury": 5,
       "law": -5
      },
@@ -2808,14 +2812,14 @@
     "right": {
      "label": "Yes, new printer",
      "effects": {
-      "treasury": -10
+      "treasury": 5,
+      "business": -5
      },
      "reaction": "The new printer only prints 'SORRY'. On everything. It's very polite. It's very unhelpful."
     },
     "left": {
      "label": "No. It's honest.",
      "effects": {
-      "treasury": 5,
       "people": 5,
       "press": -5
      },
@@ -3062,9 +3066,9 @@
   },
   {
    "id": "ws_cz1",
-   "who": "doug",
+   "who": "cheese",
    "story": "cheese2",
-   "text": "Mayor. The cheese has asked for a promotion. It wants my office. It slid a note under my door. It says 'PLEASE'. Give it?",
+   "text": "(A note slides under Doug's door. It says PROMOTION. YOUR OFFICE. PLEASE. It's from the cheese.) Give it Doug's office?",
    "options": {
     "right": {
      "label": "Yes, give it Doug's office",
@@ -3154,8 +3158,8 @@
     "left": {
      "label": "No. Curtains.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "treasury": 5,
+      "law": -5
      },
      "reaction": "Curtains. Nobody knows if we're open. We're not sure either."
     }
@@ -3240,8 +3244,8 @@
      "label": "Yes. Sell City Hall.",
      "effects": {
       "treasury": 15,
-      "business": -10,
-      "people": -10
+      "business": 5,
+      "people": -15
      },
      "reaction": "Chad Hall. The doors open with a credit card. Yours doesn't work."
     },
@@ -3565,6 +3569,7 @@
     "right": {
      "label": "Yes, open the museum",
      "effects": {
+      "press": 5,
       "treasury": -5
      },
      "reaction": "The coat is behind glass. Things move inside it. Visitors scream. Five stars."
@@ -3618,9 +3623,9 @@
   },
   {
    "id": "wpb2",
-   "who": "marge",
+   "who": "pebbles",
    "story": "goat2",
-   "text": "Mayor, Pebbles has gone viral. #GoatVotes is trending. A lawnmower company wants to sponsor him. Allow it?",
+   "text": "(Councillor Pebbles has gone viral. #GoatVotes is trending. A lawnmower company wants to sponsor him. He's eaten their letter.) Allow it?",
    "options": {
     "right": {
      "label": "Yes. Get that sponsor.",
@@ -3751,7 +3756,8 @@
     "right": {
      "label": "Yes. Tax the ghost.",
      "effects": {
-      "treasury": 10,
+      "treasury": 5,
+      "law": 5,
       "people": -5
      },
      "reaction": "She paid in coins from 1890. Doug had them valued. They're worth a fortune. Doug screamed."
@@ -4502,8 +4508,8 @@
     "right": {
      "label": "Yes. Open him up.",
      "effects": {
-      "law": 5,
-      "treasury": -5
+      "treasury": 5,
+      "law": -5
      },
      "reaction": "Inside: one crisp, a raffle ticket and a tiny note: 'VOTE GARY'.",
      "next": [
@@ -4618,9 +4624,9 @@
   },
   {
    "id": "w2g_4a",
-   "who": "doug",
+   "who": "gary",
    "story": "garysaga",
-   "text": "Mayor, Gary owes the town four years of electricity. He's offered to pay. In crisps. Accept the crisps?",
+   "text": "(Gary the vending machine owes four years of electricity. He's offered to pay. In crisps. He's already dispensing them.) Accept the crisps?",
    "options": {
     "right": {
      "label": "Yes. Crisps it is.",
@@ -5065,9 +5071,9 @@
   },
   {
    "id": "w2x_1b",
-   "who": "doug",
+   "who": "carl",
    "story": "carlheat",
-   "text": "Mayor, refilling the fountain will cost £400 in water. Big Carl has offered to fill it himself. With a bucket. Let him?",
+   "text": "Big Carl. Refilling the fountain costs £400 in water. I'll fill it myself. With a bucket. Let me?",
    "options": {
     "right": {
      "label": "Yes. Bucket by bucket.",
@@ -5298,9 +5304,9 @@
   },
   {
    "id": "w2s1_2",
-   "who": "doug",
+   "who": "sal",
    "story": "garyheat",
-   "text": "Mayor, Gary's back on. He's only giving out ice now. Free. He says it's an apology. Sal says it's ruining his ice trade. Allow it?",
+   "text": "Sal. Gary's back on. He's giving out free ice. As an apology. It's ruining my ice trade. Allow it?",
    "options": {
     "right": {
      "label": "Yes. Free ice.",
@@ -5611,9 +5617,9 @@
   },
   {
    "id": "w2s3_2b",
-   "who": "marge",
+   "who": "lorraine",
    "story": "chiprun",
-   "text": "Mayor, Lorraine wants an interview. Front page. She says she has 'a lot to say about chips'. Allow it?",
+   "text": "(Lorraine the seagull wants a front-page interview. She has 'a lot to say about chips'. She's brought a chip as a press pass.) Allow it?",
    "options": {
     "right": {
      "label": "Yes. Let her speak.",
@@ -5712,9 +5718,9 @@
   },
   {
    "id": "w2s4_2",
-   "who": "doug",
+   "who": "wendy",
    "story": "ghostcool",
-   "text": "Mayor, Wendy's chill business is going very well. She's hired two more ghosts. From the next town. On zero wages. Is that allowed?",
+   "text": "Wooo. My chill business is going so well I've hired two more ghosts. From the next town. On zero wages. Is that allowed?",
    "options": {
     "right": {
      "label": "Yes. Ghost staff.",
