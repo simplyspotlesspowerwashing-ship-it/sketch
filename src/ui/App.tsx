@@ -478,8 +478,17 @@ function EndingPrize({ k, isNew, have }: { k: string; isNew: boolean; have: numb
   return (
     <div class={`prize ${isNew ? 'new' : 'again'}`}>
       {isNew && <span class="confetti" aria-hidden="true">{Array.from({ length: 22 }, (_, i) => <i key={i} style={{ '--a': `${(i * 360) / 22}deg`, '--d': `${60 + ((i * 37) % 60)}px`, '--c': ['var(--gold)', '#C23B3B', '#3B6FB6', '#3F8F5A', '#fff'][i % 5], '--t': `${(i % 4) * 40}ms` }} />)}</span>}
-      <div class="prize-stamp">{isNew ? 'NEW ENDING UNLOCKED!' : 'A CLASSIC. AGAIN.'}</div>
-      <EndingCard k={k} isNew={false} />
+      <div class={`grand g-${k.split(':')[0]}`}>
+        <span class="grand-spot" aria-hidden="true" />
+        {k.startsWith('rare:') && <span class="grand-rays" aria-hidden="true" />}
+        <b class="grand-end">THE END</b>
+        <small class="grand-kind">{KIND[k.split(':')[0]!] ?? 'Ending'}</small>
+        <span class="grand-face"><Portrait who={endingWho(k)} size={120} mood={['low', 'out', 'outw'].includes(k.split(':')[0]!) ? 'annoyed' : 'pleased'} /></span>
+        <h2 class="grand-title">{e.title}</h2>
+        <p class="grand-text">{e.text}</p>
+        {quip && <p class="grand-randy"><Portrait who="randy" size={34} mood="pleased" /><span>“{quip}”</span></p>}
+        <span class={`prize-stamp ${isNew ? '' : 'again'}`}>{isNew ? 'NEW ENDING UNLOCKED!' : 'A CLASSIC. AGAIN.'}</span>
+      </div>
       <p class="prize-count"><b>{have}</b> of {total} endings collected{isNew ? '. Frame it.' : '. You know how this one goes.'}</p>
       <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); setCopied(true); } catch { /* clipboard blocked */ } sfx('tap'); }}>{copied ? 'Copied' : 'Share this ending'}</button>
     </div>
