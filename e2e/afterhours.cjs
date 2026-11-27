@@ -1,12 +1,13 @@
 // After Hours check: play Day 1, open After Hours from the night's review, play its ten cards, then confirm
 // it can't be replayed tonight and that its net change is waiting for tomorrow.
-//   node e2e/afterhours.cjs <screenshot-dir> <dir: left|right> [width]
+//   node e2e/afterhours.cjs <screenshot-dir> <dir: left|right> [width] [lost]   (starts from a Day 1 review made by e2e/won-night.ts)
 const { chromium } = require('playwright');
 (async () => {
-  const [out, side = 'left', width = '390'] = process.argv.slice(2);
+  const [out, side = 'left', width = '390', mode = 'won'] = process.argv.slice(2);
+  const seed = require('child_process').execFileSync('node', [require('path').join(__dirname, 'won-night.ts'), mode]).toString();
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: Number(width), height: 844 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
-  await ctx.addInitScript(() => { if (!localStorage.getItem('badtown.save')) localStorage.setItem('badtown.save', JSON.stringify({ schema: 1, state: null, playerSeed: 'ah', muted: true, dayOffset: 0, weeksDone: 0, dayDoneOn: '', scrapbook: [], deeds: [] })); });
+  await ctx.addInitScript((sv) => { if (!localStorage.getItem('badtown.save')) localStorage.setItem('badtown.save', sv); }, seed);
   const pg = await ctx.newPage();
   const errs = []; pg.on('pageerror', (e) => errs.push(String(e)));
   await pg.goto(process.env.URL ?? 'http://localhost:4173/');
@@ -31,6 +32,7 @@ const { chromium } = require('playwright');
   await pg.screenshot({ path: `${out}/ah-review.png` });
   const before = (await save()).state;
   console.log('day', before.day, 'phase', before.phase, 'meters', JSON.stringify(before.meters), 'reset', !!before.flags.__reset);
+  if (mode === 'lost') { console.log('lost night: buttons', await pg.locator('.ah-btn').count(), '| note:', await pg.locator('.ah-why').textContent()); await b.close(); return; }
   console.log('button:', await pg.locator('.ah-btn').textContent());
   await pg.locator('.ah-btn').click();
   let shown = 0;
@@ -49,10 +51,10 @@ const { chromium } = require('playwright');
   await pg.reload(); await pg.waitForTimeout(400);
   console.log('after reload, button:', await pg.locator('.ah-btn').textContent(), 'disabled', await pg.locator('.ah-btn').isDisabled());
   // tomorrow: testing skip
-  await pg.locator('.review .linkbtn').click(); await pg.waitForTimeout(200);
+  if (await pg.locator('.review .linkbtn').count()) { await pg.locator('.review .linkbtn').click(); await pg.waitForTimeout(200); }
   await pg.locator('.review .btn.primary').click(); await pg.waitForTimeout(300);
   const next = (await save()).state;
-  const base = Object.fromEntries(Object.keys(before.meters).map((k) => [k, before.flags.__reset ? 40 : before.meters[k]]));
+  const base = { ...before.meters };
   const want = Object.fromEntries(Object.keys(base).map((k) => [k, Math.min(90, Math.max(10, base[k] + ((mid.state.overnight ?? {})[k] ?? 0)))]));
   const ok = Object.keys(want).every((k) => (mid.state.overnight?.[k] ? want[k] : base[k]) === next.dayStart[k]);
   console.log('day', next.day, 'dayStart', JSON.stringify(next.dayStart), 'expected', JSON.stringify(want), ok ? 'MATCH' : 'MISMATCH', 'overnight cleared', next.overnight === undefined);

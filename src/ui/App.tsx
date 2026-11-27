@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { PACKS, SIMULATED_CROWD, packFor, packForWeek, weekIdFor } from '../content/index.ts';
 import { COMMON_ENDINGS, OUT_ORDER, RECALL_ORDER } from '../content/endings.ts';
 import { RANDY_SAYS } from '../content/randy.ts';
-import { AFTER_HOURS_CARDS, AH_CARDS, AH_ENDINGS, OVERNIGHT_CAP, afterHoursPack, overnightFrom } from '../content/afterHours.ts';
+import { AFTER_HOURS_CARDS, AH_CARDS, AH_ENDINGS, afterHoursPack, overnightFrom } from '../content/afterHours.ts';
 import { voteParts } from '../engine/election.ts';
 import { canDefer, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
@@ -314,7 +314,7 @@ function Goals({ s }: { s: State }) {
 }
 
 /** Night falls: the vote, the score that drove it, the streak, and a hook for tomorrow. */
-function DayReview({ s, streak, fresh, have, onNext, onSkip, onAfter, nextLabel, wait, sub }: { s: State; streak: number; fresh: string[]; have: number; onNext: () => void; onSkip: () => void; onAfter: (() => void) | null; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
+function DayReview({ s, streak, fresh, have, onNext, onSkip, onAfter, after, nextLabel, wait, sub }: { s: State; streak: number; fresh: string[]; have: number; onNext: () => void; onSkip: () => void; onAfter: (() => void) | null; after: 'open' | 'done' | 'lost' | 'none'; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
   const sc = dayScore(s, s.day);
   const tier = tierOf(sc.total);
   const today = s.swipes.filter((w) => w.day === s.day);
@@ -351,7 +351,9 @@ function DayReview({ s, streak, fresh, have, onNext, onSkip, onAfter, nextLabel,
         <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(share); setCopied(true); } catch { /* clipboard blocked */ } sfx('tap'); }}>{copied ? 'Copied' : 'Copy result'}</button>
         {wait ? <button class="btn primary" disabled>{wait}</button> : <button class="btn primary" onClick={onNext} autoFocus>{nextLabel}</button>}
       </div>
-      {onAfter ? <button class="btn ah-btn" onClick={onAfter}>🌙 After Hours: 10 more if you want</button> : <button class="btn ah-btn" disabled>🌙 After Hours done for tonight</button>}
+      {after === 'open' && onAfter ? <><button class="btn ah-btn" onClick={onAfter}>🌙 After Hours: 10 more if you want</button><small class="ah-why">Tonight's laws and plans decide where tomorrow starts. Fix today's mistakes.</small></>
+        : after === 'done' ? <button class="btn ah-btn" disabled>🌙 After Hours done for tonight</button>
+        : after === 'lost' ? <small class="ah-why">🌙 After Hours opens on nights you win.</small> : null}
       {wait && PREVIEW && <button class="linkbtn" onClick={onSkip}>Testing: skip to the next day</button>}
     </div>
   );
@@ -390,6 +392,10 @@ const DEEDS: Deed[] = [
   { id: 'bev', name: 'Grand Prix', how: 'Send Bev to Formula One', test: (s) => !!s.flags.bev_f1 },
   { id: 'reginald', name: 'Slow and Steady', how: 'Give Reginald his road', test: (s) => !!s.flags.reg_road },
   { id: 'gary', name: 'Good Sport', how: 'Help Gary up when he falls', test: (s) => !!s.flags.gary_help },
+  { id: 'gull', name: 'Gull Friend', how: 'Accept Lorraine\'s peace chip', test: (s) => !!s.flags.gull_friend },
+  { id: 'crossing', name: 'Nine Days', how: 'See Reginald all the way across Main Street', test: (s) => !!s.flags.reg_crossed },
+  { id: 'who', name: 'Who?', how: 'Win Professor Hoot\'s quiz', test: (s) => !!s.flags.quiz_win },
+  { id: 'rink', name: 'The Kevin Rink', how: 'Say goodbye to the rink with a speech', test: (s) => !!s.flags.kevin_rink },
   { id: 'collector', name: 'Collector', how: 'Collect ten endings', test: (_s, save) => save.scrapbook.length >= 10 },
 ];
 /** Bring the Scrapbook, the career and the streak up to date with this week's state. Safe to call on every change. */
@@ -467,9 +473,9 @@ function AfterHours({ round, start, carry, had, have, onEndings, onCarry, onClos
       <div class="ah-head"><b>🌙 After Hours</b><span>{done || s.phase === 'recalled' ? 'Done for tonight' : `Card ${s.cardInDay + 1} of ${AFTER_HOURS_CARDS}`} · {carry ? "tonight's laws and plans shape tomorrow" : 'the week is over: endings still count'}</span></div>
       <Meters s={done && carry && !reveal ? { ...s, meters: tomorrow } : s} preview={card && preview ? card.options[preview] ?? null : null} />
       {reveal ? <ImpactReveal key={reveal.key} r={reveal} onDone={() => setReveal(null)} />
-        : s.phase === 'recalled' && last ? <div class="panel recall"><p class="prize-loss">That's the night over. {carry ? 'Nothing from After Hours carries into tomorrow.' : ''}</p><EndingPrize k={last} isNew={!known.includes(last)} have={have} /><div class="dayend-btns"><button class="btn primary" onClick={onClose}>Back</button></div></div>
+        : s.phase === 'recalled' && last ? <div class="panel recall"><p class="prize-loss">That's the night over. {carry ? 'Nothing from After Hours carries: tomorrow starts where tonight ended.' : ''}</p><EndingPrize k={last} isNew={!known.includes(last)} have={have} /><div class="dayend-btns"><button class="btn primary" onClick={onClose}>Back</button></div></div>
         : done ? <div class="panel ah-done"><h2 class="display">Last orders.</h2>
-          {carry ? <><p>Tomorrow starts like this{moved.length ? ':' : '. Nothing moved overall.'}</p>{moved.length > 0 && <ul class="levels">{moved.map((m) => <li key={m}>{METER_NAME[m]}: {shift[m]! > 0 ? '+' : ''}{shift[m]}</li>)}</ul>}<small class="ah-cap">At most ±{OVERNIGHT_CAP} per group. Tonight's vote is already counted.</small></>
+          {carry ? <><p>Tomorrow starts like this{moved.length ? ':' : '. Nothing moved overall.'}</p>{moved.length > 0 && <ul class="levels">{moved.map((m) => <li key={m}>{METER_NAME[m]}: {start[m]} → {tomorrow[m]}</li>)}</ul>}<small class="ah-cap">Tonight's vote is already counted.</small></>
             : <p>The week is over, so nothing carries. Your Scrapbook remembers.</p>}
           <div class="dayend-btns"><button class="btn primary" onClick={onClose}>Back</button></div></div>
         : card && <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={false} onPreview={setPreview} onSwipe={swipe} defers={null} onDefer={() => {}} />}
@@ -659,7 +665,7 @@ function nickname(s: State): string {
   const top = [...GROUPS].sort((a, b) => avg(b) - avg(a))[0]!;
   return { people: "the People's Champion", business: 'the Sponsored', law: 'the Strict', press: 'the Photogenic' }[top];
 }
-function WeekRecap({ s, streak, fresh, next, onNewWeek, onSkip, onAfter }: { s: State; streak: number; fresh: { endings: string[]; deeds: string[] }; next: string | null; onNewWeek: () => void; onSkip: () => void; onAfter: (() => void) | null }) {
+function WeekRecap({ s, streak, fresh, next, onNewWeek, onSkip }: { s: State; streak: number; fresh: { endings: string[]; deeds: string[] }; next: string | null; onNewWeek: () => void; onSkip: () => void }) {
   const nights = s.won.filter(Boolean).length;
   const played = DAY_NAMES.map((d, i) => ({ d, i, vote: s.polls[i], won: !!s.won[i], randy: s.daveDays.includes(i + 1) }));
   const mineDays = played.filter((x) => !x.randy && x.vote !== undefined);
@@ -688,7 +694,6 @@ function WeekRecap({ s, streak, fresh, next, onNewWeek, onSkip, onAfter }: { s: 
         <button class="btn" onClick={() => { try { void navigator.clipboard.writeText(text); } catch { /* clipboard blocked */ } sfx('tap'); }}>Copy the week</button>
         {next ? <button class="btn primary" disabled>{next}</button> : <button class="btn primary" onClick={onNewWeek}>Start next week</button>}
       </div>
-      {onAfter ? <button class="btn ah-btn" onClick={onAfter}>🌙 After Hours: 10 more if you want</button> : <button class="btn ah-btn" disabled>🌙 After Hours done for tonight</button>}
       {next && PREVIEW && <button class="linkbtn" onClick={onSkip}>Testing: skip to tomorrow</button>}
     </div>
   );
@@ -790,11 +795,14 @@ export function App() {
     setSave(sv); writeSave(sv); setFresh((f) => ({ ...f, endings: [...f.endings, ...add] }));
   };
   const nightKey = `${s.weekId}:${s.day}`;
-  const afterOpen = save.afterDoneOn !== nightKey;
+  /** After Hours: Days 1-6, only after a night you won, once a night. */
+  const afterAllowed = s.phase === 'dayEnd' && s.day < 7 && !!s.won[s.day - 1] && !s.daveDays.includes(s.day);
+  const afterOpen = afterAllowed && save.afterDoneOn !== nightKey;
+  const afterState: 'open' | 'done' | 'lost' | 'none' = afterOpen ? 'open' : afterAllowed ? 'done' : s.phase === 'dayEnd' && s.day < 7 ? 'lost' : 'none';
   /** Once a night: marked used as soon as it starts, so leaving and coming back doesn't re-deal. */
   const startAfter = () => { if (!afterOpen) return; const r = save.afterRounds ?? 0; const sv = { ...save, afterRounds: r + 1, afterDoneOn: nightKey, state: s }; setSave(sv); writeSave(sv); setAfter(r); sfx('paper'); };
-  const afterCarry = s.phase === 'dayEnd' && s.day < 7;
-  const afterStart = Object.fromEntries(METERS.map((m) => [m, s.flags.__reset ? TUNING.recall.reset : s.meters[m]])) as Record<MeterId, number>;
+  const afterCarry = afterAllowed;
+  const afterStart = { ...s.meters };
   const carryOver = (e: Partial<Record<MeterId, number>>) => { if (afterCarry) persist(reduce(s, { type: 'overnight', effects: e }, pack)); };
   /** Testing only: move the clock forward. */
   const jump = (days: number) => { const sv = { ...save, dayOffset: save.dayOffset + days, state: s }; setSave(sv); writeSave(sv); setOverlay(null); };
@@ -853,8 +861,8 @@ export function App() {
               <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>On with the evening</button>
             </div>
           )}
-          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} streak={save.streak.current} fresh={fresh.endings} have={save.scrapbook.length} onNext={advance} onSkip={() => jump(1)} onAfter={afterOpen ? startAfter : null} nextLabel={s.day >= 7 ? 'The week in review' : `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}`} wait={s.day >= 7 || open ? null : waitText(DAY_NAMES[s.day] ?? 'Tomorrow')} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
-          {s.phase === 'results' && !reveal && <WeekRecap s={s} streak={save.streak.current} fresh={fresh} next={open ? null : waitText('Next week')} onNewWeek={newWeek} onSkip={() => jump(1)} onAfter={afterOpen ? startAfter : null} />}
+          {s.phase === 'dayEnd' && !needSetup && !reveal && <DayReview s={s} streak={save.streak.current} fresh={fresh.endings} have={save.scrapbook.length} onNext={advance} onSkip={() => jump(1)} onAfter={afterOpen ? startAfter : null} after={afterState} nextLabel={s.day >= 7 ? 'The week in review' : `Start ${DAY_NAMES[s.day] ?? 'tomorrow'}`} wait={s.day >= 7 || open ? null : waitText(DAY_NAMES[s.day] ?? 'Tomorrow')} sub={<p class="cliff">{pack.cliffhangers[s.day - 1]}</p>} />}
+          {s.phase === 'results' && !reveal && <WeekRecap s={s} streak={save.streak.current} fresh={fresh} next={open ? null : waitText('Next week')} onNewWeek={newWeek} onSkip={() => jump(1)} />}
           </>}
         </main>
       </div>

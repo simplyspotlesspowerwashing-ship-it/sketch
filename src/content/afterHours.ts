@@ -1,13 +1,12 @@
 // After Hours: ten extra cards, once a night, after your day is done. Its own cards, never the dailies:
 // three draft laws for tomorrow, three projects for tomorrow, three late-night visits and one After Hours disaster.
-// Whatever the round does to the meters is how tomorrow starts (capped per meter). Tonight's vote is already counted.
-// A disaster ends the round with its ending and nothing carries over.
+// Only on a night you won, Days 1-6: it's the chance to fix the day's mistakes. Wherever the meters finish is
+// where tomorrow starts. Tonight's vote is already counted. A disaster or recall ends the round with its ending and
+// nothing carries over: tomorrow starts where tonight ended.
 import type { Card, Ending, MeterId, Pack } from '../engine/types.ts';
 import data from './afterhours.json' with { type: 'json' };
 
 export const AFTER_HOURS_CARDS = 10;
-/** The most After Hours can move any one meter for tomorrow. */
-export const OVERNIGHT_CAP = 10;
 const all = data.cards as unknown as Card[];
 const byStory = (s: string) => all.filter((c) => c.story === s);
 export const AH_LAWS = byStory('ahlaw');
@@ -33,11 +32,11 @@ export function afterHoursPack(base: Pack, round: number): Pack {
   return { id: base.id, title: 'After Hours', theme: { name: 'After Hours', text: 'Tonight\'s laws and plans shape tomorrow\'s town.' }, cards, objectives: [], endings: { ...base.endings, ...AH_ENDINGS }, headlines: base.headlines, cliffhangers: base.cliffhangers };
 }
 
-/** What After Hours hands to tomorrow: the round's net change per meter, capped. */
+/** What After Hours hands to tomorrow: the round's net change per meter. */
 export function overnightFrom(start: Record<MeterId, number>, end: Record<MeterId, number>): Partial<Record<MeterId, number>> {
   const out: Partial<Record<MeterId, number>> = {};
   for (const k of Object.keys(start) as MeterId[]) {
-    const d = Math.max(-OVERNIGHT_CAP, Math.min(OVERNIGHT_CAP, end[k] - start[k]));
+    const d = end[k] - start[k];
     if (d) out[k] = d;
   }
   return out;

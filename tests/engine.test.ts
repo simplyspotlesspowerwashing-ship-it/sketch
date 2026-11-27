@@ -378,24 +378,30 @@ describe('after hours', () => {
     expect(s.phase).toBe('recalled');
     expect(s.endings.at(-1)).toBe(trap.options[dir]!.ending);
   });
-  it('carries a capped overnight change into the next morning only', async () => {
-    const { overnightFrom, OVERNIGHT_CAP } = await import('../src/content/afterHours.ts');
+  it('carries the round\'s change into the next morning, only after a night you won', async () => {
+    const { overnightFrom } = await import('../src/content/afterHours.ts');
     const base = { people: 50, business: 50, law: 50, press: 50, treasury: 50 };
-    expect(overnightFrom(base, { ...base, people: 75, law: 45 })).toEqual({ people: OVERNIGHT_CAP, law: -5 });
-    let s = start();
-    while (s.phase === 'card') s = reduce(s, { type: 'swipe', dir: steadyIn(pack, s) }, pack);
-    if (s.phase === 'recalled') s = reduce(s, { type: 'next' }, pack);
-    expect(s.phase).toBe('dayEnd');
+    expect(overnightFrom(base, { ...base, people: 75, law: 45 })).toEqual({ people: 25, law: -5 });
+    // find a seed whose Day 1 is won by steady play, and one that's lost
+    let s = start(), lost: State | null = null;
+    for (let i = 0; i < 40; i++) {
+      let t = start(`ov${i}`);
+      while (t.phase === 'card') t = reduce(t, { type: 'swipe', dir: steadyIn(pack, t) }, pack);
+      if (t.phase === 'recalled') t = reduce(t, { type: 'next' }, pack);
+      if (t.won[0]) s = t; else lost ??= t;
+      if (s.phase === 'dayEnd' && lost) break;
+    }
+    expect(s.won[0]).toBe(true);
+    if (lost) expect(() => reduce(lost!, { type: 'overnight', effects: { people: 5 } }, pack)).toThrow();
     const tonight = { ...s.meters };
     const vote = s.polls.at(-1);
-    s = reduce(s, { type: 'overnight', effects: { people: 8, press: -40 } }, pack);
+    s = reduce(s, { type: 'overnight', effects: { people: 8, press: -25 } }, pack);
     expect(s.meters).toEqual(tonight);
     expect(s.polls.at(-1)).toBe(vote);
-    const reset = !!s.flags.__reset;
     s = reduce(s, { type: 'next' }, pack);
-    const from = (k: MeterId) => (reset ? TUNING.recall.reset : tonight[k]);
+    const from = (k: MeterId) => tonight[k];
     expect(s.dayStart.people).toBe(Math.min(90, Math.max(10, from('people') + 8)));
-    expect(s.dayStart.press).toBe(Math.min(90, Math.max(10, from('press') - 10)));
+    expect(s.dayStart.press).toBe(Math.min(90, Math.max(10, from('press') - 25)));
     expect(s.dayStart.law).toBe(from('law'));
     expect(s.overnight).toBeUndefined();
   });

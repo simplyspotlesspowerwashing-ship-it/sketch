@@ -5019,6 +5019,558 @@
      "reaction": "Brayden has looked out of the window. He's crying. It's beautiful."
     }
    }
+  },
+  {
+   "id": "w4s1_1",
+   "who": "kevin",
+   "story": "kevinice",
+   "text": "(Kevin the pothole has frozen solid. Children are skating on him. Kevin seems delighted. Barb does not.) Allow skating?",
+   "options": {
+    "right": {
+     "label": "Yes. Skate on Kevin.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The Kevin Rink is open. 50p a go. Kevin has never felt so loved.",
+     "then": [
+      [
+       "w4s1_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Fence him off.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Kevin is fenced off. The children are skating on the fence.",
+     "then": [
+      [
+       "w4s1_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w4s1_2",
+   "who": "doug",
+   "story": "kevinice",
+   "text": "Mayor, the Kevin Rink is making more money than the council. Should Kevin get a share? He's a hole.",
+   "options": {
+    "right": {
+     "label": "Yes. Pay Kevin.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Kevin's share is in a jar. Beside him. Nobody's quite sure what he'll buy.",
+     "then": [
+      [
+       "w4s1_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. He's a hole.",
+     "effects": {
+      "treasury": 5,
+      "press": -5
+     },
+     "reaction": "The Bugle ran 'MAYOR SHORTCHANGES POTHOLE'. Letters poured in.",
+     "then": [
+      [
+       "w4s1_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s1_2b",
+   "who": "timmy",
+   "story": "kevinice",
+   "text": "Dear Mayor. Kevin is lonely behind the fence. I've put a hat on him. Can I take the fence down? Just a bit?",
+   "options": {
+    "right": {
+     "label": "Yes. A bit.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The fence is down a bit. The whole town came. Kevin's hat blew off. They cheered.",
+     "then": [
+      [
+       "w4s1_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Safety first.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Timmy is sitting next to the fence with Kevin. Holding his hand. Kevin has no hand.",
+     "then": [
+      [
+       "w4s1_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s1_3",
+   "who": "kevin",
+   "story": "kevinice",
+   "text": "(The thaw is coming. Kevin is melting back into a normal pothole. The town has come to say goodbye to the rink.) Make a speech?",
+   "options": {
+    "right": {
+     "label": "Yes. A speech.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "You spoke for ten minutes about a hole. People wept. Kevin gurgled.",
+     "set": [
+      "kevin_rink"
+     ]
+    },
+    "left": {
+     "label": "No. It's a pothole.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Chad has filled him with hot chocolate. Selling it by the cup. Kevin seems fine."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s2_1",
+   "who": "toby",
+   "story": "tobycold",
+   "text": "(Toby the oak tree is cold. He's dropped all his leaves. On your car. On purpose. He'd like a scarf.) Knit him one?",
+   "options": {
+    "right": {
+     "label": "Yes. A scarf for Toby.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "The PTA knitted for a week. It's forty feet long. He's never looked better.",
+     "then": [
+      [
+       "w4s2_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Trees are fine.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Toby is sulking. Branches drooping. A squirrel has taken your side. Only one.",
+     "then": [
+      [
+       "w4s2_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w4s2_2",
+   "who": "chad",
+   "story": "tobycold",
+   "text": "Mayor! Toby's scarf is the most photographed thing in town. I'd like to put my logo on it. Small. Very small. Giant.",
+   "options": {
+    "right": {
+     "label": "Yes. A logo.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "'TOBY: BROUGHT TO YOU BY CHAD'. Toby dropped a branch on Chad. Gently.",
+     "then": [
+      [
+       "w4s2_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. It's Toby's.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Chad has knitted his own tree a scarf. It's a lamppost. It's not the same.",
+     "then": [
+      [
+       "w4s2_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s2_2b",
+   "who": "nutkins",
+   "story": "tobycold",
+   "text": "(Mr Nutkins has noticed Toby is sad. The squirrels would like to move in and keep him warm. All 300.) Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Squirrels in.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Toby is full of squirrels. Very warm. Very loud. He's thrilled.",
+     "then": [
+      [
+       "w4s2_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. That's too many.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Mr Nutkins sent 299 squirrels. He says it's a compromise.",
+     "then": [
+      [
+       "w4s2_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s2_3",
+   "who": "toby",
+   "story": "tobycold",
+   "text": "(Spring is coming. Toby has grown one leaf. Just one. Facing your window. Facing you. It's for you.) Frame it?",
+   "options": {
+    "right": {
+     "label": "Yes. Frame the leaf.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "It's in your office. Toby sways when you walk past. You wave back.",
+     "set": [
+      "toby_leaf"
+     ]
+    },
+    "left": {
+     "label": "No. Leave it be.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "The Bugle has photographed the leaf. 'TREE LOVES MAYOR?' Everyone's talking."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s3_1",
+   "who": "cheese",
+   "story": "cheesecold",
+   "text": "(The Big Freeze has frozen the cheese in the vault. It's quiet for the first time in years. Too quiet.) Warm it up?",
+   "options": {
+    "right": {
+     "label": "Yes. Warm it up.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "A heater in the vault. The cheese thawed. It hummed once. You felt watched.",
+     "then": [
+      [
+       "w4s3_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Peace at last.",
+     "effects": {
+      "treasury": 5,
+      "law": -5
+     },
+     "reaction": "The vault is silent. The town sleeps well. Doug keeps checking it. Just in case.",
+     "then": [
+      [
+       "w4s3_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w4s3_2",
+   "who": "doug",
+   "story": "cheesecold",
+   "text": "Mayor, the cheese has rolled out of the vault and towards the radiator. It's been there all day. Like a cat. Move it?",
+   "options": {
+    "right": {
+     "label": "Yes. Back in the vault.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "It rolled back. It took a while. It felt like a choice.",
+     "then": [
+      [
+       "w4s3_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let it be warm.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It's purring. Cheese doesn't purr. This one does.",
+     "then": [
+      [
+       "w4s3_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s3_2b",
+   "who": "nora",
+   "story": "cheesecold",
+   "text": "Mayor, I scanned the frozen cheese. It's not frozen. It's hibernating. It's dreaming. About you. Should I wake it?",
+   "options": {
+    "right": {
+     "label": "Yes. Wake it.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "It woke up. It hummed your name. The Bugle has a recording. It's number one.",
+     "then": [
+      [
+       "w4s3_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let it dream.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "It's still dreaming. Nora says it's dreaming that it's mayor. It's doing well.",
+     "then": [
+      [
+       "w4s3_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s3_3",
+   "who": "cheese",
+   "story": "cheesecold",
+   "text": "(The thaw. The cheese is back to normal. It has left a small wedge of itself on your desk. A gift. Or a warning.) Eat it?",
+   "options": {
+    "right": {
+     "label": "Yes. Eat the gift.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Delicious. You feel strange. You feel... aged. Gracefully.",
+     "set": [
+      "cheese_gift"
+     ]
+    },
+    "left": {
+     "label": "No. Keep it.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "It's on your shelf. It doesn't go off. It never will. You can't throw it out."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s4_1",
+   "who": "biscuit",
+   "story": "snowcase",
+   "text": "(Inspector Biscuit has found pawprints in the snow leading to the treasury. They're his. He's arrested himself.) Release him?",
+   "options": {
+    "right": {
+     "label": "Yes. Release Biscuit.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He released himself. With a stern warning. He took it very well.",
+     "then": [
+      [
+       "w4s4_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Justice is justice.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Biscuit is in a cell. He's sad. His tail is wagging anyway.",
+     "then": [
+      [
+       "w4s4_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w4s4_2",
+   "who": "barb",
+   "story": "snowcase",
+   "text": "Mayor. New pawprints by the treasury. Not Biscuit's. Bigger. Honk-shaped. Investigate Gerald?",
+   "options": {
+    "right": {
+     "label": "Yes. Question Gerald.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Gerald was questioned. He honked for an hour. Barb took notes. She now speaks goose.",
+     "then": [
+      [
+       "w4s4_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Leave the geese.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "The treasury's bread fund is missing. Four hundred geese look very well fed.",
+     "then": [
+      [
+       "w4s4_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s4_2b",
+   "who": "marge",
+   "story": "snowcase",
+   "text": "Mayor, the Bugle wants to cover the trial of Inspector Biscuit. By Inspector Biscuit. He's also the judge. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Cover the trial.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "Biscuit found himself not guilty. Then gave himself a treat. Sold out.",
+     "then": [
+      [
+       "w4s4_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Keep it quiet.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "The Bugle ran 'SECRET DOG TRIAL'. Everyone came. The dog was very good.",
+     "then": [
+      [
+       "w4s4_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4s4_3",
+   "who": "biscuit",
+   "story": "snowcase",
+   "text": "(Case closed. Inspector Biscuit has solved it. He's brought you the culprit: a single snowball. It's melting.) Convict it?",
+   "options": {
+    "right": {
+     "label": "Yes. Guilty.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The snowball got life. It got about an hour. Justice was swift. And wet.",
+     "set": [
+      "snowball_case"
+     ]
+    },
+    "left": {
+     "label": "No. Not enough evidence.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The snowball walked free. It rolled, really. Biscuit is watching it. Closely."
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [

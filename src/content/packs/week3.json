@@ -5241,6 +5241,558 @@
      "reaction": "Locked in the vault. With the cheese. The vault is glowing now. Doug won't go in."
     }
    }
+  },
+  {
+   "id": "w3s1_1",
+   "who": "marcel",
+   "story": "mimeshow",
+   "text": "(Marcel the mime would like to headline the festival. The act is 'Man Trapped in Festival'. It's four hours long.) Book him?",
+   "options": {
+    "right": {
+     "label": "Yes. Headline slot.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Four hours of silence. The Bugle called it 'a triumph'. Nobody else is sure.",
+     "then": [
+      [
+       "w3s1_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Five minutes.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Five minutes. He mimed an hour into it. Somehow it felt longer.",
+     "then": [
+      [
+       "w3s1_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w3s1_2",
+   "who": "chad",
+   "story": "mimeshow",
+   "text": "Mayor, Marcel's show is so quiet I can't sell anything. Nobody dares open a crisp packet. Can I put a speaker next to him?",
+   "options": {
+    "right": {
+     "label": "Yes. A speaker.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "Chad's speaker played his advert over Marcel. Marcel mimed fainting. Encore.",
+     "then": [
+      [
+       "w3s1_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Respect the art.",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "Chad has started miming his adverts. He's terrible at it. Sales are up.",
+     "then": [
+      [
+       "w3s1_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s1_2b",
+   "who": "marcel",
+   "story": "mimeshow",
+   "text": "(Marcel is outside your office, miming being very, very sad. He's very good at it. People are stopping to cry.) Give him more time?",
+   "options": {
+    "right": {
+     "label": "Yes. An hour, then.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "An hour. He used all of it to mime saying thank you. It was lovely.",
+     "then": [
+      [
+       "w3s1_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Five minutes.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He's mimed a wall around your office. Nobody can get in. Nobody tries.",
+     "then": [
+      [
+       "w3s1_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s1_3",
+   "who": "marcel",
+   "story": "mimeshow",
+   "text": "(Marcel's final act: he mimes the whole festival backwards. He'd like you on stage. You'd be the ribbon.) Go on stage?",
+   "options": {
+    "right": {
+     "label": "Yes. Be the ribbon.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "You stood still for nine minutes. Then he mimed cutting you. Standing ovation.",
+     "set": [
+      "mime_ribbon"
+     ]
+    },
+    "left": {
+     "label": "No. Stage fright.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Marcel used an invisible mayor instead. Critics say it was more convincing."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s2_1",
+   "who": "hoot",
+   "story": "quiz",
+   "text": "(Professor Hoot is running the festival pub quiz. Every answer so far has been 'who'. He says that's correct.) Let him carry on?",
+   "options": {
+    "right": {
+     "label": "Yes. Keep quizzing.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "'Who wrote Hamlet?' 'Who.' 'Correct.' The pub has never been happier.",
+     "then": [
+      [
+       "w3s2_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Normal answers.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Hoot has refused to blink until it's fixed. It's very unsettling.",
+     "then": [
+      [
+       "w3s2_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w3s2_2",
+   "who": "bev",
+   "story": "quiz",
+   "text": "Mayor, I've won the owl quiz four times. Answer was 'who' each time. Hoot says I'm cheating. I'm not. I'm just quick. Back me?",
+   "options": {
+    "right": {
+     "label": "Yes. Bev wins.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Bev holds the trophy. It's a mouse. A real one. It's very upset.",
+     "then": [
+      [
+       "w3s2_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Disqualify her.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Bev is starting her own quiz. Every answer is 'Bev'. It's very popular.",
+     "then": [
+      [
+       "w3s2_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s2_2b",
+   "who": "linda",
+   "story": "quiz",
+   "text": "Mayor, Hoot has stopped blinking. He's staring at the library. Since Tuesday. Can we let him do 'who' answers again?",
+   "options": {
+    "right": {
+     "label": "Yes. Back to 'who'.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "He blinked. The whole library cheered. Linda shushed them. Tearfully.",
+     "then": [
+      [
+       "w3s2_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Stand firm.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "The Bugle has a live Hoot Blink Watch. Day four. No blink.",
+     "then": [
+      [
+       "w3s2_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s2_3",
+   "who": "hoot",
+   "story": "quiz",
+   "text": "(Final round. Hoot's question: 'Who is the best mayor in Bad Town?' He's staring at you. Waiting.) Answer 'who'?",
+   "options": {
+    "right": {
+     "label": "Yes. 'Who.'",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "'Correct.' You won the quiz. The prize is a book called 'Who'. All 300 pages.",
+     "set": [
+      "quiz_win"
+     ]
+    },
+    "left": {
+     "label": "No. Say your name.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "'Incorrect.' Hoot has awarded the point to Gerald. Gerald wasn't playing."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s3_1",
+   "who": "trevor",
+   "story": "lantern",
+   "text": "(Trevor the moth has heard about the festival lantern parade. All of it. Hundreds of lanterns. He's very emotional.) Invite him?",
+   "options": {
+    "right": {
+     "label": "Yes. Trevor's parade.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's at the front. He's crying. A moth can cry. You didn't know that.",
+     "then": [
+      [
+       "w3s3_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. He'll cause chaos.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's coming anyway. With friends. Two thousand friends.",
+     "then": [
+      [
+       "w3s3_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w3s3_2",
+   "who": "barb",
+   "story": "lantern",
+   "text": "Mayor. Trevor has led every lantern into the duck pond. On purpose. He says it was 'too beautiful to be on land'. Fine him?",
+   "options": {
+    "right": {
+     "label": "Yes. Fine Trevor.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Barb fined a moth. He paid in dust. She's filed the dust.",
+     "then": [
+      [
+       "w3s3_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. It was beautiful.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "It was beautiful. The ducks thought so. They're wearing lanterns now.",
+     "then": [
+      [
+       "w3s3_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s3_2b",
+   "who": "marge",
+   "story": "lantern",
+   "text": "Mayor, there are two thousand moths heading for the parade. The Bugle wants to run 'MOTH-AGEDDON'. Can we?",
+   "options": {
+    "right": {
+     "label": "Yes. Run it.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "Sold out. Everybody came to see the moths. The moths came to see the lanterns.",
+     "then": [
+      [
+       "w3s3_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Don't scare people.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Marge ran 'MOTHS: FINE, PROBABLY'. Nobody believed it.",
+     "then": [
+      [
+       "w3s3_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s3_3",
+   "who": "trevor",
+   "story": "lantern",
+   "text": "(After the parade, Trevor has found one last lantern. It's yours. On your desk. He'd like to keep it. Forever.) Give it to him?",
+   "options": {
+    "right": {
+     "label": "Yes. It's his.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "He's sat on it every night since. He's named it 'Mayor'. You're touched.",
+     "set": [
+      "moth_lantern"
+     ]
+    },
+    "left": {
+     "label": "No. It's council property.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He's sitting on your desk lamp instead. He's staring at you. Lovingly. Forever."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s4_1",
+   "who": "clive",
+   "story": "conefest",
+   "text": "(A traffic cone has entered the festival's fancy dress competition. It's Clive. He's come as a traffic cone.) Allow the entry?",
+   "options": {
+    "right": {
+     "label": "Yes. Clive's in.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He's through to the final. Judges called his costume 'incredibly convincing'.",
+     "then": [
+      [
+       "w3s4_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. He's not in costume.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's been moved. He's back. Holding a number. Nobody knows how.",
+     "then": [
+      [
+       "w3s4_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w3s4_2",
+   "who": "coach",
+   "story": "conefest",
+   "text": "Mayor! Final round of fancy dress! It's Clive versus Gerald, who has come as a goose! I can't pick! You pick!",
+   "options": {
+    "right": {
+     "label": "Clive.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Clive wins. Gerald honked for two hours. Then honked at Clive. Clive didn't flinch.",
+     "then": [
+      [
+       "w3s4_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "Gerald.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Gerald wins. He ate the rosette. Clive has moved one inch to the left. Ominous.",
+     "then": [
+      [
+       "w3s4_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s4_2b",
+   "who": "brayden",
+   "story": "conefest",
+   "text": "Mayor! Clive the cone went viral! 'Cone enters contest, refuses to leave'! Can we sell Clive merch?",
+   "options": {
+    "right": {
+     "label": "Yes. Cone merch.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "Cone hats, cone mugs, cone cones. Sold out. Clive gets nothing. He seems fine with it.",
+     "then": [
+      [
+       "w3s4_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. He's private.",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "The Bugle ran 'CONE TOO HUMBLE FOR FAME'. Clive is more famous than ever.",
+     "then": [
+      [
+       "w3s4_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3s4_3",
+   "who": "clive",
+   "story": "conefest",
+   "text": "(The festival is over. Every cone in town has been put away. Except Clive. He's outside City Hall. Waiting.) Put him away?",
+   "options": {
+    "right": {
+     "label": "Yes. Into storage.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "You put him in the shed. In the morning, he was by your car. Facing you.",
+     "set": [
+      "cone_kept"
+     ]
+    },
+    "left": {
+     "label": "No. He's earned it.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "Clive stays. A small plaque reads 'CLIVE. CONE. FESTIVAL CHAMPION (DISPUTED)'."
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [

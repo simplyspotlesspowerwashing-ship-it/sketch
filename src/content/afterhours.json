@@ -57,16 +57,16 @@
     "right": {
      "label": "Yes. Name them.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "press": 5,
+      "law": -5
      },
      "reaction": "Tomorrow's potholes: Kevin II, Kevina and Steve. Nobody can bear to fill them."
     },
     "left": {
      "label": "No. Just fill them.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "press": -5,
+      "law": 5
      },
      "reaction": "Filled, unnamed. Kevin watched. Relieved or jealous, it's hard to say."
     }
@@ -129,7 +129,7 @@
     "right": {
      "label": "Yes. Escorted only.",
      "effects": {
-      "treasury": 5,
+      "law": 5,
       "people": -5
      },
      "reaction": "Randy stayed out. His cousins did not. Doug is counting the cousins."
@@ -201,7 +201,7 @@
     "right": {
      "label": "Yes. Fine the honk.",
      "effects": {
-      "law": 5,
+      "treasury": 5,
       "people": -5
      },
      "reaction": "The first fine went to Gerald. He paid in bread. Then honked about it."
@@ -209,8 +209,8 @@
     "left": {
      "label": "No. Honk freely.",
      "effects": {
-      "people": 5,
-      "law": -5
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "Gerald honked his thanks. All night. Under your window."
     }
@@ -273,7 +273,7 @@
     "right": {
      "label": "Yes. Wendy votes.",
      "effects": {
-      "people": 5,
+      "press": 5,
       "law": -5
      },
      "reaction": "Wendy voted. Her ballot floated into the box on its own. A first."
@@ -281,8 +281,8 @@
     "left": {
      "label": "No. Not yet.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "press": -5,
+      "law": 5
      },
      "reaction": "Wendy is disappointed. The lights flickered all night. Pointedly."
     }
@@ -418,15 +418,15 @@
      "label": "Yes. No cone mayors.",
      "effects": {
       "law": 5,
-      "people": -5
+      "press": -5
      },
      "reaction": "Passed. Clive has moved one inch to the left. It feels like a threat."
     },
     "left": {
      "label": "No. Cones welcome.",
      "effects": {
-      "people": 5,
-      "law": -5
+      "law": -5,
+      "press": 5
      },
      "reaction": "Clive has a campaign office again. It's the same window."
     }
@@ -490,15 +490,15 @@
      "label": "Yes. We'll try.",
      "effects": {
       "people": 5,
-      "press": -5
+      "business": -5
      },
      "reaction": "New signs by morning. Several people have actually tried. It was unsettling."
     },
     "left": {
      "label": "No. We tried.",
      "effects": {
-      "press": 5,
-      "people": -5
+      "people": -5,
+      "business": 5
      },
      "reaction": "The old motto stays. Everyone is quietly relieved."
     }
@@ -538,15 +538,15 @@
      "label": "Yes. Fix the leak.",
      "effects": {
       "treasury": 5,
-      "people": -5
+      "press": -5
      },
      "reaction": "Fixed. The ducks are furious. They'd been saving up."
     },
     "left": {
      "label": "No. Leave it.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "treasury": -5,
+      "press": 5
      },
      "reaction": "The ducks are now the richest residents of Bad Town."
     }
@@ -682,15 +682,15 @@
      "label": "Yes. Open day.",
      "effects": {
       "people": 5,
-      "law": -5
+      "treasury": -5
      },
      "reaction": "Bev flew the helicopter. Twice round the clock tower. Upside down once."
     },
     "left": {
      "label": "No. Not anyone.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "people": -5,
+      "treasury": 5
      },
      "reaction": "Barb has opened the helicopter to Biscuit only. He's a natural."
     }
@@ -802,15 +802,15 @@
      "label": "Yes. Open it.",
      "effects": {
       "business": 5,
-      "people": -5
+      "law": -5
      },
      "reaction": "Fully booked. Nobody ate. Everyone left with a tyre. Five stars."
     },
     "left": {
      "label": "No. One is enough.",
      "effects": {
-      "people": 5,
-      "business": -5
+      "business": -5,
+      "law": 5
      },
      "reaction": "Sal is serving tyres at the first restaurant now. Same thing, really."
     }
@@ -850,15 +850,15 @@
      "label": "Yes. Night school.",
      "effects": {
       "press": 5,
-      "people": -5
+      "treasury": -5
      },
      "reaction": "The children were very confused. They learned owls. All of them."
     },
     "left": {
      "label": "No. Let them sleep.",
      "effects": {
-      "people": 5,
-      "press": -5
+      "press": -5,
+      "treasury": 5
      },
      "reaction": "Hoot taught the lesson anyway. To an empty classroom. It went well."
     }
@@ -970,15 +970,15 @@
      "label": "Yes. Door to door.",
      "effects": {
       "people": 5,
-      "press": -5
+      "treasury": -5
      },
      "reaction": "He told four hundred people it would rain. It was sunny. They were charmed."
     },
     "left": {
      "label": "No. Use the radio.",
      "effects": {
-      "press": 5,
-      "people": -5
+      "people": -5,
+      "treasury": 5
      },
      "reaction": "Radio forecast: rain. It rained. Steve doesn't know how to feel."
     }
@@ -994,15 +994,15 @@
      "label": "Yes. Cheese fair.",
      "effects": {
       "people": 5,
-      "law": -5
+      "treasury": -5
      },
      "reaction": "Very popular. The cheese did not move. The cheese did not need to."
     },
     "left": {
      "label": "No fair.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "people": -5,
+      "treasury": 5
      },
      "reaction": "The note has been replaced: TOMORROW: CHEESE FAIR ANYWAY."
     }
@@ -1017,7 +1017,7 @@
     "right": {
      "label": "Yes. Come in, Trevor.",
      "effects": {
-      "people": 5,
+      "press": 5,
       "law": -5
      },
      "reaction": "He sat on the lamp until dawn. He said it was the best night of his life."
@@ -1025,8 +1025,8 @@
     "left": {
      "label": "No. Goodnight, Trevor.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "press": -5,
+      "law": 5
      },
      "reaction": "He's on the streetlight outside. Looking in. Lovingly. All night."
     }
@@ -1065,16 +1065,16 @@
     "right": {
      "label": "Yes. Five minutes.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "treasury": 5,
+      "business": -5
      },
      "reaction": "It was forty minutes. You know a great deal about bins now. You feel closer."
     },
     "left": {
      "label": "No. Bed, Randy.",
      "effects": {
-      "treasury": 5,
-      "people": -5
+      "treasury": -5,
+      "business": 5
      },
      "reaction": "He's gone to bed. In a bin. He's talking to it instead."
     }
@@ -1089,7 +1089,7 @@
     "right": {
      "label": "Yes. Tea with Wendy.",
      "effects": {
-      "people": 5,
+      "press": 5,
       "business": -5
      },
      "reaction": "Lovely tea. She told you about 1890. It sounded awful. She misses it."
@@ -1097,8 +1097,8 @@
     "left": {
      "label": "No thanks.",
      "effects": {
-      "business": 5,
-      "people": -5
+      "press": -5,
+      "business": 5
      },
      "reaction": "She made it anyway. It's on your desk. Steaming. Forever."
     }
@@ -1114,15 +1114,15 @@
      "label": "Yes. Discuss.",
      "effects": {
       "treasury": 5,
-      "people": -5
+      "press": -5
      },
      "reaction": "You agreed a budget at 3am. Mostly for mice. You're not sure how."
     },
     "left": {
      "label": "No. Office hours.",
      "effects": {
-      "people": 5,
-      "treasury": -5
+      "treasury": -5,
+      "press": 5
      },
      "reaction": "He's left a note. It says 'who'. That's the whole note."
     }
@@ -1186,15 +1186,15 @@
      "label": "Yes. Stop him.",
      "effects": {
       "law": 5,
-      "people": -5
+      "business": -5
      },
      "reaction": "You saved half the agenda. The other half is Pebbles now."
     },
     "left": {
      "label": "No. Let him eat.",
      "effects": {
-      "people": 5,
-      "law": -5
+      "law": -5,
+      "business": 5
      },
      "reaction": "Tomorrow's meeting has no agenda. It's the best meeting in months."
     }
@@ -1281,7 +1281,7 @@
     "right": {
      "label": "Yes. Leave them.",
      "effects": {
-      "people": 5,
+      "press": 5,
       "law": -5
      },
      "reaction": "Kevin glowed all night. Someone wrote a song about it. It's mostly the word 'Kevin'."
@@ -1289,8 +1289,8 @@
     "left": {
      "label": "No. Fire risk.",
      "effects": {
-      "law": 5,
-      "people": -5
+      "press": -5,
+      "law": 5
      },
      "reaction": "Barb blew them out. One at a time. She said sorry to Kevin each time."
     }
@@ -1521,7 +1521,7 @@
     "right": {
      "label": "Yes. Save the stapler.",
      "effects": {
-      "law": 5,
+      "treasury": 5,
       "people": -5
      },
      "reaction": "You saved the stapler. He knocked over your tea instead. He held eye contact throughout."
@@ -1529,8 +1529,8 @@
     "left": {
      "label": "No. Let fate decide.",
      "effects": {
-      "people": 5,
-      "law": -5
+      "treasury": -5,
+      "people": 5
      },
      "reaction": "The stapler is on the floor. So is the lamp. Mr Whiskers is asleep. Case closed."
     }
@@ -1618,15 +1618,15 @@
      "label": "Yes. Guard away.",
      "effects": {
       "law": 5,
-      "people": -5
+      "treasury": -5
      },
      "reaction": "Carl guarded your office all night. Nothing got in. Not even morning, almost."
     },
     "left": {
      "label": "No. Go home, Carl.",
      "effects": {
-      "people": 5,
-      "law": -5
+      "law": -5,
+      "treasury": 5
      },
      "reaction": "He's guarding your doorstep. Shivering. Heroically."
     }

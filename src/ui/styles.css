@@ -1147,3 +1147,4 @@ button.scorechip { font: inherit; font-size: 13px; cursor: pointer; color: var(-
 .afterhours .panel .dayend-btns { grid-template-columns: 1fr; }
 .afterhours .dayend-btns { align-self: stretch; }
 .afterhours .dayend-btns .btn { width: 100%; }
+.ah-why { display: block; text-align: center; color: var(--soft); font-size: 12.5px; margin-top: 4px; }

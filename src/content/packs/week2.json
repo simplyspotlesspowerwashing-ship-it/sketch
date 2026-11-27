@@ -5259,6 +5259,558 @@
      "reaction": "Shared. Gerald honks at every child. Every child honks back. It's a standoff."
     }
    }
+  },
+  {
+   "id": "w2s1_1",
+   "who": "gary",
+   "story": "garyheat",
+   "text": "(Gary the vending machine has overheated. He's dispensing soup. Hot soup. In a heatwave.) Unplug him for the day?",
+   "options": {
+    "right": {
+     "label": "Yes. Rest, Gary.",
+     "effects": {
+      "law": 5,
+      "business": -5
+     },
+     "reaction": "Unplugged. He's sulking in the dark. Soup is still coming out. Slowly.",
+     "then": [
+      [
+       "w2s1_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Soup's soup.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Forty people bought soup in 34 degrees. They're sweating. And loyal.",
+     "then": [
+      [
+       "w2s1_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w2s1_2",
+   "who": "doug",
+   "story": "garyheat",
+   "text": "Mayor, Gary's back on. He's only giving out ice now. Free. He says it's an apology. Sal says it's ruining his ice trade. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Free ice.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Queues round the block. Sal is selling ice to Gary's queue. Somehow.",
+     "then": [
+      [
+       "w2s1_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Charge for it.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Gary charges 10p. Then gives you the 10p back. He doesn't understand money.",
+     "then": [
+      [
+       "w2s1_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s1_2b",
+   "who": "pam",
+   "story": "garyheat",
+   "text": "Mayor, the whole soup queue has fainted. Gently. The PTA would like Gary moved into the shade. Move him?",
+   "options": {
+    "right": {
+     "label": "Yes. Shade for Gary.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Four men carried Gary under Toby. Toby seems honoured. Gary is chilled.",
+     "then": [
+      [
+       "w2s1_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. He stays.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "The queue is back. Fainting in shifts. Very organised.",
+     "then": [
+      [
+       "w2s1_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s1_3",
+   "who": "gary",
+   "story": "garyheat",
+   "text": "(Gary has fallen in love with the new fridge at the fish shop. He's dispensing notes to it. Every hour.) Arrange a date?",
+   "options": {
+    "right": {
+     "label": "Yes. Set up a date.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "They stood side by side all evening, humming. Sal cried into the haddock.",
+     "set": [
+      "gary_fridge"
+     ]
+    },
+    "left": {
+     "label": "No. He's a machine.",
+     "effects": {
+      "business": 5,
+      "press": -5
+     },
+     "reaction": "Gary has dispensed one sad can, labelled 'for her'. Nobody can open it."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s2_1",
+   "who": "reginald",
+   "story": "shell",
+   "text": "(Reginald the tortoise has stopped in the middle of Main Street. It's 35 degrees. He's decided to wait for autumn.) Build him a shade?",
+   "options": {
+    "right": {
+     "label": "Yes. A little shade.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "A parasol over Reginald. Traffic goes round. He's never looked so smug.",
+     "then": [
+      [
+       "w2s2_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Move him.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Barb moved him. He moved back. It took him all day, but he moved back.",
+     "then": [
+      [
+       "w2s2_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w2s2_2",
+   "who": "chad",
+   "story": "shell",
+   "text": "Mayor! The Reginald parasol is a tourist attraction. I'd like to sell tickets. And hats. Reginald hats. Can I?",
+   "options": {
+    "right": {
+     "label": "Yes. Sell the hats.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Four hundred Reginald hats sold. Shaped like a shell. Very hot.",
+     "then": [
+      [
+       "w2s2_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. He's not a ride.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Chad is selling 'unofficial' hats from a van. They're slightly worse.",
+     "then": [
+      [
+       "w2s2_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s2_2b",
+   "who": "barb",
+   "story": "shell",
+   "text": "Mayor. Reginald has now been 'moved' eleven times. He always comes back. Can I give him a parking ticket?",
+   "options": {
+    "right": {
+     "label": "Yes. Ticket him.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "He's ignored it. He's sitting on it. The Bugle calls it 'protest art'.",
+     "then": [
+      [
+       "w2s2_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let it go.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Barb is drafting a law: 'No Tortoises on Main Street'. It's 40 pages.",
+     "then": [
+      [
+       "w2s2_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s2_3",
+   "who": "reginald",
+   "story": "shell",
+   "text": "(Reginald has reached the other side of Main Street. It took nine days. The town has gathered.) Hold a ceremony?",
+   "options": {
+    "right": {
+     "label": "Yes. A ceremony.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Brass band, bunting, a speech. Reginald blinked once. It was enough.",
+     "set": [
+      "reg_crossed"
+     ]
+    },
+    "left": {
+     "label": "No. It's a road.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He's turned round. He's going back. See you in nine days."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s3_1",
+   "who": "lorraine",
+   "story": "chiprun",
+   "text": "(Lorraine the seagull has stolen every chip on the seafront. All of them. In one swoop. It was beautiful.) Send someone after her?",
+   "options": {
+    "right": {
+     "label": "Yes. Get the chips.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Big Carl gave chase. Lorraine circled. Carl got a chip. He's keeping it.",
+     "then": [
+      [
+       "w2s3_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Respect her.",
+     "effects": {
+      "press": 5,
+      "business": -5
+     },
+     "reaction": "The Bugle ran it: 'GULL OF THE YEAR'. Lorraine has framed it. In her nest.",
+     "then": [
+      [
+       "w2s3_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w2s3_2",
+   "who": "sal",
+   "story": "chiprun",
+   "text": "Mayor. The seagulls are organised now. They have a leader. It's Lorraine. They want one chip per gull, per day. Deal?",
+   "options": {
+    "right": {
+     "label": "Yes. Chip tax.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Peace on the seafront. Sal pays in chips. Lorraine collects personally.",
+     "then": [
+      [
+       "w2s3_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No deals with gulls.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "The gulls have taken a pier. They've put up a flag. It's a chip.",
+     "then": [
+      [
+       "w2s3_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s3_2b",
+   "who": "marge",
+   "story": "chiprun",
+   "text": "Mayor, Lorraine wants an interview. Front page. She says she has 'a lot to say about chips'. Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Let her speak.",
+     "effects": {
+      "press": 5,
+      "law": -5
+     },
+     "reaction": "She screeched for an hour. Marge printed it all. Best-selling issue this year.",
+     "then": [
+      [
+       "w2s3_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. She's a gull.",
+     "effects": {
+      "law": 5,
+      "press": -5
+     },
+     "reaction": "Lorraine has taken the Bugle's sandwich instead. Marge calls it 'censorship'.",
+     "then": [
+      [
+       "w2s3_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s3_3",
+   "who": "lorraine",
+   "story": "chiprun",
+   "text": "(Lorraine has landed on your desk with a single chip. She puts it down. She looks at you. It's a peace offering.) Take it?",
+   "options": {
+    "right": {
+     "label": "Yes. Eat the chip.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "You ate it. She nodded. You're friends now. She will never leave you alone.",
+     "set": [
+      "gull_friend"
+     ]
+    },
+    "left": {
+     "label": "No. Give it back.",
+     "effects": {
+      "press": 5,
+      "people": -5
+     },
+     "reaction": "She's offended. She's taken your pen. And your stapler. And your lunch."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s4_1",
+   "who": "wendy",
+   "story": "ghostcool",
+   "text": "Wooo. Mayor. Everyone's coming to City Hall to stand near me. I'm cold, you see. Ghosts are. Can I charge a fee?",
+   "options": {
+    "right": {
+     "label": "Yes. Charge for cold.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Two pounds a shiver. The treasury is up. Wendy is very proud.",
+     "then": [
+      [
+       "w2s4_2",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Free chills.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "City Hall is packed with sweaty people sighing with relief. Wendy loves the company.",
+     "then": [
+      [
+       "w2s4_2b",
+       2
+      ]
+     ]
+    }
+   }
+  },
+  {
+   "id": "w2s4_2",
+   "who": "doug",
+   "story": "ghostcool",
+   "text": "Mayor, Wendy's chill business is going very well. She's hired two more ghosts. From the next town. On zero wages. Is that allowed?",
+   "options": {
+    "right": {
+     "label": "Yes. Ghost staff.",
+     "effects": {
+      "business": 5,
+      "law": -5
+     },
+     "reaction": "Three ghosts. Very cold office. Very low costs. Barb has questions.",
+     "then": [
+      [
+       "w2s4_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Pay the ghosts.",
+     "effects": {
+      "law": 5,
+      "treasury": -5
+     },
+     "reaction": "You're paying three ghosts. In what, nobody knows. Doug is leaving coins out.",
+     "then": [
+      [
+       "w2s4_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s4_2b",
+   "who": "barb",
+   "story": "ghostcool",
+   "text": "Mayor. Four hundred people are standing in the council chamber 'near Wendy'. That's a fire risk. Clear them?",
+   "options": {
+    "right": {
+     "label": "Yes. Clear the room.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Cleared. They're queuing outside now. In the heat. Glaring.",
+     "then": [
+      [
+       "w2s4_3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let them cool.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The meeting happened anyway. 400 people voted. They all voted for shade.",
+     "then": [
+      [
+       "w2s4_3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2s4_3",
+   "who": "wendy",
+   "story": "ghostcool",
+   "text": "Wooo. The heatwave's ending, Mayor. Nobody needs me now. I'm not sad. I'm a ghost. We're always a bit sad. Say thank you?",
+   "options": {
+    "right": {
+     "label": "Yes. Thank you, Wendy.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "A town-wide thank you. Wendy flickered every light in town. Happily.",
+     "set": [
+      "wendy_thanked"
+     ]
+    },
+    "left": {
+     "label": "No. Back to haunting.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "She's haunting the ice cream van now. It plays its tune backwards."
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [

@@ -195,9 +195,9 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       return s;
     }
     case 'overnight': {
-      if (s.phase !== 'dayEnd' || s.day >= 7) throw new Error('After Hours only carries into a next day');
+      if (s.phase !== 'dayEnd' || s.day >= 7 || !s.won[s.day - 1]) throw new Error('After Hours only follows a night you won, before Day 7');
       const e: Partial<Record<MeterId, number>> = {};
-      for (const k of METERS) { const v = Math.round(action.effects[k] ?? 0); if (v) e[k] = clamp(v, -10, 10); }
+      for (const k of METERS) { const v = Math.round(action.effects[k] ?? 0); if (v) e[k] = clamp(v, -100, 100); }
       s.overnight = e;
       return s;
     }
