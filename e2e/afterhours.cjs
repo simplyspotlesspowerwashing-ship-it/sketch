@@ -17,7 +17,25 @@ const { chromium } = require('playwright');
     const cx = card.x + card.width / 2, cy = card.y + card.height / 2, dx = d === 'left' ? -160 : 160;
     await pg.mouse.move(cx, cy); await pg.mouse.down(); await pg.mouse.move(cx + dx, cy, { steps: 6 }); await pg.mouse.up(); await pg.waitForTimeout(80);
   };
+  const AH = require('../src/content/afterhours.json');
+  const answerFor = (law) => AH.cards.find((c) => c.riddle && c.riddle.law === law)?.riddle.answers[0];
+  let riddles = 0, solved = 0, sneaks = 0;
   const step = async (d, inAH) => {
+    if (inAH && await pg.locator('.riddle-card').count()) {
+      riddles++;
+      if (riddles === 1) await pg.screenshot({ path: `${out}/ah-riddle.png` });
+      const law = await pg.locator('.riddle-law').textContent();
+      if (d === 'right') { await pg.locator('.riddle-form input').fill('wrong guess'); await pg.locator('.riddle-form button').click(); await pg.waitForTimeout(100); await pg.locator('.riddle-form input').fill(`The ${answerFor(law).toUpperCase()}`); await pg.locator('.riddle-form button').click(); solved++; }
+      else await pg.locator('.riddle-foot .linkbtn').click();
+      await pg.waitForTimeout(150); return;
+    }
+    if (inAH && await pg.locator('.card.sneak').count() && !(await pg.locator('.card.result').count())) {
+      sneaks++;
+      const btn = pg.locator('.sneak-btn'); const bb = await btn.boundingBox();
+      await pg.mouse.move(bb.x + bb.width / 2, bb.y + bb.height / 2); await pg.mouse.down(); await pg.waitForTimeout(850);
+      for (let k = 0; k < 40 && !(await pg.locator('.card.sneak.away').count()); k++) await pg.waitForTimeout(25);
+      await pg.mouse.up(); await pg.waitForSelector('.card.sneak', { state: 'detached', timeout: 4000 }).catch(() => {}); return;
+    }
     if (await pg.locator('.sheet.op').count()) { if (await pg.locator('.op-oath input').count()) await pg.locator('.op-oath input').check(); await pg.locator('.op .btn.primary').click(); return; }
     if (await pg.locator('#mayor-name').count() || await pg.locator('.sheet .bugle').count()) { await pg.locator('.sheet .btn.primary').click(); return; }
     if (!inAH && await pg.locator('.panel.recall').count()) { await pg.locator('.panel.recall .btn.primary').click(); return; }
@@ -43,7 +61,7 @@ const { chromium } = require('playwright');
   }
   await pg.screenshot({ path: `${out}/ah-end-${side}.png`, fullPage: true });
   const endTxt = (await pg.locator('.afterhours .panel').first().textContent()).slice(0, 220);
-  console.log('cards dragged', shown, '| end:', endTxt);
+  console.log('cards dragged', shown, 'riddles', riddles, 'solved', solved, 'sneaks', sneaks, '| end:', endTxt);
   const mid = await save();
   console.log('overnight', JSON.stringify(mid.state.overnight), 'afterDoneOn', mid.afterDoneOn, 'new endings', mid.scrapbook.filter((k) => k.includes('ah_')));
   await pg.locator('.afterhours .btn.primary').click();

@@ -6077,10 +6077,32 @@
  "secret": {
   "who": "barry",
   "start": "w4sc1",
-  "rule": [
-   "left",
-   "left"
+  "steps": [
+   [
+    "w4m1_1",
+    "right"
+   ],
+   [
+    "w4m2_1",
+    "right"
+   ],
+   [
+    "w4law2",
+    "left"
+   ],
+   [
+    "w4m4_1",
+    "left"
+   ],
+   [
+    "w4m5_1",
+    "left"
+   ],
+   [
+    "w4m7_1",
+    "right"
+   ]
   ],
-  "hint": "Something big and shy on Bad Hill trusts a mayor who says no to the morning and no to the law. Three days running."
+  "hint": "Something shy and enormous watches from the hill. It trusts the mayor who opens the ice to all, gives the snow a voice and then its rights, won't melt the roads or thaw the pipes, and throws a ball where everyone hides who they are."
  }
 }

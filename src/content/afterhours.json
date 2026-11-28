@@ -1679,6 +1679,559 @@
      "reaction": "Tomorrow's headline: 'NO COMMENT'. Somehow it sold out."
     }
    }
+  },
+  {
+   "id": "ahr1",
+   "who": "randy",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Clean Desk Act. Solve the riddle to enact it. I have keys but open no locks. I have space but no room. You can enter, but you can't go inside. What am I?",
+   "riddle": {
+    "answers": [
+     "keyboard",
+     "a keyboard",
+     "computer keyboard"
+    ],
+    "law": "The Clean Desk Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "business": 10
+     },
+     "reaction": "The Clean Desk Act enacted. Desks are tidy. Randy has been banned from typing with his feet."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'keyboard'."
+    }
+   }
+  },
+  {
+   "id": "ahr2",
+   "who": "bev",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Footpath Act. Solve the riddle to enact it. The more of me you take, the more of me you leave behind. Bev leaves a lot of me. What am I?",
+   "riddle": {
+    "answers": [
+     "footsteps",
+     "steps",
+     "footprints",
+     "footstep"
+    ],
+    "law": "The Footpath Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "The Footpath Act enacted. New pavements everywhere. Bev has already worn one out."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'footsteps'."
+    }
+   }
+  },
+  {
+   "id": "ahr3",
+   "who": "doug",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Bottle Deposit Act. Solve the riddle to enact it. I have a neck but no head, a body but no legs, and I often wear a cap. What am I?",
+   "riddle": {
+    "answers": [
+     "bottle",
+     "a bottle"
+    ],
+    "law": "The Bottle Deposit Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "treasury": 10
+     },
+     "reaction": "The Bottle Deposit Act enacted. 10p back on every bottle. Doug has collected nine thousand. He's ver"
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'bottle'."
+    }
+   }
+  },
+  {
+   "id": "ahr4",
+   "who": "wendy",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Night Light Act. Solve the riddle to enact it. I'm tall when I'm young and short when I'm old. Wendy's favourite. What am I?",
+   "riddle": {
+    "answers": [
+     "candle",
+     "a candle"
+    ],
+    "law": "The Night Light Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "law": 10
+     },
+     "reaction": "The Night Light Act enacted. Candles in every window. Crime is down. Atmosphere is up."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'candle'."
+    }
+   }
+  },
+  {
+   "id": "ahr5",
+   "who": "carl",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Towel Act. Solve the riddle to enact it. Big Carl asks: what gets wetter the more it dries?",
+   "riddle": {
+    "answers": [
+     "towel",
+     "a towel"
+    ],
+    "law": "The Towel Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "The Towel Act enacted. Free towels at the pool. Carl has folded every one. Twice."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'towel'."
+    }
+   }
+  },
+  {
+   "id": "ahr6",
+   "who": "nora",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Winter Coat Act. Solve the riddle to enact it. You can catch me, but you can't throw me. Dr Nora has caught me four times this year. What am I?",
+   "riddle": {
+    "answers": [
+     "cold",
+     "a cold",
+     "the cold",
+     "flu"
+    ],
+    "law": "The Winter Coat Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "people": 5,
+      "treasury": 5
+     },
+     "reaction": "The Winter Coat Act enacted. Free coats for everyone. Nora's sneezing has stopped. Mostly."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'cold'."
+    }
+   }
+  },
+  {
+   "id": "ahr7",
+   "who": "marge",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Signpost Act. Solve the riddle to enact it. I have cities but no houses, forests but no trees, rivers but no water. What am I?",
+   "riddle": {
+    "answers": [
+     "map",
+     "a map"
+    ],
+    "law": "The Signpost Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "business": 10
+     },
+     "reaction": "The Signpost Act enacted. New maps of Bad Town. Tourists can find the shops now. And Kevin."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'map'."
+    }
+   }
+  },
+  {
+   "id": "ahr8",
+   "who": "linda",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Mending Act. Solve the riddle to enact it. I have one eye but cannot see. Linda uses me to fix the books. What am I?",
+   "riddle": {
+    "answers": [
+     "needle",
+     "a needle"
+    ],
+    "law": "The Mending Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "treasury": 10
+     },
+     "reaction": "The Mending Act enacted. Every torn thing in town has been mended. Including Randy's coat. He's furi"
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'needle'."
+    }
+   }
+  },
+  {
+   "id": "ahr9",
+   "who": "trevor",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Streetlight Act. Solve the riddle to enact it. (Trevor taps out a riddle on your window: the more of me there is, the less you see. What am I?)",
+   "riddle": {
+    "answers": [
+     "dark",
+     "darkness",
+     "the dark"
+    ],
+    "law": "The Streetlight Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "law": 10
+     },
+     "reaction": "The Streetlight Act enacted. More streetlights. Trevor is in heaven. So is the night patrol."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'dark'."
+    }
+   }
+  },
+  {
+   "id": "ahr10",
+   "who": "bev",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Birthday Act. Solve the riddle to enact it. Bev asks: what goes up and never, ever comes down?",
+   "riddle": {
+    "answers": [
+     "age",
+     "your age",
+     "my age",
+     "ages"
+    ],
+    "law": "The Birthday Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "The Birthday Act enacted. Free cake on every birthday. Bev has had four this week. Nobody's arguing."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'age'."
+    }
+   }
+  },
+  {
+   "id": "ahr11",
+   "who": "steve",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Clock Tower Act. Solve the riddle to enact it. Stormy Steve asks: what has hands and a face, but can't clap or smile?",
+   "riddle": {
+    "answers": [
+     "clock",
+     "a clock",
+     "watch",
+     "a watch"
+    ],
+    "law": "The Clock Tower Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "press": 10
+     },
+     "reaction": "The Clock Tower Act enacted. The clock tower is fixed. The Bugle prints the right time for the first"
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'clock'."
+    }
+   }
+  },
+  {
+   "id": "ahr12",
+   "who": "kevin",
+   "story": "ahriddle",
+   "text": "SEALED LAW: Kevin's Law. Solve the riddle to enact it. (A note has been left in Kevin: I'm full of holes, but I still hold water. What am I?)",
+   "riddle": {
+    "answers": [
+     "sponge",
+     "a sponge"
+    ],
+    "law": "Kevin's Law"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "Kevin's Law enacted. Kevin gets a sponge. For rainy days. He's never been so dry."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'sponge'."
+    }
+   }
+  },
+  {
+   "id": "ahr13",
+   "who": "marge",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Spelling Act. Solve the riddle to enact it. Marge asks: which word is spelled wrong in every single dictionary?",
+   "riddle": {
+    "answers": [
+     "wrong"
+    ],
+    "law": "The Spelling Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "press": 10
+     },
+     "reaction": "The Spelling Act enacted. Spellcheck for the Bugle. Today's headline is spelled right. Marge is susp"
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'wrong'."
+    }
+   }
+  },
+  {
+   "id": "ahr14",
+   "who": "chad",
+   "story": "ahriddle",
+   "text": "SEALED LAW: The Weighbridge Act. Solve the riddle to enact it. Chad asks: forwards I'm heavy, backwards I'm not. What am I?",
+   "riddle": {
+    "answers": [
+     "ton",
+     "a ton",
+     "tonne"
+    ],
+    "law": "The Weighbridge Act"
+   },
+   "options": {
+    "right": {
+     "label": "Solved",
+     "effects": {
+      "business": 5,
+      "treasury": 5
+     },
+     "reaction": "The Weighbridge Act enacted. A weighbridge for lorries. Chad weighed his ego. It broke the bridge."
+    },
+    "left": {
+     "label": "Not solved",
+     "effects": {},
+     "reaction": "The law stays sealed. The answer was 'ton'."
+    }
+   }
+  },
+  {
+   "id": "ahs1",
+   "who": "randy",
+   "story": "ahsneak",
+   "text": "Randy is asleep in the bin. Your car keys are in his coat. Get them back while he's not looking.",
+   "sneak": true,
+   "options": {
+    "right": {
+     "label": "Got them",
+     "effects": {
+      "treasury": 5,
+      "people": 5
+     },
+     "reaction": "Keys back. Also a sandwich, two crisps and a tiny raccoon. You returned the raccoon."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "He woke up. 'Boss? Were you in my coat?' He's hurt. He's moved the keys to his other coat."
+    }
+   }
+  },
+  {
+   "id": "ahs2",
+   "who": "gerald",
+   "story": "ahsneak",
+   "text": "Gerald is guarding the bread for tomorrow's breakfast club. Swap it for wholemeal while he's not looking.",
+   "sneak": true,
+   "options": {
+    "right": {
+     "label": "Swapped it",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "Healthy breakfast club. Gerald hasn't noticed. He's eating the wholemeal. Approvingly."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "law": -5
+     },
+     "reaction": "HONK. (He saw. He's honking. He'll be honking until morning.)"
+    }
+   }
+  },
+  {
+   "id": "ahs3",
+   "who": "chad",
+   "story": "ahsneak",
+   "text": "Chad has left tomorrow's tax return on his desk. Fix the 'mistakes' while he's not looking.",
+   "sneak": true,
+   "options": {
+    "right": {
+     "label": "Fixed it",
+     "effects": {
+      "treasury": 10
+     },
+     "reaction": "Chad owes £4,000 more. He'll find out tomorrow. You'll be busy tomorrow."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "business": -5
+     },
+     "reaction": "He caught you holding his pen. 'Thinking of signing with me?' He's printing you a contract."
+    }
+   }
+  },
+  {
+   "id": "ahs4",
+   "who": "marge",
+   "story": "ahsneak",
+   "text": "Marge has written tomorrow's front page: 'MAYOR AFRAID OF DUCKS'. Swap it for the weather while she's not looking.",
+   "sneak": true,
+   "options": {
+    "right": {
+     "label": "Swapped it",
+     "effects": {
+      "press": 10
+     },
+     "reaction": "Tomorrow's front page: 'CLOUDY, PROBABLY'. Marge will be confused. Steve will be thrilled."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "press": -5
+     },
+     "reaction": "She saw. Tomorrow's headline is now 'MAYOR TAMPERS WITH BUGLE. ALSO AFRAID OF DUCKS'."
+    }
+   }
+  },
+  {
+   "id": "ahs5",
+   "who": "barb",
+   "story": "ahsneak",
+   "text": "Barb has fallen asleep at the station. The parking tickets for tomorrow are in the tray. Lose a few while she's not looking.",
+   "sneak": true,
+   "options": {
+    "right": {
+     "label": "Lost them",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "Forty tickets in the bin. Forty happy drivers tomorrow. Barb will never know."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "law": -5
+     },
+     "reaction": "She woke up. She's given you a ticket. For loitering. In her station."
+    }
+   }
+  },
+  {
+   "id": "ahs6",
+   "who": "cheese",
+   "story": "ahsneak",
+   "text": "(The cheese is humming to itself in the vault. The treasury's spare keys are on the shelf behind it. Take them while it's not looking.)",
+   "sneak": true,
+   "options": {
+    "right": {
+     "label": "Got them",
+     "effects": {
+      "treasury": 10
+     },
+     "reaction": "Keys safe. The cheese kept humming. You think it let you. You'll never be sure."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "treasury": -5
+     },
+     "reaction": "The humming stopped. The keys moved. Further away. The cheese is watching now."
+    }
+   }
+  },
+  {
+   "id": "ahs7",
+   "who": "pam",
+   "story": "ahsneak",
+   "text": "Pam is wrapping tomorrow's PTA raffle prizes. Slip in a better prize than a tin of beans while she's not looking.",
+   "sneak": true,
+   "options": {
+    "right": {
+     "label": "Slipped it in",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "Tomorrow someone wins a bicycle. Pam will be baffled. The winner will be thrilled."
+    },
+    "left": {
+     "label": "Caught",
+     "effects": {
+      "people": -5
+     },
+     "reaction": "She saw. She's thanked you for donating. And added you to the raffle committee. For life."
+    }
+   }
   }
  ],
  "endings": {

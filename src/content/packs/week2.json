@@ -6539,10 +6539,32 @@
  "secret": {
   "who": "gloria",
   "start": "w2sc1",
-  "rule": [
-   "left",
-   "right"
+  "steps": [
+   [
+    "wlaw1",
+    "right"
+   ],
+   [
+    "re1",
+    "right"
+   ],
+   [
+    "wlaw3",
+    "right"
+   ],
+   [
+    "wlaw6",
+    "right"
+   ],
+   [
+    "w2s_1",
+    "left"
+   ],
+   [
+    "w2s_law",
+    "right"
+   ]
   ],
-  "hint": "Someone crossing the desert wants a mayor who says no to the morning and yes to the law. Three days running."
+  "hint": "She walked a month to meet you. She rests when the sun is high. She'd stop the world for the slowest walker, paint the town the colour of home, and keep machines off the ballot. She never hogs the water, and hates a tie in the heat."
  }
 }

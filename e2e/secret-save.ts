@@ -15,9 +15,8 @@ for (let i = 0; i < 50; i++) {
   let s = reduce(newTerm(weekIdFor(w), `sec${i}`, p), { type: 'setup', profile: { mayor: 'Test', folk: 'Bad Towners', base: 'people' } }, p);
   for (let n = 0; n < 200 && s.phase !== 'results' && s.current !== p.secret!.start; n++) {
     if (s.phase !== 'card') { s = reduce(s, { type: 'next' }, p); continue; }
-    const c = findCard(p, s.current!);
-    const k = c.day === s.day ? (c.slot === 0 ? 0 : c.slot === 7 ? 1 : null) : null;
-    s = reduce(s, { type: 'swipe', dir: k !== null ? p.secret!.rule[k] : steady(s) }, p);
+    const want = new Map(p.secret!.steps).get(s.current!);
+    s = reduce(s, { type: 'swipe', dir: want ?? steady(s) }, p);
   }
   if (s.current === p.secret!.start) {
     console.log(JSON.stringify({ schema: 1, state: s, playerSeed: `sec${i}`, muted: true, introSeen: `${s.weekId}:${s.day}`, tutorialDone: true, dayOffset: 0, weeksDone: w, dayDoneOn: '', scrapbook: [], deeds: [], onboarded: true, lastProfile: s.profile, met: ['randy', 'gerald'], counted: '' }));

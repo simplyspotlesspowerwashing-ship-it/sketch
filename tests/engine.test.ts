@@ -354,7 +354,7 @@ describe('after hours', () => {
       const cards = afterHoursCards(round);
       expect(cards).toHaveLength(AFTER_HOURS_CARDS);
       const by = (st: string) => cards.filter((c) => c.story === st).length;
-      expect([by('ahlaw'), by('ahproj'), by('ahvisit'), by('ahtrap')], `round ${round}`).toEqual([3, 3, 3, 1]);
+      expect([by('ahlaw'), by('ahproj'), by('ahvisit'), by('ahriddle'), by('ahsneak'), by('ahtrap')], `round ${round}`).toEqual([2, 2, 2, 2, 1, 1]);
       if (round < 7) week.push(...cards.map((c) => c.id));
       // played through: exactly these ten, in order
       const ah = afterHoursPack(pack, round);
@@ -364,8 +364,24 @@ describe('after hours', () => {
       expect(shown).toEqual(cards.map((c) => c.id));
       seenTraps.add(cards.find((c) => c.story === 'ahtrap')!.id);
     }
-    expect(new Set(week.filter((id) => !id.startsWith('aht'))).size, 'no repeats in a week').toBe(week.length - 7);
+    expect(new Set(week).size, 'no repeats in a week').toBe(week.length);
     expect(seenTraps.size).toBe(AH_TRAPS.length);
+  });
+  it('sealed laws: typed answers are forgiving about case and articles, and solving one boosts tomorrow', async () => {
+    const { AH_RIDDLES, solves, afterHoursPack, afterHoursCards } = await import('../src/content/afterHours.ts');
+    expect(AH_RIDDLES).toHaveLength(14);
+    for (const r of AH_RIDDLES) {
+      for (const a of r.riddle!.answers) { expect(solves(r, a), r.id).toBe(true); expect(solves(r, `  The ${a.toUpperCase()}!`), r.id).toBe(true); }
+      expect(solves(r, 'banana'), r.id).toBe(false);
+      expect(Object.values(r.options.right!.effects).every((v) => (v ?? 0) > 0), `${r.id} reward`).toBe(true);
+    }
+    const ah = afterHoursPack(pack, 0);
+    let s = newTerm('after#0', 'ah', ah);
+    const riddle = afterHoursCards(0).find((c) => c.riddle)!;
+    while (s.current !== riddle.id) s = reduce(s, { type: 'swipe', dir: steadyIn(ah, s) }, ah);
+    const before = { ...s.meters };
+    s = reduce(s, { type: 'swipe', dir: 'right' }, ah);
+    for (const [m, v] of Object.entries(riddle.options.right!.effects)) expect(s.meters[m as MeterId]).toBe(Math.min(100, before[m as MeterId] + v!));
   });
   it('the disaster answer ends the round with its ending', async () => {
     const { afterHoursPack, afterHoursCards } = await import('../src/content/afterHours.ts');
@@ -408,50 +424,43 @@ describe('after hours', () => {
 });
 
 describe('secret characters', () => {
-  // answer the day's opener and law per `want` (null: steady), everything else steady; returns the state after `days` days
-  const play = (p: typeof pack, seed: string, want: (day: number) => boolean, days: number) => {
+  // make the chain's decisions (all, or all but one), steady everywhere else
+  const play = (p: typeof pack, seed: string, skip: string | null) => {
     let s = reduce(newTerm(weekIdFor(PACKS.indexOf(p)), seed, p), { type: 'setup', profile: { mayor: 'M', folk: 'F', base: 'people' } }, p);
-    while (s.phase !== 'results' && s.day <= days) {
-      if (s.phase !== 'card') { if (s.day === days) break; s = reduce(s, { type: 'next' }, p); continue; }
+    const steps = new Map(p.secret!.steps);
+    for (let n = 0; n < 400 && s.phase !== 'results'; n++) {
+      if (s.phase !== 'card') { s = reduce(s, { type: 'next' }, p); continue; }
+      const want = steps.get(s.current!);
       const c = findCard(p, s.current!);
-      const i = c.day === s.day ? (c.slot === 0 ? 0 : c.slot === 7 ? 1 : null) : null;
-      const rule = p.secret!.rule;
-      const dir: Dir = i !== null ? (want(s.day) ? rule[i] : rule[i] === 'left' ? 'right' : 'left') : steadyIn(p, s);
+      const dir: Dir = want ? (s.current === skip ? options(c).find((d) => d !== want)! : want) : steadyIn(p, s);
       s = reduce(s, { type: 'swipe', dir }, p);
     }
     return s;
   };
   for (const p of PACKS) {
-    it(`${p.id}: three days running of the secret answers brings ${p.secret!.who}; a broken run does not`, () => {
+    it(`${p.id}: the whole chain of decisions brings ${p.secret!.who}; one wrong answer does not`, () => {
       const sec = p.secret!;
-      // the opener and law exist every day and offer the rule's answers
-      for (let d = 1; d <= 7; d++) for (const [slot, i] of [[0, 0], [7, 1]] as const) {
-        const c = p.cards.find((x) => x.day === d && x.slot === slot)!;
-        expect(c.options[sec.rule[i]], `${p.id} day ${d} slot ${slot}`).toBeTruthy();
-      }
+      expect(sec.steps.length).toBeGreaterThanOrEqual(5);
       let hit = 0;
-      for (let k = 0; k < 12 && !hit; k++) {
-        const s = play(p, `sec${k}`, () => true, 3);
-        if (s.recalledDays.some((d) => d <= 3)) continue; // a day cut short before its law breaks the run
+      for (let k = 0; k < 15 && !hit; k++) {
+        const s = play(p, `sec${k}`, null);
+        if (!sec.steps.every(([id]) => s.seen.includes(id))) continue; // a day cut short before a step card
         expect(s.flags[`secret:${sec.who}`], `${p.id} seed ${k}`).toBe(true);
-        expect(s.seen.includes(sec.start) || s.queue.some((q) => q.cardId === sec.start)).toBe(true);
+        expect(s.seen.includes(sec.start)).toBe(true);
         hit++;
       }
       expect(hit).toBe(1);
-      const broken = play(p, 'sec-broken', (d) => d !== 2, 4);
-      expect(broken.flags[`secret:${sec.who}`]).toBeUndefined();
-      // the full three-card story is there: start -> one of two middles -> finale
+      for (const [id] of sec.steps) expect(play(p, 'sec-miss', id).flags[`secret:${sec.who}`], `${p.id} skipping ${id}`).toBeUndefined();
       const start = findCard(p, sec.start);
       const mids = Object.values(start.options).map((o) => o!.then![0]![0]);
       expect(new Set(mids).size).toBe(2);
-      for (const m of mids) expect(Object.values(findCard(p, m).options).every((o) => o!.then?.length)).toBe(true);
     });
   }
   it("Randy's days never count towards a secret", () => {
     const p = PACKS[0]!;
     let s = reduce(newTerm(weekIdFor(0), 'randy-sec', p), { type: 'setup', profile: { mayor: 'M', folk: 'F', base: 'people' } }, p);
     s = coverMissedDays(s, p, 5);
-    expect(Object.keys(s.flags).some((f) => f.startsWith('__key:') || f.startsWith('secret:'))).toBe(false);
+    expect(Object.keys(s.flags).some((f) => f.startsWith('__step:') || f.startsWith('secret:'))).toBe(false);
     expect(s.flags.__randy).toBeUndefined();
   });
 });

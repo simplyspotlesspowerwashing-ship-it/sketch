@@ -2,14 +2,13 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { PACKS, SIMULATED_CROWD, packFor, packForWeek, weekIdFor } from '../content/index.ts';
 import { COMMON_ENDINGS, OUT_ORDER, RECALL_ORDER } from '../content/endings.ts';
 import { RANDY_SAYS } from '../content/randy.ts';
-import { AFTER_HOURS_CARDS, AH_CARDS, AH_ENDINGS, afterHoursPack, overnightFrom } from '../content/afterHours.ts';
+import { AFTER_HOURS_CARDS, AH_CARDS, AH_ENDINGS, afterHoursPack, overnightFrom, solves } from '../content/afterHours.ts';
 import { voteParts } from '../engine/election.ts';
 import { canDefer, findCard, newTerm, reduce } from '../engine/engine.ts';
 import { TUNING } from '../engine/tuning.ts';
-import { dayScore, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
 import { GROUPS, METERS } from '../engine/types.ts';
-import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
+import type { Card, Choice, Dir, GroupId, MeterId, Pack, Profile, State } from '../engine/types.ts';
 import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, ODDBALLS, SECRETS, Portrait, Town } from './art.tsx';
 import type { Mood, TownView } from './art.tsx';
 import { DAY_NAMES, calendar, fetchCrowd, loadSave, sendVote, setMuted, sfx, writeSave } from './platform.ts';
@@ -283,27 +282,6 @@ function Sheet({ children, onClose, label, tone }: { children: preact.ComponentC
   );
 }
 
-/** Tap the points: what they are, how you earn them, and what they mean for tonight's vote. */
-function PointsHelp({ s }: { s: State }) {
-  const sc = dayScore(s, s.day);
-  const vote = Math.round(TUNING.vote.base + TUNING.vote.perPoint * sc.total + TUNING.vote.objective * s.objectivesDone.length);
-  const need = Math.max(0, Math.ceil((TUNING.vote.pass - TUNING.vote.base - TUNING.vote.objective * s.objectivesDone.length) / TUNING.vote.perPoint));
-  return (
-    <div class="points-help">
-      <h2 class="display">How points work</h2>
-      <p class="ph-now">Today so far: <b>{sc.total} pts</b>. If the polls closed now you'd get about <b>{Math.min(TUNING.vote.max, Math.max(TUNING.vote.min, vote))}%</b>. You need {TUNING.vote.pass}%, so roughly <b>{need} pts</b> by tonight.</p>
-      <ul>
-        <li><b>After every card</b>, each group scores: <b>2</b> if it's calm (inside the striped box on its bar, 45 to 55), <b>1</b> if uneasy (35 to 65), <b>0</b> if it's too unhappy or too happy. The Treasury only loses points when it runs low.</li>
-        <li><b>Up to 10 a card</b>, so up to 200 a day.</li>
-        <li><b>+{TUNING.score.steadyFinish}</b> if you finish all 20 cards with nobody in danger.</li>
-        <li><b>−{TUNING.score.recall}</b> if the day ends early (a recall, a disaster, a plot twist).</li>
-        <li><b>Tonight's vote</b> = {TUNING.vote.base}% + a fifth of your points + {TUNING.vote.objective}% for each weekly goal met (★). 50% keeps the job.</li>
-      </ul>
-      <p class="ph-tip">Too happy is as bad as too angry. Keep everyone in the middle.</p>
-    </div>
-  );
-}
-
 /** This week's goals (shown up front, like a to-do list). Each one met adds to every night's vote. */
 function Goals({ s }: { s: State }) {
   return (
@@ -315,11 +293,6 @@ function Goals({ s }: { s: State }) {
 
 /** Night falls: the vote, the score that drove it, the streak, and a hook for tomorrow. */
 function DayReview({ s, streak, fresh, have, onNext, onSkip, onAfter, after, nextLabel, wait, sub }: { s: State; streak: number; fresh: string[]; have: number; onNext: () => void; onSkip: () => void; onAfter: (() => void) | null; after: 'open' | 'done' | 'lost' | 'none'; nextLabel: string; wait?: string | null; sub?: preact.ComponentChildren }) {
-  const sc = dayScore(s, s.day);
-  const tier = tierOf(sc.total);
-  const today = s.swipes.filter((w) => w.day === s.day);
-  const end = today[today.length - 1]?.after ?? s.meters;
-  const rows = METERS.map((m) => `${METER_NAME[m]}: ${end[m]}`);
   const vote = s.polls[s.day - 1] ?? 0;
   const won = !!s.won[s.day - 1];
   const early = s.recalledDays.includes(s.day);
@@ -330,21 +303,16 @@ function DayReview({ s, streak, fresh, have, onNext, onSkip, onAfter, after, nex
   const verdict = won ? 'RE-ELECTED' : twist ? 'PLOT TWIST' : disaster ? 'DISASTER' : early ? 'RECALLED' : 'VOTED OUT';
   const parts = voteParts(s, s.day);
   const out = !won && !early ? s.endings[s.endings.length - 1] : undefined;
-  const share = `Mayor of Bad Town · ${DAY_NAMES[s.day - 1]} · ${verdict} ${vote}%${won && streak > 1 ? ` · 🔥 ${streak}` : ''}\n${sc.total} pts · ${tier.name}\n${rows.join('\n')}`;
+  const share = `Mayor of Bad Town · ${DAY_NAMES[s.day - 1]} · ${verdict} ${vote}%${won && streak > 1 ? ` · 🔥 ${streak}` : ''}`;
   const [copied, setCopied] = useState(false);
   useEffect(() => { if (won) sfx('win'); }, []);
   return (
     <div class="review dayend">
       <div class="bugle"><div class="masthead"><span>THE BUGLE</span><small>{DAY_NAMES[s.day - 1]} night</small></div>
-        <div class="poll-row"><span class="bigpoll">{vote}%</span><span><b class={`verdict-tag ${won ? 'won' : 'lost'}`}>{verdict}</b><small>{twist ? 'The story went somewhere you couldn\'t come back from. Not tonight, anyway.' : disaster ? 'One wrong answer. It was in the small print.' : early ? 'You were gone before the polls even opened.' : randy ? 'Randy counted the votes himself. He says you won.' : `${Math.round(parts.day)}% from today's score${parts.goals ? `, +${parts.goals}% for goals met` : ''}. You need ${TUNING.vote.pass}%.`}</small></span></div>
+        <div class="poll-row"><span class="bigpoll">{vote}%</span><span><b class={`verdict-tag ${won ? 'won' : 'lost'}`}>{verdict}</b><small>{twist ? 'The story went somewhere you couldn\'t come back from. Not tonight, anyway.' : disaster ? 'One wrong answer. It was in the small print.' : early ? 'You were gone before the polls even opened.' : randy ? 'Randy counted the votes himself. He says you won.' : `${won ? 'The town felt calm enough.' : 'The town felt lopsided.'} You need ${TUNING.vote.pass}%.${parts.goals ? ` Goals met: +${parts.goals}%.` : ''}`}</small></span></div>
         <p class="streakline">{won ? (streak > 0 ? `🔥 Re-elected ${streak} night${streak > 1 ? 's' : ''} in a row` : 'Re-elected.') : `Back tomorrow, fresh start. ${out ? 'And you got an ending out of it:' : 'And a story for the Scrapbook.'}`}</p>
       </div>
-      {out && <EndingPrize k={out} isNew={fresh.includes(out)} have={have} />}
-      <div class="dayscore">
-        <span class="bigscore">{sc.total}<small>pts</small></span>
-        <span><b class="tiername">{tier.name}</b><small>{sc.balance} for keeping the town balanced{sc.bonus ? `, +${sc.bonus} for a steady finish` : ''}{sc.recalled ? `, −${TUNING.score.recall} for ending early` : ''}</small></span>
-      </div>
-      <ul class="levels" aria-label="Where everyone ended the day">{rows.map((r) => <li key={r}>{r}</li>)}</ul>
+      {out && <EndingPrize k={out} isNew={fresh.includes(out)} have={have} why={endingWhy(out, s)} />}
       <Goals s={s} />
       {sub}
       <div class="dayend-btns">
@@ -445,6 +413,36 @@ function EndingCard({ k, isNew }: { k: string; isNew?: boolean }) {
 /** The crowd share for any card, whichever week it's from (After Hours mixes them). */
 const crowdFor = (id: string, dir: Dir) => crowd[id]?.[dir] ?? PACKS.map((p) => SIMULATED_CROWD[p.id]?.[id]?.[dir]).find((x) => x !== undefined);
 
+/** A sealed law: type the answer to the riddle to enact it. Three tries. Solved = right, not solved = left. */
+function RiddleCard({ card, onResult }: { card: Card; onResult: (d: Dir) => void }) {
+  const [typed, setTyped] = useState('');
+  const [tries, setTries] = useState(3);
+  const [shake, setShake] = useState(0);
+  const law = card.riddle!.law;
+  const riddle = fill(card.text).replace(/^SEALED LAW: [^.]*\. Solve the riddle to enact it\. /, '');
+  const reward = Object.entries(card.options.right?.effects ?? {}).map(([m, v]) => `${METER_NAME[m as MeterId]} +${v}`).join(', ');
+  const submit = () => {
+    if (!typed.trim()) return;
+    if (solves(card, typed)) { sfx('win'); onResult('right'); return; }
+    sfx('drum'); setShake((n) => n + 1); setTyped('');
+    if (tries <= 1) onResult('left'); else setTries(tries - 1);
+  };
+  return (
+    <div class="card riddle-card">
+      <div class="riddle-seal">SEALED LAW</div>
+      <b class="riddle-law">{law}</b>
+      <div class="card-who"><Portrait who={card.who} size={64} mood="neutral" /><small>{NAMES[card.who] ?? card.who}</small></div>
+      <p class="riddle-text">{riddle}</p>
+      <small class="riddle-reward">Solve it and it's law: {reward} for tomorrow.</small>
+      <form class={`riddle-form ${shake ? 'shake' : ''}`} key={shake} onSubmit={(e) => { e.preventDefault(); submit(); }}>
+        <input aria-label="Your answer" autoComplete="off" autoCapitalize="none" spellcheck={false} maxLength={30} value={typed} placeholder="Type your answer" onInput={(e) => setTyped((e.target as HTMLInputElement).value)} />
+        <button class="btn primary" type="submit">Enact</button>
+      </form>
+      <div class="riddle-foot"><small>{tries} {tries === 1 ? 'try' : 'tries'} left</small><button class="linkbtn" onClick={() => { sfx('paper'); onResult('left'); }}>Give up</button></div>
+    </div>
+  );
+}
+
 /** Ten more cards, once a night: laws and projects for tomorrow, late visits, one disaster. The net change carries into tomorrow. */
 function AfterHours({ round, start, carry, had, have, onEndings, onCarry, onClose }: { round: number; start: Record<MeterId, number>; carry: boolean; had: string[]; have: number; onEndings: (ks: string[]) => void; onCarry: (e: Partial<Record<MeterId, number>>) => void; onClose: () => void }) {
   const ah = useMemo(() => afterHoursPack(pack, round), [round]);
@@ -474,18 +472,59 @@ function AfterHours({ round, start, carry, had, have, onEndings, onCarry, onClos
       <div class="ah-head"><b>🌙 After Hours</b><span>{done || s.phase === 'recalled' ? 'Done for tonight' : `Card ${s.cardInDay + 1} of ${AFTER_HOURS_CARDS}`} · {carry ? "tonight's laws and plans shape tomorrow" : 'the week is over: endings still count'}</span></div>
       <Meters s={done && carry && !reveal ? { ...s, meters: tomorrow } : s} preview={card && preview ? card.options[preview] ?? null : null} />
       {reveal ? <ImpactReveal key={reveal.key} r={reveal} onDone={() => setReveal(null)} />
-        : s.phase === 'recalled' && last ? <div class="panel recall"><p class="prize-loss">That's the night over. {carry ? 'Nothing from After Hours carries: tomorrow starts where tonight ended.' : ''}</p><EndingPrize k={last} isNew={!known.includes(last)} have={have} /><div class="dayend-btns"><button class="btn primary" onClick={onClose}>Back</button></div></div>
+        : s.phase === 'recalled' && last ? <div class="panel recall"><p class="prize-loss">That's the night over. {carry ? 'Nothing from After Hours carries: tomorrow starts where tonight ended.' : ''}</p><EndingPrize k={last} isNew={!known.includes(last)} have={have} why={endingWhy(last, s, ah)} /><div class="dayend-btns"><button class="btn primary" onClick={onClose}>Back</button></div></div>
         : done ? <div class="panel ah-done"><h2 class="display">Last orders.</h2>
           {carry ? <><p>Tomorrow starts like this{moved.length ? ':' : '. Nothing moved overall.'}</p>{moved.length > 0 && <ul class="levels">{moved.map((m) => <li key={m}>{METER_NAME[m]}: {start[m]} → {tomorrow[m]}</li>)}</ul>}<small class="ah-cap">Tonight's vote is already counted.</small></>
             : <p>The week is over, so nothing carries. Your Scrapbook remembers.</p>}
           <div class="dayend-btns"><button class="btn primary" onClick={onClose}>Back</button></div></div>
-        : card && <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={false} onPreview={setPreview} onSwipe={swipe} defers={null} onDefer={() => {}} />}
+        : card && (card.riddle ? <RiddleCard key={`${card.id}-${s.count}`} card={card} onResult={swipe} /> : card.sneak ? <SneakCard key={`${card.id}-${s.count}`} card={card} onResult={swipe} /> : <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={false} onPreview={setPreview} onSwipe={swipe} defers={null} onDefer={() => {}} />)}
+    </div>
+  );
+}
+
+const THE: Record<string, string> = { people: 'the People', business: 'Business', law: 'the Law', press: 'the Press' };
+const shortName = (who: string) => (who === 'desk' ? 'A draft on your desk' : (NAMES[who] ?? who).split(/[,(]/)[0]!.trim());
+/** Why an ending happened, in plain words: which group you let go, or which answer to which card. */
+function endingWhy(k: string, s: State, pk: Pack = pack): string {
+  const base = k.split('/')[0]!;
+  const [kind, rest = ''] = base.split(':');
+  if (kind === 'low') return rest === 'treasury' ? 'You let the Treasury run dry. Doug counted it twice, then counted the buttons, then recalled you.' : `You let ${THE[rest]} fall all the way to 0. ${shortName(LEADER[rest as GroupId]!)} had seen enough.`;
+  if (kind === 'high') return `You let ${THE[rest]} climb all the way to 100. Once ${shortName(LEADER[rest as GroupId]!)} had that much power, they didn't need a mayor.`;
+  if (kind === 'out' || kind === 'outw') {
+    const g = rest.split('_')[0]!;
+    return `Tonight's vote: ${s.polls[s.day - 1] ?? 0}%. You needed ${TUNING.vote.pass}%. ${THE[g]![0]!.toUpperCase()}${THE[g]!.slice(1)} liked you least, ending the day at ${s.meters[g as MeterId]}. Keep every group near the middle and the votes follow.`;
+  }
+  const w = [...s.swipes].reverse().find((x) => { const c = pk.cards.find((y) => y.id === x.cardId); return c?.options[x.dir]?.ending === base; });
+  const c = w && pk.cards.find((y) => y.id === w.cardId);
+  if (!c || !w) return kind === 'rare' ? 'You followed the long story all the way to the end.' : 'One answer, and that was that.';
+  return `${kind === 'rare' ? 'You followed the story to the very end. ' : ''}${shortName(c.who)}: “${fill(c.text)}” You said “${fill(c.options[w.dir]!.label).replace(/[.!?]+$/, '')}”.`;
+}
+
+/** A secret character arrives: a grand stage, like a special ending. */
+function SecretReveal({ who, count, onMeet }: { who: string; count: number; onMeet: () => void }) {
+  useEffect(() => { sfx('win'); }, []);
+  const p = PACKS.find((x) => x.secret?.who === who);
+  return (
+    <div class="prize new secret-reveal">
+      <span class="confetti" aria-hidden="true">{Array.from({ length: 26 }, (_, i) => <i key={i} style={{ '--a': `${(i * 360) / 26}deg`, '--d': `${70 + ((i * 37) % 60)}px`, '--c': ['var(--gold)', '#B48CE0', '#FFF4CF', '#F2B8C6', '#fff'][i % 5], '--t': `${(i % 4) * 40}ms` }} />)}</span>
+      <div class="grand g-secret">
+        <span class="grand-spot" aria-hidden="true" /><span class="grand-rays" aria-hidden="true" />
+        <b class="grand-end">SECRET</b>
+        <small class="grand-kind">★ Secret character found ★</small>
+        <span class="grand-face"><Portrait who={who} size={130} mood="pleased" /></span>
+        <h2 class="grand-title">{NAMES[who] ?? who}</h2>
+        {p?.secret && <p class="grand-text"><i>“{p.secret.hint}”</i></p>}
+        <p class="grand-why"><b>You solved it</b>Every choice in the chain, all week. Almost nobody does.</p>
+        <span class="prize-stamp">SECRET CHARACTER UNLOCKED!</span>
+        <small class="grand-again">{count} of {SECRETS.length} secret characters found</small>
+      </div>
+      <button class="btn primary" onClick={onMeet}>Meet {(NAMES[who] ?? who).split(/[,(]/)[0]!.trim()}</button>
     </div>
   );
 }
 
 /** The prize for losing: a funny ending, celebrated. */
-function EndingPrize({ k, isNew, have }: { k: string; isNew: boolean; have: number }) {
+function EndingPrize({ k, isNew, have, why }: { k: string; isNew: boolean; have: number; why?: string }) {
   const e = endingText(k);
   const [copied, setCopied] = useState(false);
   const total = ALL_ENDINGS().length;
@@ -503,6 +542,7 @@ function EndingPrize({ k, isNew, have }: { k: string; isNew: boolean; have: numb
         <span class="grand-face"><Portrait who={endingWho(k)} size={120} mood={['low', 'out', 'outw'].includes(k.split(':')[0]!) ? 'annoyed' : 'pleased'} /></span>
         <h2 class="grand-title">{e.title}</h2>
         <p class="grand-text">{e.text}</p>
+        {why && <p class="grand-why"><b>How it happened</b>{why}</p>}
         {quip && <p class="grand-randy"><Portrait who="randy" size={34} mood="pleased" /><span>“{quip}”</span></p>}
         <span class={`prize-stamp ${isNew ? '' : 'again'}`}>{isNew ? 'NEW ENDING UNLOCKED!' : 'A CLASSIC. AGAIN.'}</span>
         {!isNew && <small class="grand-again">Already in your Scrapbook</small>}
@@ -541,7 +581,7 @@ function Scrapbook({ save, onClose, onRename }: { save: Save; onClose: () => voi
         <div class="cast">{ODDBALLS.map((w) => save.met.includes(w) ? <span key={w} class="cast-member"><Portrait who={w} size={56} mood="pleased" /><small>{(NAMES[w] ?? w).split(/[,(]/)[0]!.trim()}</small></span> : <span key={w} class="cast-member locked"><span class="cast-q">?</span><small>???</small></span>)}</div>
  
         <h3 class="subhead">Secret characters · {SECRETS.filter((w) => save.met.includes(w)).length} of {SECRETS.length}</h3>
-        <ul class="secrets">{PACKS.filter((p) => p.secret).map((p) => { const w = p.secret!.who; const found = save.met.includes(w); return <li key={w} class={found ? 'found' : 'locked'}>{found ? <Portrait who={w} size={52} mood="pleased" /> : <span class="cast-q secret-q">★</span>}<span><b>{found ? (NAMES[w] ?? w) : '???'}</b><small>{p.theme.name}{found ? '' : `: ${p.secret!.hint}`}</small></span></li>; })}</ul>
+        <ul class="secrets">{PACKS.filter((p) => p.secret).map((p) => { const w = p.secret!.who; const found = save.met.includes(w); return <li key={w} class={found ? 'found' : 'locked'}>{found ? <Portrait who={w} size={52} mood="pleased" /> : <span class="cast-q secret-q">★</span>}<span><b>{found ? (NAMES[w] ?? w) : '???'}</b><small>{p.theme.name}: {found ? <i>“{p.secret!.hint}”</i> : p.secret!.hint}</small></span></li>; })}</ul>
       </>}
       {tab === 'deeds' && <>
         <p class="book-total"><b>{save.deeds.length}</b> of {DEEDS.length} deeds.</p>
@@ -625,7 +665,7 @@ function Opening({ onDone }: { onDone: (p: Profile) => void }) {
       <h2 class="op-title">20 problems a day. Yes or no.</h2>
       <p>Drag the card right to approve, left to reject (or tap the buttons). Drag part-way and a dot shows who will be affected. Not which way. That's up to you to work out.</p>
       <p>Twice a day you can say <b>Not now</b>: the card comes back a few cards later, when you might be ready for it.</p>
-      <p>You score points after every card for keeping every group calm: inside the striped box on each bar. Let anyone get too angry or too happy and the points dry up. Every mayor gets the same problems, so you'll see how many made the same call.</p>
+      <p>Keep every group calm: inside the striped box on each bar. The calmer the town stays all day, the more votes you get tonight. Every mayor gets the same problems, so you'll see how many made the same call.</p>
       <p><b>Every night is an election.</b> Keep everyone calm and you'll get your 50%. Lose, and you're back the next morning with a story for the Scrapbook.</p>
       <p>Each week has a theme, three goals (the ★ at the top) and one long story. Follow it far enough and things get strange.</p>
       <p><b>Read the cards.</b> Once a day, one answer is a disaster.</p>
@@ -673,7 +713,7 @@ function WeekRecap({ s, streak, fresh, next, onNewWeek, onSkip }: { s: State; st
   const nights = s.won.filter(Boolean).length;
   const played = DAY_NAMES.map((d, i) => ({ d, i, vote: s.polls[i], won: !!s.won[i], randy: s.daveDays.includes(i + 1) }));
   const mineDays = played.filter((x) => !x.randy && x.vote !== undefined);
-  const best = mineDays.map((x) => ({ ...x, pts: dayScore(s, x.i + 1).total })).sort((a, b) => b.pts - a.pts)[0];
+  const best = [...mineDays].sort((a, b) => (b.vote ?? 0) - (a.vote ?? 0))[0];
   const odd = s.swipes.filter((w) => !s.daveDays.includes(w.day) && crowd[w.cardId]?.[w.dir] !== undefined).sort((a, b) => crowd[a.cardId]![a.dir]! - crowd[b.cardId]![b.dir]!)[0];
   const oddCard = odd ? findCard(pack, odd.cardId) : null;
   const met = [...new Set(s.swipes.filter((w) => !s.daveDays.includes(w.day)).map((w) => findCard(pack, w.cardId).who))].filter((w) => ODDBALLS.includes(w));
@@ -689,7 +729,7 @@ function WeekRecap({ s, streak, fresh, next, onNewWeek, onSkip }: { s: State; st
         <ol class="recap-days">{played.map((x) => <li key={x.d} class={x.vote === undefined ? '' : x.won ? 'won' : 'lost'}><span>{x.d}</span><b>{x.vote === undefined ? '–' : `${x.vote}%`}</b><small>{x.randy ? 'Randy' : x.vote === undefined ? '' : x.won ? 'won' : 'lost'}</small></li>)}</ol>
       </div>
       <p class="recap-line"><b>Disasters:</b> {(() => { const hit = s.endings.filter((k) => k.startsWith('trap:')).length; const met = s.swipes.filter((w) => !s.daveDays.includes(w.day) && Object.values(findCard(pack, w.cardId).options).some((o) => o!.ending?.startsWith('trap:'))).length; return met === 0 ? 'none came your way.' : `dodged ${met - hit} of ${met}.`; })()}</p>
-      {best && <p class="recap-line"><b>Best day:</b> {best.d}, {best.pts} pts ({tierOf(best.pts).name}).</p>}
+      {best && <p class="recap-line"><b>Best night:</b> {best.d}, {best.vote}% of the vote.</p>}
       {odd && oddCard && <div class="recap-odd"><b>Your oddest call</b><Portrait who={oddCard.who} size={48} mood="neutral" /><span>“{fill(oddCard.text).slice(0, 90)}{oddCard.text.length > 90 ? '…' : ''}” You said <i>{fill(oddCard.options[odd.dir]!.label).replace(/[.!?]+$/, '')}</i>. Only {crowd[odd.cardId]![odd.dir]}% of mayors agreed.</span></div>}
       {met.length > 0 && <div class="recap-met"><b>Oddballs you dealt with</b><span>{met.map((w) => <Portrait key={w} who={w} size={40} mood="pleased" />)}</span></div>}
       {endings.length > 0 && <><h3 class="subhead">Endings this week</h3><div class="endings">{endings.map((k) => <EndingCard key={k} k={k} isNew={fresh.endings.includes(k)} />)}</div></>}
@@ -758,7 +798,8 @@ export function App() {
   const [reveal, setReveal] = useState<RevealData | null>(null);
   const [fresh, setFresh] = useState<{ endings: string[]; deeds: string[] }>({ endings: [], deeds: [] });
   const [after, setAfter] = useState<number | null>(null);
-  const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | 'goals' | 'points' | null>(null);
+  const [overlay, setOverlay] = useState<'book' | 'names' | 'dev' | 'goals' | null>(null);
+  const [secretShown, setSecretShown] = useState<string | null>(null);
   const taps = useRef<number[]>([]);
   const cal = useMemo(() => calendar(save.dayOffset), [save.dayOffset]);
   const introKey = `${s.weekId}:${s.day}`;
@@ -831,7 +872,7 @@ export function App() {
   who.folk = s.profile?.folk ?? save.lastProfile?.folk ?? 'Bad Towners';
   const card = s.phase === 'card' && s.current ? findCard(pack, s.current) : null;
   const meet = !!card && (ODDBALLS.includes(card.who) || SECRETS.includes(card.who)) && !save.met.includes(card.who);
-  const today = dayScore(s, s.day);
+  const secretIntro = !!card && meet && SECRETS.includes(card.who) && secretShown !== card.who;
   const choice = card && preview ? card.options[preview] ?? null : null;
   const dayName = DAY_NAMES[s.day - 1]!;
   const needSetup = !s.profile && s.phase === 'card' && !s.result;
@@ -842,7 +883,6 @@ export function App() {
         <h1 onClick={titleTap} aria-label="Mayor of Bad Town"><i class="pre">Mayor of </i><span>Bad Town</span></h1>
         <div class="top-right">
           <span class="daychip">{dayName}{s.phase === 'card' ? <span class="dc-n"> · {s.cardInDay + 1}/{TUNING.cardsPerDay}</span> : ''}</span>
-          <button class="scorechip" aria-label={`Today's score ${today.total}. How points work`} onClick={() => { setOverlay('points'); sfx('paper'); }}><b>{today.total}</b><span class="pts-word"> pts</span></button>
           <span class="streakchip" aria-label={`Re-elected ${save.streak.current} nights in a row`}>🔥 {save.streak.current}</span>
           {<button class="goalchip" aria-label={`This week's goals: ${s.objectivesDone.length} of ${pack.objectives.length} done`} onClick={() => { setOverlay('goals'); sfx('paper'); }}>★ {s.objectivesDone.length}/{pack.objectives.length}</button>}
           <button class="icon" aria-label="Open the scrapbook" onClick={() => { setOverlay('book'); sfx('paper'); }}><Icon.book /></button>
@@ -855,12 +895,13 @@ export function App() {
           {after === null && <>
           <Meters s={s} preview={choice} />
           {reveal && <ImpactReveal key={reveal.key} r={reveal} onDone={() => setReveal(null)} />}
-          {card && !showIntro && !needSetup && !reveal && (card.ribbon ? <RibbonCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : card.sneak ? <SneakCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} meet={meet} onPreview={setPreview} onSwipe={swipe} defers={canDefer(s) ? s.defers : s.phase === 'card' && s.cardInDay >= TUNING.cardsPerDay - TUNING.defer.lastSlots ? null : 0} onDefer={() => { setPreview(null); persist(reduce(s, { type: 'defer' }, pack)); sfx('paper'); }} />)}
+          {secretIntro && !reveal && <SecretReveal who={card!.who} count={SECRETS.filter((w) => save.met.includes(w)).length + 1} onMeet={() => { setSecretShown(card!.who); sfx('paper'); }} />}
+          {card && !secretIntro && !showIntro && !needSetup && !reveal && (card.ribbon ? <RibbonCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : card.sneak ? <SneakCard key={`${card.id}-${s.count}`} card={card} meet={meet} onResult={swipe} /> : <SwipeCard key={`${card.id}-${s.count}`} card={card} locked={!!overlay} meet={meet} onPreview={setPreview} onSwipe={swipe} defers={canDefer(s) ? s.defers : s.phase === 'card' && s.cardInDay >= TUNING.cardsPerDay - TUNING.defer.lastSlots ? null : 0} onDefer={() => { setPreview(null); persist(reduce(s, { type: 'defer' }, pack)); sfx('paper'); }} />)}
           {s.phase === 'card' && <div class="progress" aria-label={`Card ${s.cardInDay + 1} of ${TUNING.cardsPerDay} today`}>{Array.from({ length: TUNING.cardsPerDay }, (_, i) => <i key={i} class={i < s.cardInDay ? 'done' : i === s.cardInDay ? 'now' : ''} />)}</div>}
           {s.phase === 'recalled' && !reveal && (
             <div class="panel recall">
               <p class="prize-loss">You lost today. Winning is the job; this is the consolation prize.</p>
-              <EndingPrize k={s.endings[s.endings.length - 1]!} isNew={fresh.endings.includes(s.endings[s.endings.length - 1]!)} have={save.scrapbook.length} />
+              <EndingPrize k={s.endings[s.endings.length - 1]!} isNew={fresh.endings.includes(s.endings[s.endings.length - 1]!)} have={save.scrapbook.length} why={endingWhy(s.endings[s.endings.length - 1]!, s)} />
               <p class="hint">Tonight's vote is off. Tomorrow you run again, everything at {TUNING.recall.reset}.</p>
               <button class="btn primary" onClick={() => { persist(reduce(s, { type: 'next' }, pack)); sfx('paper'); }}>On with the evening</button>
             </div>
@@ -886,7 +927,7 @@ export function App() {
       {needSetup && (save.onboarded ? <Setup title={`A new term, ${save.lastProfile?.mayor ?? 'Mayor'}. Same again?`} initial={save.lastProfile} onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack), { lastProfile: profile }); sfx('win'); }} />
         : <Opening onDone={(profile) => { persist(reduce(s, { type: 'setup', profile }, pack), { onboarded: true, lastProfile: profile, introSeen: introKey }); }} />)}
       {overlay === 'names' && s.profile && <Setup title="Rename things" rename initial={s.profile} onDone={(p) => { persist(reduce(s, { type: 'rename', mayor: p.mayor, folk: p.folk }, pack), { lastProfile: { ...p, base: s.profile!.base } }); setOverlay(null); }} />}
-      {overlay === 'points' && <Sheet label="How points work" onClose={() => setOverlay(null)}><PointsHelp s={s} /><button class="btn primary" onClick={() => setOverlay(null)}>Got it</button></Sheet>}
+
       {overlay === 'goals' && <Sheet label="This week's goals" onClose={() => setOverlay(null)}><Goals s={s} /><button class="btn primary" onClick={() => setOverlay(null)}>Back to work</button></Sheet>}
       {overlay === 'book' && <Scrapbook save={save} onClose={() => setOverlay(null)} onRename={s.profile ? () => setOverlay('names') : undefined} />}
       {overlay === 'dev' && (

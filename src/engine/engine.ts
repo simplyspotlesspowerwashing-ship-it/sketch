@@ -114,16 +114,15 @@ function startCard(s: State, pack: Pack, rng: Rng) {
   s.phase = 'card';
 }
 
-/** The week's secret character: the day's opener and law answered the secret way, three of your own days running. Randy's days don't count. */
-export const SECRET_RUN = 3;
+/** The week's secret character: every decision in the chain made, on your own days. One wrong answer and the secret waits for another week. */
 function secretCheck(s: State, pack: Pack, card: Card, dir: Dir) {
   const sec = pack.secret;
-  if (!sec || s.flags[`secret:${sec.who}`] || s.flags.__randy || card.day !== s.day) return;
-  const i = card.slot === 0 ? 0 : card.slot === 7 ? 1 : null;
-  if (i === null || sec.rule[i] !== dir) return;
-  s.flags[`__key:${s.day}:${i}`] = true;
-  const ok = (d: number) => d >= 1 && !s.daveDays.includes(d) && !!s.flags[`__key:${d}:0`] && !!s.flags[`__key:${d}:1`];
-  for (let k = 0; k < SECRET_RUN; k++) if (!ok(s.day - k)) return;
+  if (!sec || s.flags[`secret:${sec.who}`]) return;
+  const step = sec.steps.find(([id]) => id === card.id);
+  if (!step) return;
+  if (step[1] !== dir || s.flags.__randy) { s.flags[`__miss:${sec.who}`] = true; return; }
+  s.flags[`__step:${card.id}`] = true;
+  if (s.flags[`__miss:${sec.who}`] || !sec.steps.every(([id]) => s.flags[`__step:${id}`])) return;
   s.flags[`secret:${sec.who}`] = true;
   s.queue.push({ cardId: sec.start, at: s.count + 1 });
 }

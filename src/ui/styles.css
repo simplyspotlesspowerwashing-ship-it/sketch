@@ -1155,3 +1155,23 @@ button.scorechip { font: inherit; font-size: 13px; cursor: pointer; color: var(-
 .secrets li b { display: block; }
 .secrets li small { display: block; color: var(--soft); font-size: 12.5px; line-height: 1.35; }
 .secret-q { flex: 0 0 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; background: #4B2E6B; color: #F2C230; font-size: 22px; }
+.grand-why { margin: 6px 0 0; padding: 8px 12px; max-width: 34em; font-size: 13.5px; line-height: 1.4; color: #FFF4CF; background: rgba(0, 0, 0, .28); border-radius: 10px; text-align: left; }
+.grand-why b { display: block; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); margin-bottom: 2px; }
+.grand.g-secret { background: radial-gradient(circle at 50% 30%, #6A3F98 0%, #3A2056 60%, #231334 100%); box-shadow: 0 6px 0 var(--ink), inset 0 0 0 3px var(--gold); }
+.grand.g-secret .grand-face { filter: drop-shadow(0 0 24px rgba(232, 197, 90, .95)); }
+.secret-reveal { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.riddle-card { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px; text-align: center; background: #2F3B5C; color: #FFF4CF; }
+.riddle-seal { font-size: 11px; font-weight: 800; letter-spacing: .18em; color: var(--gold); border: 2px solid var(--gold); border-radius: 99px; padding: 1px 10px; }
+.riddle-law { font-family: var(--serif); font-weight: 400; font-size: 22px; line-height: 1.1; }
+.riddle-card .card-who small { color: #CFC6E0; }
+.riddle-text { margin: 4px 0; font-size: 17px; line-height: 1.4; }
+.riddle-reward { color: #CFC6E0; font-size: 12.5px; }
+.riddle-form { display: flex; gap: 8px; width: 100%; max-width: 360px; margin-top: 4px; }
+.riddle-form input { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 10px 12px; border: 2.5px solid var(--ink); border-radius: 12px; background: var(--paper); color: var(--ink); }
+.riddle-form.shake { animation: riddle-shake .35s; }
+@keyframes riddle-shake { 25% { translate: -8px 0; } 50% { translate: 8px 0; } 75% { translate: -4px 0; } }
+@media (prefers-reduced-motion: reduce) { .riddle-form.shake { animation: none; } }
+.riddle-foot { display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 360px; }
+.riddle-foot small { color: #CFC6E0; }
+.riddle-card .linkbtn { color: #FFF4CF; }
+.riddle-form .btn { flex: 0 0 auto; width: auto; padding-left: 18px; padding-right: 18px; }

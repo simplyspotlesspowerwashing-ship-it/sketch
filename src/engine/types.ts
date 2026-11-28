@@ -48,6 +48,7 @@ export interface Card {
   weight?: number; // in the open pool; default 1
   repeat?: boolean; // may be drawn more than once
   followUp?: boolean; // only appears when scheduled by a choice
+  riddle?: { answers: string[]; law: string }; // After Hours: type the answer to enact a sealed law (right = solved, left = not)
   options: Partial<Record<Dir, Choice>>;
 }
 
@@ -65,11 +66,12 @@ export interface Pack {
   endings: Record<string, Ending>; // low:<meter>, high:<group>, rare:<id> (saga endings), trap:<id> (daily disasters)
   headlines: Record<string, string>; // story id -> headline for the day's review
   cliffhangers: string[];
-  /** The week's secret character: follow `rule` on the day's opener (slot 0) and law (slot 7) three days running and `start` arrives. */
+  /** The week's secret character: make every decision in `steps` (each on a card everyone sees) and `start` arrives. */
   secret?: Secret;
 }
 
-export interface Secret { who: string; start: string; rule: [Dir, Dir]; hint: string }
+/** A chain of specific decisions across the week. Miss one, or let Randy play that day, and the secret stays hidden until next time. */
+export interface Secret { who: string; start: string; steps: [string, Dir][]; hint: string }
 
 export type Phase = 'card' | 'recalled' | 'dayEnd' | 'results';
 

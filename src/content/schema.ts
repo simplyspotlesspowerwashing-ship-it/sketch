@@ -20,7 +20,7 @@ export const packSchema = z.strictObject({
   objectives: z.array(z.strictObject({ id: z.string(), text: z.string(), when: condition })),
   endings: z.record(z.string(), z.strictObject({ title: z.string().max(40), text: z.string().max(160) })),
   headlines: z.record(z.string(), z.string()), cliffhangers: z.array(z.string()).length(6),
-  secret: z.strictObject({ who: z.string(), start: z.string(), rule: z.tuple([z.enum(['left', 'right']), z.enum(['left', 'right'])]), hint: z.string().max(160) }).optional(),
+  secret: z.strictObject({ who: z.string(), start: z.string(), steps: z.array(z.tuple([z.string(), z.enum(['left', 'right', 'up', 'down'])])).min(3), hint: z.string().max(260) }).optional(),
 });
 
 /** Schema check plus story integrity: every scheduled follow-up exists, every follow-up is reachable, every card has 2+ options. */
@@ -38,7 +38,15 @@ export function loadPack(raw: unknown): Pack {
       if (o!.ending && !pack.endings[o!.ending]) problems.push(`${c.id}: ending ${o!.ending} has no text in endings`);
     }
   }
-  if (pack.secret) scheduled.add(pack.secret.start);
+  if (pack.secret) {
+    scheduled.add(pack.secret.start);
+    for (const [id, dir] of pack.secret.steps) {
+      const c = pack.cards.find((x) => x.id === id);
+      if (!c || !c.day || c.slot === undefined) problems.push(`secret step ${id}: must be a card pinned to a day, so everyone sees it`);
+      else if (!c.options[dir]) problems.push(`secret step ${id}: has no ${dir} answer`);
+      else if (Object.values(c.options).some((o) => o!.ending)) problems.push(`secret step ${id}: can't be a card that ends the day`);
+    }
+  }
   for (const t of scheduled) if (!ids.has(t)) problems.push(`a choice schedules unknown card ${t}`);
   for (const c of pack.cards) if (c.followUp && !scheduled.has(c.id)) problems.push(`${c.id}: follow-up card is never scheduled`);
   for (const k of ['low:people', 'low:business', 'low:law', 'low:press', 'low:treasury', 'high:people', 'high:business', 'high:law', 'high:press']) if (!pack.endings[k]) problems.push(`missing ending ${k}`);

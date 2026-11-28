@@ -6309,10 +6309,28 @@
  "secret": {
   "who": "zambini",
   "start": "w3sc1",
-  "rule": [
-   "right",
-   "right"
+  "steps": [
+   [
+    "w3m1_1",
+    "right"
+   ],
+   [
+    "w3law3",
+    "left"
+   ],
+   [
+    "w3law4",
+    "left"
+   ],
+   [
+    "w3m6_1",
+    "right"
+   ],
+   [
+    "w3law6",
+    "left"
+   ]
   ],
-  "hint": "A rabbit in a top hat performs for a mayor who says yes to the morning and yes to the law. Three days running."
+  "hint": "A gentleman with long ears performs for the mayor who believes in wonders: who lets a vegetable be a boat, lets a pie be anything at all, lets a rocket fly any way it likes, sells tickets to a fright, and lets a ghost be loud."
  }
 }

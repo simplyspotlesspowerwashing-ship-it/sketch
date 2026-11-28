@@ -7311,10 +7311,32 @@
  "secret": {
   "who": "moira",
   "start": "w1sc1",
-  "rule": [
-   "right",
-   "left"
+  "steps": [
+   [
+    "law1",
+    "right"
+   ],
+   [
+    "g1",
+    "left"
+   ],
+   [
+    "c1",
+    "left"
+   ],
+   [
+    "law5",
+    "right"
+   ],
+   [
+    "p1",
+    "left"
+   ],
+   [
+    "w1s_law",
+    "left"
+   ]
   ],
-  "hint": "Someone under City Hall likes a mayor who says yes to the morning and no to the law. Three days running."
+  "hint": "Beneath your desk, a tenant pays no rent. She'd put a hat on every head. She hates a flood. She'd keep what's saved for rainy days. She'd crown a hole and never see it filled. On the last night, she votes in silence."
  }
 }
