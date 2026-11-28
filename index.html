@@ -3,23 +3,64 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Mayor of Bad Town</title>
-    <meta name="description" content="A daily comedy card game. 20 problems a day, yes or no. Your deputy is a raccoon. Every night is an election." />
+    <title>Mayor of Bad Town · Free Daily Comedy Card Game</title>
+    <meta name="description" content="Run the worst town in the county. 20 ridiculous problems a day, yes or no, and an election every night. A free daily comedy card game you play in your browser." />
     <meta name="theme-color" content="#F2EBDD" />
     <link rel="canonical" href="https://badtowngame.com/" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="Bad Town" />
     <link rel="preload" href="/fonts/fredoka.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Mayor of Bad Town" />
-    <meta property="og:description" content="20 problems a day. Yes or no. Every night is an election. Keep your streak alive." />
+    <meta property="og:site_name" content="Mayor of Bad Town" />
     <meta property="og:url" content="https://badtowngame.com/" />
+    <meta property="og:title" content="Mayor of Bad Town · Free Daily Comedy Card Game" />
+    <meta property="og:description" content="20 problems a day. Yes or no. Your deputy is a raccoon, and every night is an election. Can you keep your streak alive?" />
     <meta property="og:image" content="https://badtowngame.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mayor of Bad Town: Deputy Randy the raccoon and the town's oddballs" />
+    <meta property="og:locale" content="en_GB" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mayor of Bad Town · Free Daily Comedy Card Game" />
+    <meta name="twitter:description" content="20 problems a day. Yes or no. Your deputy is a raccoon, and every night is an election." />
+    <meta name="twitter:image" content="https://badtowngame.com/og.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Mayor of Bad Town",
+        "url": "https://badtowngame.com/",
+        "image": "https://badtowngame.com/og.png",
+        "description": "A free daily comedy card game. Run the worst town in the county: 20 ridiculous problems a day, yes or no, and a re-election every night.",
+        "genre": ["Card game", "Comedy", "Strategy", "Daily puzzle"],
+        "gamePlatform": "Web browser",
+        "applicationCategory": "Game",
+        "operatingSystem": "Any",
+        "playMode": "SinglePlayer",
+        "inLanguage": "en",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      }
+    </script>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- What search engines and link previews read before the game loads. The game replaces it on start. -->
+      <main class="seo">
+        <h1>Mayor of Bad Town</h1>
+        <p>A free daily comedy card game. You're the new mayor of the worst town in the county, and every night is a re-election.</p>
+        <p>Every day brings 20 ridiculous problems. Swipe yes or no. Keep the People, Business, the Law and the Press happy, and don't let the Treasury run dry. Your deputy is Randy, a raccoon. He is trying to help.</p>
+        <ul>
+          <li>A new day of cards every day, and a new themed week: Goose Migration, Heatwave, Festival Week and The Big Freeze.</li>
+          <li>Over 100 funny endings to collect in your Scrapbook, from being out-voted by a sandwich to signing the town away on a napkin.</li>
+          <li>Secret characters you can only meet with the right chain of decisions.</li>
+          <li>After Hours: riddles that pass laws, late-night visitors and sneak missions.</li>
+        </ul>
+        <p>Free. No downloads. No sign-up. Plays on your phone or computer.</p>
+      </main>
+    </div>
     <noscript>Mayor of Bad Town needs JavaScript. Randy apologises. He ate the other version.</noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>

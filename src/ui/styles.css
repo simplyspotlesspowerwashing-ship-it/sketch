@@ -1175,3 +1175,7 @@ button.scorechip { font: inherit; font-size: 13px; cursor: pointer; color: var(-
 .riddle-foot small { color: #CFC6E0; }
 .riddle-card .linkbtn { color: #FFF4CF; }
 .riddle-form .btn { flex: 0 0 auto; width: auto; padding-left: 18px; padding-right: 18px; }
+.seo { max-width: 34em; margin: 40px auto; padding: 0 20px; line-height: 1.5; color: var(--ink); }
+.seo h1 { font-family: var(--display); font-size: 32px; margin: 0 0 12px; }
+@media (max-width: 380px) { .tab { font-size: 12px; padding: 6px 6px; } .tabs { gap: 3px; } }
+.afterhours .riddle-card { align-self: center; }

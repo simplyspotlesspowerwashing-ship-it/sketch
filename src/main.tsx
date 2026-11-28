@@ -23,4 +23,6 @@ class Guard extends Component<object, { failed: boolean }> {
   }
 }
 
-render(<Guard />, document.getElementById('app')!);
+const root = document.getElementById('app')!;
+root.textContent = ''; // drop the static description that search engines read
+render(<Guard />, root);
