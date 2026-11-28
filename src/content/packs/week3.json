@@ -5948,6 +5948,144 @@
     }
    },
    "followUp": true
+  },
+  {
+   "id": "w3sc1",
+   "who": "zambini",
+   "story": "secret_zambini",
+   "text": "(A white rabbit in a top hat steps out of your desk drawer. 'The Great Zambini,' he says. 'I perform only for mayors who say yes.') Watch?",
+   "options": {
+    "right": {
+     "label": "Yes. Amaze me.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "He pulled a smaller rabbit out of his hat. It pulled out a smaller one. It's still going.",
+     "then": [
+      [
+       "w3sc2a",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. I'm busy.",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "He vanished. So did your stapler. It's back now. It's shaped like a rabbit.",
+     "then": [
+      [
+       "w3sc2b",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3sc2a",
+   "who": "zambini",
+   "story": "secret_zambini",
+   "text": "Zambini. For my grand finale, I shall make the festival disappear. Temporarily. Probably. May I?",
+   "options": {
+    "right": {
+     "label": "Yes. Make it vanish.",
+     "effects": {
+      "press": 10
+     },
+     "reaction": "It vanished for four seconds. When it came back, everyone was holding a rabbit.",
+     "then": [
+      [
+       "w3sc3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Something smaller.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "He made Chad's yacht disappear instead. Chad is still looking for it.",
+     "then": [
+      [
+       "w3sc3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3sc2b",
+   "who": "zambini",
+   "story": "secret_zambini",
+   "text": "(Zambini has reappeared. On the festival stage. He'd like to saw a volunteer in half. He's looking at you.) Volunteer?",
+   "options": {
+    "right": {
+     "label": "Yes. Saw away.",
+     "effects": {
+      "people": 10,
+      "law": -5
+     },
+     "reaction": "Sawn in half, then put back. Slightly wrong. Your left foot is your right foot now.",
+     "then": [
+      [
+       "w3sc3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Use Randy.",
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "Randy came back as two Randys. They both want to be deputy.",
+     "then": [
+      [
+       "w3sc3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3sc3",
+   "who": "zambini",
+   "story": "secret_zambini",
+   "text": "(Zambini is taking his final bow. He offers you his top hat. 'Every mayor needs a trick,' he says.) Take the hat?",
+   "options": {
+    "right": {
+     "label": "Yes. Take the hat.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "Inside: a carrot and a note. 'See you next festival.' He's gone.",
+     "set": [
+      "secret_done_zambini"
+     ]
+    },
+    "left": {
+     "label": "No. It's yours.",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "He bowed and vanished. The hat stayed anyway. On your head. It fits perfectly.",
+     "set": [
+      "secret_done_zambini"
+     ]
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [
@@ -6167,5 +6305,14 @@
   "Tomorrow: a yacht needs the high street.",
   "Tomorrow: Wendy opens her doors. And her walls.",
   "Tomorrow, the last day: a goat, a moth and a hole want your vote."
- ]
+ ],
+ "secret": {
+  "who": "zambini",
+  "start": "w3sc1",
+  "rule": [
+   "right",
+   "right"
+  ],
+  "hint": "A rabbit in a top hat performs for a mayor who says yes to the morning and yes to the law. Three days running."
+ }
 }

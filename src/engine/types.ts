@@ -65,7 +65,11 @@ export interface Pack {
   endings: Record<string, Ending>; // low:<meter>, high:<group>, rare:<id> (saga endings), trap:<id> (daily disasters)
   headlines: Record<string, string>; // story id -> headline for the day's review
   cliffhangers: string[];
+  /** The week's secret character: follow `rule` on the day's opener (slot 0) and law (slot 7) three days running and `start` arrives. */
+  secret?: Secret;
 }
+
+export interface Secret { who: string; start: string; rule: [Dir, Dir]; hint: string }
 
 export type Phase = 'card' | 'recalled' | 'dayEnd' | 'results';
 

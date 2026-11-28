@@ -20,6 +20,7 @@ export const packSchema = z.strictObject({
   objectives: z.array(z.strictObject({ id: z.string(), text: z.string(), when: condition })),
   endings: z.record(z.string(), z.strictObject({ title: z.string().max(40), text: z.string().max(160) })),
   headlines: z.record(z.string(), z.string()), cliffhangers: z.array(z.string()).length(6),
+  secret: z.strictObject({ who: z.string(), start: z.string(), rule: z.tuple([z.enum(['left', 'right']), z.enum(['left', 'right'])]), hint: z.string().max(160) }).optional(),
 });
 
 /** Schema check plus story integrity: every scheduled follow-up exists, every follow-up is reachable, every card has 2+ options. */
@@ -37,6 +38,7 @@ export function loadPack(raw: unknown): Pack {
       if (o!.ending && !pack.endings[o!.ending]) problems.push(`${c.id}: ending ${o!.ending} has no text in endings`);
     }
   }
+  if (pack.secret) scheduled.add(pack.secret.start);
   for (const t of scheduled) if (!ids.has(t)) problems.push(`a choice schedules unknown card ${t}`);
   for (const c of pack.cards) if (c.followUp && !scheduled.has(c.id)) problems.push(`${c.id}: follow-up card is never scheduled`);
   for (const k of ['low:people', 'low:business', 'low:law', 'low:press', 'low:treasury', 'high:people', 'high:business', 'high:law', 'high:press']) if (!pack.endings[k]) problems.push(`missing ending ${k}`);

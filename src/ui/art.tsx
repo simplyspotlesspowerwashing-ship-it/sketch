@@ -16,12 +16,15 @@ export const NAMES: Record<string, string> = {
   reginald: 'Reginald, a tortoise (crossing since 1987)', gary: 'Gary, a vending machine, your opponent',
   cheese: 'The Cheese (since 1987)', clive: 'Clive, a traffic cone, your opponent', kevin: 'Kevin, a pothole', nutkins: 'Mr Nutkins, Squirrel Bank', biscuit: 'Inspector Biscuit',
   mayor: 'You, the Mayor',
+  moira: 'Moira, a mole (under City Hall since 1903)', gloria: 'Gloria, a camel (crossed the desert)', zambini: 'The Great Zambini (a magician rabbit)', barry: 'Big Barry, a yeti (shy)',
   pebbles: 'Councillor Pebbles (a goat)', flaps: 'Mr Flaps, Postmaster (a pelican)', wendy: 'Wendy, a ghost (union rep)', carl: 'Big Carl, Lifeguard', lorraine: 'Lorraine (a seagull)', hoot: 'Professor Hoot, Headteacher', trevor: 'Trevor (a moth)', toby: 'Toby (an oak tree)',
   randy: 'Deputy Randy (a raccoon)', bev: 'Bev, 97, oldest resident', brayden: 'Brayden, Head of Innovation', nora: 'Dr Nora, Town Scientist',
   whiskers: 'Mr Whiskers, Esq. (a cat)', marcel: 'Marcel, Town Mime', sal: "Sal, Sal's Fine Dining & Tyres", coach: 'Coach Dunk', sheila: 'Psychic Sheila', linda: 'Linda, Librarian', doug: 'Doug, Treasurer', steve: 'Stormy Steve', timmy: 'Timmy, age 8', stranger: 'The Stranger',
 };
 /** The oddballs: the first time a player meets one, the card marks them as a new face, and the scrapbook collects them. */
 export const ODDBALLS = ['randy', 'gerald', 'whiskers', 'marcel', 'cheese', 'kevin', 'nutkins', 'biscuit', 'reginald', 'clive', 'gary', 'pebbles', 'flaps', 'wendy', 'carl', 'lorraine', 'hoot', 'trevor', 'toby'];
+/** Secret characters: one per week, found by answering the morning and the law the secret way three days running. */
+export const SECRETS = ['moira', 'gloria', 'zambini', 'barry'];
 export type Mood = 'neutral' | 'pleased' | 'annoyed';
 
 const S = { stroke: INK, 'stroke-width': 2.5, 'stroke-linejoin': 'round' as const, 'stroke-linecap': 'round' as const };
@@ -318,6 +321,63 @@ const CAST: Record<string, (mood: Mood) => ComponentChildren> = {
       {m !== 'pleased' && <circle cx="44" cy="36" r="1.4" fill={INK} />}
       <path d={m === 'annoyed' ? 'M34 26 l14 6' : 'M34 29 l14 2'} {...S} fill="none" stroke-width="3" />
       <path d="M36 66 q14 8 28 0" fill="none" stroke="#E8C55A" stroke-width="3" /><circle cx="50" cy="71" r="3.5" fill="#E8C55A" {...S} stroke-width="1.5" />
+    </>
+  ),
+  moira: (m) => (
+    <>
+      <rect width="100" height="100" fill="#7A5A3A" /><circle cx="15" cy="80" r="4" fill="#5E4329" /><circle cx="86" cy="70" r="3" fill="#5E4329" /><circle cx="80" cy="90" r="5" fill="#5E4329" />
+      <path d="M14 104 q0 -44 36 -50 q36 6 36 50z" fill="#4A4A55" {...S} />
+      <ellipse cx="50" cy="52" rx="27" ry="24" fill="#4A4A55" {...S} />
+      <ellipse cx="50" cy="64" rx="9" ry="7" fill="#E79AA8" {...S} />
+      <path d="M41 62 h-14 M41 66 h-13 M59 62 h14 M59 66 h13" stroke={INK} stroke-width="1.5" />
+      {m === 'pleased' ? <path d="M35 50 q5 -5 10 0 M55 50 q5 -5 10 0" fill="none" {...S} /> : <><circle cx="40" cy="50" r="3" fill={INK} /><circle cx="60" cy="50" r="3" fill={INK} /></>}
+      {m === 'annoyed' && <path d="M33 43 l12 4 M67 43 l-12 4" {...S} fill="none" />}
+      <path d={m === 'annoyed' ? 'M45 75 q5 -3 10 0' : m === 'pleased' ? 'M44 73 q6 5 12 0' : 'M45 74 h10'} fill="none" {...S} stroke-width="2" />
+      <path d="M24 38 q26 -26 52 0 z" fill="#F2C230" {...S} /><rect x="20" y="36" width="60" height="6" rx="3" fill="#F2C230" {...S} />
+      <circle cx="50" cy="24" r="5" fill="#FFF4B0" {...S} stroke-width="2" />
+      <ellipse cx="28" cy="94" rx="8" ry="5" fill="#E79AA8" {...S} stroke-width="2" /><ellipse cx="72" cy="94" rx="8" ry="5" fill="#E79AA8" {...S} stroke-width="2" />
+    </>
+  ),
+  gloria: (m) => (
+    <>
+      <rect width="100" height="100" fill="#F0CF86" /><circle cx="82" cy="18" r="9" fill="#F7A93B" />
+      <path d="M0 92 q25 -10 50 0 q25 10 50 0 v8 h-100z" fill="#E2B566" />
+      <path d="M30 104 q-2 -30 12 -46 h16 q14 16 12 46z" fill="#C99A5B" {...S} />
+      <path d="M30 22 q20 -12 40 0 q6 18 0 34 q-6 14 -20 14 q-14 0 -20 -14 q-6 -16 0 -34z" fill="#C99A5B" {...S} />
+      <path d="M26 24 q-8 -6 -6 -14 q8 2 10 10z M74 24 q8 -6 6 -14 q-8 2 -10 10z" fill="#C99A5B" {...S} />
+      <ellipse cx="50" cy="60" rx="14" ry="10" fill="#E3BF86" {...S} />
+      <path d="M44 58 v3 M56 58 v3" {...S} />
+      <path d="M34 36 l-3 -3 M38 34 l-1 -4 M62 34 l1 -4 M66 36 l3 -3" {...S} stroke-width="1.8" />
+      {m === 'pleased' ? <path d="M35 38 q5 -4 10 0 M55 38 q5 -4 10 0" fill="none" {...S} /> : <><circle cx="40" cy="39" r="3" fill={INK} /><circle cx="60" cy="39" r="3" fill={INK} /></>}
+      {m === 'annoyed' && <path d="M33 31 l12 5 M67 31 l-12 5" {...S} fill="none" />}
+      <path d={m === 'annoyed' ? 'M43 67 q7 -3 14 0' : m === 'pleased' ? 'M42 65 q8 6 16 0' : 'M43 66 h14'} fill="none" {...S} stroke-width="2" />
+    </>
+  ),
+  zambini: (m) => (
+    <>
+      <rect width="100" height="100" fill="#4B2E6B" /><path d="M14 20 l2 5 l5 1 l-4 3 l1 5 l-4 -3 l-4 3 l1 -5 l-4 -3 l5 -1z" fill="#F2C230" /><circle cx="84" cy="40" r="1.6" fill="#fff" /><circle cx="78" cy="14" r="1.2" fill="#fff" />
+      <path d="M18 104 q0 -34 32 -40 q32 6 32 40z" fill={INK} {...S} /><path d="M40 70 l10 6 l10 -6 l-2 10 l-8 -4 l-8 4z" fill="#C23B3B" {...S} stroke-width="2" />
+      <path d="M34 30 q-6 -26 4 -28 q8 4 4 30z M66 30 q6 -26 -4 -28 q-8 4 -4 30z" fill="#FFFFFF" {...S} /><path d="M38 28 q-2 -18 1 -22 M62 28 q2 -18 -1 -22" stroke="#F2B8C6" stroke-width="3" />
+      <ellipse cx="50" cy="48" rx="22" ry="20" fill="#FFFFFF" {...S} />
+      <path d="M32 24 h36 v-18 h-36z" fill={INK} {...S} /><rect x="26" y="24" width="48" height="5" rx="2" fill={INK} {...S} /><rect x="32" y="18" width="36" height="4" fill="#C23B3B" />
+      {m === 'pleased' ? <path d="M38 46 q4 -4 8 0 M54 46 q4 -4 8 0" fill="none" {...S} /> : <><circle cx="42" cy="46" r="3" fill="#C2185B" /><circle cx="58" cy="46" r="3" fill="#C2185B" /></>}
+      {m === 'annoyed' && <path d="M36 39 l10 4 M64 39 l-10 4" {...S} fill="none" />}
+      <path d="M47 54 h6 l-3 4z" fill="#F2B8C6" {...S} stroke-width="2" />
+      <path d={m === 'annoyed' ? 'M44 63 q6 -3 12 0' : m === 'pleased' ? 'M43 60 q7 6 14 0' : 'M44 62 h12'} fill="none" {...S} stroke-width="2" />
+    </>
+  ),
+  barry: (m) => (
+    <>
+      <rect width="100" height="100" fill="#BFD8E8" /><circle cx="14" cy="16" r="2" fill="#fff" /><circle cx="86" cy="24" r="2.5" fill="#fff" /><circle cx="76" cy="8" r="1.5" fill="#fff" /><circle cx="24" cy="40" r="1.5" fill="#fff" />
+      <path d="M8 104 q0 -50 42 -56 q42 6 42 56z" fill="#F4F6F8" {...S} />
+      <path d="M18 50 q-6 -30 14 -40 q18 -10 36 0 q20 10 14 40 q-4 26 -32 26 q-28 0 -32 -26z" fill="#F4F6F8" {...S} />
+      <path d="M22 28 l-6 -6 M30 16 l-3 -8 M70 16 l3 -8 M78 28 l6 -6" {...S} />
+      <ellipse cx="50" cy="52" rx="20" ry="17" fill="#8FA6B8" {...S} />
+      <circle cx="34" cy="60" r="5" fill="#F2A7B5" opacity=".8" /><circle cx="66" cy="60" r="5" fill="#F2A7B5" opacity=".8" />
+      {m === 'pleased' ? <path d="M39 48 q4 -4 8 0 M53 48 q4 -4 8 0" fill="none" {...S} /> : <><circle cx="43" cy="48" r="2.8" fill={INK} /><circle cx="57" cy="48" r="2.8" fill={INK} /></>}
+      {m === 'annoyed' && <path d="M37 41 l10 4 M63 41 l-10 4" {...S} fill="none" />}
+      <ellipse cx="50" cy="56" rx="4" ry="3" fill={INK} />
+      <path d={m === 'annoyed' ? 'M43 65 q7 -3 14 0' : m === 'pleased' ? 'M42 62 q8 6 16 0' : 'M44 64 h12'} fill="none" {...S} stroke-width="2" />
     </>
   ),
   hoot: (m) => (

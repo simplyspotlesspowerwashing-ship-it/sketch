@@ -6213,6 +6213,145 @@
     }
    },
    "followUp": true
+  },
+  {
+   "id": "w2sc1",
+   "who": "gloria",
+   "story": "secret_gloria",
+   "text": "(A camel has walked into City Hall. She's Gloria. She crossed the desert to meet a sensible mayor. She's very hot.) Offer her water?",
+   "options": {
+    "right": {
+     "label": "Yes. A bucket of water.",
+     "effects": {
+      "people": 5,
+      "treasury": 5
+     },
+     "reaction": "She drank it. Then forty more. She says it's 'a start'.",
+     "then": [
+      [
+       "w2sc2a",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. She's a camel.",
+     "effects": {
+      "law": 5,
+      "business": 5
+     },
+     "reaction": "She nodded. 'You don't waste water. I like you.' She's staying.",
+     "then": [
+      [
+       "w2sc2b",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2sc2a",
+   "who": "gloria",
+   "story": "secret_gloria",
+   "text": "(Gloria has stored all that water in her hump. It's the town's only reserve. She'll share it. For a hat.) Buy Gloria a hat?",
+   "options": {
+    "right": {
+     "label": "Yes. The finest hat.",
+     "effects": {
+      "people": 10,
+      "treasury": -5
+     },
+     "reaction": "Straw, with a feather. She waters the park every evening. Toby is overjoyed.",
+     "then": [
+      [
+       "w2sc3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No hats.",
+     "effects": {
+      "treasury": 5
+     },
+     "reaction": "She's sharing anyway. Slowly. One plant at a time. Mostly Toby.",
+     "then": [
+      [
+       "w2sc3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2sc2b",
+   "who": "gloria",
+   "story": "secret_gloria",
+   "text": "(Gloria has opened a desert school. Lesson one: surviving a heatwave. Lesson two: spitting. She'd like City Hall for classes.) Allow it?",
+   "options": {
+    "right": {
+     "label": "Yes. Camel school.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "The town walks slowly now and complains less. Lesson two went badly.",
+     "then": [
+      [
+       "w2sc3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Use the park.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Classes under Toby. Gerald is top of the class.",
+     "then": [
+      [
+       "w2sc3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w2sc3",
+   "who": "gloria",
+   "story": "secret_gloria",
+   "text": "(The heatwave is breaking. Gloria is heading home across the desert. She'd like you to walk the first mile with her.) Walk with Gloria?",
+   "options": {
+    "right": {
+     "label": "Yes. One mile.",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "You walked one mile. She walked the rest. She turned once to nod. It meant everything.",
+     "set": [
+      "secret_done_gloria"
+     ]
+    },
+    "left": {
+     "label": "No. Wave her off.",
+     "effects": {
+      "people": 5,
+      "press": 5
+     },
+     "reaction": "The whole town waved. She didn't look back. Camels don't. Marge got the photo.",
+     "set": [
+      "secret_done_gloria"
+     ]
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [
@@ -6396,5 +6535,14 @@
   "Tomorrow: Bad Town's Got Talent. Nine acts are Bev.",
   "Tomorrow: a goose is in love.",
   "Tomorrow, the last day: Bev has bought a swimming hat."
- ]
+ ],
+ "secret": {
+  "who": "gloria",
+  "start": "w2sc1",
+  "rule": [
+   "left",
+   "right"
+  ],
+  "hint": "Someone crossing the desert wants a mayor who says no to the morning and yes to the law. Three days running."
+ }
 }

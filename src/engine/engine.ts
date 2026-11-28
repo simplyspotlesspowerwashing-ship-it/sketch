@@ -114,6 +114,20 @@ function startCard(s: State, pack: Pack, rng: Rng) {
   s.phase = 'card';
 }
 
+/** The week's secret character: the day's opener and law answered the secret way, three of your own days running. Randy's days don't count. */
+export const SECRET_RUN = 3;
+function secretCheck(s: State, pack: Pack, card: Card, dir: Dir) {
+  const sec = pack.secret;
+  if (!sec || s.flags[`secret:${sec.who}`] || s.flags.__randy || card.day !== s.day) return;
+  const i = card.slot === 0 ? 0 : card.slot === 7 ? 1 : null;
+  if (i === null || sec.rule[i] !== dir) return;
+  s.flags[`__key:${s.day}:${i}`] = true;
+  const ok = (d: number) => d >= 1 && !s.daveDays.includes(d) && !!s.flags[`__key:${d}:0`] && !!s.flags[`__key:${d}:1`];
+  for (let k = 0; k < SECRET_RUN; k++) if (!ok(s.day - k)) return;
+  s.flags[`secret:${sec.who}`] = true;
+  s.queue.push({ cardId: sec.start, at: s.count + 1 });
+}
+
 /** Night falls: the town votes. A day that ended early (recall, rare ending) is lost whatever the count. */
 function endDay(s: State, pack: Pack) {
   s.current = null;
@@ -225,6 +239,7 @@ export function reduce(state: State, action: Action, pack: Pack, rng: Rng = seed
       // tomorrow's consequences; on the last day there is no tomorrow, so they arrive now
       for (const id of ch.next ?? []) { if (s.day >= 7) s.queue.push({ cardId: id, at: s.count }); else s.tomorrow.push(id); }
       s.swipes.push({ day: s.day, cardId: card.id, dir: action.dir, before, after: { ...s.meters } });
+      secretCheck(s, pack, card, action.dir);
       for (const o of pack.objectives) if (!s.objectivesDone.includes(o.id) && holds(s, o.when)) s.objectivesDone.push(o.id);
       if (ch.ending) { endEarly(s, ch.ending); return s; }
       const cause = recallCause(s);
@@ -267,6 +282,7 @@ export function coverMissedDays(state: State, pack: Pack, today: number, rng: Rn
   while (s.phase !== 'results' && s.day < today) {
     if (s.phase === 'card') {
       const before = { recalls: s.recalls, endings: s.endings.length };
+      s = { ...s, flags: { ...s.flags, __randy: true } };
       s = autoplay(s, davePolicy, pack, (st) => st.phase === 'dayEnd' || st.phase === 'recalled', rng);
       if (s.phase === 'results') break;
       s = structuredClone(s);
@@ -275,6 +291,7 @@ export function coverMissedDays(state: State, pack: Pack, today: number, rng: Rn
       s.recalls = before.recalls; s.endings = s.endings.slice(0, before.endings); s.recalledDays = s.recalledDays.filter((d) => d !== s.day);
       if (wasCut) { s.phase = 'card'; s.current = null; }
       delete s.flags.__reset;
+      delete s.flags.__randy;
       for (const k of METERS) s.meters[k] = clamp(s.meters[k], TUNING.handover.floor, TUNING.handover.ceiling);
       s.daveDays.push(s.day);
       if (s.phase !== 'dayEnd') { s.current = null; s.phase = 'dayEnd'; s.polls.push(nightVote(s)); s.won.push(true); }

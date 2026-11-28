@@ -10,7 +10,7 @@ import { dayScore, tierOf } from '../engine/score.ts';
 import type { Crowd } from '../engine/score.ts';
 import { GROUPS, METERS } from '../engine/types.ts';
 import type { Card, Choice, Dir, GroupId, MeterId, Profile, State } from '../engine/types.ts';
-import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, ODDBALLS, Portrait, Town } from './art.tsx';
+import { GROUP_COLOR, GROUP_NAME, Icon, LEADER, NAMES, ODDBALLS, SECRETS, Portrait, Town } from './art.tsx';
 import type { Mood, TownView } from './art.tsx';
 import { DAY_NAMES, calendar, fetchCrowd, loadSave, sendVote, setMuted, sfx, writeSave } from './platform.ts';
 import type { Save } from './platform.ts';
@@ -193,7 +193,7 @@ function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) =>
       <div class={`card sneak ${s.looking ? 'looking' : s.warn ? 'warn' : 'away'} ${s.done ? 'over' : ''}`}>
         <span class="sneak-tag">{res ?? (s.looking ? 'WATCHING YOU' : s.warn ? 'TURNING…' : 'NOT LOOKING')}</span>
         <div class="card-who"><span class="sneak-face"><Portrait who={card.who} size={110} mood={s.looking ? 'annoyed' : 'neutral'} /></span><span>{NAMES[card.who] ?? card.who}</span></div>
-        {meet && <Meet />}
+        {meet && <Meet secret={SECRETS.includes(card.who)} />}
         <p class="card-text">{fill(card.text)}</p>
         <span class="sneak-charge"><i style={{ width: `${s.charge * 100}%` }} /></span>
       </div>
@@ -205,7 +205,7 @@ function SneakCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) =>
 
 // ---------- the swipe card ----------
 /** First time a character turns up: who they are, once. */
-const Meet = () => <span class="meet">New face</span>;
+const Meet = ({ secret }: { secret?: boolean }) => <span class={`meet ${secret ? 'secret' : ''}`}>{secret ? '★ Secret character!' : 'New face'}</span>;
 
 const THRESH = 90;
 /** Every card is a yes or a no: right approves, left rejects. */
@@ -244,7 +244,7 @@ function SwipeCard({ card, onPreview, onSwipe, locked, meet, defers, onDefer }: 
         onPointerUp={() => { const d = drag; start.current = null; setDrag(null); if (d && Math.abs(d.x) > THRESH) { const dir = dirOf(d.x, d.y); if (card.options[dir]) { commit(dir); return; } } onPreview(null); }}
         onPointerCancel={() => { start.current = null; setDrag(null); onPreview(null); }}>
         <div class="card-who"><Portrait who={card.who} size={110} mood={valid ? 'annoyed' : 'neutral'} /><span>{NAMES[card.who] ?? card.who}</span></div>
-        {meet && <Meet />}
+        {meet && <Meet secret={SECRETS.includes(card.who)} />}
         <p class="card-text">{fill(card.text)}</p>
         {valid && !stamped && <div class={`choice-banner ${valid}`}>{fill(card.options[valid]!.label)}</div>}
         {stamped && (
@@ -396,6 +396,7 @@ const DEEDS: Deed[] = [
   { id: 'crossing', name: 'Nine Days', how: 'See Reginald all the way across Main Street', test: (s) => !!s.flags.reg_crossed },
   { id: 'who', name: 'Who?', how: 'Win Professor Hoot\'s quiz', test: (s) => !!s.flags.quiz_win },
   { id: 'rink', name: 'The Kevin Rink', how: 'Say goodbye to the rink with a speech', test: (s) => !!s.flags.kevin_rink },
+  { id: 'secret', name: 'Secret Friend', how: 'Find a secret character', test: (_s, save) => save.met.some((w) => SECRETS.includes(w)) },
   { id: 'collector', name: 'Collector', how: 'Collect ten endings', test: (_s, save) => save.scrapbook.length >= 10 },
 ];
 /** Bring the Scrapbook, the career and the streak up to date with this week's state. Safe to call on every change. */
@@ -538,6 +539,9 @@ function Scrapbook({ save, onClose, onRename }: { save: Save; onClose: () => voi
       {tab === 'cast' && <>
         <p class="book-total"><b>{ODDBALLS.filter((w) => save.met.includes(w)).length}</b> of {ODDBALLS.length} oddballs met.</p>
         <div class="cast">{ODDBALLS.map((w) => save.met.includes(w) ? <span key={w} class="cast-member"><Portrait who={w} size={56} mood="pleased" /><small>{(NAMES[w] ?? w).split(/[,(]/)[0]!.trim()}</small></span> : <span key={w} class="cast-member locked"><span class="cast-q">?</span><small>???</small></span>)}</div>
+ 
+        <h3 class="subhead">Secret characters · {SECRETS.filter((w) => save.met.includes(w)).length} of {SECRETS.length}</h3>
+        <ul class="secrets">{PACKS.filter((p) => p.secret).map((p) => { const w = p.secret!.who; const found = save.met.includes(w); return <li key={w} class={found ? 'found' : 'locked'}>{found ? <Portrait who={w} size={52} mood="pleased" /> : <span class="cast-q secret-q">★</span>}<span><b>{found ? (NAMES[w] ?? w) : '???'}</b><small>{p.theme.name}{found ? '' : `: ${p.secret!.hint}`}</small></span></li>; })}</ul>
       </>}
       {tab === 'deeds' && <>
         <p class="book-total"><b>{save.deeds.length}</b> of {DEEDS.length} deeds.</p>
@@ -731,7 +735,7 @@ function RibbonCard({ card, onResult, meet }: { card: Card; onResult: (d: Dir) =
       <div class={`card cutcard ${done ?? ''} ${miss ? 'shake' : ''}`}>
         <span class="sneak-tag">{done === 'hit' ? 'SNIP!' : done === 'miss' ? 'GERALD GOT THERE' : `TRY ${tries + 1} OF 3`}</span>
         <div class="card-who"><Portrait who={card.who} size={110} mood={done === 'miss' ? 'pleased' : 'annoyed'} /><span>{NAMES[card.who] ?? card.who}</span></div>
-        {meet && <Meet />}
+        {meet && <Meet secret={SECRETS.includes(card.who)} />}
         <p class="card-text">{fill(card.text)}</p>
         <div class="ribbon-track" aria-hidden="true">
           <i class="ribbon-zone" style={{ left: `${ZONE[0]}%`, width: `${ZONE[1]! - ZONE[0]!}%` }} />
@@ -782,7 +786,7 @@ export function App() {
     const card = findCard(pack, s.current!);
     const next = reduce(s, { type: 'swipe', dir }, pack);
     sendVote(pack.id, s.weekId.split('#')[1] ?? 'r0', card.id, dir);
-    persist(next, ODDBALLS.includes(card.who) && !save.met.includes(card.who) ? { met: [...save.met, card.who] } : {});
+    persist(next, (ODDBALLS.includes(card.who) || SECRETS.includes(card.who)) && !save.met.includes(card.who) ? { met: [...save.met, card.who] } : {});
     if (card.who === 'gerald') sfx('honk');
     setReveal({ key: Date.now(), card, dir, before: s.meters, after: next.meters, pct: crowd[card.id]?.[dir], recalled: next.phase === 'recalled', goals: next.objectivesDone.filter((g) => !s.objectivesDone.includes(g)).map((g) => pack.objectives.find((o) => o.id === g)?.text ?? g) });
   };
@@ -826,7 +830,7 @@ export function App() {
   who.mayor = s.profile?.mayor ?? save.lastProfile?.mayor ?? 'Mayor';
   who.folk = s.profile?.folk ?? save.lastProfile?.folk ?? 'Bad Towners';
   const card = s.phase === 'card' && s.current ? findCard(pack, s.current) : null;
-  const meet = !!card && ODDBALLS.includes(card.who) && !save.met.includes(card.who);
+  const meet = !!card && (ODDBALLS.includes(card.who) || SECRETS.includes(card.who)) && !save.met.includes(card.who);
   const today = dayScore(s, s.day);
   const choice = card && preview ? card.options[preview] ?? null : null;
   const dayName = DAY_NAMES[s.day - 1]!;

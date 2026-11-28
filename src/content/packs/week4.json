@@ -5725,6 +5725,145 @@
     }
    },
    "followUp": true
+  },
+  {
+   "id": "w4sc1",
+   "who": "barry",
+   "story": "secret_barry",
+   "text": "(Something very large and very hairy is standing in the snow outside City Hall. It's a yeti. His name is Barry. He's shy.) Invite him in?",
+   "options": {
+    "right": {
+     "label": "Yes. Come in, Barry.",
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "He ducked through the door. Mostly. He's sitting by the radiator. Blushing.",
+     "then": [
+      [
+       "w4sc2a",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Stay very still.",
+     "effects": {
+      "law": 5,
+      "people": 5
+     },
+     "reaction": "You stood still. So did Barry. After an hour, he waved. You waved back. Friends.",
+     "then": [
+      [
+       "w4sc2b",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4sc2a",
+   "who": "barry",
+   "story": "secret_barry",
+   "text": "(Barry would like to help with the Big Freeze. He can carry the snowplough. Or be the snowplough. He's very warm.) Let him plough?",
+   "options": {
+    "right": {
+     "label": "Yes. Plough, Barry.",
+     "effects": {
+      "business": 10
+     },
+     "reaction": "Every street cleared by lunch. Shops are open. Barry is humming. Bev is jealous.",
+     "then": [
+      [
+       "w4sc3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Rest by the fire.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "He made everyone cocoa instead. Huge hands. Tiny cups. Very careful.",
+     "then": [
+      [
+       "w4sc3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4sc2b",
+   "who": "marge",
+   "story": "secret_barry",
+   "text": "Mayor, there are reports of a yeti. Huge footprints by the school. The Bugle has a blurry photo. Can we print it?",
+   "options": {
+    "right": {
+     "label": "Yes. Print it.",
+     "effects": {
+      "press": 5,
+      "people": 5
+     },
+     "reaction": "'YETI IN BAD TOWN'. Barry read it. He's embarrassed. And thrilled.",
+     "then": [
+      [
+       "w4sc3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Leave him be.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "No story. Barry left a thank-you footprint. It's eight feet long.",
+     "then": [
+      [
+       "w4sc3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4sc3",
+   "who": "barry",
+   "story": "secret_barry",
+   "text": "(The thaw is coming. Barry has to go back up Bad Hill. He's knitted you something enormous. A scarf. For a building.) Accept it?",
+   "options": {
+    "right": {
+     "label": "Yes. Thank you, Barry.",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "City Hall wears it now. Warmest building in the county. Barry waves from the hill.",
+     "set": [
+      "secret_done_barry"
+     ]
+    },
+    "left": {
+     "label": "No, you keep it.",
+     "effects": {
+      "people": 5,
+      "business": 5
+     },
+     "reaction": "He wrapped it round Toby. Toby's delighted. Barry went home warmer than he came.",
+     "set": [
+      "secret_done_barry"
+     ]
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [
@@ -5934,5 +6073,14 @@
   "Tomorrow: every pipe in town is frozen.",
   "Tomorrow: Big Carl's pool is ice.",
   "Tomorrow, the last day: the Winter Ball. The Cheese has an invitation."
- ]
+ ],
+ "secret": {
+  "who": "barry",
+  "start": "w4sc1",
+  "rule": [
+   "left",
+   "left"
+  ],
+  "hint": "Something big and shy on Bad Hill trusts a mayor who says no to the morning and no to the law. Three days running."
+ }
 }

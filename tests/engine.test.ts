@@ -406,3 +406,52 @@ describe('after hours', () => {
     expect(s.overnight).toBeUndefined();
   });
 });
+
+describe('secret characters', () => {
+  // answer the day's opener and law per `want` (null: steady), everything else steady; returns the state after `days` days
+  const play = (p: typeof pack, seed: string, want: (day: number) => boolean, days: number) => {
+    let s = reduce(newTerm(weekIdFor(PACKS.indexOf(p)), seed, p), { type: 'setup', profile: { mayor: 'M', folk: 'F', base: 'people' } }, p);
+    while (s.phase !== 'results' && s.day <= days) {
+      if (s.phase !== 'card') { if (s.day === days) break; s = reduce(s, { type: 'next' }, p); continue; }
+      const c = findCard(p, s.current!);
+      const i = c.day === s.day ? (c.slot === 0 ? 0 : c.slot === 7 ? 1 : null) : null;
+      const rule = p.secret!.rule;
+      const dir: Dir = i !== null ? (want(s.day) ? rule[i] : rule[i] === 'left' ? 'right' : 'left') : steadyIn(p, s);
+      s = reduce(s, { type: 'swipe', dir }, p);
+    }
+    return s;
+  };
+  for (const p of PACKS) {
+    it(`${p.id}: three days running of the secret answers brings ${p.secret!.who}; a broken run does not`, () => {
+      const sec = p.secret!;
+      // the opener and law exist every day and offer the rule's answers
+      for (let d = 1; d <= 7; d++) for (const [slot, i] of [[0, 0], [7, 1]] as const) {
+        const c = p.cards.find((x) => x.day === d && x.slot === slot)!;
+        expect(c.options[sec.rule[i]], `${p.id} day ${d} slot ${slot}`).toBeTruthy();
+      }
+      let hit = 0;
+      for (let k = 0; k < 12 && !hit; k++) {
+        const s = play(p, `sec${k}`, () => true, 3);
+        if (s.recalledDays.some((d) => d <= 3)) continue; // a day cut short before its law breaks the run
+        expect(s.flags[`secret:${sec.who}`], `${p.id} seed ${k}`).toBe(true);
+        expect(s.seen.includes(sec.start) || s.queue.some((q) => q.cardId === sec.start)).toBe(true);
+        hit++;
+      }
+      expect(hit).toBe(1);
+      const broken = play(p, 'sec-broken', (d) => d !== 2, 4);
+      expect(broken.flags[`secret:${sec.who}`]).toBeUndefined();
+      // the full three-card story is there: start -> one of two middles -> finale
+      const start = findCard(p, sec.start);
+      const mids = Object.values(start.options).map((o) => o!.then![0]![0]);
+      expect(new Set(mids).size).toBe(2);
+      for (const m of mids) expect(Object.values(findCard(p, m).options).every((o) => o!.then?.length)).toBe(true);
+    });
+  }
+  it("Randy's days never count towards a secret", () => {
+    const p = PACKS[0]!;
+    let s = reduce(newTerm(weekIdFor(0), 'randy-sec', p), { type: 'setup', profile: { mayor: 'M', folk: 'F', base: 'people' } }, p);
+    s = coverMissedDays(s, p, 5);
+    expect(Object.keys(s.flags).some((f) => f.startsWith('__key:') || f.startsWith('secret:'))).toBe(false);
+    expect(s.flags.__randy).toBeUndefined();
+  });
+});

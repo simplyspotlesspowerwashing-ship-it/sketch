@@ -6989,6 +6989,145 @@
     }
    },
    "followUp": true
+  },
+  {
+   "id": "w1sc1",
+   "who": "moira",
+   "story": "secret_moira",
+   "text": "(Your office floor lifts. A mole in a tiny hard hat climbs out. She's Moira. She's lived under City Hall since 1903. She likes you.) Shake her paw?",
+   "options": {
+    "right": {
+     "label": "Yes. Welcome, Moira.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "She shook firmly. Then showed you a map of every tunnel under town. There are a lot.",
+     "then": [
+      [
+       "w1sc2a",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Back in the hole.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "She went. Then came up again under Doug's chair. Doug is in the tunnels now.",
+     "then": [
+      [
+       "w1sc2b",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1sc2a",
+   "who": "moira",
+   "story": "secret_moira",
+   "text": "Moira here. My tunnels go everywhere. Under the bank. Under Chad's. Under the vault. Want a shortcut to anywhere in town?",
+   "options": {
+    "right": {
+     "label": "Yes. Give me a tunnel.",
+     "effects": {
+      "treasury": 5,
+      "people": 5
+     },
+     "reaction": "There's a trapdoor under your desk now. The bakery is ninety seconds away.",
+     "then": [
+      [
+       "w1sc3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. I'll use the door.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "She's a bit hurt. She's left you a hard hat anyway. Just in case.",
+     "then": [
+      [
+       "w1sc3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1sc2b",
+   "who": "doug",
+   "story": "secret_moira",
+   "text": "Mayor, I'm in the tunnels under town. A mole called Moira is giving me a tour. She's lovely. Can I stay down here a bit?",
+   "options": {
+    "right": {
+     "label": "Yes. Enjoy it, Doug.",
+     "effects": {
+      "treasury": 5,
+      "people": 5
+     },
+     "reaction": "He came back a day later. Muddy. Radiant. He found £400 in old coins down there.",
+     "then": [
+      [
+       "w1sc3",
+       2
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Come up.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "He came up through the fountain. Moira waved him off. He misses her already.",
+     "then": [
+      [
+       "w1sc3",
+       2
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w1sc3",
+   "who": "moira",
+   "story": "secret_moira",
+   "text": "(Moira is leaving. Underground business in the next town. She offers you what moles give their friends: a worm. A nice one.) Accept the worm?",
+   "options": {
+    "right": {
+     "label": "Yes. Thank you, Moira.",
+     "effects": {
+      "people": 10
+     },
+     "reaction": "You keep it in a jar. It's called Kevin II. Moira is very proud of you.",
+     "set": [
+      "secret_done_moira"
+     ]
+    },
+    "left": {
+     "label": "No, but thank you.",
+     "effects": {
+      "people": 5,
+      "law": 5
+     },
+     "reaction": "She ate it herself. Hugged your ankle. Then she was gone. Into the ground.",
+     "set": [
+      "secret_done_moira"
+     ]
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [
@@ -7168,5 +7307,14 @@
   "Tomorrow: Bev has had the scooter looked at.",
   "Tomorrow: a pothole gets a jury summons.",
   "Tomorrow, the last day: ten thousand geese are in the air."
- ]
+ ],
+ "secret": {
+  "who": "moira",
+  "start": "w1sc1",
+  "rule": [
+   "right",
+   "left"
+  ],
+  "hint": "Someone under City Hall likes a mayor who says yes to the morning and no to the law. Three days running."
+ }
 }
