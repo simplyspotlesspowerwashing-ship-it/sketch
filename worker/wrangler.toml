@@ -3,8 +3,8 @@ main = "src/index.ts"
 compatibility_date = "2026-11-01"
 
 [vars]
-# Comma-separated origins allowed to call the service, e.g. "https://badtown.pages.dev". "*" allows any.
-ALLOWED_ORIGIN = "*"
+# Comma-separated origins allowed to call the service. Only the game's own site may send votes.
+ALLOWED_ORIGIN = "https://badtowngame.com,https://www.badtowngame.com"
 
 [[d1_databases]]
 binding = "DB"

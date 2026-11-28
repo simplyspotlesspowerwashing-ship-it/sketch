@@ -76,10 +76,10 @@ npm run crowd                     # regenerate simulated crowd shares for every 
 ```
 
 1. **Stats service** (optional but recommended): deploy `worker/` (see `worker/README.md`). It gives you a URL.
-2. **Set the launch Monday** in `src/content/index.ts` (`LAUNCH_MONDAY`) to the Monday you go live.
+2. **Domain:** the game lives at https://badtowngame.com (set in `index.html` for link previews, and in `worker/wrangler.toml` as the only site allowed to send votes).
 3. **Build:** `VITE_STATS_URL=<worker url> npm run build`. Without the stats URL the game still works; the "% of mayors" figures are then simulated estimates and are labelled "estimate". Testing shortcuts (skip a day, dev panel) only exist in `npm run dev` and `npm run build:preview`, never in `npm run build`.
 4. **Host `dist/`** on any static host. On Cloudflare Pages: build command `npm run build`, output `dist`, and the environment variable `VITE_STATS_URL`. `public/_headers` sets caching and security headers there.
-5. **Share preview image:** `og:image` in `index.html` is relative (`/og.png`). Some sites need a full URL: change it to `https://<your domain>/og.png` once you know the domain.
+5. **Share preview image:** `og:image` points at https://badtowngame.com/og.png.
 
 What players' devices store: one save in `localStorage` (their progress, names and scrapbook). Nothing else. The game loads nothing from third parties: fonts and art are bundled.
 

@@ -17,7 +17,7 @@ npx wrangler d1 execute bad-town-stats --remote --file=schema.sql
 npx wrangler deploy
 ```
 
-It prints the worker's URL, for example `https://bad-town-stats.<you>.workers.dev`. In `wrangler.toml`, set `ALLOWED_ORIGIN` to the game's address (for example `https://badtown.pages.dev`) and deploy again.
+It prints the worker's URL, for example `https://bad-town-stats.<you>.workers.dev`. `ALLOWED_ORIGIN` in `wrangler.toml` is already set to `https://badtowngame.com` and `https://www.badtowngame.com`.
 
 Build the game with that URL:
 
