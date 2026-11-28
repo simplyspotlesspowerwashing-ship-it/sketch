@@ -2614,7 +2614,7 @@
      "reaction": "The post is waiting. In Mr Flaps. He's very round. He's practically a snowman.",
      "then": [
       [
-       "w4o1b",
+       "w4o1n",
        1
       ]
      ]
@@ -2663,7 +2663,7 @@
      "reaction": "Stopped. He's eaten the 'Stop' sign on his way past.",
      "then": [
       [
-       "w4o2b",
+       "w4o2s",
        1
       ]
      ]
@@ -2726,7 +2726,7 @@
      "reaction": "It fell through her. Into the basement. Wendy says it's the thought that counts.",
      "then": [
       [
-       "w4o3b",
+       "w4o3y",
        1
       ]
      ]
@@ -2803,7 +2803,7 @@
      "reaction": "He's moved to the lamp in the corridor. He looks at you every time you pass.",
      "then": [
       [
-       "w4o4b",
+       "w4o4n",
        1
       ]
      ]
@@ -2851,7 +2851,7 @@
      "reaction": "No school. The children built Hoot a snow nest. He's asleep in it. Peacefully.",
      "then": [
       [
-       "w4o5b",
+       "w4o5y",
        1
       ]
      ]
@@ -2928,7 +2928,7 @@
      "reaction": "He's dropped every icicle on the town hall steps. One at a time. Pointedly.",
      "then": [
       [
-       "w4o6b",
+       "w4o6n",
        1
       ]
      ]
@@ -5572,6 +5572,156 @@
       "law": -5
      },
      "reaction": "The snowball walked free. It rolled, really. Biscuit is watching it. Closely."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o1n",
+   "who": "pam",
+   "story": "flaps4",
+   "text": "The PTA's winter fair invitations are stuck inside Mr Flaps. The fair is tomorrow. He won't open. Squeeze him?",
+   "options": {
+    "right": {
+     "label": "Yes. Gently squeeze.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Out came 400 invitations and a herring. The fair was packed."
+    },
+    "left": {
+     "label": "No. Let him rest.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Nobody came to the fair. Except Mr Flaps. He's still full of invitations."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o2s",
+   "who": "pebbles",
+   "story": "pebbles4",
+   "text": "(Since you stopped him eating carrots, Councillor Pebbles has tabled a motion. It's a carrot. He's guarding it.) Pass the carrot motion?",
+   "options": {
+    "right": {
+     "label": "Yes. Pass it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Passed. He ate the motion. A precedent has been set."
+    },
+    "left": {
+     "label": "No. Carrots are for snowmen.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He ate the agenda instead. New motion: 'Carrots'. Seconded by Gerald."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o3y",
+   "who": "wendy",
+   "story": "wendy5",
+   "text": "Wooo. The hot water bottle fell through me into the basement. It's still down there. Warm. I'd like to live with it. Can I have the basement?",
+   "options": {
+    "right": {
+     "label": "Yes. Basement's yours.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "She's moved in. It's the warmest room in City Hall. Staff queue to file things."
+    },
+    "left": {
+     "label": "No. That's storage.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "She's haunting the storage boxes. Files keep rearranging themselves. Helpfully."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o4n",
+   "who": "trevor",
+   "story": "trevor4",
+   "text": "(Trevor has brought forty friends. All on the corridor lamp. Nobody can see the corridor. Doug walked into a wall.) Get a brighter lamp?",
+   "options": {
+    "right": {
+     "label": "Yes. Brighter lamp.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "Brighter lamp. Eighty moths now. The corridor glows."
+    },
+    "left": {
+     "label": "No. Feel your way.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Everyone walks the corridor with their arms out. It's quite friendly."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o5y",
+   "who": "timmy",
+   "story": "hoot5",
+   "text": "Dear Mayor. The snow day was the best day ever. Can every day be a snow day? It isn't snowing. Professor Hoot says that's fine.",
+   "options": {
+    "right": {
+     "label": "Yes. One more.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "Another snow day. No snow. Everyone built snowmen out of mashed potato."
+    },
+    "left": {
+     "label": "No. School tomorrow.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "Timmy has written to you in snow. On your car. It says 'MEAN'."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w4o6n",
+   "who": "toby",
+   "story": "toby4",
+   "text": "(Toby is still cold. He's dropped every icicle on the steps. Now a branch. On your car. He'd settle for a hat.) Knit him a hat?",
+   "options": {
+    "right": {
+     "label": "Yes. A hat for Toby.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "A forty-foot bobble hat. Toby has stopped dropping things. Mostly."
+    },
+    "left": {
+     "label": "No. Trees don't wear hats.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Another branch. On Doug's car this time. Doug says it's personal."
     }
    },
    "followUp": true

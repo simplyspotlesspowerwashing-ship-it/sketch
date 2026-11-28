@@ -110,10 +110,10 @@
       "law": 5,
       "people": -10
      },
-     "reaction": "They've taken the bakery. They're baking. For themselves. They dug the pond anyway.",
+     "reaction": "They've taken the bakery. They're baking. For themselves. And digging. Somewhere.",
      "then": [
       [
-       "g3",
+       "g3c",
        1
       ]
      ]
@@ -482,7 +482,7 @@
    "id": "r5",
    "who": "randy",
    "story": "randy",
-   "text": "The cousins loved you, boss. They've moved into City Hall. All of them. They say they're 'consultants'. Hire them?",
+   "text": "The cousins loved the rally, boss. They've moved into City Hall. All of them. They say they're 'consultants'. Hire them?",
    "options": {
     "right": {
      "label": "Hire the cousins",
@@ -993,7 +993,7 @@
      },
      "reaction": "Randy's hat is very tall and very orange. People are asking questions.",
      "next": [
-      "k6"
+      "k6b"
      ]
     }
    },
@@ -1240,7 +1240,7 @@
      },
      "reaction": "Then I'll race here, dear. Everywhere. All the time. Sleep lightly.",
      "next": [
-      "b6"
+      "b6n"
      ]
     }
    },
@@ -1342,7 +1342,7 @@
       "people": -10,
       "law": 5
      },
-     "reaction": "The knitted Kevin has been placed on the spot. Traffic goes round it.",
+     "reaction": "He's gone. Then overnight he came back. On his own. Holes do that, apparently.",
      "then": [
       [
        "p3",
@@ -2241,7 +2241,7 @@
       "treasury": -5,
       "law": 5
      },
-     "reaction": "Nora put it out with the soup machine. The gym is a bowl now.",
+     "reaction": "Nora tried the soup machine. The volcano drank the soup. It's angrier now. And seasoned.",
      "then": [
       [
        "x6c",
@@ -2889,7 +2889,7 @@
      "reaction": "I offered it chips. It took the chips and the report. Classic gull.",
      "then": [
       [
-       "sg2",
+       "sg2n",
        1
       ]
      ]
@@ -3812,7 +3812,7 @@
      "reaction": "He's filed a grievance. A long sad howl. The whole station is crying.",
      "then": [
       [
-       "bi2",
+       "bi2n",
        1
       ]
      ]
@@ -3872,7 +3872,7 @@
      "reaction": "He's filming it anyway. On the library computer. It's just honking. Huge numbers.",
      "then": [
       [
-       "gt2",
+       "gt2n",
        1
       ]
      ]
@@ -3919,7 +3919,7 @@
      "reaction": "It's beautiful. The scone has a tiny skull on it too. Detail.",
      "then": [
       [
-       "bt2",
+       "bt2y",
        1
       ]
      ]
@@ -4275,7 +4275,7 @@
      "reaction": "Randy wept tiny raccoon tears. Into a bin bag. He's keeping it. 'For the next statue.'",
      "then": [
       [
-       "bn2",
+       "bn2n",
        1
       ]
      ]
@@ -5579,7 +5579,7 @@
      "reaction": "The children are asleep at their desks. Hoot is wide awake. He has never been happier.",
      "then": [
       [
-       "ho2",
+       "ho2y",
        1
       ]
      ]
@@ -5642,7 +5642,7 @@
      "reaction": "A lovely service. The lamp wore a veil. Trevor wept. Gerald gave a speech. It was mostly honking.",
      "then": [
       [
-       "tv2",
+       "tv2y",
        1
       ]
      ]
@@ -5719,7 +5719,7 @@
      "reaction": "Toby has dropped every leaf in the park. On purpose. In one go. It's a protest. It's very crunchy.",
      "then": [
       [
-       "tb2",
+       "tb2n",
        1
       ]
      ]
@@ -6713,6 +6713,282 @@
    },
    "day": 7,
    "slot": 12
+  },
+  {
+   "id": "g3c",
+   "who": "gerald",
+   "story": "goose",
+   "text": "HONK. (The geese have built their own pond. In the car park. Your parking space is in the middle of it. Gerald would like a grand opening.) Open it?",
+   "options": {
+    "right": {
+     "label": "Yes. Open it.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Gerald cut the ribbon with his face. You park at the bakery now.",
+     "then": [
+      [
+       "g5",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Drain it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Barb drained it. The geese refilled it overnight. With their beaks. It's lovely.",
+     "then": [
+      [
+       "g5",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "k6b",
+   "who": "randy",
+   "story": "cone",
+   "text": "Boss. I've still got the cone. On my head. People are leaving flowers at its empty spot. It's surging on the sympathy vote. Give it back now?",
+   "options": {
+    "right": {
+     "label": "Yes. Give it back.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Back at its post. Randy's head looks very small now. The cone looks taller."
+    },
+    "left": {
+     "label": "No. It suits you.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Randy is now polling at 9%. As a cone. He's thrilled."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "b6n",
+   "who": "bev",
+   "story": "bev",
+   "text": "I'm staying, dear. So I've raced the bin lorry, the bus and Barb. Won all three. They've each given me a speeding fine. Pay them?",
+   "options": {
+    "right": {
+     "label": "Yes. Pay the fines.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Paid. She's framed the receipts. Next to her trophies. There are a lot of trophies."
+    },
+    "left": {
+     "label": "No. Pay them yourself.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "She paid in coins from 1951. All of them. It took the bank a week to count."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "sg2n",
+   "who": "steve",
+   "story": "gull",
+   "text": "Stormy Steve. You kept my job. Thank you. But the gull is forecasting from the roof anyway. For free. People prefer it. Fight back?",
+   "options": {
+    "right": {
+     "label": "Yes. Fight the gull.",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "Steve forecast from the roof too. Side by side. The gull was right. Steve was wet."
+    },
+    "left": {
+     "label": "No. Let it be.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Steve has gone back to vibes. The gull has a following. And a chip sponsor."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "bi2n",
+   "who": "barb",
+   "story": "biscuit",
+   "text": "Mayor. Since you demoted Biscuit, he's been howling outside the station. All night. The whole street's awake. Can I reinstate him?",
+   "options": {
+    "right": {
+     "label": "Yes. Reinstate him.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Inspector again. He's stopped howling. He's started barking orders. Literally."
+    },
+    "left": {
+     "label": "No. Rules are rules.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "He howled until dawn. Then he got a job at the fire station. They adore him."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "gt2n",
+   "who": "linda",
+   "story": "goosetv",
+   "text": "Linda. Gerald is filming his show on the library computer. Every day. It's just honking. The library is packed. Unplug him?",
+   "options": {
+    "right": {
+     "label": "Yes. Unplug the goose.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Unplugged. He's filming on Brayden's phone now. The honking has gone viral."
+    },
+    "left": {
+     "label": "No. Let him film.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "'Gerald's Kitchen' is now 'Gerald's Library'. It's still about bread."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "bt2y",
+   "who": "bev",
+   "story": "tattoo",
+   "text": "The council paid for my tattoo, dear. So the whole bowls club wants one. Forty skulls. Forty scones. On the council. Pay?",
+   "options": {
+    "right": {
+     "label": "Yes. Fund the club.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Forty pensioners with skull tattoos. The bowls club is terrifying. They're winning everything."
+    },
+    "left": {
+     "label": "No. One was enough.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "They've drawn the skulls on in biro. They're very good. Bev's is still better."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "bn2n",
+   "who": "randy",
+   "story": "binstatue",
+   "text": "Boss. You took your statue down. I kept the bags. I've made a statue of me instead. Smaller. Smellier. Can it stay?",
+   "options": {
+    "right": {
+     "label": "Yes. Randy's statue.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "It's in the square. It's been eaten. By Randy. He calls it 'a self-portrait in motion'."
+    },
+    "left": {
+     "label": "No. Bin it.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Binned. Randy's in the bin with it. He says he's just visiting."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "ho2y",
+   "who": "pam",
+   "story": "hoot",
+   "text": "The PTA would like to complain. Since night school started, the children sleep all day. In assembly. In PE. Timmy slept in lunch. Back to days?",
+   "options": {
+    "right": {
+     "label": "Yes. Back to days.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Back to days. Hoot is furious. He's asleep, so it's quiet fury."
+    },
+    "left": {
+     "label": "No. Night owls.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The children have gone nocturnal. They hoot at bedtime. Parents are exhausted."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "tv2y",
+   "who": "trevor",
+   "story": "trevor",
+   "text": "(Trevor and the lamp have been married a week. Trevor would like a honeymoon. Somewhere bright. He's suggested the lighthouse.) Fund it?",
+   "options": {
+    "right": {
+     "label": "Yes. The lighthouse.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "He went round the lighthouse for a week. He came back dizzy and glowing."
+    },
+    "left": {
+     "label": "No. Stay local.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "They honeymooned under the chip shop heat lamp. Lorraine was furious."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "tb2n",
+   "who": "toby",
+   "story": "toby",
+   "text": "(Toby is still protesting. He's dropped his leaves, his conkers, and now a branch. On your car. He'd settle for a sea painting.) Commission one?",
+   "options": {
+    "right": {
+     "label": "Yes. Paint him the sea.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Bev painted it. It's mostly blue. Toby's propped it against his trunk. He's calmer."
+    },
+    "left": {
+     "label": "No. Enough.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Another branch. Through the council chamber roof. Pebbles is eating it."
+    }
+   },
+   "followUp": true
   }
  ],
  "objectives": [

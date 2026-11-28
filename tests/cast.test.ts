@@ -44,3 +44,22 @@ describe('faction faces', () => {
     expect(n).toBeGreaterThan(20);
   });
 });
+
+describe('storylines', () => {
+  it('every link points at a real card, and every storyline has at least one choice that leads somewhere different', () => {
+    for (const p of PACKS) {
+      const ids = new Set(p.cards.map((c) => c.id));
+      const links = (o: { then?: [string, number][]; next?: string[] }) => [...(o.then ?? []).map(([t]) => t), ...(o.next ?? [])];
+      const stories = new Map<string, typeof p.cards>();
+      for (const c of p.cards) {
+        for (const o of Object.values(c.options)) for (const t of links(o!)) expect(ids.has(t), `${p.id} ${c.id} -> ${t}`).toBe(true);
+        if (c.story && !c.sneak && !c.ribbon) stories.set(c.story, [...(stories.get(c.story) ?? []), c]);
+      }
+      for (const [name, cs] of stories) {
+        if (!cs.some((c) => Object.values(c.options).some((o) => links(o!).length))) continue;
+        const branches = cs.some((c) => new Set(Object.values(c.options).map((o) => links(o!).sort().join(','))).size > 1);
+        expect(branches, `${p.id} story '${name}' has only one path`).toBe(true);
+      }
+    }
+  });
+});

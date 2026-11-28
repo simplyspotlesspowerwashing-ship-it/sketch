@@ -1133,7 +1133,7 @@
       "law": 5,
       "people": -5
      },
-     "reaction": "Recounted. There are no ballots. Kevin wins by the votes of Pebbles. He's in shock. He's a hole.",
+     "reaction": "Recounted. With no ballots left, it's somehow a three-way tie. Pebbles is chewing smugly.",
      "then": [
       [
        "w3m7_3",
@@ -2643,7 +2643,7 @@
      "reaction": "It was disqualified. The vault is humming. Angrily.",
      "then": [
       [
-       "w3o1b",
+       "w3o1n",
        1
       ]
      ]
@@ -2705,7 +2705,7 @@
      "reaction": "He's sponsored the next town's festival instead. Their signs are lovely.",
      "then": [
       [
-       "w3o2b",
+       "w3o2n",
        1
       ]
      ]
@@ -2767,7 +2767,7 @@
      "reaction": "It's serving three weeks. It's bouncing the whole time. The other prisoners love it.",
      "then": [
       [
-       "w3o3b",
+       "w3o3n",
        1
       ]
      ]
@@ -2816,7 +2816,7 @@
      "reaction": "Shut. Lorraine has relocated to your roof. With the chips. She's open till late.",
      "then": [
       [
-       "w3o4b",
+       "w3o4s",
        1
       ]
      ]
@@ -2891,7 +2891,7 @@
      "reaction": "He held it at noon. Asleep. The answer to every question was 'who'. Most were right.",
      "then": [
       [
-       "w3o5b",
+       "w3o5n",
        1
       ]
      ]
@@ -2954,7 +2954,7 @@
      "reaction": "He's dropped every leaf on the real maypole. One go. Very precise.",
      "then": [
       [
-       "w3o6b",
+       "w3o6n",
        1
       ]
      ]
@@ -5795,6 +5795,156 @@
       "law": -5
      },
      "reaction": "Clive stays. A small plaque reads 'CLIVE. CONE. FESTIVAL CHAMPION (DISPUTED)'."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3o1n",
+   "who": "cheese",
+   "story": "cheese3",
+   "text": "(Since its disqualification, the cheese has been humming in the vault. Loudly. Doug says it's a protest song. It's catchy.) Reinstate it?",
+   "options": {
+    "right": {
+     "label": "Yes. Reinstate it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Reinstated. It won. By doing nothing. Again."
+    },
+    "left": {
+     "label": "No. Rules are rules.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The humming is on every radio in town. It's number one."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3o2n",
+   "who": "nutkins",
+   "story": "nutkins3",
+   "text": "Mr Nutkins. The next town's Acornfest is a triumph. Yours is not. I'll sponsor you after all. At double the price. Agreed?",
+   "options": {
+    "right": {
+     "label": "Yes. Double it.",
+     "effects": {
+      "business": 5,
+      "treasury": -5
+     },
+     "reaction": "Acornfest II. The signs are bigger. Mr Nutkins sits on the biggest one."
+    },
+    "left": {
+     "label": "No. Still no.",
+     "effects": {
+      "people": 5,
+      "business": -5
+     },
+     "reaction": "He's sent you a postcard from the next town's festival. It's an acorn."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3o3n",
+   "who": "biscuit",
+   "story": "biscuit3",
+   "text": "(The bouncy castle is still in a cell. Still bouncing. Inspector Biscuit is bouncing too. It's the best day of his career.) Let him keep it?",
+   "options": {
+    "right": {
+     "label": "Yes. Keep the castle.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The station is a bouncy castle now. Arrests are up. Everyone bounces in."
+    },
+    "left": {
+     "label": "No. Release it.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Released. Biscuit watched it go. One small, sad bounce."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3o4s",
+   "who": "lorraine",
+   "story": "lorraine3",
+   "text": "(Lorraine's chip stall is on your roof now. The queue goes down your stairs. Your office is the waiting room.) Evict her again?",
+   "options": {
+    "right": {
+     "label": "Yes. Evict her.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Evicted. She's moved into your car. It's a hatchback stall now."
+    },
+    "left": {
+     "label": "No. Let her trade.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "Your office is the busiest chip shop in town. You work in the queue."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3o5n",
+   "who": "linda",
+   "story": "hoot3",
+   "text": "Linda. Professor Hoot held his quiz at noon. Asleep. In the library. Snoring. Everyone whispered the answers. Allow a night rematch?",
+   "options": {
+    "right": {
+     "label": "Yes. Night rematch.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "3am. Hoot was magnificent. Nobody else was awake. He won."
+    },
+    "left": {
+     "label": "No. Once is enough.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He's still asleep in the library. Linda has put a 'Quiet please' sign on him."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "w3o6n",
+   "who": "toby",
+   "story": "toby3",
+   "text": "(Toby is still sulking about the maypole. He's grown three feet in protest. Sideways. Into the high street.) Trim him?",
+   "options": {
+    "right": {
+     "label": "Yes. Trim Toby.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Trimmed. He dropped every conker on the tree surgeon. One by one."
+    },
+    "left": {
+     "label": "No. Go round him.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The high street goes round Toby now. He's very pleased with the new route."
     }
    },
    "followUp": true

@@ -486,7 +486,7 @@
      "reaction": "It's started knocking. From under the pond. In a pattern. Linda says it's Morse. It says 'OI'.",
      "then": [
       [
-       "tc2",
+       "tc2n",
        1
       ]
      ]
@@ -874,7 +874,7 @@
      "reaction": "Randy's judging. He's given everything a ten. He's eaten the scorecards. All of them tens.",
      "then": [
       [
-       "tl2",
+       "tl2r",
        1
       ]
      ]
@@ -1113,7 +1113,7 @@
      "effects": {
       "people": -10
      },
-     "reaction": "Gerald is standing in the empty pond. For hours. Honking softly. It's raining. Of course it is.",
+     "reaction": "Gerald waited in the empty pond. By dawn the pedalo was back. Nobody knows how. Wedding's on.",
      "then": [
       [
        "gw3",
@@ -1301,7 +1301,7 @@
    "id": "wx1c",
    "who": "doug",
    "story": "hiccups",
-   "text": "The hiccups have stopped. Except mine. Mine never stopped. They started in 1994. Can I have the afternoon off?",
+   "text": "The town's hiccups have finally stopped. Except mine. Mine never stopped. They started in 1994. Can I have the afternoon off?",
    "options": {
     "right": {
      "label": "Yes. Go home, Doug.",
@@ -2427,7 +2427,7 @@
      "reaction": "Chad's using them as napkins. In public. He wants you to see.",
      "then": [
       [
-       "ws_mt2",
+       "ws_mt2n",
        1
       ]
      ]
@@ -2573,7 +2573,7 @@
      "reaction": "Steve is back. He's furious. He's forecasting 'betrayal'. With a light breeze.",
      "then": [
       [
-       "ws_tw2",
+       "ws_tw2n",
        1
       ]
      ]
@@ -2675,7 +2675,7 @@
      "reaction": "It left. It looked back once. It knew. You'll never know what it knew.",
      "then": [
       [
-       "ws_ow2",
+       "ws_ow2e",
        1
       ]
      ]
@@ -2856,7 +2856,7 @@
      "reaction": "He's standing outside the door. You can see his tip through the glass. He's very patient.",
      "then": [
       [
-       "ws_cl2",
+       "ws_cl2n",
        1
       ]
      ]
@@ -3294,7 +3294,7 @@
      "reaction": "The small pigeon has served you papers. They're crumbs. Legally binding crumbs.",
      "then": [
       [
-       "ws_pg2",
+       "ws_pg2n",
        1
       ]
      ]
@@ -3409,7 +3409,7 @@
      "reaction": "You moved the second cone. Clive has turned slightly. Towards you. Nobody saw him move.",
      "then": [
       [
-       "ws_cn2",
+       "ws_cn2n",
        1
       ]
      ]
@@ -3612,7 +3612,7 @@
      "reaction": "Pebbles is filibustering. Six hours of bleating. Nobody can leave. Bev's asleep.",
      "then": [
       [
-       "wpb2",
+       "wpb2n",
        1
       ]
      ]
@@ -3676,7 +3676,7 @@
      "reaction": "He's holding 9,000 cards. He's sitting on the post office roof like a large egg.",
      "then": [
       [
-       "wpf2",
+       "wpf2n",
        1
       ]
      ]
@@ -3738,7 +3738,7 @@
      "reaction": "Derek's thrilled. He says 'boo', then apologises. Everyone loves Derek.",
      "then": [
       [
-       "wwn2",
+       "wwn2d",
        1
       ]
      ]
@@ -3801,7 +3801,7 @@
      "reaction": "He's guarding every puddle himself. Running. In flippers. He's surprisingly fast.",
      "then": [
       [
-       "wcl2",
+       "wcl2n",
        1
       ]
      ]
@@ -3877,7 +3877,7 @@
      "reaction": "Shut. She's moved it to your roof. Your car keys are up there. And your car, somehow.",
      "then": [
       [
-       "wlr2",
+       "wlr2s",
        1
       ]
      ]
@@ -3953,7 +3953,7 @@
      "reaction": "Normal dinners served. Hoot ate the dinner lady's sandwich. He apologised in a long, sad hoot.",
      "then": [
       [
-       "who2",
+       "who2n",
        1
       ]
      ]
@@ -4001,7 +4001,7 @@
      "reaction": "Every call has Trevor in it. He's on speaker. He says nothing. People find it calming.",
      "then": [
       [
-       "wtv2",
+       "wtv2y",
        1
       ]
      ]
@@ -4078,7 +4078,7 @@
      "reaction": "He's leaning towards the finish line. Very slowly. Very determined. Marge has a weekly update.",
      "then": [
       [
-       "wtb2",
+       "wtb2n",
        1
       ]
      ]
@@ -5814,6 +5814,402 @@
       "people": -5
      },
      "reaction": "She's haunting the ice cream van now. It plays its tune backwards."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "tc2n",
+   "who": "linda",
+   "story": "capsule",
+   "text": "Linda. The time capsule is still knocking. Louder. In Morse. I've translated: 'OPEN ME OR I OPEN MYSELF'. Dig it up now?",
+   "options": {
+    "right": {
+     "label": "Yes. Dig it up.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Dug up. The geese charged for moving. In bread. Inside: a cassette, a cheese and a letter.",
+     "then": [
+      [
+       "tc2",
+       1
+      ]
+     ]
+    },
+    "left": {
+     "label": "No. Let it try.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "It opened itself. A cassette, a slice of cheese and a letter crawled onto your desk.",
+     "then": [
+      [
+       "tc2",
+       1
+      ]
+     ]
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "tl2r",
+   "who": "randy",
+   "story": "talent",
+   "text": "Boss. I'm judging. I've put everyone through. All forty acts. Including a bin. And a man who was just passing. Is that allowed?",
+   "options": {
+    "right": {
+     "label": "Yes. Everyone wins.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Forty winners. Forty trophies. The trophies are bins. Everyone's thrilled. Nobody's sure why."
+    },
+    "left": {
+     "label": "No. Pick one winner.",
+     "effects": {
+      "business": 5,
+      "people": -5
+     },
+     "reaction": "He picked the bin. The bin has a record deal. Randy is its manager."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "ws_mt2n",
+   "who": "nutkins",
+   "story": "mint",
+   "text": "Mr Nutkins. You banned Bad Town Bucks. So I've bought them all. For acorns. I now own your currency. Want it back?",
+   "options": {
+    "right": {
+     "label": "Yes. Buy them back.",
+     "effects": {
+      "business": 5
+     },
+     "reaction": "It cost four hundred acorns. Doug went foraging. He's very good at it."
+    },
+    "left": {
+     "label": "No. Keep them.",
+     "effects": {
+      "treasury": 5,
+      "business": -5
+     },
+     "reaction": "The squirrels line their nests with them. Very cosy. Very inflationary."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "ws_tw2n",
+   "who": "steve",
+   "story": "weather",
+   "text": "Stormy Steve. I'm back. Thank you. But the rooster's still on the roof. Crowing the forecast. People check it before me. Can I evict it?",
+   "options": {
+    "right": {
+     "label": "Yes. Evict the rooster.",
+     "effects": {
+      "press": 5
+     },
+     "reaction": "It's on the bakery now. Still right. Steve forecasts it 'sulking'."
+    },
+    "left": {
+     "label": "No. Share the weather.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Rooster does mornings. Steve does evenings. Both are wrong on Tuesdays."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "ws_ow2e",
+   "who": "linda",
+   "story": "owl",
+   "text": "Linda. Since you evicted the owl, borrowing is up. But every returned book has 'hoo' written inside. Every one. Investigate?",
+   "options": {
+    "right": {
+     "label": "Yes. Investigate.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "It's the owl. It has a library card. Under 'Mr O. Wl'. Linda let it through."
+    },
+    "left": {
+     "label": "No. Hoo cares.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The town has decided 'hoo' is a review. Five hoos is the top score."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "ws_cl2n",
+   "who": "randy",
+   "story": "clive2",
+   "text": "Boss. Clive's been outside your door all week. People think he's the queue. There's a queue behind him now. Forty people. Let them in?",
+   "options": {
+    "right": {
+     "label": "Yes. Open the door.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Forty people, one cone. You saw them all. Clive went last. Said nothing. Very productive."
+    },
+    "left": {
+     "label": "No. Keep it shut.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "The queue is still there. They've brought sandwiches. Clive hasn't moved. He's winning."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "ws_pg2n",
+   "who": "desk",
+   "story": "pigeon2",
+   "text": "Your stapler has gone missing anyway. A trail of crumbs leads up the clock tower. Something up there is cooing smugly. Send someone up?",
+   "options": {
+    "right": {
+     "label": "Yes. Send Carl up.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Carl came down with the stapler. And a pigeon that won't let go. It's on your desk now."
+    },
+    "left": {
+     "label": "No. Buy a new one.",
+     "effects": {
+      "people": 5,
+      "treasury": -5
+     },
+     "reaction": "New stapler. By lunch it was gone. The tower coos louder."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "ws_cn2n",
+   "who": "barb",
+   "story": "cone2",
+   "text": "Mayor. You moved the second cone. Every morning it's back next to Clive. Nobody moves it. Can I chain it up?",
+   "options": {
+    "right": {
+     "label": "Yes. Chain it.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Chained. In the morning the chain was next to Clive. Neatly coiled."
+    },
+    "left": {
+     "label": "No. Let them be.",
+     "effects": {
+      "people": 5,
+      "law": -5
+     },
+     "reaction": "The two cones stand together again. People have started leaving flowers."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wpb2n",
+   "who": "pebbles",
+   "story": "goat2",
+   "text": "(Councillor Pebbles is still filibustering. Day two. He's eaten the agenda, the minutes and a chair. He's eyeing your shoes.) Concede the turnip?",
+   "options": {
+    "right": {
+     "label": "Yes. The turnip passes.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "The turnip passed. Pebbles ate it. Motion complete."
+    },
+    "left": {
+     "label": "No. Hold out.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He ate your shoes. Both. You chaired the rest in socks. Mismatched."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wpf2n",
+   "who": "flaps",
+   "story": "pelican2",
+   "text": "Mr Flaps. I'm still holding 9,000 thank-you cards. On the roof. They're getting heavy. And soggy. Deliver them now?",
+   "options": {
+    "right": {
+     "label": "Yes. Deliver now.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Delivered. A bit soggy. People sent thank-you cards for the thank-you cards."
+    },
+    "left": {
+     "label": "No. Hold on.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He's held them so long he's built a nest. Out of cards. He's sitting on it."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wwn2d",
+   "who": "wendy",
+   "story": "wendy2",
+   "text": "Wooo. Derek's moved in properly. He's put up shelves. In my wall. He says 'boo', then sorry. Can he be a ghost officially?",
+   "options": {
+    "right": {
+     "label": "Yes. Ghost Derek.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Derek has a certificate. He's framed it. He apologises to it."
+    },
+    "left": {
+     "label": "No. He's a man.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Derek has taken his sheet off. He's just Derek now. People still say 'boo' to him."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wcl2n",
+   "who": "carl",
+   "story": "carl2",
+   "text": "Big Carl. I've guarded every puddle myself. All night. In flippers. I'm tired. Can I have one helper? Just one. A small one?",
+   "options": {
+    "right": {
+     "label": "Yes. One helper.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "His helper is Timmy. Timmy has a whistle. Carl is terrified of him."
+    },
+    "left": {
+     "label": "No. Rest instead.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "Carl rested. In a puddle. Guarding it. In his sleep."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wlr2s",
+   "who": "lorraine",
+   "story": "lorraine2",
+   "text": "(Lorraine's Lost Property is on your roof now. She's holding your car keys. She'd like one chip. Per key.) Pay the chips?",
+   "options": {
+    "right": {
+     "label": "Yes. Chips for keys.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "Four keys, four chips. She threw in your car. You don't ask how."
+    },
+    "left": {
+     "label": "No. Get a ladder.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "Carl climbed up. Lorraine took his whistle. Carl came down. You walk now."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "who2n",
+   "who": "hoot",
+   "story": "hoot2",
+   "text": "(Since you said no to mice, Professor Hoot sulks at lunch. He sits on the dinner trolley. Glaring. Service is very slow.) Give him his own menu?",
+   "options": {
+    "right": {
+     "label": "Yes. Hoot's menu.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "His menu: 'one mouse, optional'. Nobody orders it. He's thrilled anyway."
+    },
+    "left": {
+     "label": "No. Same as everyone.",
+     "effects": {
+      "treasury": 5,
+      "people": -5
+     },
+     "reaction": "He ate the jelly. All of it. With great dignity."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wtv2y",
+   "who": "trevor",
+   "story": "trevor2",
+   "text": "(Trevor is still on your phone. He's started pressing buttons. He has rung the next town's mayor. Twice.) Take your phone back?",
+   "options": {
+    "right": {
+     "label": "Yes. Phone back.",
+     "effects": {
+      "law": 5
+     },
+     "reaction": "Trevor has moved to your laptop. He's typed a single word. 'Light'."
+    },
+    "left": {
+     "label": "No. Let him talk.",
+     "effects": {
+      "people": 5,
+      "press": -5
+     },
+     "reaction": "Trevor and the next town's mayor talk every night. He says nothing. They're best friends."
+    }
+   },
+   "followUp": true
+  },
+  {
+   "id": "wtb2n",
+   "who": "toby",
+   "story": "toby2",
+   "text": "(Toby wasn't allowed in the marathon. He's started his own race. It's one tree long. He's in the lead.) Give him a medal anyway?",
+   "options": {
+    "right": {
+     "label": "Yes. Medal for Toby.",
+     "effects": {
+      "people": 5
+     },
+     "reaction": "A wooden medal. He wears it on a branch. He's never looked taller."
+    },
+    "left": {
+     "label": "No. Rules are rules.",
+     "effects": {
+      "law": 5,
+      "people": -5
+     },
+     "reaction": "He's dropped an acorn on each of the race committee. Precisely."
     }
    },
    "followUp": true
