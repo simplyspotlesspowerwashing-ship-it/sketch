@@ -11,6 +11,7 @@ npm run sim         # 5,000 terms per bot -> reports/balance.md
 npm run build:preview && npx vite preview --port 4173 &   # smoke test needs the preview build's skip links
 node e2e/smoke.cjs /tmp/shots 1 390     # browser playthrough (MOTION=1 to keep animations on) to election night (dir, day offset, width)
 npm run bundle                          # preview build + one self-contained dist/single.html
+npm run bundle:release                  # the launch build as one HTML file: no testing shortcuts
 npm run scores                          # day-score distribution by play style
 ```
 

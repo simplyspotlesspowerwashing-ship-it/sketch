@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
   const [out, week = '1', width = '390'] = process.argv.slice(2); // week: which of your own weeks (1 = a new player)
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: Number(width), height: Number(width) > 800 ? 900 : 844 }, deviceScaleFactor: 2, reducedMotion: process.env.MOTION ? 'no-preference' : 'reduce' });
-  await ctx.addInitScript((o) => { if (!localStorage.getItem('badtown.save')) localStorage.setItem('badtown.save', JSON.stringify({ schema: 1, state: null, playerSeed: 'smoke', muted: true, introSeen: '', tutorialDone: false, dayOffset: 0, weeksDone: o, dayDoneOn: '', scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [] }, deeds: [] })); }, Number(week) - 1);
+  await ctx.addInitScript((o) => { if (!localStorage.getItem('badtown.v1')) localStorage.setItem('badtown.v1', JSON.stringify({ schema: 1, state: null, playerSeed: 'smoke', muted: true, introSeen: '', tutorialDone: false, dayOffset: 0, weeksDone: o, dayDoneOn: '', scrapbook: [], career: { terms: 0, wins: 0, best: 0, weeks: [] }, deeds: [] })); }, Number(week) - 1);
   const pg = await ctx.newPage();
   const errs = []; pg.on('pageerror', (e) => errs.push(String(e)));
   await pg.goto(process.env.URL ?? 'http://localhost:4173/');
@@ -69,9 +69,9 @@ const { chromium } = require('playwright');
     }
     await pg.waitForTimeout(60);
   }
-  await pg.waitForSelector('.review.recap', { timeout: 15000 }).catch(async (e) => { await pg.screenshot({ path: `${out}/stuck.png` }); const st = await pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.save')).state); console.log('stuck errs', errs.slice(0, 3), swipes, st.day, st.phase, st.cardInDay, st.current); throw e; });
+  await pg.waitForSelector('.review.recap', { timeout: 15000 }).catch(async (e) => { await pg.screenshot({ path: `${out}/stuck.png` }); const st = await pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.v1')).state); console.log('stuck errs', errs.slice(0, 3), swipes, st.day, st.phase, st.cardInDay, st.current); throw e; });
   await pg.screenshot({ path: `${out}/recap.png`, fullPage: true });
-  const st = await pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.save')).state);
+  const st = await pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.v1')).state);
   const per = {}; for (const w of st.swipes) per[w.day] = (per[w.day] ?? 0) + 1;
   console.log('cards per day', JSON.stringify(per), 'recalled days', JSON.stringify(st.recalledDays), 'dave days', JSON.stringify(st.daveDays));
   const overflow = await pg.evaluate(() => document.documentElement.scrollWidth > innerWidth);

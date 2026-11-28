@@ -7,11 +7,11 @@ const { chromium } = require('playwright');
   const seed = require('child_process').execFileSync('node', [require('path').join(__dirname, 'won-night.ts'), mode]).toString();
   const b = await chromium.launch();
   const ctx = await b.newContext({ viewport: { width: Number(width), height: 844 }, deviceScaleFactor: 1, reducedMotion: 'reduce' });
-  await ctx.addInitScript((sv) => { if (!localStorage.getItem('badtown.save')) localStorage.setItem('badtown.save', sv); }, seed);
+  await ctx.addInitScript((sv) => { if (!localStorage.getItem('badtown.v1')) localStorage.setItem('badtown.v1', sv); }, seed);
   const pg = await ctx.newPage();
   const errs = []; pg.on('pageerror', (e) => errs.push(String(e)));
   await pg.goto(process.env.URL ?? 'http://localhost:4173/');
-  const save = () => pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.save')));
+  const save = () => pg.evaluate(() => JSON.parse(localStorage.getItem('badtown.v1')));
   const drag = async (d) => {
     const card = await pg.locator('.card:not(.result)').first().boundingBox();
     const cx = card.x + card.width / 2, cy = card.y + card.height / 2, dx = d === 'left' ? -160 : 160;

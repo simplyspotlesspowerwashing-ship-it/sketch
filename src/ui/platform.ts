@@ -2,7 +2,7 @@
 import type { Profile, State } from '../engine/types.ts';
 
 // ---------- storage (one module, versioned) ----------
-const KEY = 'badtown.save';
+const KEY = 'badtown.v1'; // v1 launch: a fresh slot, so every player (testers included) starts at Day 1
 const SCHEMA = 1;
 /** Kept across weeks: what a mayor has seen and done. */
 /** terms = weeks served, wins = nights re-elected, best = best nightly vote, nights = nights you played yourself. */

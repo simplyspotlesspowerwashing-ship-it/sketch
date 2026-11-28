@@ -9,7 +9,7 @@ class Guard extends Component<object, { failed: boolean }> {
   override componentDidCatch(err: unknown) {
     console.error(err);
     try {
-      const k = 'badtown.save';
+      const k = 'badtown.v1';
       const raw = localStorage.getItem(k);
       if (raw) { const sv = JSON.parse(raw); sv.state = null; localStorage.setItem(k, JSON.stringify(sv)); }
     } catch { /* storage unavailable */ }
